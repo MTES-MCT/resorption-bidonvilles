@@ -78,7 +78,7 @@
       :mandatoryLinks="footerDatas.mandatoryLinks"
       :afterMandatoryLinks="footerDatas.afterMandatoryLinks"
       :licenceName="footerDatas.licenceName"
-      :licenceTo="footerDatas.licenceTo""
+      :licenceTo="footerDatas.licenceTo"
     />
   </div>
 </template>

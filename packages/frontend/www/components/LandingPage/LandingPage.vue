@@ -7,7 +7,9 @@
                         :src="bandeau"
                         alt="Photographies prises sur des bidonvilles"
                         size="medium"
+                        legend="Crédits: Diego Inglez de Souza et Ville de Strasbourg"
                         title="Photographies prises sur des bidonvilles"
+                        ratio="16x9"
                     />
                      <DsfrPicture
                         :src="carte"
