@@ -8,7 +8,7 @@ type ShantytownPreparatoryPhaseTowardResorptionParam = {
     completed_at?: number | string | null;
 };
 
-export default async (data: ShantytownPreparatoryPhaseTowardResorptionParam, argTransaction: Transaction = undefined): Promise<number> => {
+export default async function create(data: ShantytownPreparatoryPhaseTowardResorptionParam, argTransaction: Transaction = undefined): Promise<number> {
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
 
@@ -43,4 +43,4 @@ export default async (data: ShantytownPreparatoryPhaseTowardResorptionParam, arg
         }
         throw error;
     }
-};
+}
