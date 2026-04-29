@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import incomingTownsModel from '#server/models/incomingTownsModel';
 import { Transaction } from 'sequelize';
 
-export default async (editor, shantytownId: number, data, argTransaction: Transaction = undefined): Promise<number> => {
+export default async function update(editor, shantytownId: number, data, argTransaction: Transaction = undefined): Promise<number> {
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
 
@@ -433,7 +433,7 @@ export default async (editor, shantytownId: number, data, argTransaction: Transa
                         commonData: acc.commonData,
                         justiceData: {
                             ...acc.justiceData,
-                            ...(data[key] !== undefined ? { [key]: data[key] } : {}),
+                            ...(data[key] === undefined ? {} : { [key]: data[key] }),
                         },
                         ownerData: acc.ownerData,
                     };
@@ -453,7 +453,7 @@ export default async (editor, shantytownId: number, data, argTransaction: Transa
                 return {
                     commonData: {
                         ...acc.commonData,
-                        ...(data[key] !== undefined ? { [key]: data[key] } : {}),
+                        ...(data[key] === undefined ? {} : { [key]: data[key] }),
                     },
                     justiceData: acc.justiceData,
                     ownerData: acc.ownerData,
@@ -631,4 +631,4 @@ export default async (editor, shantytownId: number, data, argTransaction: Transa
 
         throw error;
     }
-};
+}
