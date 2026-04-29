@@ -10,8 +10,8 @@ function serialize(data: ShantytownPreparatoryPhasesTowardResorptionRow[]): { to
             preparatoryPhaseId: row.preparatory_phase_id,
             preparatoryPhaseName: row.preparatory_phase_name,
             preparatoryPhaseDateLabel: row.preparatory_phase_date_label,
-            completedAt: row.completed_at !== null ? row.completed_at.getTime() / 1000 : null,
-            createdAt: row.created_at !== null ? row.created_at.getTime() / 1000 : null,
+            completedAt: row.completed_at === null ? null : row.completed_at.getTime() / 1000,
+            createdAt: row.created_at === null ? null : row.created_at.getTime() / 1000,
             createdBy: {
                 authorId: row.created_by,
                 authorFirstName: row.author_first_name,
