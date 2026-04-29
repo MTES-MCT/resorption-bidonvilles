@@ -50,8 +50,10 @@ export default async function query(where: Where | string = [], filters: UserQue
 
     const finalArrWhere = arrWhere.map((clauses, index) => {
         const clauseGroup = Object.keys(clauses).map((column) => {
-            replacements[`${column}${index}`] = clauses[column].value ?? clauses[column];
+            const value = 'value' in clauses[column] ? clauses[column].value : clauses[column];
+
             if (clauses[column].anyOperator !== undefined) {
+                replacements[`${column}${index}`] = value;
                 const clause = `(:${column}${index}) ${clauses[column].anyOperator} ANY(${clauses[column].query || `users.${column}`})`;
                 if (clauses[column].not === true) {
                     return `NOT(${clause})`;
@@ -60,10 +62,11 @@ export default async function query(where: Where | string = [], filters: UserQue
                 return clause;
             }
 
-            if (replacements[`${column}${index}`] === null) {
+            if (value === null) {
                 return `${clauses[column].query || `users.${column}`} IS ${clauses[column].not === true ? 'NOT ' : ''}NULL`;
             }
 
+            replacements[`${column}${index}`] = value;
             return `${clauses[column].query || `users.${column}`} ${clauses[column].not === true ? 'NOT ' : ''}${clauses[column].operator || 'IN'} ${clauses[column].arrayOperator ? `ARRAY[:${column}${index}]` : `(:${column}${index})`}`;
         }).join(' OR ');
 
