@@ -1,11 +1,9 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes, Transaction } from 'sequelize';
 
-export default async (preparatoryPhase, argTransaction: Transaction = undefined): Promise<void> => {
+export default async function update(preparatoryPhase, argTransaction: Transaction = undefined): Promise<void> {
     let transaction: Transaction = argTransaction;
-    if (transaction === undefined) {
-        transaction = await sequelize.transaction();
-    }
+    transaction ??= await sequelize.transaction();
     try {
         sequelize.query(
             `UPDATE 
@@ -35,4 +33,4 @@ export default async (preparatoryPhase, argTransaction: Transaction = undefined)
         }
         throw error;
     }
-};
+}
