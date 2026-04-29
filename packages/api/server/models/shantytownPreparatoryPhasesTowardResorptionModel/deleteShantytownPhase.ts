@@ -6,7 +6,7 @@ type Phase = {
     fk_preparatory_phase: string,
 };
 
-export default async (phase: Phase, argTransaction: Transaction = undefined): Promise<void> => {
+export default async function deleteShantytownPhase(phase: Phase, argTransaction: Transaction = undefined): Promise<void> {
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
 
@@ -41,4 +41,4 @@ export default async (phase: Phase, argTransaction: Transaction = undefined): Pr
         }
         throw error;
     }
-};
+}
