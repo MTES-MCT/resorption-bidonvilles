@@ -4,7 +4,7 @@ import { AuthUser } from '#server/middlewares/authMiddleware';
 import { ShantytownPreparatoryPhasesTowardResorption, ShantytownPreparatoryPhasesTowardResorptionRow } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 import serializePreparatoryPhasesTowardResorption from './common/serializeShantytownPreparatoryPhasesTowardResorption';
 
-export default async (user: AuthUser, ids: string[], transaction?: Transaction): Promise<ShantytownPreparatoryPhasesTowardResorption[]> => {
+export default async function find(user: AuthUser, ids: string[], transaction?: Transaction): Promise<ShantytownPreparatoryPhasesTowardResorption[]> {
     if (!user.isAllowedTo('list', 'shantytown')) {
         return [];
     }
@@ -44,4 +44,4 @@ export default async (user: AuthUser, ids: string[], transaction?: Transaction):
         },
     );
     return serializePreparatoryPhasesTowardResorption(rows);
-};
+}
