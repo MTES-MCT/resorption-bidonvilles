@@ -390,8 +390,8 @@ export default async function update(editor, shantytownId: number, data, argTran
         ]);
 
         // now, update the shantytown
-        const accessKeys: string[] = ['owner'];
-        const justiceKeys: string[] = [
+        const accessKeys: Set<string> = new Set(['owner']);
+        const justiceKeys: Set<string> = new Set([
             'owner_complaint',
             'justice_procedure',
             'justice_rendered',
@@ -414,7 +414,7 @@ export default async function update(editor, shantytownId: number, data, argTran
             'insalubrity_order_at',
             'insalubrity_parcels',
             'attachments',
-        ];
+        ]);
         const { commonData, justiceData, ownerData } = Object.keys(data).reduce(
             (acc, key) => {
                 if ([
@@ -428,7 +428,7 @@ export default async function update(editor, shantytownId: number, data, argTran
                     return acc;
                 }
 
-                if (justiceKeys.includes(key)) {
+                if (justiceKeys.has(key)) {
                     return {
                         commonData: acc.commonData,
                         justiceData: {
@@ -439,7 +439,7 @@ export default async function update(editor, shantytownId: number, data, argTran
                     };
                 }
 
-                if (accessKeys.includes(key)) {
+                if (accessKeys.has(key)) {
                     return {
                         commonData: acc.commonData,
                         justiceData: acc.justiceData,
