@@ -9,6 +9,7 @@ type Theme = {
 } ;
 
 export type Actor = {
+    shantytownId: number,
     id: number,
     first_name: string,
     last_name: string,
@@ -33,6 +34,7 @@ export default (actor: ActorRow):Actor => {
     }
 
     return {
+        shantytownId: actor.shantytownId,
         id: actor.userId,
         first_name: actor.userFirstName,
         last_name: actor.userLastName,

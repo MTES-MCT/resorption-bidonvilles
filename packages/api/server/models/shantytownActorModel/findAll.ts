@@ -1,11 +1,12 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import serializeActor, { Actor } from './serializeActor';
 import { ActorRow } from './ActorRow';
 
-export default (shantytownIds, transaction = undefined): Promise<ActorRow[]> => {
+export default async function findAll(shantytownIds: number | number[], transaction = undefined): Promise<Actor[]> {
     const ids = Array.isArray(shantytownIds) ? shantytownIds : [shantytownIds];
 
-    return sequelize.query(
+    const rows: ActorRow[] = await sequelize.query(
         `SELECT
             sa.fk_shantytown AS "shantytownId",
             sa.themes,
@@ -30,4 +31,6 @@ export default (shantytownIds, transaction = undefined): Promise<ActorRow[]> => 
             transaction,
         },
     );
-};
+
+    return rows.map(serializeActor);
+}

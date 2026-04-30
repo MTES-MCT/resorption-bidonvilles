@@ -42,7 +42,7 @@ export default async (req, res, next) => {
         }
 
         return res.status(201).send({
-            actors: actors.map(shantytownActorModel.serializeActor),
+            actors,
         });
     }
 
