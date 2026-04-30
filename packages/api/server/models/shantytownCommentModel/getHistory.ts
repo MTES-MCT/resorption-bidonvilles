@@ -3,10 +3,11 @@ import { QueryTypes } from 'sequelize';
 
 import geoUtils from '#server/utils/geo';
 import userModel from '#server/models/userModel';
-import shantytownModel from '#server/models/shantytownModel';
 import permissionUtils from '#server/utils/permission';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
-import getAddressSimpleOf from '#server/models//shantytownModel/_common/getAddressSimpleOf';
+import getAddressSimpleOf from '#server/models/shantytownModel/_common/getAddressSimpleOf';
+import getUsenameOf from '#server/models/shantytownModel/_common/getUsenameOf';
+import serializeComment from '#server/models/shantytownModel/_common/serializeComment';
 import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
 import { Location } from '#server/models/geoModel/Location.d';
 import { ShantytownCommentRow } from './ShantytownCommentRow.d';
@@ -15,7 +16,6 @@ import { User } from '#root/types/resources/User.d';
 
 const { fromGeoLevelToTableName } = geoUtils;
 const { formatName } = userModel;
-const { getUsenameOf, serializeComment } = shantytownModel;
 const { restrict } = permissionUtils;
 
 

@@ -10,10 +10,10 @@ import validateSafeWhereClause from '#server/models/_common/validateSafeWhereCla
 import permissionUtils from '#server/utils/permission';
 import { Where } from '#server/models/_common/types/Where.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
+import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import { ShantytownAction } from '#root/types/resources/Action.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { ShantytownPreparatoryPhaseTowardResorption, RawPhase } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
-import getComments from './getComments';
 import serializeShantytown from './serializeShantytown';
 import getDiff from './getDiff';
 import SQL, { ShantytownRow } from './SQL';
@@ -229,14 +229,14 @@ export default async function query(
     }
 
 
-    const commentsPromise = getComments(user, Object.keys(serializedTowns.hash));
+    const commentsPromise = shantytownCommentModel.findByShantytown(user, Object.keys(serializedTowns.hash));
 
     const closingSolutionsPromise = closingSolutionModel.findByShantytown(
         Object.keys(serializedTowns.hash),
     );
 
     const actorsPromise = shantytownActorModel.findAll(
-        Object.keys(serializedTowns.hash),
+        Object.keys(serializedTowns.hash).map(id => Number.parseInt(id, 10)),
     );
 
     const actionsPromise = actionModel.fetchByShantytown(
@@ -335,9 +335,7 @@ export default async function query(
     });
 
     actors.forEach((actor) => {
-        serializedTowns.hash[actor.shantytownId].actors.push(
-            shantytownActorModel.serializeActor(actor),
-        );
+        serializedTowns.hash[actor.shantytownId].actors.push(actor);
     });
 
     actions.forEach((action: ShantytownAction) => {

@@ -1,6 +1,5 @@
 import { sequelize } from '#db/sequelize';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
-import shantytownModel from '#server/models/shantytownModel';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel';
 import attachmentService from '#server/services/attachment';
 import scanAttachmentErrors from '#server/services/attachment/scanAttachmentErrors';
@@ -100,7 +99,7 @@ export default async function createCOmment(comment, shantytown, author): Promis
     // on retourne la liste mise à jour des commentaires du site
     let comments: { [key: number]: ShantytownRawComment[] } = [];
     try {
-        comments = await shantytownModel.getComments(author, [shantytown.id]);
+        comments = await shantytownCommentModel.findByShantytown(author, [shantytown.id]);
         if (!comments[shantytown.id]) {
             throw new ServiceError('fetch_failed', new Error('Impossible de retrouver les commentaires en base de données'));
         }
