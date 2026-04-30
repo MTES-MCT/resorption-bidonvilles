@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes, Transaction } from 'sequelize';
 
-export default async (argTransaction: Transaction = undefined): Promise<{ shantytownLines: number, shantytownHistoryLines: number }> => {
+export default async function anonymizeOwners(argTransaction: Transaction = undefined): Promise<{ shantytownLines: number, shantytownHistoryLines: number }> {
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
 
@@ -64,4 +64,4 @@ export default async (argTransaction: Transaction = undefined): Promise<{ shanty
         }
         throw error;
     }
-};
+}
