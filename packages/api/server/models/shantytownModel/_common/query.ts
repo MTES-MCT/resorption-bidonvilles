@@ -1,6 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import shantytownActorModel from '#server/models/shantytownActorModel';
+import closingSolutionModel from '#server/models/closingSolutionModel';
 import actionModel from '#server/models/actionModel';
 import incomingTownsModel from '#server/models/incomingTownsModel';
 import shantytownPreparatoryPhasesTowardResorptionModel from '#server/models/shantytownPreparatoryPhasesTowardResorptionModel';
@@ -18,14 +19,6 @@ import getDiff from './getDiff';
 import SQL, { ShantytownRow } from './SQL';
 
 const { where: pWhere } = permissionUtils;
-type ShantytownClosingSolutionRow = {
-    id: number,
-    peopleAffected: number,
-    householdsAffected: number,
-    message: string,
-    shantytownId?: number
-};
-
 type ShantytownObject = {
     hash: { [key: number] : Shantytown },
     ordered: Shantytown[],
@@ -159,12 +152,12 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
         LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.${tables.toilet_types_foreign_key}
         LEFT JOIN shantytown_resorption_phases srp ON srp.fk_shantytown = shantytowns.${tables.resorption_phases_foreign_key}
         LEFT JOIN shantytown_parcel_owners po ON po.fk_shantytown = shantytowns.${tables.parcel_owners_foreign_key}
-        ${whereClause !== null ? `WHERE ${whereClause}` : ''}
-        ${order !== null ? `ORDER BY ${order}` : ''}
+        ${whereClause === null ? '' : `WHERE ${whereClause}`}
+        ${order === null ? '' : `ORDER BY ${order}`}
     `;
 }
 
-export default async (
+export default async function query(
     user: AuthUser,
     feature: string,
     where: Where = [],
@@ -172,7 +165,7 @@ export default async (
     includeChangelog = false,
     additionalSQL = {},
     argReplacements = {},
-): Promise<Shantytown[]> => {
+): Promise<Shantytown[]> {
     const permissionsClauseGroup = pWhere().can(user).do(feature, 'shantytown');
     if (permissionsClauseGroup === null) {
         return [];
@@ -238,28 +231,17 @@ export default async (
 
     const commentsPromise = getComments(user, Object.keys(serializedTowns.hash));
 
-    const closingSolutionsPromise: Promise<ShantytownClosingSolutionRow[]> = sequelize.query(
-        `SELECT
-                shantytown_closing_solutions.fk_shantytown AS "shantytownId",
-                closing_solutions.closing_solution_id AS "id",
-                shantytown_closing_solutions.number_of_people_affected AS "peopleAffected",
-                shantytown_closing_solutions.number_of_households_affected AS "householdsAffected",
-                shantytown_closing_solutions.message AS "message"
-            FROM shantytown_closing_solutions
-            LEFT JOIN closing_solutions ON shantytown_closing_solutions.fk_closing_solution = closing_solutions.closing_solution_id
-            WHERE shantytown_closing_solutions.fk_shantytown IN (:ids)`,
-        {
-            type: QueryTypes.SELECT,
-            replacements: { ids: Object.keys(serializedTowns.hash) },
-        },
+    const closingSolutionsPromise = closingSolutionModel.findByShantytown(
+        Object.keys(serializedTowns.hash),
     );
+
     const actorsPromise = shantytownActorModel.findAll(
         Object.keys(serializedTowns.hash),
     );
 
     const actionsPromise = actionModel.fetchByShantytown(
         user,
-        Object.keys(serializedTowns.hash).map(id => parseInt(id, 10)),
+        Object.keys(serializedTowns.hash).map(id => Number.parseInt(id, 10)),
     );
 
     const incomingTownsPromise = incomingTownsModel.findAll(user, Object.keys(serializedTowns.hash));
@@ -299,7 +281,7 @@ export default async (
         });
 
         for (let i = 1, { id } = serializedHistory[0]; i <= serializedHistory.length; i += 1) {
-            if (!serializedHistory[i] || id !== serializedHistory[i].id) {
+            if (id !== serializedHistory[i]?.id) {
                 if (!serializedTowns.hash[id]) {
                     // eslint-disable-next-line no-continue
                     continue;
@@ -343,16 +325,14 @@ export default async (
         serializedTowns.hash[shantytownId].comments = comments[shantytownId] ?? [];
     });
 
-    if (closingSolutions !== undefined) {
-        closingSolutions.forEach((closingSolution) => {
-            serializedTowns.hash[closingSolution.shantytownId].closingSolutions.push({
-                id: closingSolution.id,
-                peopleAffected: closingSolution.peopleAffected,
-                householdsAffected: closingSolution.householdsAffected,
-                message: closingSolution.message,
-            });
+    closingSolutions.forEach((closingSolution) => {
+        serializedTowns.hash[closingSolution.shantytownId].closingSolutions.push({
+            id: closingSolution.id,
+            peopleAffected: closingSolution.peopleAffected,
+            householdsAffected: closingSolution.householdsAffected,
+            message: closingSolution.message,
         });
-    }
+    });
 
     actors.forEach((actor) => {
         serializedTowns.hash[actor.shantytownId].actors.push(
@@ -375,4 +355,4 @@ export default async (
     });
 
     return serializedTowns.ordered;
-};
+}
