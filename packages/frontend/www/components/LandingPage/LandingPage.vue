@@ -1,5 +1,8 @@
 <template>
     <section id="main-content" class="fr-container width-inherit">
+        <div class="flex justify-center mt-4 h-auto">
+            <h4 class="mb-0">Plateforme Résorption-bidonvilles</h4>
+        </div>
         <div class="flex flex-col lg:flex-row">
             <ContentWrapper class="flex-1">
                 <div class="flex flex-col items-center justify-center justify-items-center h-full md:px-6">
@@ -7,17 +10,19 @@
                         :src="bandeau"
                         alt="Photographies prises sur des bidonvilles"
                         size="medium"
-                        legend="Crédits: Diego Inglez de Souza et Ville de Strasbourg"
+                        legend="Crédits : Diego Inglez de Souza et Ville de Strasbourg"
                         title="Photographies prises sur des bidonvilles"
                         ratio="16x9"
                     />
+                    <h5 class="!mb-0">Départements de l'Hexagone concernés selon le nombre d'habitants en bidonvilles</h5>
                      <DsfrPicture
                         :src="carte"
                         alt="Impact des actions de résorption en France"
                         size="medium"
-                        legend="Carte: Délégation interministérielle à l'hébergement et à l'accès au logement (DIHAL). Source: Plateforme Résorption-bidonvilles"
+                        legend="Carte : Délégation interministérielle à l'hébergement et à l'accès au logement (DIHAL). Source: Plateforme Résorption-bidonvilles"
                         title="Impact des actions de résorption en France"
                         ratio="1x1"
+                        class="!mt-0"
                      />
                 </div>
             </ContentWrapper>

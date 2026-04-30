@@ -73,6 +73,7 @@
 
     <DsfrFooter
       :descText="footerDatas.descText"
+      :logoText="footerDatas.logoText"
       :ecosystemLinks="footerDatas.ecosystemLinks"
       :beforeMandatoryLinks="footerDatas.beforeMandatoryLinks"
       :mandatoryLinks="footerDatas.mandatoryLinks"
@@ -129,24 +130,23 @@ onMounted(() => {
 const headerDatas = {
     homeTo: "/",
     homeLabel: "Accueil Résorption des bidonvilles",
-    logoText: ["Gouvernement"],
-    serviceTitle: "Plateforme Résorption-bidonvilles",
-    serviceDescription: 'Délégation interministérielle à l\'hébergement et à l\'accès au logement',
+    logoText: "Gouvernement",
+    serviceTitle: 'Délégation interministérielle à l\'hébergement et à l\'accès au logement',
     quickLinks: [
         {
             label: 'Connexion',
             href: `${WEBAPP_URL}/connexion`,
             icon: 'fr-icon-lock-line',
         }, {
-            label: 'Paramètres d\'affichage',
-            button: true,
-            onClick: () => openedModal.value = true,
-            icon: 'fr-icon-theme-fill',
-        }, {
             label: 'Accès au blog',
             href: `${BLOG_URL}`,
             icon: 'fr-icon-article-line',
             target: '_blank'
+        }, {
+            label: 'Paramètres d\'affichage',
+            button: true,
+            onClick: () => openedModal.value = true,
+            icon: 'fr-icon-theme-fill',
         }
     ]
 }
@@ -205,6 +205,7 @@ const footerDatas = {
       },
       {
         label: 'Conditions générales d\'utilisation',
+        target: '_blank',
         href: `${WEBAPP_URL}/doc/conditions-d-utilisation.pdf`
       },
     ],
@@ -233,7 +234,8 @@ const footerDatas = {
       }
     ],
     licenceName: "licence AGPL-3.0",
-    licenceTo: "https://github.com/MTES-MCT/resorption-bidonvilles/blob/develop/LICENSE"
+    licenceTo: "https://github.com/MTES-MCT/resorption-bidonvilles/blob/develop/LICENSE",
+    logoText: "Gouvernement"
 }
 </script>
 <style scoped>
