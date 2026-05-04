@@ -230,13 +230,3 @@ function removeAddress(index) {
     }
 }
 </script>
-
-<style scoped>
-.h-96 {
-    height: 24rem;
-}
-
-.bg-G500 {
-    background-color: #f6f6f6;
-}
-</style>
