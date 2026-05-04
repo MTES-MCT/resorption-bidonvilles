@@ -76,7 +76,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, watch, ref, computed } from "vue";
+import { toRefs, watch, ref, computed } from "vue";
 import { useField } from "vee-validate";
 import { Button } from "@resorptionbidonvilles/ui";
 import sectionsList from "./sections.list";
