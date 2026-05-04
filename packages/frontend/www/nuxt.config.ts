@@ -21,8 +21,18 @@ export default defineNuxtConfig({
                 port: 8091,
                 protocol: "ws",
                 host: "localhost"
-            }
-        }
+            },
+            allowedHosts: ["host.docker.internal"]
+        },
+        optimizeDeps: {
+            include: [
+                '@vue/devtools-core',
+                '@vue/devtools-kit',
+                'vue-matomo', // CJS
+                'vee-validate',
+                'date-fns/locale',
+            ]
+        },
     },
     runtimeConfig: {
         public: {
