@@ -17,6 +17,22 @@ type ActionCheckRow = {
     region_name: string,
 };
 
+type ActionHistoryRawRow = Omit<ActionRow, 'topics' | 'managers' | 'operators' | 'shantytowns' | 'addresses' | 'finances' | 'metrics'> & {
+    hid: number,
+    author_first_name: string,
+    author_last_name: string,
+    author_organization_id: number,
+    author_organization_name: string,
+    author_organization_abbreviation: string | null,
+    topics: string | Array<{ uid: string, name: string }>,
+    managers: string | Array<any>,
+    operators: string | Array<any>,
+    shantytowns: string | Array<any>,
+    location_eti_addresses: string | Array<any>,
+    indicateurs?: string | { [key: number]: any[] },
+    finances?: string | { [key: number]: any[] },
+};
+
 type ActionHistoryRow = ActionRow & {
     hid: number,
     author_first_name: string,
@@ -90,7 +106,7 @@ export default async function getHistory(user: User, actionId: number): Promise<
 
     const canAccessFinances = can(user).do('access', 'action_finances').on(location);
 
-    const activitiesRaw: any[] = await sequelize.query(
+    const activitiesRaw = await sequelize.query<ActionHistoryRawRow>(
         `
         (
         WITH
@@ -535,7 +551,7 @@ export default async function getHistory(user: User, actionId: number): Promise<
     );
 
     // Parser les colonnes JSONB qui peuvent être retournées comme des strings
-    const activities: ActionHistoryRow[] = activitiesRaw.map((row: any) => {
+    const activities: ActionHistoryRow[] = activitiesRaw.map((row: ActionHistoryRawRow) => {
         const parsed = {
             ...row,
             topics: typeof row.topics === 'string' ? JSON.parse(row.topics) : row.topics,
