@@ -62,6 +62,7 @@ import {
 } from "@/utils/formatFormAction";
 import { normalizeShantytownIds } from "@/utils/normalizeShantytownIds";
 import formatFormDate from "@common/utils/formatFormDate";
+import parseCoordinates from "@common/utils/parseCoordinates";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
@@ -387,8 +388,7 @@ function formatValuesFromApi(v) {
                         data: {
                             label: addr.address,
                             citycode: addr.citycode,
-                            coordinates:
-                                addr.coordinates?.split(",").map(Number) || [],
+                            coordinates: parseCoordinates(addr.coordinates),
                         },
                     },
                 };
