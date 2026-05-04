@@ -152,6 +152,16 @@ function generateUniqueId() {
     return `addr_${Date.now()}_${uniqueIdCounter++}`;
 }
 
+function parseCoordinates(coordinates) {
+    if (Array.isArray(coordinates)) {
+        return coordinates;
+    }
+    if (typeof coordinates === "string") {
+        return coordinates.split(",").map(Number);
+    }
+    return [];
+}
+
 // Initialiser avec une adresse vide si aucune adresse n'existe
 const addresses = ref(
     locationEtiAddresses.value && locationEtiAddresses.value.length > 0
@@ -167,8 +177,7 @@ const addresses = ref(
                       data: {
                           label: addr.address,
                           citycode: addr.citycode,
-                          coordinates:
-                              addr.coordinates?.split(",").map(Number) || [],
+                          coordinates: parseCoordinates(addr.coordinates),
                       },
                   };
               }
