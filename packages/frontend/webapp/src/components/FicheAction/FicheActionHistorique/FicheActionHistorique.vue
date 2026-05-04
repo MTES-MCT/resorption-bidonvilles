@@ -85,8 +85,7 @@ const loadHistory = async () => {
     try {
         const history = await getActionHistory(action.value.id);
         changelog.value = history.filter((item) => item.action === "update");
-    } catch (error) {
-        console.error("Erreur lors du chargement de l'historique:", error);
+    } catch {
         changelog.value = [];
     } finally {
         loading.value = false;
