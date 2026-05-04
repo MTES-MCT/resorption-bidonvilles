@@ -6,8 +6,6 @@
         <FormDeclarationActionCaracteristiques class="mt-6" :mode="mode" />
         <FormDeclarationActionLocalisation
             :disableDepartement="mode === 'edit' && !canAccessFinances"
-            :setFieldValue="setFieldValue"
-            :setErrors="setErrors"
             class="mt-6"
         />
         <FormDeclarationActionContacts
@@ -102,7 +100,6 @@ const {
     setErrors,
     isSubmitting,
     resetForm,
-    setFieldValue,
     validate,
 } = useForm({
     validationSchema,

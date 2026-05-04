@@ -8,8 +8,6 @@
             <InputLocationAutre v-if="values.location_type === 'autre'" />
             <InputLocationETIMultiple
                 v-else-if="values.location_type === 'eti'"
-                :setFieldValue="setFieldValue"
-                :setErrors="setErrors"
             />
             <InputLocationShantytowns
                 v-else-if="values.location_type === 'sur_site'"
@@ -19,7 +17,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref } from "vue";
+import { ref, toRefs } from "vue";
 import { useFormValues } from "vee-validate";
 import FormSection from "@/components/FormSection/FormSection.vue";
 import { FormParagraph } from "@resorptionbidonvilles/ui";
@@ -33,10 +31,8 @@ import InputLocationShantytowns from "../inputs/FormDeclarationActionInputLocati
 
 const props = defineProps({
     disableDepartement: Boolean,
-    setFieldValue: Function,
-    setErrors: Function,
 });
-const { disableDepartement, setFieldValue, setErrors } = toRefs(props);
+const { disableDepartement } = toRefs(props);
 
 const values = useFormValues();
 const locationETIMultipleRef = ref(null);
