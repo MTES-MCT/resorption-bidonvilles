@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import { useFieldValue } from "vee-validate";
 import FormSection from "@/components/FormSection/FormSection.vue";
 
