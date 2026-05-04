@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import CartoFicheAction from "@/components/CartoFicheAction/CartoFicheAction.vue";
 
 const props = defineProps({
