@@ -1,9 +1,11 @@
 import permissionUtils from '#server/utils/permission';
+import dateUtils from '#server/utils/date';
 import { CreatorInfo, EditorInfo } from '#server/models/_common/types/UserInfoTypes.d';
 import Action from '#root/types/resources/Action.d';
 import { User } from '#root/types/resources/User.d';
 
 const { can } = permissionUtils;
+const { toTimestamp } = dateUtils;
 
 export type ActionAddress = {
     action_address_id: number,
@@ -36,18 +38,6 @@ export type ActionRow = {
     metrics?: Array<any>,
 } & CreatorInfo & EditorInfo;
 
-function fromDateToTimestamp(date: string | Date | null): number | null {
-    if (date === null) {
-        return null;
-    }
-
-    if (typeof date === 'string') {
-        return new Date(date).getTime();
-    }
-
-    return date.getTime();
-}
-
 export default function serializeAction(action: ActionRow, user: User): Action {
     const location = {
         type: 'departement' as const,
@@ -72,8 +62,8 @@ export default function serializeAction(action: ActionRow, user: User): Action {
             return `ID${action.departement_code}${createdYear}${paddedActionId}`;
         })(),
         name: action.name,
-        started_at: fromDateToTimestamp(action.started_at),
-        ended_at: fromDateToTimestamp(action.ended_at),
+        started_at: toTimestamp(action.started_at),
+        ended_at: toTimestamp(action.ended_at),
         goals: action.goals,
         topics: action.topics || [],
         location,
