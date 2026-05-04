@@ -275,7 +275,9 @@ function createMap() {
 
 function addControl(name, control) {
     controls[name] = control;
-    map.value.addControl(controls[name]);
+    if (map.value) {
+        map.value.addControl(controls[name]);
+    }
 }
 
 function onZoomEnd(...args) {
@@ -364,9 +366,11 @@ async function printMapScreenshot() {
     }
 
     // on réaffiche les contrôles
-    Object.values(controls).forEach((control) => {
-        map.value.addControl(control);
-    });
+    if (map.value) {
+        Object.values(controls).forEach((control) => {
+            map.value.addControl(control);
+        });
+    }
 }
 
 function syncTownMarkers() {
