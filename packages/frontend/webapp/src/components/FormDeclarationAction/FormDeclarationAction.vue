@@ -62,7 +62,7 @@ import {
 } from "@/utils/formatFormAction";
 import { normalizeShantytownIds } from "@/utils/normalizeShantytownIds";
 import formatFormDate from "@common/utils/formatFormDate";
-import parseCoordinates from "@common/utils/parseCoordinates";
+import parseCoordinates from "@/utils/parseCoordinates";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
