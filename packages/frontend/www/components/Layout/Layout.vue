@@ -14,8 +14,8 @@
       :logoText="headerDatas.logoText"
       :homeTo="headerDatas.homeTo"
       :homeLabel="headerDatas.homeLabel"
-      :serviceTitle="headerDatas.serviceTitle"
-      :serviceDescription="headerDatas.serviceDescription"
+      :operatorImgSrc="headerDatas.operatorImgSrc"
+      :operatorImgStyle="headerDatas.operatorImgStyle"
       :quickLinks="headerDatas.quickLinks"
     />
 
@@ -88,12 +88,20 @@
 import { ref, reactive, onMounted, watchEffect } from 'vue';
 import { useScheme } from '@gouvminint/vue-dsfr'
 import openMail from '~~/utils/openMail';
+import logoDihal_light from "~/assets/img/Layout/dihal-light.png";
+import logoDihal_dark from "~/assets/img/Layout/dihal-dark.png";
 const { WEBAPP_URL, CONTACT_EMAIL, BLOG_URL } = useRuntimeConfig().public;
 
 // Icones SVG pour les thèmes clair, sombre et système
 const sunSvgPath = '/artwork/pictograms/environment/sun.svg';
 const moonSvgPath = '/artwork/pictograms/environment/moon.svg';
 const systemSvgPath = '/artwork/pictograms/system/system.svg';
+
+const logoDihal = ref({
+  default: logoDihal_light,
+  light: logoDihal_light,
+  dark: logoDihal_dark
+});
 
 // Gestion de la modale et de l'affichage (thème)
 const openedModal = ref(false);
@@ -102,6 +110,7 @@ const preferences = reactive({
   theme: undefined,
   scheme: 'system',
 })
+
 const modalParams = [
   {
     label: 'Thème clair',
@@ -122,16 +131,20 @@ const modalParams = [
 onMounted(() => {
   const { theme, scheme, setScheme } = useScheme()
   preferences.scheme = scheme.value
-  watchEffect(() => { preferences.theme = theme.value })
+  watchEffect(() => { preferences.theme = theme.value
+    headerDatas.value.operatorImgSrc = logoDihal.value[preferences.theme]
+   })
   watchEffect(() => setScheme(preferences.scheme))
 });
+console.log("LogoDihal?", logoDihal.value, preferences);
 
 // Paramétrage du header DSFR
-const headerDatas = {
+const headerDatas = ref({
     homeTo: "/",
     homeLabel: "Accueil Résorption des bidonvilles",
     logoText: "Gouvernement",
-    serviceTitle: 'Délégation interministérielle à l\'hébergement et à l\'accès au logement',
+    operatorImgSrc: preferences.theme ? logoDihal.value[preferences.theme] : logoDihal.value.default,
+    operatorImgStyle: "height: auto; max-height: 3rem;",
     quickLinks: [
         {
             label: 'Connexion',
@@ -149,7 +162,7 @@ const headerDatas = {
             icon: 'fr-icon-theme-fill',
         }
     ]
-}
+})
 
 // Paramétrage du follow DSFR
 const followDatas = {
@@ -235,7 +248,7 @@ const footerDatas = {
     ],
     licenceName: "licence AGPL-3.0",
     licenceTo: "https://github.com/MTES-MCT/resorption-bidonvilles/blob/develop/LICENSE",
-    logoText: "Gouvernement"
+    logoText: "Souky présidente!"
 }
 </script>
 <style scoped>
