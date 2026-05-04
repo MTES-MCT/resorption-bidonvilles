@@ -8,6 +8,14 @@ import Action from '#root/types/resources/Action.d';
 
 const { can } = permissionUtils;
 
+type ActionCheckRow = {
+    action_id: number,
+    departement_code: string,
+    departement_name: string,
+    region_code: string,
+    region_name: string,
+};
+
 type ActionHistoryRow = ActionRow & {
     hid: number,
     author_first_name: string,
@@ -44,7 +52,7 @@ export type ActionActivity = {
 
 export default async function getHistory(user: User, actionId: number): Promise<ActionActivity[]> {
     // Récupérer d'abord l'action pour vérifier les permissions sur sa vraie localisation
-    const actionCheck = await sequelize.query(
+    const actionCheck = await sequelize.query<ActionCheckRow>(
         `SELECT a.action_id, d.code as departement_code, d.name as departement_name, r.code as region_code, r.name as region_name
          FROM actions a
          LEFT JOIN departements d ON a.fk_departement = d.code
@@ -60,7 +68,7 @@ export default async function getHistory(user: User, actionId: number): Promise<
         return [];
     }
 
-    const actionData: any = actionCheck[0];
+    const actionData = actionCheck[0];
     const location = {
         type: 'departement' as const,
         city: null,
