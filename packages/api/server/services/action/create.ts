@@ -1,19 +1,19 @@
 import { sequelize } from '#db/sequelize';
 import { UniqueConstraintError } from 'sequelize';
 import ServiceError from '#server/errors/ServiceError';
-import create from '#server/models/actionModel/create/create';
+import createAction from '#server/models/actionModel/create/create';
 import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 import { User } from '#root/types/resources/User.d';
 import { ActionInput } from './ActionInput.d';
 
 import fetchAction from './write.fetchAction';
 
-export default async (user: User, data: ActionInput): Promise<EnrichedAction> => {
+export default async function create(user: User, data: ActionInput): Promise<EnrichedAction> {
     const transaction = await sequelize.transaction();
 
     let actionId: number;
     try {
-        actionId = await create({
+        actionId = await createAction({
             ...data,
             created_by: user.id,
         }, transaction);
@@ -49,4 +49,4 @@ export default async (user: User, data: ActionInput): Promise<EnrichedAction> =>
     }
 
     return action;
-};
+}
