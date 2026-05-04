@@ -46,11 +46,7 @@
             </div>
         </div>
 
-        <DsfrButton
-            secondary
-            icon="fr-icon-add-line"
-            @click.prevent.stop="addAddress"
-        >
+        <DsfrButton icon="fr-icon-add-line" @click.prevent.stop="addAddress">
             Ajouter une adresse
         </DsfrButton>
     </div>
