@@ -58,6 +58,7 @@ import { useFieldValue, useFormErrors, useFormContext } from "vee-validate";
 import InputAddress from "@/components/InputAddress/InputAddress.vue";
 import InputCoordinates from "@/components/InputCoordinates/InputCoordinates.vue";
 import labels from "../FormDeclarationAction.labels";
+import parseCoordinates from "@/utils/parseCoordinates";
 
 const formErrors = useFormErrors();
 const { setFieldValue, setErrors } = useFormContext();
@@ -150,16 +151,6 @@ function checkDuplicates() {
 let uniqueIdCounter = 0;
 function generateUniqueId() {
     return `addr_${Date.now()}_${uniqueIdCounter++}`;
-}
-
-function parseCoordinates(coordinates) {
-    if (Array.isArray(coordinates)) {
-        return coordinates;
-    }
-    if (typeof coordinates === "string") {
-        return coordinates.split(",").map(Number);
-    }
-    return [];
 }
 
 // Initialiser avec une adresse vide si aucune adresse n'existe
