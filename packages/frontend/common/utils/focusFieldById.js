@@ -3,6 +3,10 @@
  * @param {string} fieldId - ID du champ
  */
 export default function focusFieldById(fieldId) {
+    if (typeof fieldId !== 'string' || fieldId.trim() === '') {
+        return false;
+    }
+
     // Essayer d'abord avec l'ID exact
     let field = document.getElementById(fieldId);
     
