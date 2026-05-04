@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, defineExpose, computed } from "vue";
+import { toRefs, ref, computed } from "vue";
 import filters from "../FicheAction.filter";
 import { getActionHistory } from "@/api/actions.api";
 
