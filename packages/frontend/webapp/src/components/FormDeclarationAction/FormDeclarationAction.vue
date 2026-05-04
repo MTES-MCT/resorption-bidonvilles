@@ -298,13 +298,6 @@ watch(
     { deep: true }
 );
 
-// Watch pour le focus automatique sur les erreurs de validation
-watch(errors, (newErrors) => {
-    if (Object.keys(newErrors).length > 0) {
-        focusFirstErrorField(newErrors);
-    }
-});
-
 onBeforeUnmount(() => {
     debouncedUpdateHasChanges.cancel();
 });
