@@ -16,14 +16,10 @@ export default function focusFieldById(fieldId) {
     }
     
     // Si toujours pas trouvé, essayer avec un sélecteur CSS échappé
-    if (!field) {
-        try {
-            // Échapper les caractères spéciaux pour le sélecteur CSS
-            const escapedId = CSS.escape(fieldId);
-            field = document.querySelector(`#${escapedId}`);
-        } catch {
-            // do nothing
-        }
+    if (!field && typeof CSS !== 'undefined' && typeof CSS.escape === 'function') {
+        // Échapper les caractères spéciaux pour le sélecteur CSS
+        const escapedId = CSS.escape(fieldId);
+        field = document.querySelector(`#${escapedId}`);
     }
     
     // Si toujours pas trouvé, essayer avec les underscores (format transformé)
