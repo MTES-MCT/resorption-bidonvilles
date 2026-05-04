@@ -1,9 +1,15 @@
 import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
+import { ActionAddress } from '#server/models/actionModel/_common/serializeAction';
+
+type ActionAddressHistoryRow = ActionAddress & {
+    fk_action: number,
+    created_at: Date,
+};
 
 export default async function historizeAddresses(actionId: number, actionHid: number, transaction: Transaction): Promise<void> {
     // Vérifier d'abord s'il y a des adresses à historiser
-    const addresses = await sequelize.query(
+    const addresses = await sequelize.query<ActionAddressHistoryRow>(
         `SELECT action_address_id, fk_action, address, latitude, longitude, fk_city, created_at
         FROM action_addresses
         WHERE fk_action = :actionId`,
