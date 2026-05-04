@@ -1,6 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import permissionUtils from '#server/utils/permission';
+import { Departement } from '#server/models/geoModel/Location.d';
 import serializeAction, { ActionRow } from '../_common/serializeAction';
 import getDiff from '../_common/getDiff';
 import { User } from '#root/types/resources/User.d';
@@ -69,18 +70,18 @@ export default async function getHistory(user: User, actionId: number): Promise<
     }
 
     const actionData = actionCheck[0];
-    const location = {
-        type: 'departement' as const,
-        city: null,
-        epci: null,
-        departement: {
-            code: actionData.departement_code,
-            name: actionData.departement_name,
-        },
+    const location: Departement = {
+        type: 'departement',
         region: {
             code: actionData.region_code,
             name: actionData.region_name,
         },
+        departement: {
+            code: actionData.departement_code,
+            name: actionData.departement_name,
+        },
+        epci: null,
+        city: null,
     };
 
     if (!can(user).do('read', 'action').on(location)) {
