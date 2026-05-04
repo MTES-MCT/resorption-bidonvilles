@@ -1,8 +1,5 @@
 <template>
-    <section id="main-content" class="fr-container width-inherit">
-        <div class="flex justify-center mt-4 h-auto">
-            <h4 class="mb-0">Plateforme Résorption-bidonvilles</h4>
-        </div>
+    <section id="main-content" class="fr-container width-inherit flex">
         <div class="flex flex-col lg:flex-row">
             <ContentWrapper class="flex-1">
                 <div class="flex flex-col items-center justify-center justify-items-center h-full md:px-6">
@@ -28,7 +25,7 @@
             </ContentWrapper>
             <ContentWrapper class="flex-1">
                 <div class="flex flex-col text-justify md:p-8">
-                    <h4>La politique de résorption des bidonvilles</h4>
+                    <h5>La politique de résorption des bidonvilles</h5>
                     <p>
                         Vivre dans un bidonville signifie faire face à des conditions de vie très précaires : habitat insalubre, accès limité à l’eau, à l’électricité, aux soins, à la scolarisation ou à l’emploi. Pour répondre à ces situations, l’État met en œuvre une politique de résorption des bidonvilles destinée à accompagner les personnes concernées vers des solutions durables d’hébergement, de logement et d'insertion.
                     </p>
@@ -44,7 +41,7 @@
                     <a :href="BLOG_URL" target="_blank" class="text-blue-600 mt-4 mb-10 inline-block place-self-center">
                         En savoir plus sur notre Blog
                     </a>
-                    <h4>L’outil numérique Résorption-bidonvilles au service de l’action publique</h4>
+                    <h5>L’outil numérique Résorption-bidonvilles au service de l’action publique</h5>
                     <p>
                         Afin de soutenir la mise en œuvre des stratégies territoriales, l’outil numérique Résorption-bidonvilles constitue un appui opérationnel au pilotage local et national de la politique publique. Il vise à renforcer la coordination entre les acteurs, fiabiliser la connaissance des situations et améliorer le suivi des actions engagées.
                     </p>
