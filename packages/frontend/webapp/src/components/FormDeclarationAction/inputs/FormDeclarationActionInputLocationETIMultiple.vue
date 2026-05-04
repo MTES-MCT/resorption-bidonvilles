@@ -54,23 +54,13 @@
 
 <script setup>
 import { ref, watch, computed } from "vue";
-import { useFieldValue, useFormErrors } from "vee-validate";
+import { useFieldValue, useFormErrors, useFormContext } from "vee-validate";
 import InputAddress from "@/components/InputAddress/InputAddress.vue";
 import InputCoordinates from "@/components/InputCoordinates/InputCoordinates.vue";
 import labels from "../FormDeclarationAction.labels";
 
 const formErrors = useFormErrors();
-
-const props = defineProps({
-    setFieldValue: {
-        type: Function,
-        required: true,
-    },
-    setErrors: {
-        type: Function,
-        required: true,
-    },
-});
+const { setFieldValue, setErrors } = useFormContext();
 
 const locationEtiAddresses = useFieldValue("location_eti_addresses");
 const duplicateErrors = ref({});
@@ -151,7 +141,7 @@ function checkDuplicates() {
     });
 
     // Appliquer toutes les erreurs en une seule fois
-    props.setErrors(errorsToSet);
+    setErrors(errorsToSet);
 
     duplicateErrors.value = newErrors;
 }
@@ -199,7 +189,7 @@ watch(
             return cleanedAddr;
         });
 
-        props.setFieldValue("location_eti_addresses", cleanedAddresses);
+        setFieldValue("location_eti_addresses", cleanedAddresses);
 
         // Vérifier les doublons après chaque modification
         checkDuplicates();
@@ -222,7 +212,7 @@ function addAddress() {
         // eslint-disable-next-line no-unused-vars
         ({ _uid, ...addr }) => addr
     );
-    props.setFieldValue("location_eti_addresses", cleanedAddresses);
+    setFieldValue("location_eti_addresses", cleanedAddresses);
 }
 
 function removeAddress(index) {
