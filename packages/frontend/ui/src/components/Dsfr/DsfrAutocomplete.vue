@@ -41,29 +41,12 @@ const props = defineProps({
     fn: Function,
     modelValue: {
         type: Object,
-        required: false,
         default: () => undefined
     },
-    allowFreeSearch: {
-        type: Boolean,
-        required: false,
-        default: false
-    },
-    autoClear: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
-    showCategory: {
-        type: Boolean,
-        required: false,
-        default: false
-    },
-    disabled: {
-        type: Boolean,
-        required: false,
-        default: false
-    },
+    allowFreeSearch: Boolean,
+    autoClear: Boolean,
+    showCategory: Boolean,
+    disabled: Boolean,
 });
 
 const emit = defineEmits(['update:modelValue']);
