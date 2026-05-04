@@ -36,7 +36,7 @@ export default function focusFieldById(fieldId) {
     if (!field) {
         return false;
     }
-    
+
     field.scrollIntoView({ behavior: "smooth", block: "center" });
     setTimeout(() => {
         const focusable =
