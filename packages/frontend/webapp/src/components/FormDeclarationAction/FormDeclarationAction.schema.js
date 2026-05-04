@@ -257,7 +257,16 @@ export default function formDeclarationAction() {
         location_eti_addresses: array()
             .of(
                 object().shape({
-                    address: object().nullable().noDuplicateAddress(),
+                    address: object()
+                        .nullable()
+                        .when("$location_type", {
+                            is: "eti",
+                            then: (schema) =>
+                                schema.required(
+                                    "L'adresse est obligatoire pour un Espace Temporaire d'Accompagnement"
+                                ),
+                        })
+                        .noDuplicateAddress(),
                     coordinates: array().of(number()).nullable(),
                 })
             )
