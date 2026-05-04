@@ -68,34 +68,33 @@ export default function serializeAction(action: ActionRow, user: User): Action {
         topics: action.topics || [],
         location,
         location_type: action.location_type as any,
-        eti: action.location_type === 'eti' && action.addresses
-            ? action.addresses.map(addr => ({
-                id: addr.action_address_id,
-                address: addr.address,
-                latitude: addr.latitude,
-                longitude: addr.longitude,
-                citycode: addr.fk_city,
-            }))
-            : null,
-        location_eti_addresses: (() => {
+        eti: (() => {
             if (action.location_type !== 'eti') {
-                return [];
+                return null;
             }
-            // Priorité 1 : utiliser location_eti_addresses si disponible (depuis getHistory)
-            if ((action as any).location_eti_addresses && (action as any).location_eti_addresses.length > 0) {
-                return (action as any).location_eti_addresses;
-            }
-            // Priorité 2 : utiliser eti si disponible (depuis fetch normal)
-            if ((action as any).eti && (action as any).eti.length > 0) {
-                return (action as any).eti.map((addr: any) => ({
-                    id: addr.id,
+            // Cas 1: données depuis fetch (addresses peuplé par mergeAddresses)
+            if (action.addresses && action.addresses.length > 0) {
+                return action.addresses.map(addr => ({
+                    id: addr.action_address_id,
                     address: addr.address,
-                    citycode: addr.citycode,
-                    coordinates: `${addr.latitude},${addr.longitude}`,
+                    latitude: addr.latitude,
+                    longitude: addr.longitude,
+                    citycode: addr.fk_city,
                 }));
             }
-            return [];
+            // Cas 2: données depuis getHistory (location_eti_addresses peuplé par SQL)
+            if ((action as any).location_eti_addresses && (action as any).location_eti_addresses.length > 0) {
+                return (action as any).location_eti_addresses.map((addr: any) => ({
+                    id: addr.id,
+                    address: addr.address,
+                    latitude: parseFloat(addr.coordinates.split(',')[0]),
+                    longitude: parseFloat(addr.coordinates.split(',')[1]),
+                    citycode: addr.citycode,
+                }));
+            }
+            return null;
         })(),
+        location_eti_addresses: [],
         location_other: action.location_other,
         location_shantytowns: action.shantytowns || [],
         managers: action.managers || [],
