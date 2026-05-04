@@ -257,7 +257,7 @@ export default function formDeclarationAction() {
         location_eti_addresses: array()
             .of(
                 object().shape({
-                    address: object().nullable(),
+                    address: object().nullable().noDuplicateAddress(),
                     coordinates: array().of(number()).nullable(),
                 })
             )
