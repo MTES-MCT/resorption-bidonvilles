@@ -71,15 +71,7 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/leaflet.markercluster";
 import "leaflet-providers";
-import {
-    defineProps,
-    toRefs,
-    ref,
-    onMounted,
-    onBeforeUnmount,
-    nextTick,
-    watch,
-} from "vue";
+import { toRefs, ref, onMounted, onBeforeUnmount, nextTick, watch } from "vue";
 import mapControls from "./Carte.controls";
 
 import { trackEvent } from "@/helpers/matomo";
