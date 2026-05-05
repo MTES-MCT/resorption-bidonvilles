@@ -295,7 +295,7 @@ function cluster() {
 
     if (Object.keys(clusters.value).length > 0) {
         Object.keys(clusters.value)
-            .map((x) => parseInt(x, 10))
+            .map((x) => Number.parseInt(x, 10))
             .sort((a, b) => a - b)
             .some((clusterLevel) => {
                 if (zoomLevel <= clusterLevel) {
@@ -442,7 +442,7 @@ function createLocationMarker(level, location) {
                           location.chieftown.longitude,
                       ]
                     : [location.latitude, location.longitude],
-                parseInt(zoomLevel, 10) + 1
+                Number.parseInt(zoomLevel, 10) + 1
             );
         });
 
