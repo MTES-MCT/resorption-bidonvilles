@@ -8,7 +8,7 @@ import permissionUtils from '#server/utils/permission';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 import getAddressSimpleOf from '#server/models//shantytownModel/_common/getAddressSimpleOf';
 import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
-import { codesOutreMer } from '#server/utils/permission/outremer';
+import { outremer } from '#server/utils/permission/outremer';
 import { Location } from '#server/models/geoModel/Location.d';
 import { ShantytownCommentRow } from './ShantytownCommentRow.d';
 import { ShantytownCommentActivity } from '#root/types/resources/Activity.d';
@@ -35,7 +35,7 @@ export type ShantytownCommentHistoryRow = ShantytownCommentRow & {
 };
 export default async (user: User, location: Location, numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<ShantytownCommentActivity[]> => {
     // apply geographic level restrictions
-    const where = [];
+    const where: string[] = [];
     const replacements: any = {
         maxDate,
     };
@@ -70,7 +70,10 @@ export default async (user: User, location: Location, numberOfActivities: number
         const publicCommentLocationClause = restrictedLocations.public.map((l, index) => {
             // On fait l'exclusion ou inclusion si c'est metropole ou outremer
             if (restrictedLocationTypes.has(l.type)) {
-                return `departements.code ${l.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer.departements})`;
+                replacements.outreMerDepts = outremer.departements;
+                return l.type === 'metropole'
+                    ? 'departements.code NOT IN (:outreMerDepts)'
+                    : 'departements.code IN (:outreMerDepts)';
             }
             const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownCommentLocationCode${index}`];
             if (l.type === 'city') {
@@ -94,7 +97,12 @@ export default async (user: User, location: Location, numberOfActivities: number
             restrictedLocations.private.forEach((l, index) => {
                 // On fait l'exclusion ou inclusion si c'est metropole ou outremer
                 if (restrictedLocationTypes.has(l.type)) {
-                    privateCommentLocationClause.push(`departements.code ${l.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer.departements})`);
+                    replacements.outreMerDepts = outremer.departements;
+                    privateCommentLocationClause.push(
+                        l.type === 'metropole'
+                            ? 'departements.code NOT IN (:outreMerDepts)'
+                            : 'departements.code IN (:outreMerDepts)',
+                    );
                 } else {
                     privateCommentLocationClause.push(`${fromGeoLevelToTableName(l.type)}.code = :privateShantytownCommentLocationCode${index}`);
                     if (l.type === 'city') {
@@ -135,7 +143,12 @@ export default async (user: User, location: Location, numberOfActivities: number
     if (location.type !== 'nation') {
         // On fait l'exclusion ou inclusion si c'est metropole ou outremer
         if (restrictedLocationTypes.has(location.type)) {
-            searchLocationClause.push(`departements.code ${location.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer.departements})`);
+            replacements.outreMerDepts = outremer.departements;
+            searchLocationClause.push(
+                location.type === 'metropole'
+                    ? 'departements.code NOT IN (:outreMerDepts)'
+                    : 'departements.code IN (:outreMerDepts)',
+            );
         } else {
             searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.code = :shantytownCommentSearchLocationCode`);
             if (location.type === 'city') {
@@ -150,7 +163,8 @@ export default async (user: User, location: Location, numberOfActivities: number
     where.push(`(${searchLocationClause.join(' OR ')})`);
 
     // additional filters
-    where.push(`comments.created_at < '${lastDate}'`);
+    replacements.lastDate = lastDate;
+    where.push('comments.created_at < :lastDate');
     if (maxDate) {
         where.push('comments.created_at >= :maxDate');
     }
