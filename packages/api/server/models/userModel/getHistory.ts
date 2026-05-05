@@ -3,7 +3,7 @@ import { QueryTypes } from 'sequelize';
 import { Location } from '#server/models/geoModel/Location.d';
 import interventionAreaModel from '#server/models/interventionAreaModel';
 import { RawInterventionArea } from '#server/models/userModel/_common/query.d';
-import { codesOutreMer } from '#server/utils/permission/outremer';
+import { outremer } from '#server/utils/permission/outremer';
 import { UserActivity } from '#root/types/resources/Activity.d';
 import formatName from './_common/formatName';
 
@@ -29,12 +29,12 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
                 EXISTS (
                     SELECT 1
                     FROM unnest(COALESCE(v_user_areas.departements, ARRAY[]::varchar[])) AS dep(code)
-                    WHERE btrim(dep.code::text) IN (${codesOutreMer.departements})
+                    WHERE btrim(dep.code::text) IN (:outreMerDepts)
                 )
                 OR EXISTS (
                     SELECT 1
                     FROM unnest(COALESCE(v_user_areas.regions, ARRAY[]::varchar[])) AS region(code)
-                    WHERE btrim(region.code::text) IN (${codesOutreMer.regions})
+                    WHERE btrim(region.code::text) IN (:outreMerRegions)
                 )
             )`;
 
@@ -60,7 +60,7 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
         LEFT JOIN v_user_areas ON v_user_areas.user_id = users.user_id AND v_user_areas.is_main_area IS TRUE
         WHERE
             lua.used_at IS NOT NULL
-            AND lua.used_at < '${lastDate}'
+            AND lua.used_at < :lastDate
             ${maxDate ? 'AND lua.used_at >= :maxDate' : ''}
             ${location.type === 'city' ? 'AND :city = ANY(v_user_areas.cities)' : ''}
             ${location.type === 'epci' ? 'AND :epci = ANY(v_user_areas.epci)' : ''}
@@ -76,6 +76,9 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
             type: QueryTypes.SELECT,
             replacements: {
                 maxDate,
+                lastDate,
+                outreMerDepts: outremer.departements,
+                outreMerRegions: outremer.regions,
                 city: location.city?.code || null,
                 epci: location.epci?.code || null,
                 departement: location.departement?.code || null,
