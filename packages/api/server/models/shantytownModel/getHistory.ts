@@ -4,7 +4,7 @@ import geoUtils from '#server/utils/geo';
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
 import { Location } from '#server/models/geoModel/Location.d';
-import { outremer } from '#server/utils/permission/outremer';
+import outremer from '#server/utils/permission/outremer';
 import getUsenameOf from './_common/getUsenameOf';
 import serializeShantytown from './_common/serializeShantytown';
 import getDiff from './_common/getDiff';

@@ -8,7 +8,7 @@ import permissionUtils from '#server/utils/permission';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 import getAddressSimpleOf from '#server/models//shantytownModel/_common/getAddressSimpleOf';
 import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
-import { outremer } from '#server/utils/permission/outremer';
+import outremer from '#server/utils/permission/outremer';
 import { Location } from '#server/models/geoModel/Location.d';
 import { ShantytownCommentRow } from './ShantytownCommentRow.d';
 import { ShantytownCommentActivity } from '#root/types/resources/Activity.d';

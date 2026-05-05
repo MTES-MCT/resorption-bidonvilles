@@ -3,7 +3,7 @@ import { QueryTypes } from 'sequelize';
 
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
-import { outremer } from '#server/utils/permission/outremer';
+import outremer from '#server/utils/permission/outremer';
 
 import { Location } from '#server/models/geoModel/Location.d';
 import { ActionCommentActivity } from '#root/types/resources/Activity.d';

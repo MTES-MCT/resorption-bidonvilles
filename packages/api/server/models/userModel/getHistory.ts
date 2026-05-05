@@ -3,7 +3,7 @@ import { QueryTypes } from 'sequelize';
 import { Location } from '#server/models/geoModel/Location.d';
 import interventionAreaModel from '#server/models/interventionAreaModel';
 import { RawInterventionArea } from '#server/models/userModel/_common/query.d';
-import { outremer } from '#server/utils/permission/outremer';
+import outremer from '#server/utils/permission/outremer';
 import { UserActivity } from '#root/types/resources/Activity.d';
 import formatName from './_common/formatName';
 
