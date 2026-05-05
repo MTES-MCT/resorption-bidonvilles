@@ -3,7 +3,7 @@ import { QueryTypes } from 'sequelize';
 
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
-import { codesOutreMer } from '#server/utils/permission/outremer';
+import { outremer } from '#server/utils/permission/outremer';
 
 import { Location } from '#server/models/geoModel/Location.d';
 import { ActionCommentActivity } from '#root/types/resources/Activity.d';
@@ -47,7 +47,10 @@ export default async (user: User, location: Location, numberOfActivities: number
 
                 // On fait l'exclusion ou inclusion si c'est metropole ou outremer
                 if (restrictedLocationTypes.has(l.type)) {
-                    return `departements.code ${l.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer.departements})`;
+                    replacements.outreMerDepts = outremer.departements;
+                    return l.type === 'metropole'
+                        ? 'departements.code NOT IN (:outreMerDepts)'
+                        : 'departements.code IN (:outreMerDepts)';
                 }
                 replacements[`locationCode${index}`] = l.departement.code;
 
@@ -56,7 +59,8 @@ export default async (user: User, location: Location, numberOfActivities: number
         );
     }
 
-    where.push(`comments.created_at < '${lastDate}'`);
+    replacements.lastDate = lastDate;
+    where.push('comments.created_at < :lastDate');
     if (maxDate) {
         where.push('comments.created_at >= :maxDate');
     }
