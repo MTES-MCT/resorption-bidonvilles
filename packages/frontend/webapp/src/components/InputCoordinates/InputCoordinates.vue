@@ -170,11 +170,13 @@ watch(view, () => {
     loadCadastre();
 });
 
-watch(carto, () => {
-    if (carto.value && carto.value.map) {
-        const { map } = carto.value;
+watch(
+    () => carto.value?.map,
+    (map) => {
+        if (!map) {
+            return;
+        }
 
-        // Créer le marqueur avec les coordonnées actuelles
         inputMarker = marqueurInput(view.value);
         inputMarker.addTo(map);
 
@@ -193,7 +195,7 @@ watch(carto, () => {
             clickTimeout = null;
         });
     }
-});
+);
 
 watch(showCadastre, () => {
     if (!carto.value || !carto.value.map) {
