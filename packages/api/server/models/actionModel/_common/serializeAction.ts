@@ -87,8 +87,8 @@ export default function serializeAction(action: ActionRow, user: User): Action {
                 return (action as any).location_eti_addresses.map((addr: any) => ({
                     id: addr.id,
                     address: addr.address,
-                    latitude: parseFloat(addr.coordinates.split(',')[0]),
-                    longitude: parseFloat(addr.coordinates.split(',')[1]),
+                    latitude: Number.parseFloat(addr.coordinates.split(',')[0]),
+                    longitude: Number.parseFloat(addr.coordinates.split(',')[1]),
                     citycode: addr.citycode,
                 }));
             }
