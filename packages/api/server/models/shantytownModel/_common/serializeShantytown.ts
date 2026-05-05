@@ -136,6 +136,7 @@ export default (town: ShantytownRow, user): Shantytown => {
         resorptionTarget: town.resorptionTarget,
         completionRate: 0,
         preparatoryPhasesTowardResorption: town.preparatoryPhasesTowardResorption,
+        hasInitialResorptionPhases: false,
     };
 
     // generé par findNearby

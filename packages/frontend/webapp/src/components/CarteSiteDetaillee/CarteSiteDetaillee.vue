@@ -19,6 +19,7 @@
                     class="mb-4"
                     :shantytown="shantytown"
                     :isHover="isHover"
+                    :currentTab="currentTab"
                 />
                 <CarteSiteDetailleeName :shantytown="shantytown" />
                 <div
