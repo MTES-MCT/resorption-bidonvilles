@@ -4,7 +4,7 @@ import geoUtils from '#server/utils/geo';
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
 import { Location } from '#server/models/geoModel/Location.d';
-import { codesOutreMer } from '#server/utils/permission/outremer';
+import { outremer } from '#server/utils/permission/outremer';
 import getUsenameOf from './_common/getUsenameOf';
 import serializeShantytown from './_common/serializeShantytown';
 import getDiff from './_common/getDiff';
@@ -50,7 +50,10 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
             restrictedLocations.map((l, index) => {
                 // On fait l'exclusion ou inclusion si c'est metropole ou outremer
                 if (restrictedLocationTypes.has(l.type)) {
-                    return `departements.code ${l.type === 'metropole' ? 'NOT' : ''} IN (${codesOutreMer.departements})`;
+                    replacements.outreMerDepts = outremer.departements;
+                    return l.type === 'metropole'
+                        ? 'departements.code NOT IN (:outreMerDepts)'
+                        : 'departements.code IN (:outreMerDepts)';
                 }
                 replacements[`shantytownLocationCode${index}`] = l[l.type].code;
 
