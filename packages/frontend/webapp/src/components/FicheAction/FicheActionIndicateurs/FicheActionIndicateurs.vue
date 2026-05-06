@@ -1,5 +1,10 @@
 <template>
-    <FicheRubrique title="Indicateurs" id="indicateurs">
+    <FicheRubrique
+        title="Indicateurs"
+        id="indicateurs"
+        category="indicateurs"
+        entityType="action"
+    >
         <IndicateursGrid class="overflow-x-auto">
             <IndicateursRow>
                 <template v-slot:right>

@@ -1,4 +1,5 @@
 import permissionUtils from '#server/utils/permission';
+import dateUtils from '#server/utils/date';
 import { Location } from '#server/models/geoModel/Location.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { ShantytownRow } from './SQL';
@@ -7,10 +8,7 @@ import getUsenameOf from './getUsenameOf';
 import serializeLivingConditions from './livingConditions/serializeLivingConditions';
 
 const { can } = permissionUtils;
-
-function fromDateToTimestamp(date) {
-    return date !== null ? (new Date(`${date}T00:00:00Z`).getTime() / 1000) : null;
-}
+const { toTimestampSeconds } = dateUtils;
 
 export default (town: ShantytownRow, user): Shantytown => {
     let serializedTown: Shantytown = {
@@ -57,8 +55,8 @@ export default (town: ShantytownRow, user): Shantytown => {
                 longitude: town.regionChiefTownLongitude,
             },
         },
-        declaredAt: fromDateToTimestamp(town.declaredAt),
-        builtAt: fromDateToTimestamp(town.builtAt),
+        declaredAt: toTimestampSeconds(town.declaredAt),
+        builtAt: toTimestampSeconds(town.builtAt),
         isReinstallation: town.isReinstallation,
         reinstallationComments: town.reinstallationComments,
         reinstallationIncomingTowns: [],
@@ -89,7 +87,7 @@ export default (town: ShantytownRow, user): Shantytown => {
         livingConditions: serializeLivingConditions(town),
         censusStatus: town.censusStatus,
         censusConductedBy: town.censusConductedBy,
-        censusConductedAt: fromDateToTimestamp(town.censusConductedAt),
+        censusConductedAt: toTimestampSeconds(town.censusConductedAt),
         fieldType: {
             id: town.fieldTypeId,
             label: town.fieldTypeLabel,
@@ -186,24 +184,24 @@ export default (town: ShantytownRow, user): Shantytown => {
                 ownerComplaint: town.ownerComplaint,
                 justiceProcedure: town.justiceProcedure,
                 justiceRendered: town.justiceRendered,
-                justiceRenderedAt: fromDateToTimestamp(town.justiceRenderedAt),
+                justiceRenderedAt: toTimestampSeconds(town.justiceRenderedAt),
                 justiceRenderedBy: town.justiceRenderedBy,
                 justiceChallenged: town.justiceChallenged,
                 policeStatus: town.policeStatus,
-                policeRequestedAt: fromDateToTimestamp(town.policeRequestedAt),
-                policeGrantedAt: fromDateToTimestamp(town.policeGrantedAt),
+                policeRequestedAt: toTimestampSeconds(town.policeRequestedAt),
+                policeGrantedAt: toTimestampSeconds(town.policeGrantedAt),
                 bailiff: town.bailiff,
                 // procédures administratives
                 existingLitigation: town.existingLitigation,
                 evacuationUnderTimeLimit: town.evacuationUnderTimeLimit,
-                administrativeOrderDecisionAt: fromDateToTimestamp(town.administrativeOrderDecisionAt),
+                administrativeOrderDecisionAt: toTimestampSeconds(town.administrativeOrderDecisionAt),
                 administrativeOrderDecisionRenderedBy: town.administrativeOrderDecisionRenderedBy,
-                administrativeOrderEvacuationAt: fromDateToTimestamp(town.administrativeOrderEvacuationAt),
+                administrativeOrderEvacuationAt: toTimestampSeconds(town.administrativeOrderEvacuationAt),
                 insalubrityOrder: town.insalubrityOrder,
                 insalubrityOrderDisplayed: town.insalubrityOrderDisplayed,
                 insalubrityOrderType: town.insalubrityOrderType,
                 insalubrityOrderBy: town.insalubrityOrderBy,
-                insalubrityOrderAt: fromDateToTimestamp(town.insalubrityOrderAt),
+                insalubrityOrderAt: toTimestampSeconds(town.insalubrityOrderAt),
                 insalubrityParcels: town.insalubrityParcels,
                 // fin procédures administratives
             },

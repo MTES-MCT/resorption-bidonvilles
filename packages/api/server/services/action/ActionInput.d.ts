@@ -17,6 +17,13 @@ type ActionFinanceRow = {
     real_amount: number,
 };
 
+export type ActionAddressInput = {
+    address: string,
+    citycode: string,
+    latitude: number,
+    longitude: number,
+};
+
 export interface ActionInput {
     name: string,
     started_at: Date,
@@ -27,10 +34,7 @@ export interface ActionInput {
     location: Departement,
     location_departement: string,
     location_type: ActionLocationType,
-    location_eti: string | null,
-    location_eti_citycode: string | null,
-    latitude: number | null,
-    longitude: number | null,
+    location_eti_addresses: ActionAddressInput[] | null,
     location_shantytowns: number[] | null,
     location_autre: string | null,
     managers: ActionInputUser[],
@@ -60,7 +64,6 @@ export interface ActionInput {
 }
 
 export interface ActionEnrichedInput extends ActionInput {
-    address: string | null
 }
 
 export interface ActionCreateInput extends ActionEnrichedInput {

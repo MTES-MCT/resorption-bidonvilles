@@ -4,7 +4,7 @@ import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 import { User } from '#root/types/resources/User.d';
 import enrichCommentsAttachments from './enrichCommentsAttachments';
 
-export default async (user: User, actionIds: number[] = null): Promise<EnrichedAction[]> => {
+export default async (user: User, actionIds?: number[]): Promise<EnrichedAction[]> => {
     const actions = await actionModel.fetch(user, actionIds);
 
     /*
