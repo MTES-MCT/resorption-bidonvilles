@@ -271,18 +271,30 @@ export default async (
     // Remplir les phases préparatoires AVANT de calculer le changelog
     townsPhasesTowardResorption.forEach((elt) => {
         if (elt.preparatoryPhases?.length > 0) {
-            // Filtrer les éléments null/undefined
-            const validPhases = elt.preparatoryPhases.filter(p => p !== null && p !== undefined);
-            serializedTowns.hash[elt.townId].preparatoryPhasesTowardResorption = validPhases.length > 0 ? validPhases : [];
+            serializedTowns.hash[elt.townId].preparatoryPhasesTowardResorption = elt.preparatoryPhases;
         }
     });
 
-    // Nettoyer les phases qui contiennent [null] ou [undefined] de la requête SQL
+    // Nettoyer les phases et calculer hasInitialResorptionPhases pour chaque site
+    const INITIAL_PHASE_UIDS = new Set([
+        'sociological_diagnosis',
+        'social_assessment',
+        'political_validation',
+    ]);
+
     Object.keys(serializedTowns.hash).forEach((shantytownId) => {
         const phases: ShantytownPreparatoryPhaseTowardResorption[] = serializedTowns.hash[shantytownId].preparatoryPhasesTowardResorption;
         if (phases?.length > 0) {
+            // Nettoyer les phases qui contiennent [null] ou [undefined]
             const validPhases = phases.filter(p => p !== null && p !== undefined);
             serializedTowns.hash[shantytownId].preparatoryPhasesTowardResorption = validPhases;
+
+            // Calculer hasInitialResorptionPhases
+            const initialPhasesPresent = validPhases
+                .filter(p => INITIAL_PHASE_UIDS.has(p.preparatoryPhaseId))
+                .map(p => p.preparatoryPhaseId);
+
+            serializedTowns.hash[shantytownId].hasInitialResorptionPhases = initialPhasesPresent.length === 3;
         }
     });
 
