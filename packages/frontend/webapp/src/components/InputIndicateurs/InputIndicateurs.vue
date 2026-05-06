@@ -76,8 +76,8 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, watch, ref, computed } from "vue";
-import { useField, useFormErrors } from "vee-validate";
+import { toRefs, watch, ref, computed } from "vue";
+import { useField } from "vee-validate";
 import { Button } from "@resorptionbidonvilles/ui";
 import sectionsList from "./sections.list";
 import inputsList from "./inputs.list";
@@ -102,44 +102,45 @@ const props = defineProps({
     },
     topics: {
         type: Array,
+        required: false,
         default() {
             return [];
         },
     },
+    errors: {
+        type: Object,
+        required: false,
+        default() {
+            return {};
+        },
+    },
 });
 
-const { name, minYear, maxYear, topics } = toRefs(props);
+const { name, minYear, maxYear, topics, errors } = toRefs(props);
 
 const { value } = useField(name.value);
 initializeYears(value.value);
-
-const errors = useFormErrors();
 
 const focusedYear = ref(Math.min(new Date().getFullYear(), maxYear.value));
 const focusedYearData = computed(() => {
     return value.value?.[focusedYear.value] || {};
 });
+
+// indicateursErrors est un objet plat { fieldName: message } reconstruit
+// depuis les messages yup encodés "FIELD:fieldName|MESSAGE:..." par le parent.
+// Il n'est pas filtré par année car la validation yup agit sur l'objet année
+// focalisé au moment de la saisie.
 const focusedYearErrors = computed(() => {
-    return (
-        Object.keys(errors.value)
-            // l'erreur peut-être sous deux formats différents selon que c'est Yup ou l'API qui a
-            // généré l'erreur
-            // - yup: indicateurs.2023.nombre_personnes
-            // - api : indicateurs[2023].nombre_personnes
-            .filter((key) =>
-                new RegExp(
-                    `indicateurs(\\[|\\.)${focusedYear.value}(\\]|\\.)`
-                ).test(key)
-            )
-            .reduce((acc, key) => {
-                const fieldName = key.match(
-                    /^indicateurs(?:\[|\.).+\]?\.(.+)$/
-                )[1];
-                acc[fieldName] = [errors.value[key]];
-                return acc;
-            }, {})
-    );
+    const errorsObj = errors.value;
+    if (!errorsObj || Object.keys(errorsObj).length === 0) {
+        return {};
+    }
+    return Object.keys(errorsObj).reduce((acc, fieldName) => {
+        acc[fieldName] = [errorsObj[fieldName]];
+        return acc;
+    }, {});
 });
+
 const sections = computed(() => {
     return sectionsList.filter(
         ({ topic }) =>
@@ -176,7 +177,7 @@ function applyNewTimeRange() {
 
     // on supprime les données des années en-dehors de l'intervalle autorisé
     Object.keys(value.value).forEach((strYear) => {
-        const year = parseInt(strYear, 10);
+        const year = Number.parseInt(strYear, 10);
         if (year < minYear.value || year > maxYear.value) {
             delete value.value[strYear];
             value.value[strYear] = undefined;

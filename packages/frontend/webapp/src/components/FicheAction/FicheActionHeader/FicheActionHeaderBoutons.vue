@@ -1,5 +1,13 @@
 <template>
     <p class="flex space-x-2">
+        <DsfrButton
+            v-if="userStore.hasActionPermission('action.read', action)"
+            size="sm"
+            secondary
+            icon="fr-icon-time-line"
+            @click.prevent.stop="$emit('openHistory')"
+            >Historique</DsfrButton
+        >
         <RouterLink
             to="#journal_de_l_action"
             v-if="userStore.hasActionPermission('action_comment.read', action)"
@@ -27,6 +35,8 @@ import { useRouter } from "vue-router";
 const props = defineProps({
     action: Object,
 });
+
+defineEmits(["openHistory"]);
 
 const router = useRouter();
 const { action } = toRefs(props);

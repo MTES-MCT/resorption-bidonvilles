@@ -258,16 +258,4 @@ watch(
     },
     { immediate: true }
 );
-watch(
-    () => townsStore.filters.status,
-    (status) => {
-        if (status === "close") {
-            console.log(
-                "[DEBUG] closureYear initial:",
-                townsStore.filters.properties.closureYear
-            );
-        }
-    },
-    { immediate: true }
-);
 </script>

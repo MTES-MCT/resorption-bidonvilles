@@ -1,5 +1,5 @@
 <template>
-    <FicheActionHeader :action="action" />
+    <FicheActionHeader :action="action" @openHistory="openHistory" />
 
     <ContentWrapper>
         <ArrangementLeftMenu columnWidthClass="w-96" :tabs="tabs" autonav>
@@ -30,10 +30,12 @@
         class="mt-4"
         v-if="userStore.hasActionPermission('action_comment.read', action)"
     />
+
+    <FicheActionHistorique ref="historiqueRef" :action="action" />
 </template>
 
 <script setup>
-import { toRefs, computed, watch } from "vue";
+import { toRefs, computed, watch, ref } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
 
 import { useUserStore } from "@/stores/user.store";
@@ -50,6 +52,7 @@ import FicheActionFinancements from "./FicheActionFinancements/FicheActionFinanc
 import FicheActionIndicateurs from "./FicheActionIndicateurs/FicheActionIndicateurs.vue";
 import FicheActionAbsenceIndicateurs from "./FicheActionAbsenceIndicateurs/FicheActionAbsenceIndicateurs.vue";
 import FicheActionJournal from "./FicheActionJournal/FicheActionJournal.vue";
+import FicheActionHistorique from "./FicheActionHistorique/FicheActionHistorique.vue";
 import ModaleListeAccesActionFinancements from "@/components/ModaleListeAccesActionFinancements/ModaleListeAccesActionFinancements.vue";
 
 const { bus } = useEventBus();
@@ -60,6 +63,13 @@ const props = defineProps({
 const { action } = toRefs(props);
 
 const userStore = useUserStore();
+const historiqueRef = ref(null);
+
+const openHistory = () => {
+    if (historiqueRef.value) {
+        historiqueRef.value.open();
+    }
+};
 
 const tabs = computed(() => {
     const commentsAttachments = action.value.comments.reduce((sum, comment) => {
@@ -96,6 +106,15 @@ watch(
             future: false,
             actionId: action.value.id,
         });
+    }
+);
+
+watch(
+    () => bus.value.get("ficheaction:openHistorique"),
+    (data) => {
+        if (historiqueRef.value) {
+            historiqueRef.value.open(data);
+        }
     }
 );
 </script>

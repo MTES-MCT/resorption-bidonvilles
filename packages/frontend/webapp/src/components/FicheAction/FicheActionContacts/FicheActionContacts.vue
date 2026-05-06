@@ -1,5 +1,10 @@
 <template>
-    <FicheRubrique title="Contacts" id="contacts">
+    <FicheRubrique
+        title="Contacts"
+        id="contacts"
+        category="contacts"
+        entityType="action"
+    >
         <FicheActionPilotes :action="action" />
         <FicheActionOperateur :action="action" />
     </FicheRubrique>

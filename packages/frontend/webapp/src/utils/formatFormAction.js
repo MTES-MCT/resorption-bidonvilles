@@ -31,22 +31,24 @@ export const formatFormAction = (data) => {
         location_departement:
             data.location_departement || data.location?.departement?.code,
         location_type: data.location_type || undefined,
-        location_eti: data.eti
-            ? {
-                  search: data.eti.address,
-                  data: {
-                      citycode: data.eti.citycode,
-                      city: "",
-                      label: data.eti.address,
-                      coordinates: data.latitude
-                          ? [data.eti.latitude, data.eti.longitude]
-                          : [],
-                  },
-              }
-            : undefined,
-        location_eti_coordinates: data.eti
-            ? [data.eti.latitude, data.eti.longitude]
-            : [],
+        location_eti_addresses:
+            data.eti && Array.isArray(data.eti) && data.eti.length > 0
+                ? data.eti.map((address) => ({
+                      address: {
+                          search: address.address,
+                          data: {
+                              citycode: address.citycode,
+                              city: "",
+                              label: address.address,
+                              coordinates: [
+                                  address.latitude,
+                                  address.longitude,
+                              ],
+                          },
+                      },
+                      coordinates: [address.latitude, address.longitude],
+                  }))
+                : [{ address: null, coordinates: null }],
         location_shantytowns: data.location_shantytowns
             ? normalizeShantytownIds(data.location_shantytowns)
             : [],

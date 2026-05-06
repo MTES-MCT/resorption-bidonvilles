@@ -6,7 +6,9 @@
             <InputLocationDepartement :disable="disableDepartement" />
             <InputLocationType />
             <InputLocationAutre v-if="values.location_type === 'autre'" />
-            <InputLocationETI v-else-if="values.location_type === 'eti'" />
+            <InputLocationETIMultiple
+                v-else-if="values.location_type === 'eti'"
+            />
             <InputLocationShantytowns
                 v-else-if="values.location_type === 'sur_site'"
             />
@@ -15,7 +17,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { ref, toRefs } from "vue";
 import { useFormValues } from "vee-validate";
 import FormSection from "@/components/FormSection/FormSection.vue";
 import { FormParagraph } from "@resorptionbidonvilles/ui";
@@ -24,7 +26,7 @@ import labels from "../FormDeclarationAction.labels";
 import InputLocationType from "../inputs/FormDeclarationActionInputLocationType.vue";
 import InputLocationDepartement from "../inputs/FormDeclarationActionInputLocationDepartement.vue";
 import InputLocationAutre from "../inputs/FormDeclarationActionInputLocationAutre.vue";
-import InputLocationETI from "../inputs/FormDeclarationActionInputLocationETI.vue";
+import InputLocationETIMultiple from "../inputs/FormDeclarationActionInputLocationETIMultiple.vue";
 import InputLocationShantytowns from "../inputs/FormDeclarationActionInputLocationShantytowns.vue";
 
 const props = defineProps({
@@ -33,4 +35,9 @@ const props = defineProps({
 const { disableDepartement } = toRefs(props);
 
 const values = useFormValues();
+const locationETIMultipleRef = ref(null);
+
+defineExpose({
+    locationETIMultipleRef,
+});
 </script>

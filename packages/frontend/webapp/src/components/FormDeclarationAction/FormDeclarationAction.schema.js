@@ -25,14 +25,207 @@ addMethod(object, "usersIsNotEmpty", function () {
                     .min(1, ({ label }) => `${label} est obligatoire`)
                     .validate(value.users);
                 return true;
-            } catch (error) {
+            } catch {
                 return false;
             }
         }
     );
 });
 
-export default function () {
+function normalizeAddressForComparison(address) {
+    return String(address)
+        .normalize("NFD")
+        .replaceAll(/[\u0300-\u036f]/g, "")
+        .replaceAll(/[\u2018\u2019\u0027]/g, "'")
+        .toLowerCase()
+        .trim();
+}
+
+function createAddressKey(addr) {
+    if (!addr?.data) {
+        return null;
+    }
+    const normalizedAddress = normalizeAddressForComparison(addr.data.label);
+    return `${normalizedAddress}|${
+        addr.data.citycode
+    }|${addr.data.coordinates?.join(",")}`;
+}
+
+addMethod(object, "noDuplicateAddress", function () {
+    return this.test(
+        "noDuplicateAddress",
+        "Cette adresse est déjà présente dans la liste",
+        function (value) {
+            // value est l'objet address actuel
+            const addressKey = createAddressKey(value);
+
+            if (!addressKey) {
+                return true;
+            }
+
+            // Récupérer le contexte complet du formulaire
+            const { from, path } = this;
+
+            // Extraire l'index de ce champ depuis le path (ex: "location_eti_addresses[0].address")
+            const match = new RegExp(/\[(\d+)\]\.address$/).exec(path);
+            if (!match) {
+                return true;
+            }
+            const currentIndex = Number.parseInt(match[1], 10);
+
+            // Récupérer toutes les adresses ETI depuis le formulaire parent
+            const allAddresses = from[0]?.value?.location_eti_addresses;
+
+            if (!allAddresses || allAddresses.length <= 1) {
+                return true;
+            }
+
+            // Vérifier si cette adresse existe déjà ailleurs
+            for (let i = 0; i < allAddresses.length; i++) {
+                if (i === currentIndex) {
+                    continue; // Ignorer l'adresse courante
+                }
+
+                const otherAddressKey = createAddressKey(
+                    allAddresses[i].address
+                );
+                if (otherAddressKey && otherAddressKey === addressKey) {
+                    return false; // Doublon détecté
+                }
+            }
+
+            return true;
+        }
+    );
+});
+
+// Helper pour créer un champ nombre standardisé
+// Utilise un format spécial pour encoder le fieldName dans le message
+// Format: "FIELD:fieldName|MESSAGE:message"
+// Le composant InputIndicateurs extrait le fieldName et affiche uniquement le message
+const createNumberField = (fieldName, label) =>
+    number()
+        .typeError(`FIELD:${fieldName}|MESSAGE:${label} doit être un nombre`)
+        .nullable()
+        .transform(emptyStringToNull);
+
+// Helper pour créer les champs indicateurs à partir d'un format compact
+// Format: [name, label, hasLabel?]
+const createFields = (baseFields) =>
+    baseFields.map(([name, label, hasLabel]) => ({
+        name,
+        label,
+        ...(hasLabel && { hasLabel }),
+    }));
+
+// Définition des champs d'indicateurs avec leurs labels
+const indicateursFields = [
+    // Démographie
+    ...createFields([
+        ["nombre_personnes", "Nombre de personnes", true],
+        ["nombre_menages", "Nombre de ménages"],
+        ["nombre_femmes", "Nombre de femmes"],
+        ["nombre_mineurs", "Nombre de mineurs"],
+    ]),
+
+    // Santé
+    ...createFields([
+        [
+            "sante_nombre_personnes",
+            "Nombre de personnes ayant bénéficié d'un accompagnement vers la santé",
+        ],
+    ]),
+
+    // Travail
+    ...createFields([
+        [
+            "travail_nombre_personnes",
+            "Nombre de personnes ayant eu au moins 1 contrat de travail",
+        ],
+        [
+            "travail_nombre_femmes",
+            "Nombre de femmes ayant eu au moins 1 contrat de travail",
+        ],
+    ]),
+
+    // Hébergement
+    ...createFields([
+        [
+            "hebergement_nombre_personnes",
+            "Nombre de personnes ayant eu accès à un hébergement",
+        ],
+        [
+            "hebergement_nombre_menages",
+            "Nombre de ménages ayant eu accès à un hébergement",
+        ],
+    ]),
+
+    // Logement
+    ...createFields([
+        [
+            "logement_nombre_personnes",
+            "Nombre de personnes ayant eu accès à un logement",
+        ],
+        [
+            "logement_nombre_menages",
+            "Nombre de ménages ayant eu accès à un logement",
+        ],
+    ]),
+
+    // Scolaire
+    ...createFields([
+        [
+            "scolaire_mineurs_scolarisables",
+            "Nombre de mineurs en âge d'être scolarisés",
+        ],
+        [
+            "scolaire_mineurs_en_mediation",
+            "Nombre de mineurs bénéficiant d'une action de médiation",
+        ],
+        [
+            "scolaire_nombre_maternelle",
+            "Nombre de mineurs scolarisés en maternelle",
+        ],
+        [
+            "scolaire_nombre_elementaire",
+            "Nombre de mineurs scolarisés en élémentaire",
+        ],
+        ["scolaire_nombre_college", "Nombre de mineurs scolarisés au collège"],
+        ["scolaire_nombre_lycee", "Nombre de mineurs scolarisés au lycée"],
+        ["scolaire_nombre_autre", 'Nombre de mineurs scolarisés "autre"'],
+    ]),
+];
+
+// Helper pour créer les champs d'indicateurs par catégorie
+const createIndicateurFields = () => {
+    // Créer tous les champs de base
+    const fields = {};
+
+    indicateursFields.forEach(({ name, label, hasLabel }) => {
+        let field = createNumberField(name, label);
+
+        // Ajouter le label explicite pour certains champs
+        if (hasLabel) {
+            field = field.label(label);
+        }
+
+        fields[name] = field;
+    });
+
+    // Appliquer les particularités (même approche que FormDeclarationDeSite)
+    fields.nombre_femmes = fields.nombre_femmes.when("nombre_personnes", {
+        is: (value) => value !== null && value !== undefined,
+        then: (schema) =>
+            schema.max(
+                ref("nombre_personnes"),
+                "FIELD:nombre_femmes|MESSAGE:Le nombre de femmes ne peut être supérieur au nombre de personnes"
+            ),
+    });
+
+    return fields;
+};
+
+export default function formDeclarationAction() {
     const configStore = useConfigStore();
 
     const schema = {
@@ -44,7 +237,7 @@ export default function () {
             .nullable()
             .typeError(`${labels.ended_at} est invalide`)
             .when("started_at", {
-                is: (value) => value instanceof Date && !isNaN(value),
+                is: (value) => value instanceof Date && !Number.isNaN(value),
                 then: (schema) => schema.min(ref("started_at")),
             })
             .label(labels.ended_at),
@@ -61,12 +254,33 @@ export default function () {
             .oneOf(locationTypes.map(({ uid }) => uid))
             .required()
             .label(labels.location_type),
-        location_eti: object()
+        location_eti_addresses: array()
+            .of(
+                object().shape({
+                    address: object()
+                        .nullable()
+                        .when("$location_type", {
+                            is: "eti",
+                            then: (schema) =>
+                                schema.required(
+                                    "L'adresse est obligatoire pour un Espace Temporaire d'Accompagnement"
+                                ),
+                        })
+                        .noDuplicateAddress(),
+                    coordinates: array().of(number()).nullable(),
+                })
+            )
             .when("location_type", {
                 is: "eti",
-                then: (schema) => schema.required(),
+                then: (schema) =>
+                    schema
+                        .required()
+                        .min(
+                            1,
+                            "Au moins une adresse est requise pour un Espace Temporaire d'Accompagnement"
+                        ),
             })
-            .label(labels.location_eti),
+            .label("Adresses des Espaces Temporaires d'Accompagnement"),
         location_shantytowns: array()
             .of(number())
             .when("location_type", {
@@ -98,117 +312,7 @@ export default function () {
                     Object.keys(value || {}).reduce((acc, key) => {
                         acc[key] = object()
                             .required()
-                            .shape({
-                                nombre_personnes: number()
-                                    .typeError(
-                                        `${key} — Nombre de personnes doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull)
-                                    .label("Nombre de personnes"),
-                                nombre_menages: number()
-                                    .typeError(
-                                        `${key} — Nombre de ménages doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                nombre_femmes: number()
-                                    .typeError(
-                                        `${key} — Nombre de femmes doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                nombre_mineurs: number()
-                                    .typeError(
-                                        `${key} — Nombre de mineurs doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                sante_nombre_personnes: number()
-                                    .typeError(
-                                        `${key} — Nombre de personnes ayant bénéficié d'un accompagnement vers la santé doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                travail_nombre_personnes: number()
-                                    .typeError(
-                                        `${key} — Nombre de personnes ayant eu au moins 1 contrat de travail doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                travail_nombre_femmes: number()
-                                    .typeError(
-                                        `${key} — Nombre de femmes ayant eu au moins 1 contrat de travail doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                hebergement_nombre_personnes: number()
-                                    .typeError(
-                                        `${key} — Nombre de personnes ayant eu accès à un hébergement doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                hebergement_nombre_menages: number()
-                                    .typeError(
-                                        `${key} — Nombre de ménages ayant eu accès à un hébergement doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                logement_nombre_personnes: number()
-                                    .typeError(
-                                        `${key} — Nombre de personnes ayant eu accès à un logement doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                logement_nombre_menages: number()
-                                    .typeError(
-                                        `${key} — Nombre de ménages ayant eu accès à un logement doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                scolaire_mineurs_scolarisables: number()
-                                    .typeError(
-                                        `${key} — Nombre de mineurs en âge d'être scolarisés doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                scolaire_mineurs_en_mediation: number()
-                                    .typeError(
-                                        `${key} — Nombre de mineurs bénéficiant d'une action de médiation doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                scolaire_nombre_maternelle: number()
-                                    .typeError(
-                                        `${key} — Nombre de mineurs scolarisés en maternelle doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                scolaire_nombre_elementaire: number()
-                                    .typeError(
-                                        `${key} — Nombre de mineurs scolarisés en élémentaire doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                scolaire_nombre_college: number()
-                                    .typeError(
-                                        `${key} — Nombre de mineurs scolarisés au collège doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                scolaire_nombre_lycee: number()
-                                    .typeError(
-                                        `${key} — Nombre de mineurs scolarisés au lycée doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                                scolaire_nombre_autre: number()
-                                    .typeError(
-                                        `${key} — Nombre de mineurs scolarisés "autre" doit être un nombre`
-                                    )
-                                    .nullable()
-                                    .transform(emptyStringToNull),
-                            })
+                            .shape(createIndicateurFields())
                             .label("Indicateurs " + key);
                         return acc;
                     }, {})

@@ -8,10 +8,10 @@ export type ActionTopicRow = {
     name: string,
 };
 
-export default function fetchTopics(actionIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionTopicRow[]> {
+export default function fetchTopics(actionIds?: number[], clauseGroup: object = {}, transaction?: Transaction): Promise<ActionTopicRow[]> {
     const where = [];
     const replacements = { actionIds };
-    if (actionIds !== null) {
+    if (actionIds !== undefined) {
         where.push('action_topics.fk_action IN (:actionIds)');
     }
 

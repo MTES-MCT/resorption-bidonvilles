@@ -56,7 +56,7 @@ const ariane = computed(() => [
 ]);
 
 const actionId = computed(() => {
-    return parseInt(router.currentRoute.value.params.id, 10);
+    return Number.parseInt(router.currentRoute.value.params.id, 10);
 });
 
 onMounted(load);

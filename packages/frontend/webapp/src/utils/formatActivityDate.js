@@ -1,4 +1,4 @@
-import formatDate from "../../../common/utils/formatDate";
+import formatTimestamp from "@common/utils/formatTimestamp.js";
 
 function isSameDay(now, then) {
     return (
@@ -12,7 +12,7 @@ export default function (date) {
     const now = new Date();
     const then = new Date(date * 1000);
 
-    let day = `${formatDate(date, "U")} ${formatDate(date, "d M y")}`;
+    let day = `${formatTimestamp(date, "U")} ${formatTimestamp(date, "d M y")}`;
     if (isSameDay(now, then)) {
         day = "Aujourd'hui";
     } else {
@@ -22,5 +22,5 @@ export default function (date) {
         }
     }
 
-    return `${day} à ${formatDate(date, "h")}h`;
+    return `${day} à ${formatTimestamp(date, "h")}h`;
 }

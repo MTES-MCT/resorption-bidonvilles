@@ -3,16 +3,16 @@ import { sequelize } from '#db/sequelize';
 import enrichWhere from '../fetch/enrichWhere';
 import { ActionRowComment } from './ActionCommentRow.d';
 
-export default function fetchComments(actionIds: number[] = null, commentIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionRowComment[]> {
+export default function fetchComments(actionIds?: number[], commentIds?: number[], clauseGroup: object = {}, transaction?: Transaction): Promise<ActionRowComment[]> {
     const where = [];
     const replacements = {
         actionIds,
         commentIds,
     };
-    if (actionIds !== null) {
+    if (actionIds !== undefined) {
         where.push('action_comments.fk_action IN (:actionIds)');
     }
-    if (commentIds !== null) {
+    if (commentIds !== undefined) {
         where.push('action_comments.action_comment_id IN (:commentIds)');
     }
 
