@@ -18,7 +18,11 @@
         </div>
 
         <div class="h-128 mb-8">
-            <CartoFicheAction :defaultView="center" :towns="action.eti" />
+            <CartoFicheAction
+                :mapId="`action-${action.id}-map`"
+                :defaultView="center"
+                :towns="action.eti"
+            />
         </div>
     </div>
 </template>
