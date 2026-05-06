@@ -245,8 +245,6 @@ export default async (user: User, location: Location, numberOfActivities: number
         );
     }
 
-    console.log('Activities: ', activities);
-
     return activities
         .map((activity: ShantytownCommentHistoryRow): ShantytownCommentActivity => ({
             entity: 'comment',
