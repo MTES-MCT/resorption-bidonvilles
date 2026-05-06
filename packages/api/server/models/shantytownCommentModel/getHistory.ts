@@ -70,7 +70,9 @@ export default async (user: User, location: Location, numberOfActivities: number
         const publicCommentLocationClause = restrictedLocations.public.map((l, index) => {
             // On fait l'exclusion ou inclusion si c'est metropole ou outremer
             if (restrictedLocationTypes.has(l.type)) {
-                replacements.outreMerDepts = outremer.departements;
+                if (!replacements.outreMerDepts) {
+                    replacements.outreMerDepts = outremer.departements;
+                }
                 return l.type === 'metropole'
                     ? 'departements.code NOT IN (:outreMerDepts)'
                     : 'departements.code IN (:outreMerDepts)';
@@ -97,7 +99,9 @@ export default async (user: User, location: Location, numberOfActivities: number
             restrictedLocations.private.forEach((l, index) => {
                 // On fait l'exclusion ou inclusion si c'est metropole ou outremer
                 if (restrictedLocationTypes.has(l.type)) {
-                    replacements.outreMerDepts = outremer.departements;
+                    if (!replacements.outreMerDepts) {
+                        replacements.outreMerDepts = outremer.departements;
+                    }
                     privateCommentLocationClause.push(
                         l.type === 'metropole'
                             ? 'departements.code NOT IN (:outreMerDepts)'
@@ -143,7 +147,9 @@ export default async (user: User, location: Location, numberOfActivities: number
     if (location.type !== 'nation') {
         // On fait l'exclusion ou inclusion si c'est metropole ou outremer
         if (restrictedLocationTypes.has(location.type)) {
-            replacements.outreMerDepts = outremer.departements;
+            if (!replacements.outreMerDepts) {
+                replacements.outreMerDepts = outremer.departements;
+            }
             searchLocationClause.push(
                 location.type === 'metropole'
                     ? 'departements.code NOT IN (:outreMerDepts)'
@@ -238,6 +244,8 @@ export default async (user: User, location: Location, numberOfActivities: number
             activities.map(({ commentId }: any) => commentId),
         );
     }
+
+    console.log('Activities: ', activities);
 
     return activities
         .map((activity: ShantytownCommentHistoryRow): ShantytownCommentActivity => ({

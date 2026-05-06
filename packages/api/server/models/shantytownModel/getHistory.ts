@@ -50,7 +50,9 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
             restrictedLocations.map((l, index) => {
                 // On fait l'exclusion ou inclusion si c'est metropole ou outremer
                 if (restrictedLocationTypes.has(l.type)) {
-                    replacements.outreMerDepts = outremer.departements;
+                    if (!replacements.outreMerDepts) {
+                        replacements.outreMerDepts = outremer.departements;
+                    }
                     return l.type === 'metropole'
                         ? 'departements.code NOT IN (:outreMerDepts)'
                         : 'departements.code IN (:outreMerDepts)';
