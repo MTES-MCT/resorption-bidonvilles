@@ -60,9 +60,14 @@ const dihalYearOptions = computed(() => {
             }
         }
     }
-    return [...years]
+    const yearOptions = [...years]
         .sort((a, b) => b - a)
         .map((year) => ({ value: String(year), label: String(year) }));
+
+    return [
+        { value: "all", label: "Toutes les années", displayBottomBorder: true },
+        ...yearOptions,
+    ];
 });
 
 const filters = computed(() =>
