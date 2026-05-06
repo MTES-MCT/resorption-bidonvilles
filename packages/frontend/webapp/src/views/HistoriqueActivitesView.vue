@@ -5,7 +5,6 @@
         searchPlaceholder="Nom d'une commune, d'un département, d'une région..."
         v-model:location="location"
         :paddingTop="false"
-        :displayMetropoleOutremer="false"
     >
         <ContentWrapper class="pt-8">
             <FilArianne :items="ariane" class="mb-8" />
@@ -49,6 +48,15 @@ const location = computed({
     },
 });
 
+const datasToDisplay = computed(() => {
+    const aMonthAgo = new Date();
+    aMonthAgo.setMonth(aMonthAgo.getMonth() - 1);
+
+    return activitiesStore.activities.filter(
+        (activity) => activity.date >= aMonthAgo
+    );
+});
+
 onMounted(() => {
     if (activitiesStore.activities.length === 0) {
         activitiesStore.fetchDefault();
@@ -62,7 +70,10 @@ onBeforeUnmount(() => {
 });
 
 function reachBottom() {
-    if (activitiesStore.isLoading === true) {
+    if (
+        activitiesStore.isLoading === true ||
+        datasToDisplay.value.length === 0
+    ) {
         return;
     }
 

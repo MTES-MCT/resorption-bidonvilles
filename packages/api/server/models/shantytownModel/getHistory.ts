@@ -4,6 +4,7 @@ import geoUtils from '#server/utils/geo';
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
 import { Location } from '#server/models/geoModel/Location.d';
+import outremer from '#server/utils/permission/outremer';
 import getUsenameOf from './_common/getUsenameOf';
 import serializeShantytown from './_common/serializeShantytown';
 import getDiff from './_common/getDiff';
@@ -42,10 +43,22 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
         return [];
     }
 
+    const restrictedLocationTypes = new Set(['metropole', 'outremer']);
+
     if (!restrictedLocations.some(l => l.type === 'nation')) {
         where.push(
             restrictedLocations.map((l, index) => {
+                // On fait l'exclusion ou inclusion si c'est metropole ou outremer
+                if (restrictedLocationTypes.has(l.type)) {
+                    if (!replacements.outreMerDepts) {
+                        replacements.outreMerDepts = outremer.departements;
+                    }
+                    return l.type === 'metropole'
+                        ? 'departements.code NOT IN (:outreMerDepts)'
+                        : 'departements.code IN (:outreMerDepts)';
+                }
                 replacements[`shantytownLocationCode${index}`] = l[l.type].code;
+
                 const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownLocationCode${index}`];
                 if (l.type === 'city') {
                     arr.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :shantytownLocationCode${index}`);
@@ -176,6 +189,7 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
     );
     const listOldestVersions = [];
     const listIdOldestVersions = [];
+
     // on récupère pour chaque bidonville la plus vieille version existante qui n'est pas une création
     activities.reverse().forEach((activity: ShantytownActivityRow) => {
         if (!(listIdOldestVersions.includes(activity.id)) && (activity.updatedAt.valueOf() - activity.createdAt.valueOf() > 10)) {
