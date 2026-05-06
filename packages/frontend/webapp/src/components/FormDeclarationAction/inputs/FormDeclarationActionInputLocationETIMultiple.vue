@@ -178,6 +178,31 @@ const addresses = ref(
         : [{ address: null, coordinates: null, _uid: generateUniqueId() }]
 );
 
+// Watch pour mettre à jour les coordonnées quand l'adresse change
+watch(
+    addresses,
+    (newAddresses, oldAddresses) => {
+        newAddresses.forEach((addr, index) => {
+            const oldAddr = oldAddresses?.[index];
+
+            // Détecter si l'adresse a changé en comparant les labels
+            const newLabel = addr.address?.data?.label;
+            const oldLabel = oldAddr?.address?.data?.label;
+
+            // Si l'adresse a changé et contient de nouvelles coordonnées
+            if (
+                newLabel &&
+                newLabel !== oldLabel &&
+                addr.address?.data?.coordinates
+            ) {
+                // Mettre à jour les coordonnées pour synchroniser le marqueur
+                addr.coordinates = [...addr.address.data.coordinates];
+            }
+        });
+    },
+    { deep: true }
+);
+
 // Watch pour synchroniser avec vee-validate et vérifier les doublons
 watch(
     addresses,

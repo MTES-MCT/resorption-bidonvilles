@@ -93,6 +93,23 @@ watch(value, () => {
     }
 });
 
+watch(initialCoordinates, (newCoords) => {
+    if (!newCoords) {
+        return;
+    }
+
+    // Comparer les valeurs des tableaux, pas les références
+    const currentValue = value.value;
+    const coordsChanged =
+        !currentValue ||
+        newCoords[0] !== currentValue[0] ||
+        newCoords[1] !== currentValue[1];
+
+    if (coordsChanged) {
+        handleChange(newCoords);
+    }
+});
+
 const view = computed(() => {
     if (value.value) {
         return value.value;
