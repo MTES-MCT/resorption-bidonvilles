@@ -59,7 +59,6 @@ const descriptions: RolePermissionDescriptions = {
         local_permissions: [
             [
                 { type: 'edit', label: 'Créer, mettre à jour les %sites%', comments: null },
-                { type: 'edit', label: 'Créer, mettre à jour les %sites%', comments: null },
                 {
                     type: 'deny', label: 'hors fermeture des sites', comments: null, option: 'close_shantytown',
                 },
