@@ -271,9 +271,7 @@ export default async (
     // Remplir les phases préparatoires AVANT de calculer le changelog
     townsPhasesTowardResorption.forEach((elt) => {
         if (elt.preparatoryPhases?.length > 0) {
-            // Filtrer les éléments null/undefined
-            const validPhases = elt.preparatoryPhases.filter(p => p !== null && p !== undefined);
-            serializedTowns.hash[elt.townId].preparatoryPhasesTowardResorption = validPhases.length > 0 ? validPhases : [];
+            serializedTowns.hash[elt.townId].preparatoryPhasesTowardResorption = elt.preparatoryPhases;
         }
     });
 
