@@ -11,7 +11,6 @@ import { serialized as fakeAnswer } from '#test/utils/answer';
 import { serialized as serializedAnswer } from '#test/utils/answerSerialized';
 import fakeFile from '#test/utils/file';
 import { row as fakeQuestionSubscriber } from '#test/utils/questionSubscriber';
-import { fail } from 'assert';
 import scanAttachmentErrors from '../attachment/scanAttachmentErrors';
 
 const { expect } = chai;
@@ -62,10 +61,19 @@ import createAnswer from './createAnswer';
 rewiremock.disable();
 
 describe('services/answer.createAnswer()', () => {
+    let consoleErrorStub;
+
     beforeEach(async () => {
+        consoleErrorStub = sandbox.stub(console, 'error');
         stubs.sequelize.transaction.resolves(stubs.transaction);
+        stubs.answerModel.create.resolves(1);
+        stubs.answerModel.findOne.resolves(serializedAnswer);
+        stubs.userModel.getQuestionSubscribers.resolves([]);
+        stubs.uploadAttachments.resolves();
+        stubs.transaction.commit.resolves();
     });
     afterEach(() => {
+        consoleErrorStub.restore();
         sandbox.reset();
     });
 
@@ -99,9 +107,8 @@ describe('services/answer.createAnswer()', () => {
         stubs.answerModel.create.rejects(new Error('Une erreur'));
         try {
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
+        } catch {
+            // expected error
         }
 
         expect(stubs.transaction.commit, 'Le commit() a été appellé').to.not.have.been.called;
@@ -131,9 +138,8 @@ describe('services/answer.createAnswer()', () => {
         stubs.transaction.commit.rejects(new Error('Une erreur'));
         try {
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
+        } catch {
+            // expected error
         }
 
         expect(stubs.transaction.rollback, 'Le rollback() n\'a pas été appellé').to.have.been.calledOnce;
@@ -192,18 +198,12 @@ describe('services/answer.createAnswer()', () => {
         stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         stubs.userQuestionSubscriptionModel.createSubscription.rejects(new Error('une erreur'));
 
-        try {
-            await createAnswer(
-                { description: 'Une réponse' },
-                fakeQuestion({ id: 1 }),
-                fakeUser({ id: 2 }),
-                [],
-            );
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-            fail('Une exception a été lancée');
-        }
+        await createAnswer(
+            { description: 'Une réponse' },
+            fakeQuestion({ id: 1 }),
+            fakeUser({ id: 2 }),
+            [],
+        );
     });
 
     it('envoie une notification mail spéciale à l\'auteur de la question', async () => {
@@ -284,18 +284,12 @@ describe('services/answer.createAnswer()', () => {
         stubs.userModel.getQuestionSubscribers.withArgs(1).resolves([subscriber]);
         stubs.mails.sendCommunityNewAnswerForAuthor.rejects(new Error('Une erreur'));
 
-        try {
-            await createAnswer(
-                { description: 'Une réponse' },
-                fakeQuestion({ id: 1 }),
-                answerAuthor,
-                [],
-            );
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-            fail('Une exception a été lancée');
-        }
+        await createAnswer(
+            { description: 'Une réponse' },
+            fakeQuestion({ id: 1 }),
+            answerAuthor,
+            [],
+        );
     });
 
     it('retourne la réponse nouvelle créée', async () => {
@@ -395,12 +389,11 @@ describe('services/answer.createAnswer()', () => {
     it('fait un rollback si l\'upload des fichiers échoue', async () => {
         const files = [fakeFile()];
         stubs.uploadAttachments.rejects(new Error('une erreur'));
+        stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         try {
-            stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
+        } catch {
+            // expected error
         }
 
         expect(stubs.transaction.commit, 'Le commit() de la transaction a été appelé').to.not.have.been.called;

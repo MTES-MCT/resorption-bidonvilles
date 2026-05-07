@@ -14,7 +14,10 @@ chai.use(sinonChai);
 describe('services/shantytownActor', () => {
     describe('export()', () => {
         let stubs;
+        let consoleErrorStub;
+
         beforeEach(() => {
+            consoleErrorStub = sinon.stub(console, 'error');
             stubs = {
                 where: sinon.stub(permissionUtils, 'where'),
                 can: sinon.stub(),
@@ -26,20 +29,17 @@ describe('services/shantytownActor', () => {
             stubs.can.returns({
                 do: stubs.do,
             });
+            stubs.do.returns({});
         });
 
         afterEach(() => {
+            consoleErrorStub.restore();
             sinon.restore();
         });
 
         it('vérifie la permission export.shantytown_actor', async () => {
             const user = fakeUser();
-            try {
-                await exportService(user);
-            } catch (error) {
-                // eslint-disable-next-line no-console
-                console.error(error);
-            }
+            await exportService(user);
 
             expect(stubs.can).to.have.been.calledOnceWith(user);
             expect(stubs.do).to.have.been.calledOnceWith('export', 'shantytown_actor');

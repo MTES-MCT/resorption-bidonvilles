@@ -59,10 +59,19 @@ import create from './create';
 rewiremock.disable();
 
 describe('services/question/create', () => {
+    let consoleErrorStub;
+
     beforeEach(async () => {
+        consoleErrorStub = sandbox.stub(console, 'error');
         stubs.sequelize.transaction.resolves(stubs.transaction);
+        stubs.questionModel.create.resolves(1);
+        stubs.enrichQuestion.resolves(serializedQuestion);
+        stubs.userModel.getQuestionWatchers.resolves([]);
+        stubs.uploadAttachments.resolves();
+        stubs.transaction.commit.resolves();
     });
     afterEach(() => {
+        consoleErrorStub.restore();
         sandbox.reset();
     });
 

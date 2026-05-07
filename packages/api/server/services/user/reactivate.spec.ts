@@ -34,12 +34,16 @@ import reactivateUser from './reactivate';
 rewiremock.disable();
 
 describe('userService.reactivate()', () => {
+    let consoleErrorStub;
+    let transaction;
+
     afterEach(() => {
+        consoleErrorStub.restore();
         sandbox.reset();
     });
 
-    let transaction;
     beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
         transaction = {
             commit: sandbox.stub(),
             rollback: sandbox.stub(),
@@ -143,9 +147,7 @@ describe('userService.reactivate()', () => {
 
         try {
             await reactivateUser(fakeUser(), 42);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -175,9 +177,7 @@ describe('userService.reactivate()', () => {
 
         try {
             await reactivateUser(fakeUser(), 42);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -207,9 +207,7 @@ describe('userService.reactivate()', () => {
 
         try {
             await reactivateUser(fakeUser(), 42);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -243,9 +241,7 @@ describe('userService.reactivate()', () => {
 
         try {
             await reactivateUser(fakeUser(), 42);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }

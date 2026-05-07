@@ -35,17 +35,22 @@ import refuseUserAccess from './refuse';
 rewiremock.disable();
 
 describe('userService.refuse()', () => {
-    afterEach(() => {
-        sandbox.reset();
-    });
-
+    let consoleErrorStub;
     let transaction;
+
     beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
         transaction = {
             commit: sandbox.stub(),
             rollback: sandbox.stub(),
         };
         sequelize.transaction.withArgs().resolves(transaction);
+        userModel.findOne.resolves(fakeUser({ id: 42 }));
+    });
+
+    afterEach(() => {
+        consoleErrorStub.restore();
+        sandbox.reset();
     });
 
     it('change le statut du compte à refused en base de données', async () => {
@@ -91,9 +96,7 @@ describe('userService.refuse()', () => {
 
         try {
             await refuseUserAccess(42);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -123,9 +126,7 @@ describe('userService.refuse()', () => {
 
         try {
             await refuseUserAccess(42);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -155,9 +156,7 @@ describe('userService.refuse()', () => {
 
         try {
             await refuseUserAccess(42);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }

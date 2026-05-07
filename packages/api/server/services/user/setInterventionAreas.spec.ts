@@ -32,10 +32,15 @@ import setInterventionAreas from './setInterventionAreas';
 rewiremock.disable();
 
 describe('services/user/setInterventionAreas', () => {
+    let consoleErrorStub;
+
     beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
         sequelize.transaction.resolves(transaction);
     });
+
     afterEach(() => {
+        consoleErrorStub.restore();
         sandbox.reset();
     });
 

@@ -30,17 +30,21 @@ import setExpertiseTopics from './setExpertiseTopics';
 rewiremock.disable();
 
 describe('userService.setExpertiseTopics()', () => {
-    afterEach(() => {
-        sandbox.reset();
-    });
-
+    let consoleErrorStub;
     let transaction;
+
     beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
         transaction = {
             commit: sandbox.stub(),
             rollback: sandbox.stub(),
         };
         sequelize.transaction.withArgs().resolves(transaction);
+    });
+
+    afterEach(() => {
+        consoleErrorStub.restore();
+        sandbox.reset();
     });
 
     it('marque en base de données que l\'utilisateur a sélectionné ses sujets de compétence', async () => {

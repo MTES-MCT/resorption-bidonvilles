@@ -25,7 +25,14 @@ import sendInactiveUserAlerts from './sendInactiveUserAlerts';
 rewiremock.disable();
 
 describe('userService/sendInactiveUserAlerts', () => {
+    let consoleErrorStub;
+
+    beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
+    });
+
     afterEach(() => {
+        consoleErrorStub.restore();
         sandbox.reset();
     });
 
@@ -61,9 +68,8 @@ describe('userService/sendInactiveUserAlerts', () => {
 
         try {
             await sendInactiveUserAlerts();
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
+            // expected error
         }
 
         expect(mails.sendInactiveUserAlert).to.not.have.been.called;

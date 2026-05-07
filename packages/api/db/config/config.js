@@ -11,7 +11,7 @@ function getConfig(database) {
         username: process.env.RB_API_POSTGRES_USER,
         password,
         host,
-        port: parseInt(port, 10),
+        port: Number.parseInt(port, 10),
         database,
         dialect: 'postgres',
         dialectModule: pg,

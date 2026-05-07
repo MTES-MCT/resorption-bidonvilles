@@ -41,7 +41,14 @@ import cleanArchives from './cleanArchives';
 rewiremock.disable();
 
 describe('services/attachment/cleanArchives', () => {
+    let consoleErrorStub;
+
+    beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
+    });
+
     afterEach(() => {
+        consoleErrorStub.restore();
         sandbox.reset();
     });
 

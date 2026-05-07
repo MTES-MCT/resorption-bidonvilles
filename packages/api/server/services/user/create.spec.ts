@@ -31,7 +31,14 @@ import createUser from './create';
 rewiremock.disable();
 
 describe('userService.createUser()', () => {
+    let consoleErrorStub;
+
+    beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
+    });
+
     afterEach(() => {
+        consoleErrorStub.restore();
         sandbox.reset();
     });
 

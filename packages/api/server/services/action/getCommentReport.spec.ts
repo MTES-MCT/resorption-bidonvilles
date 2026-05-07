@@ -38,27 +38,28 @@ rewiremock.disable();
 describe('services/action.getActionReport()', () => {
     const user: AuthUser = fakeUser();
     const actionCommentRow: ActionRowComment = fakeActionCommentRow();
+    let consoleErrorStub;
 
     beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
         stubs.can.returns({
             do: stubs.do,
         });
         stubs.do.returns({
             on: stubs.on,
         });
+        stubs.on.returns(true);
+        stubs.actionModel.fetchComments.resolves([actionCommentRow]);
+        stubs.JSONToCSV.parse.resolves('csv data');
     });
 
     afterEach(() => {
-        sandbox.restore();
+        consoleErrorStub.restore();
+        sandbox.reset();
     });
 
     it('vérifie que l\'utilisateur a le droit d\'exporter les commentaires des actions au niveau national', async () => {
-        try {
-            await getCommentReport(user);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
-        }
+        await getCommentReport(user);
         expect(stubs.can).to.have.been.calledOnceWith(user);
         expect(stubs.do).to.have.been.calledOnceWith('export', 'action_comment');
         // eslint-disable-next-line no-unused-expressions

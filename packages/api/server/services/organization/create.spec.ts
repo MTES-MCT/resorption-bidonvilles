@@ -32,10 +32,16 @@ import create from './create';
 rewiremock.disable();
 
 describe('services/organization/create', () => {
+    let consoleErrorStub;
+
     beforeEach(() => {
+        consoleErrorStub = sandbox.stub(console, 'error');
         sequelize.transaction.resolves(transaction);
+        createOrganization.resolves(1);
+        findOrganizationById.resolves(fakeOrganization());
     });
     afterEach(() => {
+        consoleErrorStub.restore();
         sandbox.reset();
     });
 
@@ -145,9 +151,8 @@ describe('services/organization/create', () => {
                 new_type_abbreviation: null,
                 new_type_default_role: null,
             });
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
+        } catch {
+            // expected error
         }
 
         expect(transaction.rollback).to.have.been.calledOnce;
