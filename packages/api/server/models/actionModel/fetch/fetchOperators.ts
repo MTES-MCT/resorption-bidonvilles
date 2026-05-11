@@ -15,6 +15,7 @@ export default function fetchOperators(actionIds?: number[], clauseGroup: object
     return sequelize.query(
         `SELECT
             action_operators.fk_action AS action_id,
+            action_operators.is_principal,
             users.user_id AS id,
             users.email,
             users.first_name,
