@@ -125,6 +125,7 @@ export type ActionOrganizationMember = {
     phone: string | null,
     role: string,
     is_admin: boolean,
+    is_principal?: boolean,
     organization: {
         id: number,
         name: string,
@@ -135,7 +136,8 @@ type ActionOrganization = {
     id: number,
     name: string,
     abbreviation: string | null,
-    users: ActionOrganizationMember[]
+    is_principal?: boolean,
+    users: ActionOrganizationMember[],
 };
 type ActionFinances = {
     [key: number]: ActionFinanceRow[],
@@ -153,6 +155,8 @@ type ActionFinanceRow = {
 interface IAction {
     id: number,
     name: string,
+    project_name?: string,
+    operator_name?: string,
     topics: ActionTopic[],
     operators: ActionOrganization[],
     location: {

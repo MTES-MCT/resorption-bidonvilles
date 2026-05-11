@@ -3,7 +3,8 @@ import ActionLocationType from '#root/types/resources/ActionLocationType.d';
 
 type ActionInputUser = {
     id: number,
-    organization_id: number
+    organization_id: number,
+    is_principal?: boolean
 };
 
 type ActionFinanceType = 'etatique' | 'dedie' | 'collectivite' | 'europeen' | 'prive' | 'autre';
