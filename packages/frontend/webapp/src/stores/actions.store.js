@@ -36,9 +36,23 @@ export const useActionsStore = defineStore("actions", () => {
     const sort = ref("updated_at");
 
     const sortFn = computed(() => {
+        const isDateField = [
+            "started_at",
+            "updated_at",
+            "metrics_updated_at",
+        ].includes(sort.value);
+
         return (a, b) => {
-            const aValue = a[sort.value];
-            const bValue = b[sort.value];
+            let aValue = a[sort.value];
+            let bValue = b[sort.value];
+
+            // Pour les champs texte, remplacer les valeurs vides/null/undefined par une chaîne vide
+            if (!isDateField) {
+                aValue = aValue || "";
+                bValue = bValue || "";
+            }
+
+            // Gérer les valeurs nulles/undefined pour les dates
             if (!aValue && !bValue) {
                 return 0;
             }
@@ -48,7 +62,27 @@ export const useActionsStore = defineStore("actions", () => {
             if (!bValue) {
                 return -1;
             }
-            return new Date(bValue).getTime() - new Date(aValue).getTime();
+
+            if (isDateField) {
+                // Tri par date (décroissant)
+                return new Date(bValue).getTime() - new Date(aValue).getTime();
+            }
+
+            // Tri alphabétique (croissant) avec critère secondaire
+            const primaryCompare = aValue.localeCompare(bValue, "fr", {
+                sensitivity: "base",
+            });
+
+            // Si le critère principal est égal, utiliser le nom du projet comme critère secondaire
+            if (primaryCompare === 0 && sort.value === "operator_name") {
+                const aProject = a.project_name || "";
+                const bProject = b.project_name || "";
+                return aProject.localeCompare(bProject, "fr", {
+                    sensitivity: "base",
+                });
+            }
+
+            return primaryCompare;
         };
     });
 
