@@ -14,6 +14,7 @@ export default (hash: ActionHash, operators: ActionUserRow[]): void => {
             phone: row.phone,
             role: row.admin_role_name || row.regular_role_name,
             is_admin: row.admin_role_name !== null,
+            is_principal: row.is_principal,
             organization: {
                 id: row.organization_id,
                 name: row.organization_name,
@@ -26,9 +27,15 @@ export default (hash: ActionHash, operators: ActionUserRow[]): void => {
                 id: row.organization_id,
                 name: row.organization_name,
                 abbreviation: row.organization_abbreviation,
+                is_principal: row.is_principal,
                 users: [user],
             });
         } else {
+            // Si cet utilisateur est principal, marquer toute l'organisation comme principale
+            if (row.is_principal) {
+                /* eslint no-param-reassign: "error" */
+                hash[row.action_id].operators[index].is_principal = true;
+            }
             hash[row.action_id].operators[index].users.push(user);
         }
     });
