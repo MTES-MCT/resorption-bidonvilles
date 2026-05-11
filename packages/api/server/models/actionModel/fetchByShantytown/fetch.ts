@@ -7,6 +7,7 @@ import fetchOperators from './fetchOperators';
 import hashActions from './hashActions';
 import mergeTopics from './mergeTopics';
 import mergeOperators from './mergeOperators';
+import computeActionNames from '../fetch/computeActionNames';
 import { User } from '#root/types/resources/User.d';
 
 export default async (user: User, shantytownIds: number[]): Promise<ShantytownAction[]> => {
@@ -20,6 +21,7 @@ export default async (user: User, shantytownIds: number[]): Promise<ShantytownAc
     const hash = hashActions(actions);
     mergeTopics(hash, topics);
     mergeOperators(hash, operators);
+    computeActionNames(hash);
 
     return Object.values(hash);
 };

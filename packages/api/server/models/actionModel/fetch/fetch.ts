@@ -18,6 +18,7 @@ import mergeMetrics from './mergeMetrics';
 import mergeOperators from './mergeOperators';
 import mergeShantytowns from './mergeShantytowns';
 import mergeTopics from './mergeTopics';
+import computeActionNames from './computeActionNames';
 import Action from '#root/types/resources/Action.d';
 import { User } from '#root/types/resources/User.d';
 
@@ -45,6 +46,7 @@ export default async function fetch(user: User, actionIds?: number[], transactio
     mergeTopics(hash, topics);
     mergeManagers(hash, managers);
     mergeOperators(hash, operators);
+    computeActionNames(hash);
     mergeShantytowns(hash, shantytowns);
     mergeComments(hash, comments);
     mergeMetrics(hash, metrics);
