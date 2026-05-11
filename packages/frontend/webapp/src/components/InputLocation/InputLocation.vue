@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, defineEmits, ref } from "vue";
+import { toRefs, computed, ref } from "vue";
 import { Autocomplete } from "@resorptionbidonvilles/ui";
 import { autocomplete } from "@/api/locations.api.js";
 import { fetchOne } from "@/api/actions.api.js";
@@ -73,26 +73,9 @@ async function autocompleteFn(value) {
     }
 
     // 2. Recherche géographique
-    const locationPromise = autocomplete(value)
-        .then((items) =>
-            items.map((loc) => ({
-                id: loc.code,
-                label: formatLocationLabel(loc),
-                category: loc.label,
-                data: {
-                    code: loc.code,
-                    departement: loc.departement,
-                    typeName: loc.label,
-                    typeUid: loc.type,
-                    latitude: loc.latitude,
-                    longitude: loc.longitude,
-                },
-            }))
-        )
-        .catch((error) => {
-            console.error("Error fetching locations:", error);
-            return [];
-        });
+    const locationPromise = autocomplete(trimmedSearch)
+        .then((items) => items.map(toLocationItem))
+        .catch(() => []);
 
     // 3. Recherche de structures
     const organizationPromise = searchActionOperators(value)
@@ -129,4 +112,41 @@ defineExpose({
         input.value.focus();
     },
 });
+
+function toLocationItem(loc) {
+    // Résultat GeoJSON (recherche par code postal via API externe)
+    if (loc.type === "Feature") {
+        return {
+            id: loc.properties.id,
+            label: formatLocationLabel({
+                code: loc.properties.id,
+                name: loc.properties.name,
+            }),
+            category: "Commune",
+            data: {
+                code: loc.properties.postcode,
+                departement: loc.properties.depcode,
+                typeName: "Commune",
+                typeUid: "city",
+                latitude: loc.geometry?.coordinates?.[1],
+                longitude: loc.geometry?.coordinates?.[0],
+            },
+        };
+    }
+
+    // Résultat interne
+    return {
+        id: loc.code,
+        label: formatLocationLabel(loc),
+        category: loc.label,
+        data: {
+            code: loc.code,
+            departement: loc.departement,
+            typeName: loc.label,
+            typeUid: loc.type,
+            latitude: loc.latitude,
+            longitude: loc.longitude,
+        },
+    };
+}
 </script>
