@@ -22,7 +22,7 @@ export default defineNuxtConfig({
                 protocol: "ws",
                 host: "localhost"
             },
-            allowedHosts: ["host.docker.internal", "localhost"]
+            allowedHosts: ["host.docker.internal"],
         },
         optimizeDeps: {
             include: [
