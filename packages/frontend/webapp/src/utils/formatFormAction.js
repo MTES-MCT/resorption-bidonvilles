@@ -23,7 +23,7 @@ export const fields = [
 
 export const formatFormAction = (data) => {
     const formatted = {
-        name: data.name || "",
+        name: data.project_name || data.name || "",
         started_at: data.started_at ? new Date(data.started_at) : undefined,
         ended_at: data.ended_at ? new Date(data.ended_at) : undefined,
         topics: data.topics ? data.topics.map(({ uid }) => uid) : [],

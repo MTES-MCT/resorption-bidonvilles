@@ -1,5 +1,5 @@
 export default {
-    name: "Quel est le nom de l'action ?",
+    name: "Quel est le nom du projet ?",
     started_at: "Date de début",
     ended_at: "Date de fin effective",
     topics: "Quels sont les champs d'intervention de l'action ?",
