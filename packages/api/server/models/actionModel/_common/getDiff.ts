@@ -55,6 +55,31 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
             const uniqueOrgNames = [...new Set(orgNames)];
             return uniqueOrgNames.join(', ');
         },
+        operatorList(operators: any[]): string {
+            if (!operators || operators.length === 0) {
+                return 'non renseigné';
+            }
+            // Trier par nom canonique (sans suffixe) pour éviter les faux positifs dus à l'ordre
+            const orgEntries = operators
+                .map(o => ({
+                    canonicalName: o.name || o.abbreviation || 'Organisation inconnue',
+                    isPrincipal: o.is_principal === true,
+                }))
+                .sort((a, b) => a.canonicalName.localeCompare(b.canonicalName, 'fr', { sensitivity: 'base' }));
+            // Supprimer les doublons (par nom canonique + statut principal)
+            const seen = new Set<string>();
+            const uniqueEntries = orgEntries.filter((entry) => {
+                const key = `${entry.canonicalName}|${entry.isPrincipal}`;
+                if (seen.has(key)) {
+                    return false;
+                }
+                seen.add(key);
+                return true;
+            });
+            return uniqueEntries
+                .map(entry => (entry.isPrincipal ? `${entry.canonicalName} (principal)` : entry.canonicalName))
+                .join(', ');
+        },
         topicList(topics: any[]): string {
             if (!topics || topics.length === 0) {
                 return 'non renseignées';
@@ -161,7 +186,7 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
         },
         operators: {
             label: 'Intervenants',
-            processor: baseProcessors.userList,
+            processor: baseProcessors.operatorList,
         },
         location_shantytowns: {
             label: 'Sites concernés',
