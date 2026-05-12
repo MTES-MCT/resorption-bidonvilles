@@ -8,9 +8,12 @@ import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 import { User } from '#root/types/resources/User.d';
 import fetchAction from './write.fetchAction';
 import { ActionInput } from './ActionInput.d';
+import validateAndNormalizeOperators from './operatorValidation';
 
 export default async function updateAction(action: Action, author: User, data: ActionInput): Promise<EnrichedAction> {
     const canWriteFinances = can(author).do('access', 'action_finances').on(action);
+
+    validateAndNormalizeOperators(data.operators);
 
     const transaction = await sequelize.transaction();
     try {
