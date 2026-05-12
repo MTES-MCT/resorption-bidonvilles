@@ -4,7 +4,6 @@ import sinonChai from 'sinon-chai';
 
 import { rewiremock } from '#test/rewiremock';
 import { serialized as fakeUser } from '#test/utils/user';
-import { serialized as fakeAction } from '#test/utils/action';
 import ServiceError from '#server/errors/ServiceError';
 
 const { expect } = chai;
@@ -19,9 +18,8 @@ const stubs = {
         commit: sandbox.stub(),
         rollback: sandbox.stub(),
     },
-    updateActionModel: sandbox.stub(),
+    createActionModel: sandbox.stub(),
     fetchAction: sandbox.stub(),
-    can: sandbox.stub(),
 };
 
 class FakeUniqueConstraintError extends Error {
@@ -35,14 +33,13 @@ class FakeUniqueConstraintError extends Error {
 
 rewiremock('sequelize').with({ UniqueConstraintError: FakeUniqueConstraintError });
 rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
-rewiremock('#server/models/actionModel/update/update').with(stubs.updateActionModel);
+rewiremock('#server/models/actionModel/create/create').with(stubs.createActionModel);
 rewiremock('./write.fetchAction').with(stubs.fetchAction);
-rewiremock('#server/utils/permission/can').with(stubs.can);
 rewiremock('./operatorValidation').callThrough();
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
-import update from './update';
+import create from './create';
 rewiremock.disable();
 
 type ActionInputOperator = {
@@ -53,11 +50,11 @@ type ActionInputOperator = {
 
 function buildActionData(operators: ActionInputOperator[]) {
     return {
-        name: 'Action modifiée',
+        name: 'Action test',
         started_at: new Date(2024, 0, 1),
         ended_at: null,
         topics: ['health'],
-        goals: 'Objectif modifié',
+        goals: 'Objectif test',
         location: {
             type: 'departement' as const,
             city: null,
@@ -76,22 +73,16 @@ function buildActionData(operators: ActionInputOperator[]) {
     };
 }
 
-describe('services/action.update()', () => {
+describe('services/action.create()', () => {
     let user: ReturnType<typeof fakeUser>;
-    const action = fakeAction();
 
     beforeEach(() => {
         user = fakeUser();
         stubs.sequelize.transaction.resolves(stubs.transaction);
-        stubs.updateActionModel.resolves();
-        stubs.fetchAction.resolves({ id: action.id, name: 'Action modifiée' });
+        stubs.createActionModel.resolves(42);
+        stubs.fetchAction.resolves({ id: 42, name: 'Action test' });
         stubs.transaction.commit.resolves();
         stubs.transaction.rollback.resolves();
-        stubs.can.returns({
-            do: () => ({
-                on: () => false,
-            }),
-        });
     });
 
     afterEach(() => {
@@ -105,10 +96,10 @@ describe('services/action.update()', () => {
     describe('logique is_principal sur les operators', () => {
         it('force is_principal=true sur l\'unique opérateur si la liste contient un seul élément sans is_principal', async () => {
             const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10 }];
-            await update(action, user, buildActionData(operators));
+            await create(user, buildActionData(operators));
 
-            expect(stubs.updateActionModel).to.have.been.calledOnce;
-            const calledData = stubs.updateActionModel.firstCall.args[1];
+            expect(stubs.createActionModel).to.have.been.calledOnce;
+            const calledData = stubs.createActionModel.firstCall.args[0];
             expect(calledData.operators[0].is_principal).to.equal(true);
         });
 
@@ -117,10 +108,10 @@ describe('services/action.update()', () => {
                 { id: 1, organization_id: 10, is_principal: true },
                 { id: 2, organization_id: 20, is_principal: false },
             ];
-            await update(action, user, buildActionData(operators));
+            await create(user, buildActionData(operators));
 
-            expect(stubs.updateActionModel).to.have.been.calledOnce;
-            const calledData = stubs.updateActionModel.firstCall.args[1];
+            expect(stubs.createActionModel).to.have.been.calledOnce;
+            const calledData = stubs.createActionModel.firstCall.args[0];
             expect(calledData.operators).to.deep.equal(operators);
         });
 
@@ -132,7 +123,7 @@ describe('services/action.update()', () => {
 
             let caughtError: ServiceError | null = null;
             try {
-                await update(action, user, buildActionData(operators));
+                await create(user, buildActionData(operators));
             } catch (err) {
                 caughtError = err as ServiceError;
             }
@@ -142,29 +133,29 @@ describe('services/action.update()', () => {
             expect(caughtError?.nativeError).to.be.instanceOf(Error);
         });
 
-        it('n\'appelle pas le model update si aucun opérateur n\'est principal sur une liste de taille ≥ 2', async () => {
+        it('n\'appelle pas le model create si aucun opérateur n\'est principal sur une liste de taille ≥ 2', async () => {
             const operators: ActionInputOperator[] = [
                 { id: 1, organization_id: 10, is_principal: false },
                 { id: 2, organization_id: 20, is_principal: false },
             ];
 
             try {
-                await update(action, user, buildActionData(operators));
+                await create(user, buildActionData(operators));
             } catch (_err) {
                 // erreur attendue
             }
 
-            expect(stubs.updateActionModel).not.to.have.been.called;
+            expect(stubs.createActionModel).not.to.have.been.called;
         });
 
-        it('ne commit pas et ne rollback pas si aucun opérateur n\'est principal sur une liste de taille ≥ 2', async () => {
+        it('ne démarre pas de transaction si aucun opérateur n\'est principal sur une liste de taille ≥ 2', async () => {
             const operators: ActionInputOperator[] = [
                 { id: 1, organization_id: 10, is_principal: false },
                 { id: 2, organization_id: 20, is_principal: false },
             ];
 
             try {
-                await update(action, user, buildActionData(operators));
+                await create(user, buildActionData(operators));
             } catch (_err) {
                 // erreur attendue
             }
@@ -181,7 +172,7 @@ describe('services/action.update()', () => {
 
             let caughtError: ServiceError | null = null;
             try {
-                await update(action, user, buildActionData(operators));
+                await create(user, buildActionData(operators));
             } catch (err) {
                 caughtError = err as ServiceError;
             }
@@ -191,19 +182,19 @@ describe('services/action.update()', () => {
             expect(caughtError?.nativeError).to.be.instanceOf(Error);
         });
 
-        it('n\'appelle pas le model update si plus d\'un opérateur est principal', async () => {
+        it('n\'appelle pas le model create si plus d\'un opérateur est principal', async () => {
             const operators: ActionInputOperator[] = [
                 { id: 1, organization_id: 10, is_principal: true },
                 { id: 2, organization_id: 20, is_principal: true },
             ];
 
             try {
-                await update(action, user, buildActionData(operators));
+                await create(user, buildActionData(operators));
             } catch (_err) {
                 // erreur attendue
             }
 
-            expect(stubs.updateActionModel).not.to.have.been.called;
+            expect(stubs.createActionModel).not.to.have.been.called;
         });
 
         it('ne commit pas et ne rollback pas si plus d\'un opérateur est principal (aucune transaction ouverte)', async () => {
@@ -213,67 +204,67 @@ describe('services/action.update()', () => {
             ];
 
             try {
-                await update(action, user, buildActionData(operators));
+                await create(user, buildActionData(operators));
             } catch (_err) {
                 // erreur attendue
             }
 
             expect(stubs.transaction.commit).not.to.have.been.called;
+            expect(stubs.transaction.rollback).not.to.have.been.called;
         });
 
         it('passe la liste vide telle quelle au model sans erreur', async () => {
             const operators: ActionInputOperator[] = [];
-            await update(action, user, buildActionData(operators));
+            await create(user, buildActionData(operators));
 
-            expect(stubs.updateActionModel).to.have.been.calledOnce;
-            const calledData = stubs.updateActionModel.firstCall.args[1];
+            expect(stubs.createActionModel).to.have.been.calledOnce;
+            const calledData = stubs.createActionModel.firstCall.args[0];
             expect(calledData.operators).to.deep.equal([]);
         });
     });
 
     describe('comportement nominal', () => {
-        it('appelle le model update avec l\'id de l\'action et les données enrichies du updated_by', async () => {
+        it('appelle le model createAction avec les données enrichies du created_by', async () => {
             const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
-            await update(action, user, buildActionData(operators));
+            await create(user, buildActionData(operators));
 
-            expect(stubs.updateActionModel).to.have.been.calledOnce;
-            const [calledId, calledData] = stubs.updateActionModel.firstCall.args;
-            expect(calledId).to.equal(action.id);
-            expect(calledData.updated_by).to.equal(user.id);
+            expect(stubs.createActionModel).to.have.been.calledOnce;
+            const calledData = stubs.createActionModel.firstCall.args[0];
+            expect(calledData.created_by).to.equal(user.id);
         });
 
-        it('commit la transaction après la mise à jour', async () => {
+        it('commit la transaction après l\'insertion', async () => {
             const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
-            await update(action, user, buildActionData(operators));
+            await create(user, buildActionData(operators));
 
             expect(stubs.transaction.commit).to.have.been.calledOnce;
         });
 
-        it('retourne l\'action récupérée après mise à jour', async () => {
-            const fakeUpdatedAction = { id: action.id, name: 'Action modifiée' };
-            stubs.fetchAction.resolves(fakeUpdatedAction);
+        it('retourne l\'action récupérée après insertion', async () => {
+            const fakeCreatedAction = { id: 42, name: 'Action test' };
+            stubs.fetchAction.resolves(fakeCreatedAction);
             const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
 
-            const result = await update(action, user, buildActionData(operators));
+            const result = await create(user, buildActionData(operators));
 
-            expect(result).to.deep.equal(fakeUpdatedAction);
+            expect(result).to.deep.equal(fakeCreatedAction);
         });
 
-        it('rollback la transaction et lève ServiceError action_insert_error si le model update échoue', async () => {
+        it('rollback la transaction et lève ServiceError insert_action_error si le model échoue', async () => {
             const nativeError = new Error('db error');
-            stubs.updateActionModel.rejects(nativeError);
+            stubs.createActionModel.rejects(nativeError);
             const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
 
             let caughtError: ServiceError | null = null;
             try {
-                await update(action, user, buildActionData(operators));
+                await create(user, buildActionData(operators));
             } catch (err) {
                 caughtError = err as ServiceError;
             }
 
             expect(stubs.transaction.rollback).to.have.been.calledOnce;
             expect(caughtError).to.be.instanceOf(ServiceError);
-            expect(caughtError?.code).to.equal('action_insert_error');
+            expect(caughtError?.code).to.equal('insert_action_error');
         });
 
         it('rollback la transaction et lève ServiceError action_fetch_error si le fetchAction échoue', async () => {
@@ -283,7 +274,7 @@ describe('services/action.update()', () => {
 
             let caughtError: ServiceError | null = null;
             try {
-                await update(action, user, buildActionData(operators));
+                await create(user, buildActionData(operators));
             } catch (err) {
                 caughtError = err as ServiceError;
             }
