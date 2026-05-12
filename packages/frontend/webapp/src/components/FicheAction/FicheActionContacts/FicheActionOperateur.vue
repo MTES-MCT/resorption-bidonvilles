@@ -24,6 +24,6 @@ const props = defineProps({
 });
 const { action } = toRefs(props);
 const users = computed(() => {
-    return action.value.operators.map(({ users }) => users).flat();
+    return action.value.operators.flatMap(({ users }) => users);
 });
 </script>
