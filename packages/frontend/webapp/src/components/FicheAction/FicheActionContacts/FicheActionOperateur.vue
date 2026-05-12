@@ -8,6 +8,7 @@
             :user="user"
             :linkToUser="false"
             includeOrganization
+            displayLeadOperatorInfo
         />
     </FicheSousRubrique>
 </template>
