@@ -35,13 +35,16 @@ addMethod(object, "usersIsNotEmpty", function () {
 addMethod(object, "hasExactlyOnePrincipalWhenMultiple", function () {
     return this.test(
         "hasExactlyOnePrincipalWhenMultiple",
-        labels.principalOperator + " : vous devez désigner exactement un opérateur principal",
+        labels.principalOperator +
+            " : vous devez désigner exactement un opérateur principal",
         function (value) {
             const users = value?.users;
             if (!Array.isArray(users) || users.length < 2) {
                 return true;
             }
-            const principalCount = users.filter((u) => u.is_principal === true).length;
+            const principalCount = users.filter(
+                (u) => u.is_principal === true
+            ).length;
             return principalCount === 1;
         }
     );
