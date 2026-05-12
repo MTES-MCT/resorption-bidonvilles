@@ -56,27 +56,24 @@ export const formatFormAction = (data) => {
         managers: {
             organizations: [],
             users: data.managers
-                ? data.managers
-                      .map(({ users }) =>
-                          users.map((user) => ({
-                              id: user.id,
-                              label: `${user.first_name} ${user.last_name}`,
-                          }))
-                      )
-                      .flat()
+                ? data.managers.flatMap(({ users }) =>
+                      users.map((user) => ({
+                          id: user.id,
+                          label: `${user.first_name} ${user.last_name}`,
+                      }))
+                  )
                 : [],
         },
         operators: {
             organizations: [],
             users: data.operators
-                ? data.operators
-                      .map(({ users }) =>
-                          users.map((user) => ({
-                              id: user.id,
-                              label: `${user.first_name} ${user.last_name}`,
-                          }))
-                      )
-                      .flat()
+                ? data.operators.flatMap(({ users }) =>
+                      users.map((user) => ({
+                          id: user.id,
+                          label: `${user.first_name} ${user.last_name}`,
+                          is_principal: user.is_principal === true,
+                      }))
+                  )
                 : [],
         },
         finances: Object.keys(data.finances || {}).reduce((acc, year) => {

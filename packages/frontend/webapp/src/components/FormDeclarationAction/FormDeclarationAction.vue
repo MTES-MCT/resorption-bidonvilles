@@ -440,7 +440,10 @@ function formatValuesForApi(v) {
                 v.location_shantytowns
             ),
             managers: v.managers.users.map(({ id }) => id),
-            operators: v.operators.users.map(({ id }) => id),
+            operators: v.operators.users.map(({ id, is_principal }) => ({
+                id,
+                is_principal: !!is_principal,
+            })),
             location_eti_addresses: locationEtiAddresses,
         },
     };
