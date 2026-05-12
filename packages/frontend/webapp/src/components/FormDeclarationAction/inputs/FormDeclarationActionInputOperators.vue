@@ -23,7 +23,6 @@
 <script setup>
 import { computed, watch } from "vue";
 import { useField } from "vee-validate";
-import { DsfrRadioButtonSet } from "@gouvminint/vue-dsfr";
 import InputUsers from "@/components/InputUsers/InputUsers.vue";
 import labels from "../FormDeclarationAction.labels";
 
@@ -39,8 +38,10 @@ const activeUsers = computed(() =>
 
 const selectedPrincipalId = computed({
     get() {
-        const principal = activeUsers.value.find((u) => u.is_principal === true);
-        return principal ? principal.id : (activeUsers.value[0]?.id ?? null);
+        const principal = activeUsers.value.find(
+            (u) => u.is_principal === true
+        );
+        return principal ? principal.id : activeUsers.value[0]?.id ?? null;
     },
     set(newId) {
         users.value.forEach((u) => {
@@ -77,7 +78,9 @@ watch(
             return;
         }
 
-        const hasPrincipal = newActiveUsers.some((u) => u.is_principal === true);
+        const hasPrincipal = newActiveUsers.some(
+            (u) => u.is_principal === true
+        );
         if (!hasPrincipal) {
             newActiveUsers[0].is_principal = true;
         }
