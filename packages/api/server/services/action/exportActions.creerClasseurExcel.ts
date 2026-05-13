@@ -30,16 +30,16 @@ type HeaderCell = {
 };
 
 const sectionTitles = [
-    { name: 'ACTION', range: { from: 'A6', to: 'J6' } },
-    { name: 'OPÉRATEURS', range: { from: 'K6', to: 'K6' } },
-    { name: 'INDICATEURS GÉNÉRAUX', range: { from: 'L6', to: 'O6' } },
-    { name: 'SANTÉ', range: { from: 'P6', to: 'P6' } },
-    { name: 'EMPLOI', range: { from: 'Q6', to: 'R6' } },
-    { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'S6', to: 'V6' } },
-    { name: 'SCOLARISATION', range: { from: 'W6', to: 'AC6' } },
-    { name: 'FINANCEMENT', range: { from: 'AD6', to: 'AO6' } },
-    { name: 'COMMENTAIRES', range: { from: 'AP6', to: 'AR6' } },
-    { name: 'MISE À JOUR', range: { from: 'AS6', to: 'AT6' } },
+    { name: 'ACTION', range: { from: 'A6', to: 'K6' } },
+    { name: 'OPÉRATEURS', range: { from: 'L6', to: 'L6' } },
+    { name: 'INDICATEURS GÉNÉRAUX', range: { from: 'M6', to: 'P6' } },
+    { name: 'SANTÉ', range: { from: 'Q6', to: 'Q6' } },
+    { name: 'EMPLOI', range: { from: 'R6', to: 'S6' } },
+    { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'T6', to: 'W6' } },
+    { name: 'SCOLARISATION', range: { from: 'X6', to: 'AD6' } },
+    { name: 'FINANCEMENT', range: { from: 'AE6', to: 'AP6' } },
+    { name: 'COMMENTAIRES', range: { from: 'AQ6', to: 'AS6' } },
+    { name: 'MISE À JOUR', range: { from: 'AT6', to: 'AU6' } },
 ];
 
 const headers = [
@@ -47,7 +47,8 @@ const headers = [
     { label: 'Code région', width: '3' },
     { label: 'Région', width: '7' },
     { label: 'ID action', width: '3' },
-    { label: 'Nom action', width: '8' },
+    { label: 'Opérateur principal', width: '6' },
+    { label: 'Nom du projet', width: '8' },
     { label: 'Date de lancement/début', width: '3' },
     { label: 'Date de fin (prévue)', width: '3' },
     { label: 'Lieu', width: '4' },
@@ -254,7 +255,8 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, in
             item.region_code,
             item.region_name,
             item.action_id,
-            item.action_name,
+            item.operator_name ?? '',
+            item.project_name,
             item.started_at,
             item.ended_at,
             item.location_type,
@@ -347,7 +349,7 @@ function formatWorksheetCells(worksheet: ExcelJS.Worksheet, columnNumbers: numbe
 }
 
 function formatCommentCol(worksheet: ExcelJS.Worksheet) {
-    const commentsCol = worksheet.getColumn('AO');
+    const commentsCol = worksheet.getColumn('AP');
     commentsCol.eachCell((cell) => {
         if (cell.value) {
             formaterCommentaires(cell, cell.value);
@@ -411,10 +413,10 @@ export default function exportActions(
             .filter(s => s.name !== 'FINANCEMENT')
             .map((section) => {
                 if (section.name === 'COMMENTAIRES') {
-                    return { name: section.name, range: { from: 'AD6', to: 'AF6' } };
+                    return { name: section.name, range: { from: 'AE6', to: 'AG6' } };
                 }
                 if (section.name === 'MISE À JOUR') {
-                    return { name: section.name, range: { from: 'AG6', to: 'AH6' } };
+                    return { name: section.name, range: { from: 'AH6', to: 'AI6' } };
                 }
                 return section;
             });
@@ -422,7 +424,7 @@ export default function exportActions(
 
     // Déterminer les headers à inclure selon les permissions
     // Les colonnes de financement vont de l'index 29 (finance_etatique) à 40 (depense_finance_autre)
-    const headersToInclude = includeFinances ? headers : headers.filter((_, index) => index < 29 || index > 40);
+    const headersToInclude = includeFinances ? headers : headers.filter((_, index) => index < 30 || index > 41);
 
     // Trouver la section "FINANCEMENT" si elle existe
     const financementSection = includeFinances ? findSection('FINANCEMENT') : null;

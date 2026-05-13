@@ -10,6 +10,8 @@ export type ActionItem = {
     region_name: string,
     action_id: number,
     action_name: string,
+    operator_name: string | null,
+    project_name: string,
     started_at: string,
     ended_at: string | null,
     location_type: string,

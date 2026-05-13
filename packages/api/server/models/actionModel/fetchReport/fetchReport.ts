@@ -208,6 +208,19 @@ export default function fetchReport(
             GROUP BY
                 fk_action
         ),
+        principal_operator AS (
+            SELECT
+                ao.fk_action,
+                COALESCE(NULLIF(org.abbreviation, ''), org."name") AS operator_name
+            FROM
+                action_operators ao
+            INNER JOIN
+                users u ON u.user_id = ao.fk_user
+            INNER JOIN
+                organizations org ON org.organization_id = u.fk_organization
+            WHERE
+                ao.is_principal = true
+        ),
         action_operators AS (
             SELECT
                 fk_action,
@@ -227,7 +240,13 @@ export default function fetchReport(
         r.code AS "region_code",
         r.name AS "region_name",
         actions.action_id,
-        actions."name" AS "action_name",
+        po.operator_name AS "operator_name",
+        actions."name" AS "project_name",
+        CASE
+            WHEN po.operator_name IS NOT NULL
+                THEN po.operator_name || ' - ' || actions."name"
+            ELSE actions."name"
+        END AS "action_name",
         TO_CHAR(started_at, 'DD/MM/YYYY') AS "started_at",
         TO_CHAR(ended_at, 'DD/MM/YYYY') AS "ended_at",
         CASE actions.location_type
@@ -297,6 +316,8 @@ export default function fetchReport(
         finances fi ON fi.action_id = actions.action_id
     LEFT JOIN
         metrics_last_update mlu ON mlu.action_id = actions.action_id
+    LEFT JOIN
+        principal_operator po ON po.fk_action = actions.action_id
     WHERE
         actions.started_at <= TO_DATE(:annee::varchar || '-12-31', 'YYYY-MM-DD')
     AND
