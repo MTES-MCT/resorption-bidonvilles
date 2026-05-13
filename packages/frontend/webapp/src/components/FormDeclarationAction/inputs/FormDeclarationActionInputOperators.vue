@@ -10,7 +10,7 @@
         />
 
         <DsfrRadioButtonSet
-            v-if="activeUsers.length >= 2"
+            v-if="props.canEditPrincipal && activeUsers.length >= 2"
             v-model="selectedPrincipalId"
             :name="RADIO_GROUP_NAME"
             :legend="labels.principalOperator"
@@ -25,6 +25,13 @@ import { computed, watch } from "vue";
 import { useField } from "vee-validate";
 import InputUsers from "@/components/InputUsers/InputUsers.vue";
 import labels from "../FormDeclarationAction.labels";
+
+const props = defineProps({
+    canEditPrincipal: {
+        type: Boolean,
+        default: false,
+    },
+});
 
 const RADIO_GROUP_NAME = "operators-principal";
 

@@ -10,6 +10,7 @@
         />
         <FormDeclarationActionContacts
             :disableManagers="mode === 'edit' && !canAccessFinances"
+            :canEditPrincipal="canEditPrincipal"
             class="mt-6"
         />
 
@@ -92,6 +93,13 @@ const originalFinances = ref(null);
 
 const mode = computed(() => {
     return action.value === null ? "create" : "edit";
+});
+
+const canEditPrincipal = computed(() => {
+    if (mode.value === "create") {
+        return true;
+    }
+    return action.value?.is_pilot_or_national_admin === true;
 });
 const validationSchema = schemaFn(mode.value);
 const {
