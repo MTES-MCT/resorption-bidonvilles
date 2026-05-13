@@ -1,14 +1,9 @@
 import chai from 'chai';
 import ServiceError from '#server/errors/ServiceError';
+import { ActionInputOperator } from '#test/utils/actionInput';
 import validateAndNormalizeOperators from './operatorValidation';
 
 const { expect } = chai;
-
-type ActionInputOperator = {
-    id: number,
-    organization_id: number,
-    is_principal?: boolean,
-};
 
 describe('services/action/operatorValidation', () => {
     it('ne mute pas et ne throw pas avec une liste vide', () => {

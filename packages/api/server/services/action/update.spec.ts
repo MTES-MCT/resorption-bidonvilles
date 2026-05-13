@@ -5,6 +5,7 @@ import sinonChai from 'sinon-chai';
 import { rewiremock } from '#test/rewiremock';
 import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeAction } from '#test/utils/action';
+import { buildActionData as buildBaseActionData, ActionInputOperator } from '#test/utils/actionInput';
 import ServiceError from '#server/errors/ServiceError';
 
 const { expect } = chai;
@@ -46,36 +47,10 @@ rewiremock.enable();
 import update from './update';
 rewiremock.disable();
 
-type ActionInputOperator = {
-    id: number,
-    organization_id: number,
-    is_principal?: boolean,
-};
-
-function buildActionData(operators: ActionInputOperator[]) {
-    return {
-        name: 'Action modifiée',
-        started_at: new Date(2024, 0, 1),
-        ended_at: null,
-        topics: ['health'],
-        goals: 'Objectif modifié',
-        location: {
-            type: 'departement' as const,
-            city: null,
-            epci: null,
-            departement: { code: '78', name: 'Yvelines' },
-            region: { code: '11', name: 'Île-De-France' },
-        },
-        location_departement: '78',
-        location_type: 'logement' as const,
-        location_eti_addresses: null,
-        location_shantytowns: null,
-        location_autre: null,
-        managers: [{ id: 1, organization_id: 10 }],
-        operators,
-        indicateurs: {},
-    };
-}
+const buildActionData = (operators: ActionInputOperator[]) => buildBaseActionData(operators, {
+    name: 'Action modifiée',
+    goals: 'Objectif modifié',
+});
 
 describe('services/action.update()', () => {
     let user: ReturnType<typeof fakeUser>;

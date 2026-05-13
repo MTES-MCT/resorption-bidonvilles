@@ -4,6 +4,7 @@ import sinonChai from 'sinon-chai';
 
 import { rewiremock } from '#test/rewiremock';
 import { serialized as fakeUser } from '#test/utils/user';
+import { buildActionData, ActionInputOperator } from '#test/utils/actionInput';
 import ServiceError from '#server/errors/ServiceError';
 
 const { expect } = chai;
@@ -42,37 +43,6 @@ rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
 import create from './create';
 rewiremock.disable();
-
-type ActionInputOperator = {
-    id: number,
-    organization_id: number,
-    is_principal?: boolean,
-};
-
-function buildActionData(operators: ActionInputOperator[]) {
-    return {
-        name: 'Action test',
-        started_at: new Date(2024, 0, 1),
-        ended_at: null,
-        topics: ['health'],
-        goals: 'Objectif test',
-        location: {
-            type: 'departement' as const,
-            city: null,
-            epci: null,
-            departement: { code: '78', name: 'Yvelines' },
-            region: { code: '11', name: 'Île-De-France' },
-        },
-        location_departement: '78',
-        location_type: 'logement' as const,
-        location_eti_addresses: null,
-        location_shantytowns: null,
-        location_autre: null,
-        managers: [{ id: 1, organization_id: 10 }],
-        operators,
-        indicateurs: {},
-    };
-}
 
 describe('services/action.create()', () => {
     let user: ReturnType<typeof fakeUser>;
