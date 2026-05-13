@@ -105,6 +105,131 @@ describe('services/action.update()', () => {
         });
     });
 
+    describe('protection de l\'opérateur principal', () => {
+        // action BDD : operators[0].users[0] est principal (id=10)
+        // managers : org id=1, user id=42 (le pilote)
+        const actionWithPrincipal = fakeAction({
+            managers: [
+                {
+                    id: 1,
+                    name: 'Structure pilote',
+                    abbreviation: '',
+                    users: [
+                        {
+                            id: 42,
+                            email: 'pilote@action.fr',
+                            position: 'Pilote',
+                            phone: null,
+                            role: 'collaborator',
+                            is_admin: false,
+                            first_name: 'Alice',
+                            last_name: 'Pilote',
+                            organization: { id: 1, name: 'Structure pilote', abbreviation: '' },
+                        },
+                    ],
+                },
+            ],
+            operators: [
+                {
+                    id: 2,
+                    name: 'Opérateur',
+                    abbreviation: '',
+                    users: [
+                        {
+                            id: 10,
+                            email: 'op@action.fr',
+                            position: 'Opérateur',
+                            phone: null,
+                            role: 'collaborator',
+                            is_admin: false,
+                            is_principal: true,
+                            first_name: 'Bob',
+                            last_name: 'Opérateur',
+                            organization: { id: 2, name: 'Opérateur', abbreviation: '' },
+                        },
+                    ],
+                },
+            ],
+        });
+
+        // payload : le user id=10 passe de is_principal=true à is_principal=false → changement détecté
+        const operatorsChangingPrincipal: ActionInputOperator[] = [
+            { id: 10, organization_id: 2, is_principal: false },
+        ];
+
+        // payload identique à la BDD : is_principal=true → pas de changement
+        const operatorsSamePrincipal: ActionInputOperator[] = [
+            { id: 10, organization_id: 2, is_principal: true },
+        ];
+
+        it('autorise un national_admin actif à changer l\'opérateur principal', async () => {
+            const adminUser = fakeUser({ id: 99, role_id: 'national_admin' });
+
+            await update(actionWithPrincipal, adminUser, buildActionData(operatorsChangingPrincipal));
+
+            expect(stubs.updateActionModel).to.have.been.calledOnce;
+            expect(stubs.transaction.commit).to.have.been.calledOnce;
+        });
+
+        it('autorise un pilote de l\'action à changer l\'opérateur principal', async () => {
+            // le pilote est le user id=42, présent dans actionWithPrincipal.managers[0].users
+            const piloteUser = fakeUser({ id: 42, role_id: 'collaborator' });
+
+            await update(actionWithPrincipal, piloteUser, buildActionData(operatorsChangingPrincipal));
+
+            expect(stubs.updateActionModel).to.have.been.calledOnce;
+            expect(stubs.transaction.commit).to.have.been.calledOnce;
+        });
+
+        it('lève ServiceError forbidden_principal_change si un user lambda tente de changer l\'opérateur principal', async () => {
+            // user lambda : ni national_admin, ni dans les managers
+            const lambdaUser = fakeUser({ id: 99, role_id: 'collaborator' });
+
+            let caughtError: ServiceError | null = null;
+            try {
+                await update(actionWithPrincipal, lambdaUser, buildActionData(operatorsChangingPrincipal));
+            } catch (err) {
+                caughtError = err as ServiceError;
+            }
+
+            expect(stubs.updateActionModel).not.to.have.been.called;
+            expect(stubs.sequelize.transaction).not.to.have.been.called;
+            expect(caughtError).to.be.instanceOf(ServiceError);
+            expect(caughtError?.code).to.equal('forbidden_principal_change');
+        });
+
+        it('n\'applique pas la garde si le payload est identique à la BDD (aucun changement de is_principal)', async () => {
+            // user lambda : ne pourrait pas changer, mais le payload est identique → pas de garde
+            const lambdaUser = fakeUser({ id: 99, role_id: 'collaborator' });
+
+            await update(actionWithPrincipal, lambdaUser, buildActionData(operatorsSamePrincipal));
+
+            // la transaction normale est démarrée et le model update est appelé
+            expect(stubs.updateActionModel).to.have.been.calledOnce;
+            expect(stubs.transaction.commit).to.have.been.calledOnce;
+        });
+
+        it('lève ServiceError forbidden_principal_change si un user lambda retire l\'opérateur principal (passage à undefined)', async () => {
+            // payload sans is_principal explicite alors que la BDD a is_principal=true : c'est un changement
+            const operatorsRemovingPrincipal: ActionInputOperator[] = [
+                { id: 10, organization_id: 2 },
+            ];
+            const lambdaUser = fakeUser({ id: 99, role_id: 'collaborator' });
+
+            let caughtError: ServiceError | null = null;
+            try {
+                await update(actionWithPrincipal, lambdaUser, buildActionData(operatorsRemovingPrincipal));
+            } catch (err) {
+                caughtError = err as ServiceError;
+            }
+
+            expect(stubs.updateActionModel).not.to.have.been.called;
+            expect(stubs.sequelize.transaction).not.to.have.been.called;
+            expect(caughtError).to.be.instanceOf(ServiceError);
+            expect(caughtError?.code).to.equal('forbidden_principal_change');
+        });
+    });
+
     describe('comportement nominal', () => {
         it('appelle le model update avec l\'id de l\'action et les données enrichies du updated_by', async () => {
             const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
