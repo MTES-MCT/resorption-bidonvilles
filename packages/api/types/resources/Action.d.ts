@@ -213,6 +213,7 @@ interface GenericAction extends IAction {
     created_by: ActionUser,
     updated_at: number | null,
     updated_by: ActionUser | null,
+    is_pilot_or_national_admin?: boolean,
 }
 
 export interface Action extends GenericAction {

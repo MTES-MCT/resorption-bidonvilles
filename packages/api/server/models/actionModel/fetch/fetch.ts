@@ -52,5 +52,11 @@ export default async function fetch(user: User, actionIds?: number[], transactio
     mergeMetrics(hash, metrics);
     mergeFinances(hash, finances);
 
+    Object.values(hash).forEach((action) => {
+        // eslint-disable-next-line no-param-reassign
+        action.is_pilot_or_national_admin = user.role_id === 'national_admin'
+            || action.managers.flatMap(org => org.users).some(u => u.id === user.id);
+    });
+
     return Object.values(hash);
 }
