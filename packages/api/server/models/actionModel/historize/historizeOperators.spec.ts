@@ -57,14 +57,23 @@ describe('models/actionModel/historize/historizeOperators()', () => {
 
         const sql: string = queryStub.firstCall.args[0];
 
-        // La colonne cible est mentionnée dans le bloc INSERT … ( … )
-        const insertMatch = /INSERT\s+INTO[^(]+\(([^)]+)\)/i.exec(sql);
-        const insertBlock = insertMatch?.[1] ?? '';
+        // La requête a la forme :
+        //   INSERT INTO action_operators_history( <colonnes cibles> ) (SELECT <colonnes source> FROM action_operators WHERE ...)
+        // On isole les deux zones sans regex (évite l'alerte ReDoS de SonarQube).
+        const openParenIndex = sql.indexOf('(');
+        const closeParenIndex = sql.indexOf(')');
+        const fromIndex = sql.indexOf(' FROM ');
+        expect(openParenIndex, 'parenthèse ouvrante INSERT introuvable').to.be.greaterThan(-1);
+        expect(closeParenIndex, 'parenthèse fermante INSERT introuvable').to.be.greaterThan(openParenIndex);
+        expect(fromIndex, 'mot-clé FROM introuvable').to.be.greaterThan(closeParenIndex);
+
+        // Zone INSERT : entre la première parenthèse ouvrante et sa fermante.
+        const insertBlock = sql.slice(openParenIndex + 1, closeParenIndex);
         expect(insertBlock).to.include('is_principal');
 
-        // La colonne source est mentionnée dans le SELECT
-        const selectMatch = /SELECT\s+(.*?)\s+FROM/is.exec(sql);
-        const selectBlock = selectMatch?.[1] ?? '';
+        // Zone SELECT : entre la première parenthèse fermante (fin du bloc INSERT)
+        // et le premier ' FROM ' (les colonnes source en SELECT sont entre les deux).
+        const selectBlock = sql.slice(closeParenIndex + 1, fromIndex);
         expect(selectBlock).to.include('is_principal');
     });
 
