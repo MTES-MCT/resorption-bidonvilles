@@ -1,8 +1,10 @@
-import { ActionHash } from './hashActions';
 import ActionUserRow from './ActionUserRow.d';
-import { ActionOrganizationMember } from '#root/types/resources/Action.d';
+import { ActionOrganizationMember, ActionOrganization } from '#root/types/resources/Action.d';
 
-export default function mergeOperators(hash: ActionHash, operators: ActionUserRow[]): void {
+export default function mergeOperators<T extends { operators: ActionOrganization[] }>(
+    hash: { [key: number]: T },
+    operators: ActionUserRow[],
+): void {
     operators.forEach((row) => {
         const index = hash[row.action_id].operators.findIndex(({ id }) => id === row.organization_id);
         const user: ActionOrganizationMember = {

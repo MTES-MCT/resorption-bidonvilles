@@ -132,7 +132,7 @@ export type ActionOrganizationMember = {
         abbreviation: string,
     }
 };
-type ActionOrganization = {
+export type ActionOrganization = {
     id: number,
     name: string,
     abbreviation: string | null,

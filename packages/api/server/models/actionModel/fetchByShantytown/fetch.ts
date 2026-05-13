@@ -6,11 +6,11 @@ import fetchTopics from './fetchTopics';
 import fetchOperators from './fetchOperators';
 import hashActions from './hashActions';
 import mergeTopics from './mergeTopics';
-import mergeOperators from './mergeOperators';
+import mergeOperators from '../fetch/mergeOperators';
 import computeActionNames from '../fetch/computeActionNames';
 import { User } from '#root/types/resources/User.d';
 
-export default async (user: User, shantytownIds: number[]): Promise<ShantytownAction[]> => {
+export default async function fetchByShantytown(user: User, shantytownIds: number[]): Promise<ShantytownAction[]> {
     const clauseGroup = where().can(user).do('read', 'action');
     const [actions, topics, operators] = await Promise.all([
         fetchActions(shantytownIds, clauseGroup),
@@ -24,4 +24,4 @@ export default async (user: User, shantytownIds: number[]): Promise<ShantytownAc
     computeActionNames(hash);
 
     return Object.values(hash);
-};
+}
