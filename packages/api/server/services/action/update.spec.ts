@@ -22,6 +22,7 @@ const stubs = {
     updateActionModel: sandbox.stub(),
     fetchAction: sandbox.stub(),
     can: sandbox.stub(),
+    validateAndNormalizeOperators: sandbox.stub(),
 };
 
 class FakeUniqueConstraintError extends Error {
@@ -38,7 +39,7 @@ rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
 rewiremock('#server/models/actionModel/update/update').with(stubs.updateActionModel);
 rewiremock('./write.fetchAction').with(stubs.fetchAction);
 rewiremock('#server/utils/permission/can').with(stubs.can);
-rewiremock('./operatorValidation').callThrough();
+rewiremock('./operatorValidation').with(stubs.validateAndNormalizeOperators);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -92,6 +93,7 @@ describe('services/action.update()', () => {
                 on: () => false,
             }),
         });
+        stubs.validateAndNormalizeOperators.returns(undefined);
     });
 
     afterEach(() => {
@@ -102,33 +104,18 @@ describe('services/action.update()', () => {
         sandbox.restore();
     });
 
-    describe('logique is_principal sur les operators', () => {
-        it('force is_principal=true sur l\'unique opérateur si la liste contient un seul élément sans is_principal', async () => {
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10 }];
+    describe('wiring de la validation des opérateurs', () => {
+        it('appelle validateAndNormalizeOperators avec les opérateurs reçus', async () => {
+            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
             await update(action, user, buildActionData(operators));
 
-            expect(stubs.updateActionModel).to.have.been.calledOnce;
-            const calledData = stubs.updateActionModel.firstCall.args[1];
-            expect(calledData.operators[0].is_principal).to.equal(true);
+            expect(stubs.validateAndNormalizeOperators).to.have.been.calledOnce;
+            expect(stubs.validateAndNormalizeOperators.firstCall.args[0]).to.equal(operators);
         });
 
-        it('passe la liste telle quelle au model en cas de multi-opérateurs avec principals explicites', async () => {
-            const operators: ActionInputOperator[] = [
-                { id: 1, organization_id: 10, is_principal: true },
-                { id: 2, organization_id: 20, is_principal: false },
-            ];
-            await update(action, user, buildActionData(operators));
-
-            expect(stubs.updateActionModel).to.have.been.calledOnce;
-            const calledData = stubs.updateActionModel.firstCall.args[1];
-            expect(calledData.operators).to.deep.equal(operators);
-        });
-
-        it('lève ServiceError no_principal_operator si aucun opérateur n\'est principal sur une liste de taille ≥ 2', async () => {
-            const operators: ActionInputOperator[] = [
-                { id: 1, organization_id: 10, is_principal: false },
-                { id: 2, organization_id: 20, is_principal: false },
-            ];
+        it('ne démarre pas de transaction si la validation échoue', async () => {
+            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: false }];
+            stubs.validateAndNormalizeOperators.throws(new ServiceError('no_principal_operator', new Error('test')));
 
             let caughtError: ServiceError | null = null;
             try {
@@ -137,97 +124,9 @@ describe('services/action.update()', () => {
                 caughtError = err as ServiceError;
             }
 
+            expect(stubs.sequelize.transaction).not.to.have.been.called;
             expect(caughtError).to.be.instanceOf(ServiceError);
             expect(caughtError?.code).to.equal('no_principal_operator');
-            expect(caughtError?.nativeError).to.be.instanceOf(Error);
-        });
-
-        it('n\'appelle pas le model update si aucun opérateur n\'est principal sur une liste de taille ≥ 2', async () => {
-            const operators: ActionInputOperator[] = [
-                { id: 1, organization_id: 10, is_principal: false },
-                { id: 2, organization_id: 20, is_principal: false },
-            ];
-
-            try {
-                await update(action, user, buildActionData(operators));
-            } catch (_err) {
-                // erreur attendue
-            }
-
-            expect(stubs.updateActionModel).not.to.have.been.called;
-        });
-
-        it('ne commit pas et ne rollback pas si aucun opérateur n\'est principal sur une liste de taille ≥ 2', async () => {
-            const operators: ActionInputOperator[] = [
-                { id: 1, organization_id: 10, is_principal: false },
-                { id: 2, organization_id: 20, is_principal: false },
-            ];
-
-            try {
-                await update(action, user, buildActionData(operators));
-            } catch (_err) {
-                // erreur attendue
-            }
-
-            expect(stubs.transaction.commit).not.to.have.been.called;
-            expect(stubs.transaction.rollback).not.to.have.been.called;
-        });
-
-        it('lève ServiceError multiple_principal_operators si plus d\'un opérateur est principal', async () => {
-            const operators: ActionInputOperator[] = [
-                { id: 1, organization_id: 10, is_principal: true },
-                { id: 2, organization_id: 20, is_principal: true },
-            ];
-
-            let caughtError: ServiceError | null = null;
-            try {
-                await update(action, user, buildActionData(operators));
-            } catch (err) {
-                caughtError = err as ServiceError;
-            }
-
-            expect(caughtError).to.be.instanceOf(ServiceError);
-            expect(caughtError?.code).to.equal('multiple_principal_operators');
-            expect(caughtError?.nativeError).to.be.instanceOf(Error);
-        });
-
-        it('n\'appelle pas le model update si plus d\'un opérateur est principal', async () => {
-            const operators: ActionInputOperator[] = [
-                { id: 1, organization_id: 10, is_principal: true },
-                { id: 2, organization_id: 20, is_principal: true },
-            ];
-
-            try {
-                await update(action, user, buildActionData(operators));
-            } catch (_err) {
-                // erreur attendue
-            }
-
-            expect(stubs.updateActionModel).not.to.have.been.called;
-        });
-
-        it('ne commit pas et ne rollback pas si plus d\'un opérateur est principal (aucune transaction ouverte)', async () => {
-            const operators: ActionInputOperator[] = [
-                { id: 1, organization_id: 10, is_principal: true },
-                { id: 2, organization_id: 20, is_principal: true },
-            ];
-
-            try {
-                await update(action, user, buildActionData(operators));
-            } catch (_err) {
-                // erreur attendue
-            }
-
-            expect(stubs.transaction.commit).not.to.have.been.called;
-        });
-
-        it('passe la liste vide telle quelle au model sans erreur', async () => {
-            const operators: ActionInputOperator[] = [];
-            await update(action, user, buildActionData(operators));
-
-            expect(stubs.updateActionModel).to.have.been.calledOnce;
-            const calledData = stubs.updateActionModel.firstCall.args[1];
-            expect(calledData.operators).to.deep.equal([]);
         });
     });
 
