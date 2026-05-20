@@ -121,7 +121,7 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
 
     const toDiff: { [key: string]: { label: string, processor?: (value: any) => string } } = {
         name: {
-            label: "Nom de l'action",
+            label: 'Nom du projet',
         },
         started_at: {
             label: 'Date de début',
