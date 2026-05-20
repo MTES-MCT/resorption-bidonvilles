@@ -23,7 +23,11 @@ const props = defineProps({
     action: Object,
 });
 const { action } = toRefs(props);
-const users = computed(() => {
-    return action.value.operators.flatMap(({ users }) => users);
-});
+const isDeactivatedUser = (user) =>
+    user.first_name === "Utilisateur" && user.last_name === "Désactivé";
+const users = computed(() =>
+    action.value.operators
+        .flatMap(({ users: orgUsers }) => orgUsers)
+        .filter((user) => !isDeactivatedUser(user))
+);
 </script>
