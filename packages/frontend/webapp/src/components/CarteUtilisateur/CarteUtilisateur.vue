@@ -9,12 +9,6 @@
         }"
     >
         <div>
-            <DsfrTag
-                v-if="displayLeadOperatorInfo && user.is_principal"
-                label="Opérateur principal"
-                small
-                class="lg:place-self-end text-xs !bg-blue100 text-primary py-2 mb-2"
-            />
             <h2 class="font-bold" :class="user.is_admin ? 'text-info' : ''">
                 <p>
                     {{ user.last_name.toUpperCase() }}
