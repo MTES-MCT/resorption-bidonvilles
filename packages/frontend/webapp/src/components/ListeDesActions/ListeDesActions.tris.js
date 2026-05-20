@@ -13,7 +13,7 @@ export default {
     },
     operatorName: {
         value: "operator_name",
-        label: "Nom de l'action (structure - projet)",
+        label: "Nom de l'action",
     },
     projectName: {
         value: "project_name",
