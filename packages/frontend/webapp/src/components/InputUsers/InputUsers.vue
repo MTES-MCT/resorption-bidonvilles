@@ -76,10 +76,12 @@ const tags = computed(() => {
             id: `organization.${id}`,
             label,
         })),
-        ...value.value.users.map(({ id, label }) => ({
-            id: `user.${id}`,
-            label,
-        })),
+        ...value.value.users
+            .filter((u) => u.label !== "Utilisateur Désactivé")
+            .map(({ id, label }) => ({
+                id: `user.${id}`,
+                label,
+            })),
     ];
 });
 
