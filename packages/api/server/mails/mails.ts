@@ -165,6 +165,7 @@ export default {
             variables: {
                 recipientName: formatName(recipient),
                 userName: variables.userName,
+                userEmail: variables.userEmail,
                 orgName: variables.orgName,
                 webappUrl: `${webappUrl}?${utm}`,
                 adminUrl: `${variables.adminUrl}?${utm}`,
@@ -404,7 +405,7 @@ export default {
                 wwwUrl: `${wwwUrl}?${utm}`,
                 backUrl,
                 blogUrl,
-                contactUrl: `${contactUrl}?${utm}`,
+                contactUrl: `${contactUrl}?acces&${utm}`,
                 formationUrl,
             },
             preserveRecipient,

@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { toRef, ref, computed, defineProps, toRefs } from "vue";
+import { toRef, ref, computed, toRefs } from "vue";
 import { useForm } from "vee-validate";
 import { Button, DatepickerInput, Modal } from "@resorptionbidonvilles/ui";
 import ModalExportLien from "./ModalExportLien.vue";

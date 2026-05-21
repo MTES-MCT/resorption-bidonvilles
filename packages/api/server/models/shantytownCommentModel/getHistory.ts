@@ -8,6 +8,7 @@ import permissionUtils from '#server/utils/permission';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 import getAddressSimpleOf from '#server/models//shantytownModel/_common/getAddressSimpleOf';
 import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
+import outremer from '#server/utils/permission/outremer';
 import { Location } from '#server/models/geoModel/Location.d';
 import { ShantytownCommentRow } from './ShantytownCommentRow.d';
 import { ShantytownCommentActivity } from '#root/types/resources/Activity.d';
@@ -34,7 +35,7 @@ export type ShantytownCommentHistoryRow = ShantytownCommentRow & {
 };
 export default async (user: User, location: Location, numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<ShantytownCommentActivity[]> => {
     // apply geographic level restrictions
-    const where = [];
+    const where: string[] = [];
     const replacements: any = {
         maxDate,
     };
@@ -44,6 +45,7 @@ export default async (user: User, location: Location, numberOfActivities: number
         public: restrict(location).for(user).askingTo('list', 'shantytown_comment'),
         private: restrict(location).for(user).askingTo('listPrivate', 'shantytown_comment'),
     };
+    const restrictedLocationTypes = new Set(['metropole', 'outremer']);
 
     if (restrictedLocations.public.length === 0 && restrictedLocations.private.length === 0) {
         return [];
@@ -66,6 +68,15 @@ export default async (user: User, location: Location, numberOfActivities: number
     } else if (!restrictedLocations.public.some(l => l.type === 'nation')) {
         // geo permission
         const publicCommentLocationClause = restrictedLocations.public.map((l, index) => {
+            // On fait l'exclusion ou inclusion si c'est metropole ou outremer
+            if (restrictedLocationTypes.has(l.type)) {
+                if (!replacements.outreMerDepts) {
+                    replacements.outreMerDepts = outremer.departements;
+                }
+                return l.type === 'metropole'
+                    ? 'departements.code NOT IN (:outreMerDepts)'
+                    : 'departements.code IN (:outreMerDepts)';
+            }
             const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownCommentLocationCode${index}`];
             if (l.type === 'city') {
                 arr.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :shantytownCommentLocationCode${index}`);
@@ -86,12 +97,24 @@ export default async (user: User, location: Location, numberOfActivities: number
             privateCommentLocationClause.push('true');
         } else {
             restrictedLocations.private.forEach((l, index) => {
-                privateCommentLocationClause.push(`${fromGeoLevelToTableName(l.type)}.code = :privateShantytownCommentLocationCode${index}`);
-                if (l.type === 'city') {
-                    privateCommentLocationClause.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :privateShantytownCommentLocationCode${index}`);
-                }
+                // On fait l'exclusion ou inclusion si c'est metropole ou outremer
+                if (restrictedLocationTypes.has(l.type)) {
+                    if (!replacements.outreMerDepts) {
+                        replacements.outreMerDepts = outremer.departements;
+                    }
+                    privateCommentLocationClause.push(
+                        l.type === 'metropole'
+                            ? 'departements.code NOT IN (:outreMerDepts)'
+                            : 'departements.code IN (:outreMerDepts)',
+                    );
+                } else {
+                    privateCommentLocationClause.push(`${fromGeoLevelToTableName(l.type)}.code = :privateShantytownCommentLocationCode${index}`);
+                    if (l.type === 'city') {
+                        privateCommentLocationClause.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :privateShantytownCommentLocationCode${index}`);
+                    }
 
-                replacements[`privateShantytownCommentLocationCode${index}`] = l[l.type].code;
+                    replacements[`privateShantytownCommentLocationCode${index}`] = l[l.type].code;
+                }
             });
         }
     }
@@ -122,11 +145,23 @@ export default async (user: User, location: Location, numberOfActivities: number
     // on vérifie que le commentaire est bien sur le territoire de la recherche
     const searchLocationClause = [];
     if (location.type !== 'nation') {
-        searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.code = :shantytownCommentSearchLocationCode`);
-        if (location.type === 'city') {
-            searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.fk_main = :shantytownCommentSearchLocationCode`);
+        // On fait l'exclusion ou inclusion si c'est metropole ou outremer
+        if (restrictedLocationTypes.has(location.type)) {
+            if (!replacements.outreMerDepts) {
+                replacements.outreMerDepts = outremer.departements;
+            }
+            searchLocationClause.push(
+                location.type === 'metropole'
+                    ? 'departements.code NOT IN (:outreMerDepts)'
+                    : 'departements.code IN (:outreMerDepts)',
+            );
+        } else {
+            searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.code = :shantytownCommentSearchLocationCode`);
+            if (location.type === 'city') {
+                searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.fk_main = :shantytownCommentSearchLocationCode`);
+            }
+            replacements.shantytownCommentSearchLocationCode = location[location.type].code;
         }
-        replacements.shantytownCommentSearchLocationCode = location[location.type].code;
     } else {
         searchLocationClause.push('true');
     }
@@ -134,7 +169,8 @@ export default async (user: User, location: Location, numberOfActivities: number
     where.push(`(${searchLocationClause.join(' OR ')})`);
 
     // additional filters
-    where.push(`comments.created_at < '${lastDate}'`);
+    replacements.lastDate = lastDate;
+    where.push('comments.created_at < :lastDate');
     if (maxDate) {
         where.push('comments.created_at >= :maxDate');
     }

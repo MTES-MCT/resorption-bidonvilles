@@ -3,10 +3,10 @@ import { sequelize } from '#db/sequelize';
 import ActionUserRow from './ActionUserRow';
 import enrichWhere from './enrichWhere';
 
-export default function fetchOperators(actionIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionUserRow[]> {
+export default function fetchOperators(actionIds?: number[], clauseGroup: object = {}, transaction?: Transaction): Promise<ActionUserRow[]> {
     const where = [];
     const replacements = { actionIds };
-    if (actionIds !== null) {
+    if (actionIds !== undefined) {
         where.push('action_operators.fk_action IN (:actionIds)');
     }
 

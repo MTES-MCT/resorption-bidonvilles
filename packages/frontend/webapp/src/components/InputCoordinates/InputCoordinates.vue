@@ -2,6 +2,7 @@
     <div class="relative h-full">
         <InputCoordinatesTooltip />
         <Carto
+            :mapId="mapId"
             :defaultView="{ center: view, zoom: DEFAULT_ZOOM }"
             ref="carto"
             :layers="['Dessin', 'Satellite']"
@@ -59,12 +60,22 @@ const DEFAULT_ZOOM = 14;
 const carto = ref(null);
 const cadastreToggler = ref(null);
 const props = defineProps({
+    mapId: {
+        type: String,
+        required: false,
+        default: "input-coordinates-map",
+    },
     name: {
         type: String,
         required: true,
     },
+    initialCoordinates: {
+        type: Array,
+        required: false,
+        default: null,
+    },
 });
-const { name } = toRefs(props);
+const { mapId, name, initialCoordinates } = toRefs(props);
 const showCadastre = ref(false);
 const cadastre = ref(null);
 const cadastreIsLoading = ref(null);
@@ -82,14 +93,34 @@ watch(value, () => {
     }
 });
 
-const view = computed(() => {
-    if (!value.value) {
+watch(initialCoordinates, (newCoords) => {
+    if (!newCoords) {
         return;
     }
-    return value.value;
+
+    // Comparer les valeurs des tableaux, pas les références
+    const currentValue = value.value;
+    const coordsChanged =
+        !currentValue ||
+        newCoords[0] !== currentValue[0] ||
+        newCoords[1] !== currentValue[1];
+
+    if (coordsChanged) {
+        handleChange(newCoords);
+    }
 });
 
-const inputMarker = marqueurInput(value.value);
+const view = computed(() => {
+    if (value.value) {
+        return value.value;
+    }
+    if (initialCoordinates.value) {
+        return initialCoordinates.value;
+    }
+    return [0, 0];
+});
+
+let inputMarker = null;
 
 let clickTimeout = null;
 
@@ -136,7 +167,9 @@ function refreshInput(center, emitInput = true) {
         return;
     }
 
-    inputMarker.setLatLng(center);
+    if (inputMarker) {
+        inputMarker.setLatLng(center);
+    }
     carto.value && carto.value.setView({ center });
 
     if (emitInput === true) {
@@ -154,10 +187,16 @@ watch(view, () => {
     loadCadastre();
 });
 
-watch(carto, () => {
-    if (carto.value) {
-        const { map } = carto.value;
+watch(
+    () => carto.value?.map,
+    (map) => {
+        if (!map) {
+            return;
+        }
+
+        inputMarker = marqueurInput(view.value);
         inputMarker.addTo(map);
+
         carto.value.addControl("cadastreToggler", createCadastreControl());
         inputMarker.addEventListener("dragend", () => {
             const { lat, lng } = inputMarker.getLatLng();
@@ -173,9 +212,13 @@ watch(carto, () => {
             clickTimeout = null;
         });
     }
-});
+);
 
 watch(showCadastre, () => {
+    if (!carto.value || !carto.value.map) {
+        return;
+    }
+
     const { map } = carto.value;
 
     if (showCadastre.value === false) {

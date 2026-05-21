@@ -7,18 +7,30 @@
             :minYear="minYear"
             :maxYear="maxYear"
             :topics="topics"
+            :errors="errors"
         />
     </FormSection>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, toRefs } from "vue";
 import { useFieldValue } from "vee-validate";
 import FormSection from "@/components/FormSection/FormSection.vue";
 
 import InputIndicateurs from "@/components/InputIndicateurs/InputIndicateurs.vue";
 import FormActionIndicateursInfo from "./FormDeclarationActionIndicateursInfo.vue";
 
+const props = defineProps({
+    errors: {
+        type: Object,
+        required: false,
+        default() {
+            return {};
+        },
+    },
+});
+
+const { errors } = toRefs(props);
 const topics = useFieldValue("topics");
 
 const startedAt = useFieldValue("started_at");

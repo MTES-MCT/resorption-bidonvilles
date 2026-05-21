@@ -41,13 +41,47 @@
 <script setup>
 import { computed } from "vue";
 import { useActionsStore } from "@/stores/actions.store";
-import filters from "./ListeDesActions.filtres";
+import staticFilters from "./ListeDesActions.filtres";
 import sorts from "./ListeDesActions.tris";
 import { Filter, Sort } from "@resorptionbidonvilles/ui";
 
 const actionsStore = useActionsStore();
 
 const sortOptions = [sorts.startedAt, sorts.updatedAt, sorts.lastMetricUpdate];
+
+const dihalYearOptions = computed(() => {
+    const years = new Set();
+    for (const action of actionsStore.actions) {
+        for (const [year, financeLines] of Object.entries(
+            action.finances || {}
+        )) {
+            if (financeLines.some((line) => line.type?.uid === "dedie")) {
+                years.add(Number(year));
+            }
+        }
+    }
+    const yearOptions = [...years]
+        .sort((a, b) => b - a)
+        .map((year) => ({ value: String(year), label: String(year) }));
+
+    return [
+        { value: "all", label: "Toutes les années", displayBottomBorder: true },
+        ...yearOptions,
+    ];
+});
+
+const filters = computed(() =>
+    staticFilters.map((filter) =>
+        filter.id === "dihalFinancing"
+            ? {
+                  ...filter,
+                  label: "Financement DIHAL",
+                  options: dihalYearOptions.value,
+              }
+            : filter
+    )
+);
+
 const isFiltered = computed(() => {
     const filterValues = Object.values(actionsStore.filters.properties);
     const activeFiltersCount = filterValues.filter(

@@ -3,6 +3,7 @@ import { QueryTypes } from 'sequelize';
 import { Location } from '#server/models/geoModel/Location.d';
 import interventionAreaModel from '#server/models/interventionAreaModel';
 import { RawInterventionArea } from '#server/models/userModel/_common/query.d';
+import outremer from '#server/utils/permission/outremer';
 import { UserActivity } from '#root/types/resources/Activity.d';
 import formatName from './_common/formatName';
 
@@ -24,6 +25,19 @@ type UserActivityRow = {
 
 export default async (location: Location, numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<UserActivity[]> => {
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
+    const outremerCondition = `(
+                EXISTS (
+                    SELECT 1
+                    FROM unnest(COALESCE(v_user_areas.departements, ARRAY[]::varchar[])) AS dep(code)
+                    WHERE btrim(dep.code::text) IN (:outreMerDepts)
+                )
+                OR EXISTS (
+                    SELECT 1
+                    FROM unnest(COALESCE(v_user_areas.regions, ARRAY[]::varchar[])) AS region(code)
+                    WHERE btrim(region.code::text) IN (:outreMerRegions)
+                )
+            )`;
+
     const activities: UserActivityRow[] = await sequelize.query(
         `
         SELECT
@@ -46,12 +60,15 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
         LEFT JOIN v_user_areas ON v_user_areas.user_id = users.user_id AND v_user_areas.is_main_area IS TRUE
         WHERE
             lua.used_at IS NOT NULL
-            AND lua.used_at < '${lastDate}'
+            AND lua.used_at < :lastDate
             ${maxDate ? 'AND lua.used_at >= :maxDate' : ''}
             ${location.type === 'city' ? 'AND :city = ANY(v_user_areas.cities)' : ''}
             ${location.type === 'epci' ? 'AND :epci = ANY(v_user_areas.epci)' : ''}
             ${location.type === 'departement' ? 'AND :departement = ANY(v_user_areas.departements)' : ''}
             ${location.type === 'region' ? 'AND :region = ANY(v_user_areas.regions)' : ''}
+            ${location.type === 'metropole' ? `AND NOT ${outremerCondition}` : ''}
+            ${location.type === 'outremer' ? `AND ${outremerCondition}` : ''}
+            
         ORDER BY lua.used_at DESC
         ${limit}
         `,
@@ -59,6 +76,9 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
             type: QueryTypes.SELECT,
             replacements: {
                 maxDate,
+                lastDate,
+                outreMerDepts: outremer.departements,
+                outreMerRegions: outremer.regions,
                 city: location.city?.code || null,
                 epci: location.epci?.code || null,
                 departement: location.departement?.code || null,

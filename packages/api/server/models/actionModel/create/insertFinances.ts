@@ -24,7 +24,7 @@ export default (actionId: number, finances: ActionFinances, transaction: Transac
             transaction,
             replacements: {
                 fk_action: actionId,
-                year: parseInt(year, 10),
+                year: Number.parseInt(year, 10),
                 fk_action_finance_type: row.finance_type,
                 amount: row.amount,
                 real_amount: row.real_amount,

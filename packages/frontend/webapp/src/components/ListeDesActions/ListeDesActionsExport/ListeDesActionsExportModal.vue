@@ -24,6 +24,7 @@
                                 :filename="exportItem.filename"
                                 :downloadFn="exportItem.downloadFn"
                                 :format="exportItem.format"
+                                @export-error="onExportError"
                             />
                         </li>
                     </ul>
@@ -39,6 +40,9 @@
                     @year-selected="handleYearSelected"
                 />
             </template>
+            <div v-if="error">
+                <DsfrAlert type="error" :description="error" small />
+            </div>
         </template>
         <template v-slot:footer>
             <div>
@@ -58,6 +62,7 @@
                             :format="exportItem.format"
                             :disabled="!selectedYear"
                             :year="selectedYear"
+                            @export-error="onExportError"
                         />
                     </li>
                     <li>
@@ -82,7 +87,7 @@
 </template>
 
 <script setup>
-import { ref, computed, defineProps, toRefs, watch } from "vue";
+import { ref, computed, toRefs, watch } from "vue";
 import { Icon, Link, Modal } from "@resorptionbidonvilles/ui";
 import ModalExportLien from "@/components/ModalExport/ModalExportLien.vue";
 import ModalExportListeAnnee from "@/components/ListeDesActions/ListeDesActionsExport/ListeDesActionsExportListeAnnees.vue";
@@ -93,6 +98,7 @@ const props = defineProps({
 const { exports: exportList } = toRefs(props);
 const modale = ref(null);
 const actionsExportIsSelected = ref(false);
+const error = ref(null);
 
 const selectedYear = ref(new Date().getFullYear() - 1);
 
@@ -178,4 +184,12 @@ function displayExportActionsBtn(label) {
 const title = computed(() => {
     return actionsExportIsSelected.value ? "Export des actions" : "Exports";
 });
+
+const onExportError = (message) => {
+    if (!message) {
+        error.value = null;
+        return;
+    }
+    error.value = message;
+};
 </script>

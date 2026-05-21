@@ -168,7 +168,7 @@ export default async (actionId?: number, managers?: number[], departement?: Depa
 
     const interventionAreas = await interventionAreaModel.list(
         [],
-        Object.keys(hash).map(id => parseInt(id, 10)),
+        Object.keys(hash).map(id => Number.parseInt(id, 10)),
     );
     hashAreas(interventionAreas, hash);
 

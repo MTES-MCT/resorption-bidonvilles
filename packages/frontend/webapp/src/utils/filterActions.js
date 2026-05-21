@@ -117,8 +117,15 @@ function checkOrganization(action, organizationId) {
 }
 
 function checkDihalFinancing(action, dihalFinancingFilters) {
-    if (dihalFinancingFilters.includes("dihal")) {
-        return action.hasDihalFinancing === true;
+    if (dihalFinancingFilters.includes("all")) {
+        return Object.values(action.finances || {}).some((financeLines) =>
+            financeLines.some((line) => line.type?.uid === "dedie")
+        );
     }
-    return true;
+
+    return Object.entries(action.finances || {}).some(
+        ([year, financeLines]) =>
+            dihalFinancingFilters.includes(String(year)) &&
+            financeLines.some((line) => line.type?.uid === "dedie")
+    );
 }

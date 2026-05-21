@@ -28,7 +28,7 @@ export const useActivitiesStore = defineStore("activities", () => {
     const endOfActivities = ref(false);
 
     async function fetchActivities(target = {}) {
-        if (isLoading.value === true) {
+        if (isLoading.value) {
             return;
         }
 
@@ -126,6 +126,7 @@ export const useActivitiesStore = defineStore("activities", () => {
     watch(() => bus.value.get("new-user"), reset);
     reset();
 
+    watch(filters.location, refetch);
     watch(filters.search, refetch);
     watch(filters.properties, refetch, {
         deep: true,
