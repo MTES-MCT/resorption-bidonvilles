@@ -30,46 +30,48 @@ const blogRessourceRoute = createBlogRoute(
 
 const topItems = [
     {
-        icon: "arrow-right-to-bracket",
+        icon: "fr-icon-lock-line",
         label: "Me connecter",
-        route: "/connexion",
+        to: "/connexion",
         authRequirement: "signedOut",
     },
     {
-        icon: "fa-user fa-regular",
+        icon: "fr-icon-user-line",
         label: "Demander un accès",
-        route: "/contact?language=fr&acces",
+        to: "/contact?language=fr&acces",
         authRequirement: "signedOut",
     },
     {
-        icon: "fa-regular fa-user-plus",
+        icon: "fr-icon-user-add-fill",
         label: "Inviter des utilisateurs",
-        route: "/invitation?from=navbar",
+        to: "/invitation?from=navbar",
         authRequirement: "signedIn",
     },
     {
-        icon: "fa-newspaper fa-regular",
+        icon: "fr-icon-article-line",
         label: "Blog",
-        route: getBlogUrl(),
+        href: getBlogUrl(),
+        target: "_blank",
         authRequirement: "none",
     },
     {
-        icon: "fa-book fa-regular",
+        icon: "fr-icon-book-2-line",
         label: "Ressources",
-        route: `${blogRessourceRoute}`,
+        href: `${blogRessourceRoute}`,
+        target: "_blank",
         authRequirement: "none",
     },
     {
-        icon: "fa-user fa-regular",
+        icon: "fr-icon-user-fill",
         label: "Mon profil",
-        route: "/mon-compte",
+        to: "/mon-compte",
         authRequirement: "signedIn",
         configRequired: true,
     },
     {
-        icon: "arrow-right-to-bracket",
+        icon: "fr-icon-logout-box-r-line",
         label: "Me déconnecter",
-        route: "/deconnexion",
+        to: "/deconnexion",
         authRequirement: "signedIn",
     },
 ];
@@ -91,6 +93,17 @@ function filterByAuthRequirement(item, { isLoggedIn, isLoaded }) {
     return !(configRequired === true && !isLoaded);
 }
 
+function generateUserName(userInfos) {
+    if (!userInfos || !userInfos.first_name || !userInfos.last_name) {
+        return "Mon profil";
+    }
+    return `${userInfos.first_name
+        .slice(0, 1)
+        .toUpperCase()}${userInfos.first_name
+        .slice(1)
+        .toLowerCase()} ${userInfos.last_name.slice(0, 1)}.`;
+}
+
 export const useNavigationStore = defineStore("navigation", {
     state: () => ({
         entrypoint: null,
@@ -99,19 +112,28 @@ export const useNavigationStore = defineStore("navigation", {
         topItems: () => {
             const configStore = useConfigStore();
             const userStore = useUserStore();
-
-            return topItems.filter((item) => {
-                return filterByAuthRequirement(item, {
-                    isLoggedIn: userStore.isLoggedIn,
-                    isLoaded: configStore.isLoaded,
+            return topItems
+                .map((item) => {
+                    if (item.to === "/mon-compte") {
+                        return {
+                            ...item,
+                            label: generateUserName(userStore.user),
+                        };
+                    }
+                    return item;
+                })
+                .filter((item) => {
+                    return filterByAuthRequirement(item, {
+                        isLoggedIn: userStore.isLoggedIn,
+                        isLoaded: configStore.isLoaded,
+                    });
                 });
-            });
         },
         metricsItem: () => {
             const userStore = useUserStore();
             const metricsItem = {
-                label: "Visualisation des données",
-                route: "/visualisation-donnees",
+                text: "Visualisation des données",
+                to: "/visualisation-donnees",
             };
 
             if (
@@ -138,7 +160,7 @@ export const useNavigationStore = defineStore("navigation", {
             }
 
             if (departementArea) {
-                metricsItem.route = `/visualisation-donnees/departement/${departementArea.departement.code}`;
+                metricsItem.to = `/visualisation-donnees/departement/${departementArea.departement.code}`;
             }
 
             return metricsItem;
@@ -150,19 +172,19 @@ export const useNavigationStore = defineStore("navigation", {
             }
 
             const items = [
-                { label: "Accueil", route: "/" },
-                { label: "Sites", route: "/liste-des-sites" },
-                { label: "Actions", route: "/liste-des-actions" },
+                { text: "Accueil", to: "/" },
+                { text: "Sites", to: "/liste-des-sites" },
+                { text: "Actions", to: "/liste-des-actions" },
                 { ...this.metricsItem, active: false },
-                { label: "Entraide", route: "/communaute" },
-                { label: "Carte", route: "/cartographie" },
-                { label: "Dernières activités", route: "/activites" },
-                { label: "Administration", route: "/acces" },
+                { text: "Entraide", to: "/communaute" },
+                { text: "Carte", to: "/cartographie" },
+                { text: "Dernières activités", to: "/activites" },
+                { text: "Administration", to: "/acces" },
             ];
 
             const userStore = useUserStore();
             const itemsFilteredByPermission = items.filter((item) => {
-                const { permissions } = router.resolve(item.route).meta;
+                const { permissions } = router.resolve(item.to).meta;
                 if (!permissions) {
                     return true;
                 }
