@@ -8,7 +8,7 @@ import updateAction from './updateAction';
 
 export default async function updateActionModel(id: number, data: ActionUpdateInput, canWriteFinances: boolean, transaction: Transaction): Promise<void> {
     // save current state into history tables
-    await historize(id, transaction);
+    await historize(id, canWriteFinances, transaction);
 
     // empty all "aside" tables
     await resetAsideData(id, canWriteFinances, transaction);
