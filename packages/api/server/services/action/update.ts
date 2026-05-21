@@ -17,7 +17,7 @@ export default async (action: Action, author: User, data: ActionInput): Promise<
         await update(action.id, {
             ...data,
             updated_by: author.id,
-        }, transaction);
+        }, canWriteFinances, transaction);
     } catch (error) {
         await transaction.rollback();
 

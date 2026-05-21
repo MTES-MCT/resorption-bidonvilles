@@ -6,12 +6,12 @@ import resetAsideData from './resetAsideData';
 import insertAsideData from '../create/insertAsideData';
 import updateAction from './updateAction';
 
-export default async function updateActionModel(id: number, data: ActionUpdateInput, transaction: Transaction): Promise<void> {
+export default async function updateActionModel(id: number, data: ActionUpdateInput, canWriteFinances: boolean, transaction: Transaction): Promise<void> {
     // save current state into history tables
     await historize(id, transaction);
 
     // empty all "aside" tables
-    await resetAsideData(id, transaction);
+    await resetAsideData(id, canWriteFinances, transaction);
 
     // update
     await updateAction(id, data, transaction);
