@@ -1,5 +1,5 @@
 export default function redirectToHome() {
-    if (globalThis.window !== undefined) {
+    if (globalThis.window != undefined) {
         globalThis.window.location.href = '/';
     }
 }
