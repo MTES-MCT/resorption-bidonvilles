@@ -11,9 +11,17 @@
                 class="cursor-pointer hover:bg-blue-france-925-125"
                 @click="navigateToAction(action.id)"
             >
-                <td>
-                    <div class="font-bold text-primary">
-                        {{ action.displayId }}
+                <td @click.stop>
+                    <DsfrTagCopy
+                        :label="action.displayId"
+                        dataType="Identifiant de l'action"
+                        title="Cliquer pour copier l'identifiant"
+                    />
+                    <div
+                        class="text-sm text-gray-600 mt-1"
+                        v-if="action.started_at"
+                    >
+                        Débutée le {{ formatDate(action.started_at) }}
                     </div>
                 </td>
                 <td>
@@ -53,9 +61,13 @@ import { useActionsStore } from "@/stores/actions.store";
 import getSince from "@/utils/getSince";
 import formatMetricsUpdatedAt from "@/utils/formatMetricsUpdatedAt";
 import { formatProjectName } from "@/utils/formatActionName";
+import { useNotificationStore } from "@/stores/notification.store";
+import formatTimestamp from "@common/utils/formatTimestamp";
+import DsfrTagCopy from "@/components/DsfrTagCopy/DsfrTagCopy.vue";
 
 const router = useRouter();
 const actionsStore = useActionsStore();
+const notificationStore = useNotificationStore();
 
 const headers = [
     "Identifiant de l'action",
@@ -86,6 +98,13 @@ const currentPageIndex = computed({
 
 const navigateToAction = (actionId) => {
     router.push(`/action/${actionId}`);
+};
+
+const formatDate = (timestamp) => {
+    if (!timestamp) {
+        return "";
+    }
+    return formatTimestamp(timestamp / 1000, "d/m/y");
 };
 
 const capitalizeFirstLetter = (str) => {
