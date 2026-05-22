@@ -87,7 +87,7 @@
 <script setup>
 import { ref, reactive, onMounted, watchEffect } from 'vue';
 import { useScheme } from '@gouvminint/vue-dsfr'
-import openMail from '~~/utils/openMail';
+import openMail from '~/utils/openMail';
 import logoDihal_light from "~/assets/img/Layout/dihal-light.png";
 import logoDihal_dark from "~/assets/img/Layout/dihal-dark.png";
 const { WEBAPP_URL, CONTACT_EMAIL, BLOG_URL } = useRuntimeConfig().public;
@@ -136,7 +136,6 @@ onMounted(() => {
    })
   watchEffect(() => setScheme(preferences.scheme))
 });
-console.log("LogoDihal?", logoDihal.value, preferences);
 
 // Paramétrage du header DSFR
 const headerDatas = ref({
@@ -248,7 +247,6 @@ const footerDatas = {
     ],
     licenceName: "licence AGPL-3.0",
     licenceTo: "https://github.com/MTES-MCT/resorption-bidonvilles/blob/develop/LICENSE",
-    logoText: "Souky présidente!"
 }
 </script>
 <style scoped>
