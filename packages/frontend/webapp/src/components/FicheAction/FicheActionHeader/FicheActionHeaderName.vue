@@ -2,14 +2,19 @@
     <span class="text-sm font-normal">
         {{ action.location.departement.name }} </span
     ><br />
-    <span>{{ action.name }}</span>
+    <span>{{ formattedActionName }}</span>
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { defineProps, toRefs, computed } from "vue";
+import formatActionName from "@/utils/formatActionName";
 
 const props = defineProps({
     action: Object,
 });
 const { action } = toRefs(props);
+
+const formattedActionName = computed(() => {
+    return formatActionName(action.value);
+});
 </script>

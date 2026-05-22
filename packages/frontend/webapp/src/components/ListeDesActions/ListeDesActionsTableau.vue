@@ -21,7 +21,7 @@
                 </td>
                 <td>
                     <div class="font-bold">
-                        {{ capitalizeFirstLetter(action.project_name || action.name) }}
+                        {{ formatProjectName(action) }}
                     </div>
                 </td>
                 <td>
@@ -52,6 +52,7 @@ import { useRouter } from "vue-router";
 import { useActionsStore } from "@/stores/actions.store";
 import getSince from "@/utils/getSince";
 import formatMetricsUpdatedAt from "@/utils/formatMetricsUpdatedAt";
+import { formatProjectName } from "@/utils/formatActionName";
 
 const router = useRouter();
 const actionsStore = useActionsStore();
