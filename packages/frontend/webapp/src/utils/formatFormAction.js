@@ -1,4 +1,5 @@
 import { normalizeShantytownIds } from "./normalizeShantytownIds";
+import sortOperatorsByPrincipal from "./sortOperatorsByPrincipal";
 
 export const fields = [
     "nombre_personnes",
@@ -69,14 +70,15 @@ export const formatFormAction = (data) => {
         operators: {
             organizations: [],
             users: data.operators
-                ? data.operators.flatMap(({ name, abbreviation, users }) =>
-                      users.map((user) => ({
-                          id: user.id,
-                          label: `${user.first_name} ${user.last_name} (${
-                              abbreviation || name
-                          })`,
-                          is_principal: user.is_principal === true,
-                      }))
+                ? sortOperatorsByPrincipal(data.operators).flatMap(
+                      ({ name, abbreviation, users }) =>
+                          users.map((user) => ({
+                              id: user.id,
+                              label: `${user.first_name} ${user.last_name} (${
+                                  abbreviation || name
+                              })`,
+                              is_principal: user.is_principal === true,
+                          }))
                   )
                 : [],
         },
