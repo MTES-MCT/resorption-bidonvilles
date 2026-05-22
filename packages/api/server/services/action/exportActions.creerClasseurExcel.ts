@@ -100,7 +100,7 @@ function regrouperParDepartement(data: ActionReportRow[]): DepartementObject[] {
             departement_name: item.departement_name,
             data: [],
         };
-        acc[departement_code].data.push(rest as ActionItem);
+        acc[departement_code].data.push(rest);
         return acc;
     }, {});
 
