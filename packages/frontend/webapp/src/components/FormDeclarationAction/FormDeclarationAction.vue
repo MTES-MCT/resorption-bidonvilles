@@ -433,27 +433,29 @@ function formatValuesForApi(v) {
             if (key === "ended_at") {
                 return acc;
             }
+            // NB : `structuredClone` ne sait pas cloner les Proxy réactifs Vue
+            // exposés par vee-validate (DataCloneError). On conserve donc le
+            // pattern `JSON.parse(JSON.stringify(...))` qui lit les valeurs via
+            // les getters Proxy et produit un objet brut sérialisable.
             acc[key] = v[key] ? JSON.parse(JSON.stringify(v[key])) : v[key];
             return acc;
         }, {}),
-        ...{
-            started_at: formatFormDate(v.started_at),
-            ended_at: endedAt === null ? undefined : endedAt,
-            topics: Array.isArray(v.topics)
-                ? [...v.topics].sort((a, b) =>
-                      a.localeCompare(b, "fr", { sensitivity: "base" })
-                  )
-                : v.topics,
-            location_shantytowns: normalizeShantytownIds(
-                v.location_shantytowns
-            ),
-            managers: v.managers.users.map(({ id }) => id),
-            operators: v.operators.users.map(({ id, is_principal }) => ({
-                id,
-                is_principal: !!is_principal,
-            })),
-            location_eti_addresses: locationEtiAddresses,
-        },
+
+        started_at: formatFormDate(v.started_at),
+        ended_at: endedAt === null ? undefined : endedAt,
+        topics: Array.isArray(v.topics)
+            ? [...v.topics].sort((a, b) =>
+                  a.localeCompare(b, "fr", { sensitivity: "base" })
+              )
+            : v.topics,
+
+        location_shantytowns: normalizeShantytownIds(v.location_shantytowns),
+        managers: v.managers.users.map(({ id }) => id),
+        operators: v.operators.users.map(({ id, is_principal }) => ({
+            id,
+            is_principal: !!is_principal,
+        })),
+        location_eti_addresses: locationEtiAddresses,
     };
 
     if (formatted.finances && typeof formatted.finances === "object") {
