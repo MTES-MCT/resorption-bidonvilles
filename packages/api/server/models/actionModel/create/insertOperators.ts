@@ -6,15 +6,17 @@ type OperatorInput = {
     is_principal?: boolean
 };
 
-export default (actionId: number, operators: OperatorInput[], transaction: Transaction) => sequelize.query(
-    `INSERT INTO action_operators(
-        fk_action,
-        fk_user,
-        is_principal
-    ) VALUES ${operators.map(() => '(?, ?, ?)').join(',')}`,
-    {
-        type: QueryTypes.INSERT,
-        transaction,
-        replacements: operators.map(op => [actionId, op.id, op.is_principal || false]).flat(),
-    },
-);
+export default function insertOperators(actionId: number, operators: OperatorInput[], transaction: Transaction) {
+    return sequelize.query(
+        `INSERT INTO action_operators(
+            fk_action,
+            fk_user,
+            is_principal
+        ) VALUES ${operators.map(() => '(?, ?, ?)').join(',')}`,
+        {
+            type: QueryTypes.INSERT,
+            transaction,
+            replacements: operators.flatMap(op => [actionId, op.id, op.is_principal || false]),
+        },
+    );
+}
