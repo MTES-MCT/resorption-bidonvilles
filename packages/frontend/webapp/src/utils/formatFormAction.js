@@ -56,10 +56,12 @@ export const formatFormAction = (data) => {
         managers: {
             organizations: [],
             users: data.managers
-                ? data.managers.flatMap(({ users }) =>
+                ? data.managers.flatMap(({ name, abbreviation, users }) =>
                       users.map((user) => ({
                           id: user.id,
-                          label: `${user.first_name} ${user.last_name}`,
+                          label: `${user.first_name} ${user.last_name} (${
+                              abbreviation || name
+                          })`,
                       }))
                   )
                 : [],
@@ -67,10 +69,12 @@ export const formatFormAction = (data) => {
         operators: {
             organizations: [],
             users: data.operators
-                ? data.operators.flatMap(({ users }) =>
+                ? data.operators.flatMap(({ name, abbreviation, users }) =>
                       users.map((user) => ({
                           id: user.id,
-                          label: `${user.first_name} ${user.last_name}`,
+                          label: `${user.first_name} ${user.last_name} (${
+                              abbreviation || name
+                          })`,
                           is_principal: user.is_principal === true,
                       }))
                   )

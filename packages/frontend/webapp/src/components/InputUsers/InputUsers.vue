@@ -22,6 +22,7 @@
 import { defineProps, toRefs, ref, watch, computed, nextTick } from "vue";
 import { useIsSubmitting, useField } from "vee-validate";
 import { autocomplete } from "@/api/organizations.api.js";
+import formatUserWithOrganization from "@/utils/formatUserWithOrganization";
 
 import {
     Autocomplete,
@@ -77,10 +78,15 @@ const tags = computed(() => {
             label,
         })),
         ...value.value.users
-            .filter((u) => u.label !== "Utilisateur Désactivé")
+            .filter((u) => {
+                return (
+                    u.label !== "Utilisateur Désactivé" &&
+                    !u.label.includes("Utilisateur Désactivé")
+                );
+            })
             .map(({ id, label }) => ({
                 id: `user.${id}`,
-                label,
+                label: formatUserWithOrganization(label),
             })),
     ];
 });

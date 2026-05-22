@@ -25,6 +25,7 @@ import { computed, watch } from "vue";
 import { useField } from "vee-validate";
 import InputUsers from "@/components/InputUsers/InputUsers.vue";
 import labels from "../FormDeclarationAction.labels";
+import formatUserWithOrganization from "@/utils/formatUserWithOrganization";
 
 const props = defineProps({
     canEditPrincipal: {
@@ -40,7 +41,12 @@ const { value: operatorsField } = useField("operators");
 const users = computed(() => operatorsField.value?.users ?? []);
 
 const activeUsers = computed(() =>
-    users.value.filter((u) => u.label !== "Utilisateur Désactivé")
+    users.value.filter((u) => {
+        return (
+            u.label !== "Utilisateur Désactivé" &&
+            !u.label.includes("Utilisateur Désactivé")
+        );
+    })
 );
 
 const selectedPrincipalId = computed({
@@ -59,7 +65,7 @@ const selectedPrincipalId = computed({
 
 const radioOptions = computed(() =>
     activeUsers.value.map((u) => ({
-        label: u.label,
+        label: formatUserWithOrganization(u.label),
         value: u.id,
     }))
 );
