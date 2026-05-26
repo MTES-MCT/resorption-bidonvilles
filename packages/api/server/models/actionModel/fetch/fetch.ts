@@ -1,6 +1,7 @@
 import { Transaction } from 'sequelize';
 import where from '#server/utils/permission/where';
 import fetchActions from './fetchActions';
+import fetchAddresses from './fetchAddresses';
 import fetchComments from '../fetchComments/fetchComments';
 import fetchFinances from './fetchFinances';
 import fetchManagers from './fetchManagers';
@@ -9,6 +10,7 @@ import fetchOperators from './fetchOperators';
 import fetchShantytowns from './fetchShantytowns';
 import fetchTopics from './fetchTopics';
 import hashActions from './hashActions';
+import mergeAddresses from './mergeAddresses';
 import mergeComments from './mergeComments';
 import mergeFinances from './mergeFinances';
 import mergeManagers from './mergeManagers';
@@ -26,8 +28,9 @@ export default async function fetch(user: User, actionIds?: number[], transactio
     }
 
     const financeClauseGroup = where().can(user).do('access', 'action_finances');
-    const [actions, topics, managers, operators, shantytowns, comments, metrics, finances] = await Promise.all([
+    const [actions, addresses, topics, managers, operators, shantytowns, comments, metrics, finances] = await Promise.all([
         fetchActions(actionIds, clauseGroup, transaction),
+        fetchAddresses(actionIds, transaction), // Toujours charger les adresses pour les ETI
         fetchTopics(actionIds, clauseGroup, transaction),
         fetchManagers(actionIds, clauseGroup, transaction),
         fetchOperators(actionIds, clauseGroup, transaction),
@@ -38,6 +41,7 @@ export default async function fetch(user: User, actionIds?: number[], transactio
     ]);
 
     const hash = hashActions(actions);
+    mergeAddresses(hash, addresses);
     mergeTopics(hash, topics);
     mergeManagers(hash, managers);
     mergeOperators(hash, operators);

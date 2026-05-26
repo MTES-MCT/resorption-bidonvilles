@@ -7,6 +7,12 @@
                 class="mt-1 items-center text-xs py-2 mr-2"
             />
             <DsfrBadge
+                v-if="showResorptionInProgressBadge"
+                label="En cours de résorption"
+                type="info"
+                class="mt-1 items-center text-xs py-2 mr-2"
+            />
+            <DsfrBadge
                 v-if="heatwaveStatus === true"
                 label="Risque Canicule"
                 type="warning"
@@ -43,14 +49,24 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    currentTab: {
+        type: String,
+    },
 });
-const { shantytown } = toRefs(props);
+const { shantytown, currentTab } = toRefs(props);
 const { townStatus } = useLastUpdated(shantytown);
 
 const userStore = useUserStore();
 
 const heatwaveStatus = computed(() => {
     return shantytown.value.heatwaveStatus;
+});
+
+const showResorptionInProgressBadge = computed(() => {
+    return (
+        currentTab.value === "open" &&
+        shantytown.value.hasInitialResorptionPhases === true
+    );
 });
 const attachmentsLabel = computed(() => {
     const commentsAttachments = shantytown.value.comments.reduce(

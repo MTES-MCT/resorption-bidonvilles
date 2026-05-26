@@ -131,6 +131,7 @@ type BaseShantytown =
     completionRate: number,
     distance?: number | null
     preparatoryPhasesTowardResorption: ShantytownPreparatoryPhaseTowardResorption[],
+    hasInitialResorptionPhases: boolean,
 };
 
 type ShantytownWithJustice = BaseShantytown & {

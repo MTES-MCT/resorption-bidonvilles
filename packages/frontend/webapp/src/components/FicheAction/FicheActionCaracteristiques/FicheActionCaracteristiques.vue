@@ -1,5 +1,10 @@
 <template>
-    <FicheRubrique title="Intervention" id="caracteristiques">
+    <FicheRubrique
+        title="Intervention"
+        id="caracteristiques"
+        category="caracteristiques"
+        entityType="action"
+    >
         <FicheActionChampsIntervention
             :action="action"
             :border="false"

@@ -1,6 +1,7 @@
 <template>
     <InputWrapper :hasErrors="!!errors.length" :withoutMargin="withoutMargin">
         <DsfrAutocomplete
+            :id="name"
             :fn="searchAddress"
             v-bind="$attrs"
             v-model="selectedItem"
@@ -18,7 +19,7 @@ import {
     InputError,
 } from "@resorptionbidonvilles/ui";
 import { searchAddress } from "@/api/datagouv.api.js";
-import { useField } from "vee-validate";
+import { useFormErrors } from "vee-validate";
 
 const props = defineProps({
     modelValue: {
@@ -30,10 +31,18 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    name: {
+        type: String,
+        required: true,
+    },
 });
 const emit = defineEmits(["update:modelValue"]);
-const { modelValue, withoutMargin } = toRefs(props);
-const { errors } = useField("address");
+const { modelValue, withoutMargin, name } = toRefs(props);
+const formErrors = useFormErrors();
+const errors = computed(() => {
+    const fieldError = formErrors.value[name.value];
+    return fieldError ? [fieldError] : [];
+});
 const address = ref(null);
 
 const selectedItem = computed({

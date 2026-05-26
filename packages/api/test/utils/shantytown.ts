@@ -211,7 +211,7 @@ export function serialized(location: City = defaultLocation, override = {}): Sha
         city, epci, departement, region,
     } = location;
 
-    const shantytown: Shantytown = {
+    const shantytown: Shantytown & { hasInitialResorptionPhases?: boolean } = {
         type: 'shantytown',
         id: 1,
         updatedWithoutAnyChange: false,
@@ -402,7 +402,8 @@ export function serialized(location: City = defaultLocation, override = {}): Sha
         resorptionTarget: null,
         completionRate: 0.5,
         distance: null,
-        preparatoryPhasesTowardResorption: null,
+        preparatoryPhasesTowardResorption: [],
+        hasInitialResorptionPhases: false,
     };
 
     return {

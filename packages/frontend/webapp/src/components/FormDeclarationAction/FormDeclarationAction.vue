@@ -19,14 +19,17 @@
             :managers="managerIds"
             :departement="departement"
         />
-        <FormDeclarationActionIndicateurs class="mt-6" />
+        <FormDeclarationActionIndicateurs
+            class="mt-6"
+            :errors="indicateursErrors"
+        />
 
         <ErrorSummary
             id="erreurs"
             class="mt-12"
             v-if="error || Object.keys(errors).length > 0"
             :message="error"
-            :summary="errors"
+            :summary="cleanedErrors"
         />
     </ArrangementLeftMenu>
 </template>
@@ -50,6 +53,7 @@ import { useNotificationStore } from "@/stores/notification.store";
 import { useModaleStore } from "@/stores/modale.store";
 import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
+import focusFirstErrorField from "@/utils/focusFirstErrorField";
 import _ from "lodash-es";
 import backOrReplace from "@/utils/backOrReplace";
 import {
@@ -58,6 +62,7 @@ import {
 } from "@/utils/formatFormAction";
 import { normalizeShantytownIds } from "@/utils/normalizeShantytownIds";
 import formatFormDate from "@common/utils/formatFormDate";
+import parseCoordinates from "@/utils/parseCoordinates";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
@@ -89,16 +94,23 @@ const mode = computed(() => {
     return action.value === null ? "create" : "edit";
 });
 const validationSchema = schemaFn(mode.value);
-const { handleSubmit, values, errors, setErrors, isSubmitting, resetForm } =
-    useForm({
-        validationSchema,
-        keepValuesOnUnmount: true,
-        initialValues: formatFormAction(
-            action.value || {
-                location_departement: userStore.departementsForActions[0]?.code,
-            }
-        ),
-    });
+const {
+    handleSubmit,
+    values,
+    errors,
+    setErrors,
+    isSubmitting,
+    resetForm,
+    validate,
+} = useForm({
+    validationSchema,
+    keepValuesOnUnmount: true,
+    initialValues: formatFormAction(
+        action.value || {
+            location_departement: userStore.departementsForActions[0]?.code,
+        }
+    ),
+});
 
 const managerIds = ref([]);
 
@@ -113,7 +125,9 @@ function cloneValue(value) {
         return structuredClone(rawValue);
     }
 
-    return JSON.parse(JSON.stringify(rawValue));
+    // Pour préserver la compatibilité avec les navigateurs antérieurs à 2022
+    // ne supportant pas structuredClone
+    return JSON.parse(JSON.stringify(rawValue)); // NOSONAR javascript:S7784
 }
 
 if (action.value && action.value.finances) {
@@ -128,11 +142,54 @@ watch(
     { deep: true }
 );
 
+// Watch pour le focus automatique sur les erreurs de validation
+watch(errors, (newErrors) => {
+    if (Object.keys(newErrors).length > 0) {
+        focusFirstErrorField(newErrors);
+    }
+});
+
 const originalValues = ref(null);
 
 const actionsStore = useActionsStore();
 const error = ref(null);
 const departement = useFieldValue("location_departement");
+
+// Nettoyer les erreurs pour l'affichage dans ErrorSummary.
+// Fusionne les erreurs non-indicateurs de vee-validate avec les erreurs indicateurs
+// issues directement de yup (indicateursErrors), pour éviter le bug de déduplication
+// de vee-validate sur les champs imbriqués non enregistrés individuellement.
+const cleanedErrors = computed(() => {
+    const cleaned = {};
+
+    // Erreurs non-indicateurs depuis vee-validate
+    Object.keys(errors.value)
+        .filter((key) => !key.startsWith("indicateurs"))
+        .forEach((key) => {
+            const errorMessage = errors.value[key];
+            if (typeof errorMessage === "string") {
+                const match = errorMessage.match(
+                    /^FIELD:([^|]+)\|MESSAGE:(.+)$/
+                );
+                cleaned[key] = match ? match[2] : errorMessage;
+            } else {
+                cleaned[key] = errorMessage;
+            }
+        });
+
+    // Erreurs indicateurs depuis la source yup fiable
+    Object.keys(indicateursErrors.value).forEach((key) => {
+        const errorMessage = indicateursErrors.value[key];
+        if (typeof errorMessage === "string") {
+            const match = errorMessage.match(/^FIELD:([^|]+)\|MESSAGE:(.+)$/);
+            cleaned[key] = match ? match[2] : errorMessage;
+        } else {
+            cleaned[key] = errorMessage;
+        }
+    });
+
+    return cleaned;
+});
 const canAccessFinances = computed(() => {
     const configStore = useConfigStore();
     const fullDepartement = configStore.config.departements.find(
@@ -153,9 +210,11 @@ const canAccessFinances = computed(() => {
 });
 
 async function initFromAction(initialFormValues) {
-    resetForm({ values: initialFormValues });
+    // Transformer les données de l'API vers le format attendu par le formulaire
+    const formattedForForm = formatValuesFromApi(initialFormValues);
+    resetForm({ values: formattedForForm });
     await nextTick();
-    originalValues.value = formatValuesForApi(initialFormValues);
+    originalValues.value = formatValuesForApi(formattedForForm);
 }
 
 watch(
@@ -173,16 +232,51 @@ watch(
 
 const hasChanges = ref(false);
 
+// Ref alimenté par le watch sur values.indicateurs (mode 'silent').
+// Séparé de errors.value car le mode 'silent' ne propage pas les erreurs
+// d'indicateurs dans vee-validate.
+const indicateursErrors = ref({});
+
+// Computed property pour savoir s'il y a des erreurs.
+// Les erreurs d'indicateurs sont lues depuis indicateursErrors (source yup directe)
+// plutôt que errors.value (vee-validate), car le watch utilise le mode 'silent'
+// qui ne propage pas les erreurs d'indicateurs dans errors.value.
+const hasErrors = computed(
+    () =>
+        error.value !== null ||
+        Object.keys(errors.value).length > 0 ||
+        Object.keys(indicateursErrors.value).length > 0
+);
+
+// Computed property pour savoir s'il y a des doublons d'adresses
+const hasDuplicates = computed(() => {
+    if (values.location_type !== "eti" || !values.location_eti_addresses) {
+        return false;
+    }
+
+    const seenAddresses = new Map();
+
+    for (const addr of values.location_eti_addresses) {
+        const addressKey = createAddressKey(addr);
+
+        if (addressKey) {
+            if (seenAddresses.has(addressKey)) {
+                return true; // Doublon détecté
+            }
+            seenAddresses.set(addressKey, true);
+        }
+    }
+
+    return false;
+});
+
 function updateHasChanges() {
-    if (originalValues.value === null) {
-        hasChanges.value = false;
+    if (!originalValues.value) {
         return;
     }
 
-    hasChanges.value = !_.isEqual(
-        originalValues.value,
-        formatValuesForApi(values)
-    );
+    const currentFormatted = formatValuesForApi(values);
+    hasChanges.value = !_.isEqual(originalValues.value, currentFormatted);
 }
 
 const debouncedUpdateHasChanges = _.debounce(updateHasChanges, 250);
@@ -270,13 +364,60 @@ const config = {
     },
 };
 
+// Transformer les données de l'API vers le format attendu par le formulaire
+function formatValuesFromApi(v) {
+    if (v.location_eti_addresses && Array.isArray(v.location_eti_addresses)) {
+        return {
+            ...v,
+            location_eti_addresses: v.location_eti_addresses.map((addr) => {
+                // Si address est déjà un objet avec data, on le garde
+                if (addr.address && typeof addr.address === "object") {
+                    return addr;
+                }
+                // Sinon, on reconstruit la structure attendue par InputAddress
+                return {
+                    ...addr,
+                    address: {
+                        data: {
+                            label: addr.address,
+                            citycode: addr.citycode,
+                            coordinates: parseCoordinates(addr.coordinates),
+                        },
+                    },
+                };
+            }),
+        };
+    }
+    return v;
+}
+
 function formatValuesForApi(v) {
-    let citycode = null;
-    let label = null;
     const endedAt = formatFormDate(v.ended_at);
 
-    if (v.location_eti?.data) {
-        ({ citycode, label } = v.location_eti.data);
+    // Transformer les adresses ETI multiples pour l'API
+    let locationEtiAddresses = null;
+    if (
+        v.location_type === "eti" &&
+        v.location_eti_addresses &&
+        Array.isArray(v.location_eti_addresses)
+    ) {
+        const validAddresses = v.location_eti_addresses.filter(
+            (addr) => addr.address?.data?.label && addr.address?.data?.citycode
+        );
+
+        if (validAddresses.length > 0) {
+            locationEtiAddresses = validAddresses.map((addr) => {
+                const coords =
+                    addr.coordinates || addr.address.data.coordinates;
+                return {
+                    address: addr.address.data.label,
+                    citycode: addr.address.data.citycode,
+                    coordinates: Array.isArray(coords)
+                        ? `${coords[0]},${coords[1]}`
+                        : coords,
+                };
+            });
+        }
     }
 
     const formatted = {
@@ -300,11 +441,7 @@ function formatValuesForApi(v) {
             ),
             managers: v.managers.users.map(({ id }) => id),
             operators: v.operators.users.map(({ id }) => id),
-            location_eti_citycode: citycode,
-            location_eti: label,
-            location_eti_coordinates: v.location_eti_coordinates
-                ? `${v.location_eti_coordinates[0]},${v.location_eti_coordinates[1]}`
-                : "",
+            location_eti_addresses: locationEtiAddresses,
         },
     };
 
@@ -369,6 +506,35 @@ watch(useFormErrors(), () => {
     }
 });
 
+watch(
+    () => values.indicateurs,
+    async () => {
+        // mode 'silent' : ne marque pas les champs comme touchés,
+        // évite d'afficher prématurément les erreurs des champs non encore saisis.
+        const result = await validate({ mode: "silent" });
+        const fieldResult = result.results["indicateurs"];
+        if (!fieldResult || fieldResult.valid) {
+            indicateursErrors.value = {};
+            return;
+        }
+        // vee-validate stocke toutes les erreurs des sous-champs indicateurs
+        // dans un tableau plat sous la clé "indicateurs".
+        // Chaque message encode le nom du champ : "FIELD:fieldName|MESSAGE:..."
+        // On reconstruit un objet { fieldName: message } pour l'affichage inline.
+        indicateursErrors.value = fieldResult.errors.reduce((acc, msg) => {
+            const match =
+                typeof msg === "string"
+                    ? msg.match(/^FIELD:([^|]+)\|MESSAGE:(.+)$/)
+                    : null;
+            if (match) {
+                acc[match[1]] = match[2];
+            }
+            return acc;
+        }, {});
+    },
+    { deep: true }
+);
+
 function getYearFromDateValue(value) {
     if (value == null || value === "") {
         return null;
@@ -432,8 +598,57 @@ function checkFundingDeletions(sentValues) {
     };
 }
 
+function normalizeAddressForComparison(address) {
+    return String(address)
+        .normalize("NFD")
+        .replaceAll(/[\u0300-\u036f]/g, "")
+        .replaceAll(/['''\u2019]/g, "'")
+        .toLowerCase()
+        .trim();
+}
+
+function createAddressKey(addr) {
+    if (!addr?.address?.data) {
+        return null;
+    }
+    const normalizedAddress = normalizeAddressForComparison(
+        addr.address.data.label
+    );
+    const coords = addr.address.data.coordinates || addr.coordinates;
+    return `${normalizedAddress}|${addr.address.data.citycode}|${
+        Array.isArray(coords) ? coords.join(",") : coords
+    }`;
+}
+
 async function performSubmit(sentValues) {
     const formattedValues = formatValuesForApi(sentValues);
+
+    // Vérifier les doublons d'adresses ETI (validation finale avant soumission)
+    if (
+        sentValues.location_type === "eti" &&
+        sentValues.location_eti_addresses
+    ) {
+        const seenAddresses = new Map();
+        let hasDuplicates = false;
+
+        sentValues.location_eti_addresses.forEach((addr) => {
+            const addressKey = createAddressKey(addr);
+
+            if (addressKey) {
+                if (seenAddresses.has(addressKey)) {
+                    hasDuplicates = true;
+                } else {
+                    seenAddresses.set(addressKey, addressKey);
+                }
+            }
+        });
+
+        if (hasDuplicates) {
+            error.value =
+                "Des adresses en double ont été détectées. Veuillez corriger avant de soumettre.";
+            return;
+        }
+    }
 
     if (
         mode.value === "edit" &&
@@ -487,6 +702,8 @@ defineExpose({
         }
     }),
     hasChanges,
+    hasErrors,
+    hasDuplicates,
     isSubmitting,
 });
 </script>

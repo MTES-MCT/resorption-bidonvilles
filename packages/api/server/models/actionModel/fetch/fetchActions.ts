@@ -1,5 +1,6 @@
 import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
+import { CreatorInfo, EditorInfo } from '#server/models/_common/types/UserInfoTypes.d';
 import ActionLocationType from '#root/types/resources/ActionLocationType.d';
 import enrichWhere from './enrichWhere';
 
@@ -15,31 +16,13 @@ export type ActionSelectRow = {
     region_name: string,
     region_code: string,
     location_type: ActionLocationType,
-    address: string | null,
-    latitude: number | null,
-    longitude: number | null,
-    eti_fk_city: string | null,
     location_other: string | null,
-    creator_id: number,
-    creator_first_name: string,
-    creator_last_name: string,
-    creator_organization_id: number,
-    creator_organization_name: string,
-    creator_organization_abbreviation: string | null,
-    created_at: Date,
-    editor_id: number | null,
-    editor_first_name: string | null,
-    editor_last_name: string | null,
-    editor_organization_id: number | null,
-    editor_organization_name: string | null,
-    editor_organization_abbreviation: string | null,
-    updated_at: Date,
-};
+} & CreatorInfo & EditorInfo;
 
-export default function fetchActions(actionIds: number[] = null, clauseGroup: object = {}, transaction?: Transaction): Promise<ActionSelectRow[]> {
+export default function fetchActions(actionIds?: number[], clauseGroup: object = {}, transaction?: Transaction): Promise<ActionSelectRow[]> {
     const where = [];
     const replacements = { actionIds };
-    if (actionIds !== null) {
+    if (actionIds !== undefined) {
         where.push('actions.action_id IN (:actionIds)');
     }
 
@@ -58,10 +41,6 @@ export default function fetchActions(actionIds: number[] = null, clauseGroup: ob
             regions.name AS region_name,
             regions.code AS region_code,
             actions.location_type,
-            actions.address,
-            actions.latitude,
-            actions.longitude,
-            actions.eti_fk_city,
             actions.location_other,
             creator.user_id AS creator_id,
             creator.first_name AS creator_first_name,

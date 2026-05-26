@@ -3,6 +3,7 @@ import { QueryTypes } from 'sequelize';
 
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
+import outremer from '#server/utils/permission/outremer';
 
 import { Location } from '#server/models/geoModel/Location.d';
 import { ActionCommentActivity } from '#root/types/resources/Activity.d';
@@ -33,6 +34,8 @@ export default async (user: User, location: Location, numberOfActivities: number
     if (restrictedLocations.length === 0) {
         return [];
     }
+    const restrictedLocationTypes = new Set(['metropole', 'outremer']);
+
 
     if (!restrictedLocations.some(l => l.type === 'nation')) {
         where.push(
@@ -42,13 +45,22 @@ export default async (user: User, location: Location, numberOfActivities: number
                     return `departements.fk_region = :locationCode${index}`;
                 }
 
+                // On fait l'exclusion ou inclusion si c'est metropole ou outremer
+                if (restrictedLocationTypes.has(l.type)) {
+                    replacements.outreMerDepts = outremer.departements;
+                    return l.type === 'metropole'
+                        ? 'departements.code NOT IN (:outreMerDepts)'
+                        : 'departements.code IN (:outreMerDepts)';
+                }
                 replacements[`locationCode${index}`] = l.departement.code;
+
                 return `departements.code = :locationCode${index}`;
             }).join(' OR '),
         );
     }
 
-    where.push(`comments.created_at < '${lastDate}'`);
+    replacements.lastDate = lastDate;
+    where.push('comments.created_at < :lastDate');
     if (maxDate) {
         where.push('comments.created_at >= :maxDate');
     }

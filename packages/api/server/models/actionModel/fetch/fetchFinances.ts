@@ -4,14 +4,14 @@ import ActionFinanceRow from './ActionFinanceRow.d';
 import enrichWhere from './enrichWhere';
 
 export default function fetchFinances(
-    actionIds: number[] = null,
+    actionIds?: number[],
     clauseGroup: object = {},
     financeClauseGroup: object = {},
     transaction?: Transaction,
 ): Promise<ActionFinanceRow[]> {
     const where = [];
     const replacements = { actionIds };
-    if (actionIds !== null) {
+    if (actionIds !== undefined) {
         where.push('action_finances.fk_action IN (:actionIds)');
     }
 

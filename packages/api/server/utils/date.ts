@@ -77,6 +77,45 @@ function substractWeek(date) {
     return newDate;
 }
 
+/**
+ * Converts a date (string or Date object) to a timestamp in milliseconds
+ * Used for actions and general purpose timestamp conversion
+ *
+ * @param date - Date as string or Date object, or null
+ * @returns Timestamp in milliseconds, or null if input is null
+ */
+function toTimestamp(date: string | Date | null): number | null {
+    if (date === null) {
+        return null;
+    }
+
+    if (typeof date === 'string') {
+        return new Date(date).getTime();
+    }
+
+    return date.getTime();
+}
+
+/**
+ * Converts a date string to a timestamp in seconds (UTC midnight)
+ * Used for shantytowns DATEONLY fields (declared_at, built_at, etc.)
+ * Adds T00:00:00Z to ensure UTC midnight interpretation for strings
+ *
+ * @param date - Date as string (YYYY-MM-DD format) or Date object, or null
+ * @returns Timestamp in seconds, or null if input is null
+ */
+function toTimestampSeconds(date: string | Date | null): number | null {
+    if (date === null) {
+        return null;
+    }
+
+    if (typeof date === 'string') {
+        return new Date(`${date}T00:00:00Z`).getTime() / 1000;
+    }
+
+    return date.getTime() / 1000;
+}
+
 export default {
     formatDate,
     substractWeek,
@@ -84,4 +123,6 @@ export default {
     toFormat,
     fromTsToFormat,
     getMonthDiffBetween,
+    toTimestamp,
+    toTimestampSeconds,
 };
