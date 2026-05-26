@@ -58,14 +58,11 @@ const formattedDate = computed(() => {
         return "";
     }
 
-    return new Date(phase.value.completedAt).toLocaleDateString(
-        "fr-FR",
-        {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        }
-    );
+    return new Date(phase.value.completedAt).toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
 });
 
 const STATUS_COLORS = {
