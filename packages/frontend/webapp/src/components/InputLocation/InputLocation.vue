@@ -124,7 +124,7 @@ function toLocationItem(loc) {
             }),
             category: "Commune",
             data: {
-                code: loc.properties.postcode,
+                code: loc.properties.citycode,
                 departement: loc.properties.depcode,
                 typeName: "Commune",
                 typeUid: "city",
