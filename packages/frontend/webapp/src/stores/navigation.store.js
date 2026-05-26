@@ -94,7 +94,7 @@ function filterByAuthRequirement(item, { isLoggedIn, isLoaded }) {
 }
 
 function generateUserName(userInfos) {
-    if (!userInfos || !userInfos.first_name || !userInfos.last_name) {
+    if (!userInfos?.first_name || !userInfos?.last_name) {
         return "Mon profil";
     }
     return `${userInfos.first_name
