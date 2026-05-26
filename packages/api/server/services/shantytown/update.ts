@@ -201,7 +201,7 @@ async function updateShantytownData(user, shantytownId: number, payload, transac
 }
 
 async function uploadDecreeAttachments(decreeAttachments: DecreeAttachments, shantytownId: number, userId: number, transaction, existingAttachments) {
-    if (decreeAttachments.files?.length === 0) {
+    if (!decreeAttachments.files?.length) {
         return;
     }
 
@@ -221,7 +221,7 @@ async function uploadDecreeAttachments(decreeAttachments: DecreeAttachments, sha
 }
 
 async function updateParcelOwners(user, shantytown, transaction) {
-    if (shantytown.owners?.length === 0 || !user.isAllowedTo('access', 'shantytown_owner')) {
+    if (!shantytown.owners?.length || !user.isAllowedTo('access', 'shantytown_owner')) {
         return;
     }
 
@@ -234,7 +234,7 @@ async function updateParcelOwners(user, shantytown, transaction) {
 }
 
 async function updatePreparatoryPhases(user, shantytown, transaction) {
-    if (shantytown.preparatory_phases_toward_resorption?.length === 0 || !user.isAllowedTo('update', 'shantytown')) {
+    if (!shantytown.preparatory_phases_toward_resorption?.length || !user.isAllowedTo('update', 'shantytown')) {
         return;
     }
 
