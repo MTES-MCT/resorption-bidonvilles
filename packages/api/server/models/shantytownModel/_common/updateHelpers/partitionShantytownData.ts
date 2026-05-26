@@ -46,6 +46,14 @@ interface PartitionedData {
  * Répartit les données du shantytown en 3 catégories : communes, justice, propriétaire
  */
 export default function partitionShantytownData(data: ShantytownUpdateData): PartitionedData {
+    if (!data) {
+        return {
+            commonData: {},
+            justiceData: {},
+            ownerData: {},
+        };
+    }
+
     return Object.keys(data).reduce(
         (acc, key) => {
             if (EXCLUDED_KEYS.has(key)) {
