@@ -294,16 +294,16 @@ export default async function update(shantytown, user, decreeAttachments: Decree
 
     const transaction = await sequelize.transaction();
 
-    await updateShantytownData(user, shantytown.id, buildUpdatePayload(shantytown, originalShantytown), transaction);
-    await uploadDecreeAttachments(decreeAttachments, shantytown.id, user.id, transaction, shantytown.attachments);
-    await updateParcelOwners(user, shantytown, transaction);
-    await updatePreparatoryPhases(user, shantytown, transaction);
-
     try {
+        await updateShantytownData(user, shantytown.id, buildUpdatePayload(shantytown, originalShantytown), transaction);
+        await uploadDecreeAttachments(decreeAttachments, shantytown.id, user.id, transaction, shantytown.attachments);
+        await updateParcelOwners(user, shantytown, transaction);
+        await updatePreparatoryPhases(user, shantytown, transaction);
+
         await transaction.commit();
-    } catch (commitError) {
+    } catch (error) {
         await transaction.rollback();
-        throw new ServiceError('commit_failed', commitError);
+        throw error;
     }
 
     const updatedShantytown = await fetchUpdatedShantytown(user, shantytown.id);
