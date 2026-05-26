@@ -58,7 +58,7 @@ const formattedDate = computed(() => {
         return "";
     }
 
-    return new Date(phase.value.completedAt * 1000).toLocaleDateString(
+    return new Date(phase.value.completedAt).toLocaleDateString(
         "fr-FR",
         {
             day: "numeric",

@@ -81,7 +81,7 @@ const activePhase = activePhases.find(
 );
 
 if (activePhase && activePhase.completedAt) {
-    completed_date.value = new Date(activePhase.completedAt * 1000);
+    completed_date.value = new Date(activePhase.completedAt);
 }
 
 const handleCheckboxChange = (checked) => {
