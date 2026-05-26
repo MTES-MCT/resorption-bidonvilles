@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-import redirectToHome from '~~/utils/redirectToHome';
+import redirectToHome from '~/utils/redirectToHome';
 const props = defineProps({
     error: {
         type: Object,
