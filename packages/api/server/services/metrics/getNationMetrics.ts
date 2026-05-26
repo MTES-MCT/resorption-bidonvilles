@@ -2,8 +2,8 @@
 import { NationMetricsRawData } from '#server/models/metricsModel/getNationData';
 import metricsModel from '#server/models/metricsModel';
 import ServiceError from '#server/errors/ServiceError';
-import moment from 'moment';
 import getSince from '#server/services/shantytown/_common/getSince';
+import dateUtils from '#server/utils/date';
 import { NationMetrics } from '#root/types/resources/NationMetrics.d';
 import { NationMetricsList } from '#root/types/services/MetricsService.d';
 import { User } from '#root/types/resources/User.d';
@@ -33,12 +33,6 @@ const baseMetrics: (metricsLevel: 'nation' | 'region' | 'departement', metricsUi
     },
     children: [],
 });
-
-function normalizeDateToMidnight(date: Date | string) {
-    return moment(date).set({
-        hour: 0, minute: 0, second: 0, millisecond: 0,
-    });
-}
 
 function isEuropeanOriginWith10Plus(row: NationMetricsRawData): boolean {
     return row.population_total >= 10
@@ -206,18 +200,14 @@ export default async function getNationMetrics(user: User, argFrom: Date, argTo:
         throw new ServiceError('fetch_failed', error);
     }
 
-    const from = moment(argFrom).set({
-        hour: 0, minute: 0, second: 0, millisecond: 0,
-    });
+    const from = dateUtils.normalizeDateToMidnight(argFrom);
 
-    const to = moment(argTo).set({
-        hour: 0, minute: 0, second: 0, millisecond: 0,
-    });
+    const to = dateUtils.normalizeDateToMidnight(argTo);
 
     data.forEach((row, index) => {
-        const inputDate = normalizeDateToMidnight(row.input_date);
-        const previousInputDate = index === 0 ? null : normalizeDateToMidnight(data[index - 1].input_date);
-        const knownSince = normalizeDateToMidnight(row.known_since);
+        const inputDate = dateUtils.normalizeDateToMidnight(row.input_date);
+        const previousInputDate = index === 0 ? null : dateUtils.normalizeDateToMidnight(data[index - 1].input_date);
+        const knownSince = dateUtils.normalizeDateToMidnight(row.known_since);
 
         const isMostRecent = index === 0 || row.shantytown_id !== data[index - 1].shantytown_id;
         const isMostAncient = data[index + 1]?.shantytown_id !== row.shantytown_id;

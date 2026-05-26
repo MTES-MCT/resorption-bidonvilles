@@ -116,6 +116,12 @@ function toTimestampSeconds(date: string | Date | null): number | null {
     return date.getTime() / 1000;
 }
 
+function normalizeDateToMidnight(date: Date | string): Date {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+}
+
 export default {
     formatDate,
     substractWeek,
@@ -125,4 +131,5 @@ export default {
     getMonthDiffBetween,
     toTimestamp,
     toTimestampSeconds,
+    normalizeDateToMidnight,
 };
