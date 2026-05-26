@@ -4,39 +4,34 @@ import { sequelize } from '#db/sequelize';
 import { Transaction } from 'sequelize';
 import { Differences, SimplifiedPhase } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 
-function convertCompletedAt(timestamp: number | null): string | null {
-    if (timestamp === null) { return null; }
-    return new Date(timestamp * 1000).toISOString();
-}
-
-function createPhaseEntry(phaseId: string, completedAt: number | null): SimplifiedPhase {
+function createPhaseEntry(phaseId: string, completedAt: string | null): SimplifiedPhase {
     return {
         preparatoryPhaseId: phaseId,
         completedAt,
     };
 }
 
-function createModifiedPhaseEntry(phaseId: string, oldCompletedAt: number | null, newCompletedAt: number | null) {
+function createModifiedPhaseEntry(phaseId: string, oldCompletedAt: string | null, newCompletedAt: string | null) {
     return {
         preparatoryPhaseId: phaseId,
-        oldCompletedAt: convertCompletedAt(oldCompletedAt),
-        newCompletedAt: convertCompletedAt(newCompletedAt),
+        oldCompletedAt,
+        newCompletedAt,
     };
 }
 
-function findAddedPhases(existingMap: Map<string, number | null>, updatedMap: Map<string, number | null>) {
+function findAddedPhases(existingMap: Map<string, string | null>, updatedMap: Map<string, string | null>) {
     return Array.from(updatedMap.entries())
         .filter(([phaseId]) => !existingMap.has(phaseId))
         .map(([phaseId, completedAt]) => createPhaseEntry(phaseId, completedAt));
 }
 
-function findRemovedPhases(existingMap: Map<string, number | null>, updatedMap: Map<string, number | null>) {
+function findRemovedPhases(existingMap: Map<string, string | null>, updatedMap: Map<string, string | null>) {
     return Array.from(existingMap.entries())
         .filter(([phaseId]) => !updatedMap.has(phaseId))
         .map(([phaseId, completedAt]) => createPhaseEntry(phaseId, completedAt));
 }
 
-function findModifiedPhases(existingMap: Map<string, number | null>, updatedMap: Map<string, number | null>) {
+function findModifiedPhases(existingMap: Map<string, string | null>, updatedMap: Map<string, string | null>) {
     return Array.from(updatedMap.entries())
         .filter(([phaseId]) => existingMap.has(phaseId))
         .filter(([phaseId, newCompletedAt]) => existingMap.get(phaseId) !== newCompletedAt)
@@ -119,7 +114,7 @@ function buildUpdatedPhases(preparatoryPhasesTowardResorption, terminatedPrepara
     return preparatoryPhasesTowardResorption.map(phase => ({
         preparatoryPhaseId: phase,
         completedAt: terminatedPreparatoryPhasesTowardResorption[phase]
-            ? new Date(terminatedPreparatoryPhasesTowardResorption[phase]).getTime() / 1000
+            ? new Date(terminatedPreparatoryPhasesTowardResorption[phase]).toISOString()
             : null,
     }));
 }
