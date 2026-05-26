@@ -5,7 +5,7 @@ export default async function update(preparatoryPhase, argTransaction: Transacti
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
     try {
-        sequelize.query(
+        await sequelize.query(
             `UPDATE 
                 shantytown_preparatory_phases_toward_resorption
             SET
