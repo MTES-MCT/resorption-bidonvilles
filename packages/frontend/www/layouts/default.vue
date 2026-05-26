@@ -1,5 +1,5 @@
 <template>
-    <Layout :stickyHeader="false" :displayLanguagePicker="false" >
+    <Layout>
         <slot />
     </Layout>
 </template>
