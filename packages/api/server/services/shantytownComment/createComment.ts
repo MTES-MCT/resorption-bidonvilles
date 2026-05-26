@@ -15,7 +15,7 @@ import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownComme
 import { ShantytownCommentTag } from '#root/types/resources/ShantytownCommentTag.d';
 import enrichCommentsAttachments from '../shantytown/_common/enrichCommentsAttachments';
 
-export default async function createCOmment(comment, shantytown, author): Promise<{ comments: ShantytownEnrichedComment[], numberOfWatchers: number } > {
+export default async function createComment(comment, shantytown, author): Promise<{ comments: ShantytownEnrichedComment[], numberOfWatchers: number } > {
     // on insère le commentaire
     let commentId: number;
     const transaction = await sequelize.transaction();
