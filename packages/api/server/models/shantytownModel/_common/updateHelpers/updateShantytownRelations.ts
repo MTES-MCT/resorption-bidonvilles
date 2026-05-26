@@ -22,7 +22,7 @@ async function updateIncomingTowns(
 
 async function updateSocialOrigins(
     shantytownId: number,
-    origins: any[],
+    origins: number[],
     transaction: Transaction,
 ): Promise<void> {
     await sequelize.query(
@@ -40,7 +40,7 @@ async function updateSocialOrigins(
                 VALUES
                     ${origins.map(() => '(?, ?)').join(', ')}`,
             {
-                replacements: origins.reduce((arr, origin) => [...arr, shantytownId, origin], []),
+                replacements: origins.flatMap(origin => [shantytownId, origin]),
                 transaction,
             },
         );
@@ -49,7 +49,7 @@ async function updateSocialOrigins(
 
 async function updateToiletTypes(
     shantytownId: number,
-    toiletTypes: any[],
+    toiletTypes: string[],
     transaction: Transaction,
 ): Promise<void> {
     await sequelize.query(
@@ -67,7 +67,7 @@ async function updateToiletTypes(
                 VALUES
                     ${toiletTypes.map(() => '(?, ?)').join(', ')}`,
             {
-                replacements: toiletTypes.reduce((arr, toiletType) => [...arr, shantytownId, toiletType], []),
+                replacements: toiletTypes.flatMap(toiletType => [shantytownId, toiletType]),
                 transaction,
             },
         );
@@ -76,7 +76,7 @@ async function updateToiletTypes(
 
 async function updateElectricityTypes(
     shantytownId: number,
-    accessTypes: any[],
+    accessTypes: string[],
     transaction: Transaction,
 ): Promise<void> {
     await sequelize.query(
@@ -94,16 +94,23 @@ async function updateElectricityTypes(
                 VALUES
                     ${accessTypes.map(() => '(?, ?)').join(', ')}`,
             {
-                replacements: accessTypes.reduce((arr, accessType) => [...arr, shantytownId, accessType], []),
+                replacements: accessTypes.flatMap(accessType => [shantytownId, accessType]),
                 transaction,
             },
         );
     }
 }
 
+interface ClosingSolution {
+    id: number;
+    people_affected: number | null;
+    households_affected: number | null;
+    message: string | null;
+}
+
 async function updateClosingSolutions(
     shantytownId: number,
-    solutions: any[],
+    solutions: ClosingSolution[],
     transaction: Transaction,
 ): Promise<void> {
     await sequelize.query(
@@ -121,17 +128,13 @@ async function updateClosingSolutions(
                 VALUES
                     ${solutions.map(() => '(?, ?, ?, ?, ?)').join(', ')}`,
             {
-                replacements: solutions.reduce(
-                    (arr, solution) => [
-                        ...arr,
-                        shantytownId,
-                        solution.id,
-                        solution.people_affected,
-                        solution.households_affected,
-                        solution.message,
-                    ],
-                    [],
-                ),
+                replacements: solutions.flatMap(solution => [
+                    shantytownId,
+                    solution.id,
+                    solution.people_affected,
+                    solution.households_affected,
+                    solution.message,
+                ]),
                 transaction,
             },
         );
