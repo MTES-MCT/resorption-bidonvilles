@@ -1,26 +1,25 @@
 <template>
     <div class="flex justify-between items-center">
-        <Button
-            icon="arrow-left"
-            iconPosition="left"
-            type="button"
-            variant="textPrimary"
+        <DsfrButton
+            icon="fr-icon-arrow-left-line"
+            tertiary
+            no-outline
             :disabled="focusedYear <= minYear"
             @click="previousYear"
-            >Année précédente</Button
-        >
+            label="Année précédente"
+        />
         <p class="text-lg text-primary font-bold text-center">
             Année {{ focusedYear }}
         </p>
-        <Button
-            icon="arrow-right"
-            iconPosition="right"
-            type="button"
-            variant="textPrimary"
+        <DsfrButton
+            icon="fr-icon-arrow-right-line"
+            icon-right
+            tertiary
+            no-outline
             :disabled="focusedYear >= maxYear"
             @click="nextYear"
-            >Année suivante</Button
-        >
+            label="Année suivante"
+        />
     </div>
 
     <Tableau :columns="COLUMNS_DEFINITION" :data="focusedYearData">
@@ -59,7 +58,7 @@ import { defineProps, toRefs, computed, ref } from "vue";
 import formatMoney from "@/utils/formatMoney";
 
 import Tableau from "@/components/Tableau/TableauRb.vue";
-import { Button, Link } from "@resorptionbidonvilles/ui";
+import { Link } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     minYear: {
