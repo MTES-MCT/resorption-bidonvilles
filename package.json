@@ -23,5 +23,17 @@
   "dependencies": {
     "echarts": "^5.5.0",
     "vue-echarts": "^6.7.3"
+  },
+  "resolutions": {
+    "vue": "3.5.22",
+    "@vue/compiler-core": "3.5.22",
+    "@vue/compiler-dom": "3.5.22",
+    "@vue/compiler-sfc": "3.5.22",
+    "@vue/compiler-ssr": "3.5.22",
+    "@vue/runtime-core": "3.5.22",
+    "@vue/runtime-dom": "3.5.22",
+    "@vue/server-renderer": "3.5.22",
+    "@vue/reactivity": "3.5.22",
+    "@vue/shared": "3.5.22"
   }
 }
