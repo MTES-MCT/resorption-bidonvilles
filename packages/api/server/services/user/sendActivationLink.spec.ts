@@ -23,7 +23,9 @@ const authUtils = {
     getExpiracyDateForActivationTokenCreatedAt: sandbox.stub(),
 };
 const scheduler = {
-    scheduleAccessRequestReminder: sandbox.stub(),
+    scheduleEvent: {
+        accessAboutToExpire: sandbox.stub(),
+    },
 };
 
 rewiremock('#db/config/sequelize').with(sequelize);
@@ -137,9 +139,7 @@ describe('userService/sendActivationLink', () => {
 
         try {
             await sendActivationLink(fakeUser({ id: 42 }), fakeUser({ id: 1 }));
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
