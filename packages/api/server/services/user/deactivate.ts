@@ -98,8 +98,6 @@ async function sendNotifications(user: User, selfDeactivation: boolean, reason: 
             });
         }
     } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
         throw error;
     }
 }
@@ -131,9 +129,8 @@ export default async function deactivate(id: number, selfDeactivation: boolean, 
     await Promise.all(onboardingJob.map(async (jobName) => {
         try {
             await checkAndCancelJob(agenda, jobName, id);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
+        } catch {
+            // DO NOTHING
         }
     }));
     return updatedUser;

@@ -65,9 +65,8 @@ export default async function create(question: QuestionInput, author: AuthorData
     // on insère l'abonnement pour l'auteur de la question
     try {
         await userQuestionSubscriptionModel.createSubscription(author.id, questionId);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // Erreur ignorée - l'abonnement ne doit pas bloquer la création de la question
     }
 
     // on notifie tous les utilisateurs concernés
@@ -81,9 +80,8 @@ export default async function create(question: QuestionInput, author: AuthorData
                 },
             })),
         );
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // Erreur ignorée - l'envoi de notifications ne doit pas bloquer la création de la question
     }
 
     return enrichedQuestion;

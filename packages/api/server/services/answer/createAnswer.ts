@@ -108,9 +108,8 @@ export default async function createAnswer(answer: AnswerData, question: Enriche
                 });
             }),
         );
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // Erreur ignorée - l'envoi de notifications ne doit pas bloquer la création de la réponse
     }
 
     // on essaie d'abonner l'auteur de la réponse à la question
@@ -120,9 +119,8 @@ export default async function createAnswer(answer: AnswerData, question: Enriche
             await userQuestionSubscriptionModel.createSubscription(author.id, question.id);
             subscribed = true;
         }
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // Erreur ignorée - l'abonnement ne doit pas bloquer la création de la réponse
     }
 
     return {

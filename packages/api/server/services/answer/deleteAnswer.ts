@@ -19,9 +19,8 @@ export default async function deleteAnswerService(question: EnrichedQuestion, an
         let nationalAdmins: User[] = [];
         try {
             nationalAdmins = await getNationalAdmins();
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
+            // Erreur ignorée - l'envoi de mail continue sans les admins nationaux en copie
         }
 
         try {
@@ -39,9 +38,8 @@ export default async function deleteAnswerService(question: EnrichedQuestion, an
                 },
                 bcc: nationalAdmins,
             });
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
+            // Erreur ignorée - l'envoi de mail ne doit pas bloquer la suppression
         }
     }
 }
