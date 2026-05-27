@@ -32,7 +32,7 @@ export default async function fetchAction(user: User, actionId: number, canAcces
         };
     }));
     if (actions.length !== 1) {
-        throw new ServiceError('action_not_found', new Error('Action could not be found in database'));
+        throw new ServiceError('action_not_found', new Error('L\'action n\'a pas été trouvée en base de données'));
     }
     return enrichedActions[0];
 }
