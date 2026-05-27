@@ -165,7 +165,7 @@ describe('services/action/fetch()', () => {
         it('retourne bien des résultats quand actionIds est undefined (cas par défaut)', async () => {
             stubs.actionModelFetch.resolves(mockActions);
 
-            const result = await fetch(user, undefined);
+            const result = await fetch(user);
 
             expect(result).to.have.lengthOf(2);
             expect(stubs.actionModelFetch).to.have.been.calledWith(user, undefined);
