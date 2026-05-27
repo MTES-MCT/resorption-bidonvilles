@@ -70,9 +70,8 @@ async function sendNotifications(user: User, selfDeactivation: boolean, reason: 
                 },
             });
         }
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // DO NOTHING
     }
 }
 
@@ -82,23 +81,19 @@ async function sendNotifications(user: User, selfDeactivation: boolean, reason: 
  * @param jobName - Nom du job à annuler
  * @param userId - ID de l'utilisateur
  */async function checkAndCancelJob(agenda, jobName: string, userId: number): Promise<void> {
-    try {
     // On recherche le job par son nom et l'identifiant du compte utilisateur
-        const jobs = await agenda.jobs({
+    const jobs = await agenda.jobs({
+        name: jobName,
+        'data.user.id': userId,
+    });
+
+    // On vérifie que le job existe
+    if (jobs && jobs.length > 0) {
+        // On annule le job
+        await agenda.cancel({
             name: jobName,
             'data.user.id': userId,
         });
-
-        // On vérifie que le job existe
-        if (jobs && jobs.length > 0) {
-            // On annule le job
-            await agenda.cancel({
-                name: jobName,
-                'data.user.id': userId,
-            });
-        }
-    } catch (error) {
-        throw error;
     }
 }
 
