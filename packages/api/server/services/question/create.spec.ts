@@ -61,6 +61,8 @@ rewiremock.disable();
 describe('services/question/create', () => {
     beforeEach(async () => {
         stubs.sequelize.transaction.resolves(stubs.transaction);
+        stubs.userModel.getQuestionWatchers.resolves([]);
+        stubs.enrichQuestion.resolves(serializedQuestion);
     });
     afterEach(() => {
         sandbox.reset();
@@ -122,9 +124,8 @@ describe('services/question/create', () => {
         stubs.uploadAttachments.rejects(new Error('une erreur'));
         try {
             await create(fakeQuestionInput(), fakeUser(), files);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
+        } catch {
+            // DO NOTHING
         }
 
         expect(stubs.transaction.rollback).to.have.been.calledOnce;

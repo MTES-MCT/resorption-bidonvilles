@@ -64,6 +64,7 @@ rewiremock.disable();
 describe('services/answer.createAnswer()', () => {
     beforeEach(async () => {
         stubs.sequelize.transaction.resolves(stubs.transaction);
+        stubs.userModel.getQuestionSubscribers.resolves([]);
     });
     afterEach(() => {
         sandbox.reset();
@@ -99,9 +100,8 @@ describe('services/answer.createAnswer()', () => {
         stubs.answerModel.create.rejects(new Error('Une erreur'));
         try {
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
+        } catch {
+            // DO NOTHING
         }
 
         expect(stubs.transaction.commit, 'Le commit() a été appellé').to.not.have.been.called;
@@ -131,9 +131,8 @@ describe('services/answer.createAnswer()', () => {
         stubs.transaction.commit.rejects(new Error('Une erreur'));
         try {
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), []);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
+        } catch {
+            // DO NOTHING
         }
 
         expect(stubs.transaction.rollback, 'Le rollback() n\'a pas été appellé').to.have.been.calledOnce;
@@ -200,8 +199,6 @@ describe('services/answer.createAnswer()', () => {
                 [],
             );
         } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
             fail('Une exception a été lancée');
         }
     });
@@ -292,8 +289,6 @@ describe('services/answer.createAnswer()', () => {
                 [],
             );
         } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
             fail('Une exception a été lancée');
         }
     });
@@ -303,6 +298,7 @@ describe('services/answer.createAnswer()', () => {
         stubs.answerModel.create.resolves(2);
         stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
         stubs.answerModel.findOne.withArgs(2).resolves(answer);
+        stubs.userModel.getQuestionSubscribers.withArgs(1).resolves([]);
         const response = await createAnswer(
             { description: answer.description },
             fakeQuestion({ id: 1 }),
@@ -398,9 +394,8 @@ describe('services/answer.createAnswer()', () => {
         try {
             stubs.answerModel.findOne.resolves({ id: 2, ...serializedAnswer });
             await createAnswer(fakeAnswer(), fakeQuestion(), fakeUser(), files);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
+        } catch {
+            // DO NOTHING
         }
 
         expect(stubs.transaction.commit, 'Le commit() de la transaction a été appelé').to.not.have.been.called;

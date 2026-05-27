@@ -61,9 +61,7 @@ describe('userService/sendInactiveUserAlerts', () => {
 
         try {
             await sendInactiveUserAlerts();
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
         }
 
         expect(mails.sendInactiveUserAlert).to.not.have.been.called;

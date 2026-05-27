@@ -40,8 +40,6 @@ describe('services/shantytown', () => {
                     1,
                 );
             } catch (error) {
-                // eslint-disable-next-line no-console
-                console.error(error);
             }
 
             expect(stubs.deleteShantytown).to.have.been.calledOnceWith(town.id);

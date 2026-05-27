@@ -37,8 +37,6 @@ describe('services/shantytownActor', () => {
             try {
                 await exportService(user);
             } catch (error) {
-                // eslint-disable-next-line no-console
-                console.error(error);
             }
 
             expect(stubs.can).to.have.been.calledOnceWith(user);

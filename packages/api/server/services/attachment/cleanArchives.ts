@@ -36,10 +36,7 @@ export default async () => {
     if (attachmentsToBeDeleted.length > 0) {
         try {
             await deleteArchivedAttachments(attachmentsToBeDeleted);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-
+        } catch {
             await mattermost.triggerAttachmentArchiveCleanupError();
         }
     }

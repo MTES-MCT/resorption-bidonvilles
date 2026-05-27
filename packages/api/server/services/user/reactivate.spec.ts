@@ -143,9 +143,7 @@ describe('userService.reactivate()', () => {
 
         try {
             await reactivateUser(fakeUser(), 42);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -175,9 +173,7 @@ describe('userService.reactivate()', () => {
 
         try {
             await reactivateUser(fakeUser(), 42);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -207,9 +203,7 @@ describe('userService.reactivate()', () => {
 
         try {
             await reactivateUser(fakeUser(), 42);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -243,9 +237,7 @@ describe('userService.reactivate()', () => {
 
         try {
             await reactivateUser(fakeUser(), 42);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }

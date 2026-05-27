@@ -51,8 +51,6 @@ describe('services/heatwave/get', () => {
         try {
             await get();
         } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
         }
         expect(stubs.heatwaveModel.get).to.have.been.calledOnce;
     });

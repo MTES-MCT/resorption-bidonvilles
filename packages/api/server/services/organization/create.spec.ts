@@ -145,9 +145,8 @@ describe('services/organization/create', () => {
                 new_type_abbreviation: null,
                 new_type_default_role: null,
             });
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
+        } catch {
+            // L'erreur est attendue, on ne fait rien
         }
 
         expect(transaction.rollback).to.have.been.calledOnce;

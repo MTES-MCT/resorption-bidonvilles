@@ -99,8 +99,6 @@ describe('services/action.deleteComment()', () => {
         try {
             await deleteActionComment(fakeTestUser, fakeAction().id, 1, deletionMessage);
         } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
         }
         expect(stubs.can).to.have.been.calledOnceWith(fakeTestUser);
         expect(stubs.do).to.have.been.calledOnceWith('moderate', 'data');
@@ -207,8 +205,6 @@ describe('services/action.deleteComment()', () => {
         try {
             await deleteActionComment(fakeTestUser, fakeAction().id, 1, deletionMessage);
         } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
         }
 
         expect(stubs.mails.sendUserCommentDeletion).to.have.been.calledOnce;

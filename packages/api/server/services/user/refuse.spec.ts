@@ -46,6 +46,7 @@ describe('userService.refuse()', () => {
             rollback: sandbox.stub(),
         };
         sequelize.transaction.withArgs().resolves(transaction);
+        userModel.findOne.resolves(fakeUser({ id: 42, status: 'inactive' }));
     });
 
     it('change le statut du compte à refused en base de données', async () => {
@@ -91,9 +92,7 @@ describe('userService.refuse()', () => {
 
         try {
             await refuseUserAccess(42);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -123,9 +122,7 @@ describe('userService.refuse()', () => {
 
         try {
             await refuseUserAccess(42);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -155,9 +152,7 @@ describe('userService.refuse()', () => {
 
         try {
             await refuseUserAccess(42);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }

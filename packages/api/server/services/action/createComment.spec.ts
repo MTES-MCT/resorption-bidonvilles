@@ -80,9 +80,8 @@ describe('services/action.createComment()', () => {
 
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [] });
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
+            // L'erreur est attendue, on ne fait rien
         }
 
         expect(stubs.transaction.rollback).to.have.been.calledOnce;
@@ -147,10 +146,8 @@ describe('services/action.createComment()', () => {
 
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [fakeFile()] });
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
-            // ignore
+        } catch {
+            // L'erreur est attendue, on ne fait rien
         }
 
         expect(stubs.transaction.rollback).to.have.been.calledOnce;
@@ -193,9 +190,8 @@ describe('services/action.createComment()', () => {
 
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [fakeFile()] });
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
+            // L'erreur est attendue, on ne fait rien
         }
 
         expect(stubs.transaction.rollback).to.have.been.calledOnce;
@@ -222,9 +218,8 @@ describe('services/action.createComment()', () => {
 
         try {
             await createComment(1, fakeAction(), { description: 'description', files: [fakeFile()] });
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
+            // L'erreur est attendue, on ne fait rien
         }
 
         expect(stubs.transaction.rollback).to.have.been.calledOnce;
