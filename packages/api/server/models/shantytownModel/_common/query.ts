@@ -11,12 +11,12 @@ import permissionUtils from '#server/utils/permission';
 import { Where } from '#server/models/_common/types/Where.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
-import { ShantytownAction } from '#root/types/resources/Action.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
-import { ShantytownPreparatoryPhaseTowardResorption, RawPhase } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 import serializeShantytown from './serializeShantytown';
-import getDiff from './getDiff';
 import SQL, { ShantytownRow } from './SQL';
+import processPreparatoryPhases from './queryHelpers/processPreparatoryPhases';
+import buildChangelog from './queryHelpers/buildChangelog';
+import enrichTownsWithRelations from './queryHelpers/enrichTownsWithRelations';
 
 const { where: pWhere } = permissionUtils;
 type ShantytownObject = {
@@ -250,118 +250,16 @@ export default async function query(
 
     const [history, comments, closingSolutions, actors, actions, incomingTowns, townsPhasesTowardResorption] = await Promise.all([historyPromise, commentsPromise, closingSolutionsPromise, actorsPromise, actionsPromise, incomingTownsPromise, townsPhasesTowardResorptionPromise]);
 
-    // Remplir les phases préparatoires AVANT de calculer le changelog
-    townsPhasesTowardResorption.forEach((elt) => {
-        if (elt.preparatoryPhases?.length > 0) {
-            serializedTowns.hash[elt.townId].preparatoryPhasesTowardResorption = elt.preparatoryPhases;
-        }
-    });
+    processPreparatoryPhases(serializedTowns.hash, townsPhasesTowardResorption);
 
-    // Nettoyer les phases et calculer hasInitialResorptionPhases pour chaque site
-    const INITIAL_PHASE_UIDS = new Set([
-        'sociological_diagnosis',
-        'social_assessment',
-        'political_validation',
-    ]);
+    buildChangelog(serializedTowns.hash, history, user);
 
-    Object.keys(serializedTowns.hash).forEach((shantytownId) => {
-        const phases: ShantytownPreparatoryPhaseTowardResorption[] = serializedTowns.hash[shantytownId].preparatoryPhasesTowardResorption;
-        if (phases?.length > 0) {
-            // Nettoyer les phases qui contiennent [null] ou [undefined]
-            const validPhases = phases.filter(p => p !== null && p !== undefined);
-            serializedTowns.hash[shantytownId].preparatoryPhasesTowardResorption = validPhases;
-
-            // Calculer hasInitialResorptionPhases
-            const initialPhasesPresent = validPhases
-                .filter(p => INITIAL_PHASE_UIDS.has(p.preparatoryPhaseId))
-                .map(p => p.preparatoryPhaseId);
-
-            serializedTowns.hash[shantytownId].hasInitialResorptionPhases = initialPhasesPresent.length === 3;
-        }
-    });
-
-    if (history !== undefined && history.length > 0) {
-        const serializedHistory = history.map((h) => {
-            const serialized = serializeShantytown(h, user);
-            // Remplir les phases préparatoires à partir des données SQL historisées
-            if (h.preparatoryPhasesTowardResorption?.length > 0) {
-                // Filtrer les null/undefined
-                const validPhases: RawPhase[] = (h.preparatoryPhasesTowardResorption as any[]).filter(p => p !== null && p !== undefined);
-                serialized.preparatoryPhasesTowardResorption = validPhases.length > 0 ? validPhases as any : [];
-            }
-            return serialized;
-        });
-
-        for (let i = 1, { id } = serializedHistory[0]; i <= serializedHistory.length; i += 1) {
-            if (id !== serializedHistory[i]?.id) {
-                if (!serializedTowns.hash[id]) {
-                    // eslint-disable-next-line no-continue
-                    continue;
-                }
-
-                const diff = getDiff(serializedHistory[i - 1], serializedTowns.hash[id]);
-                if (diff.length > 0) {
-                    serializedTowns.hash[id].changelog.push({
-                        author: serializedTowns.hash[id].updatedBy,
-                        date: serializedTowns.hash[id].updatedAt,
-                        diff,
-                    });
-                }
-
-                if (serializedHistory[i]) {
-                    ({ id } = serializedHistory[i]);
-                }
-
-                // eslint-disable-next-line no-continue
-                continue;
-            }
-
-            const diff = getDiff(serializedHistory[i - 1], serializedHistory[i]);
-            if (diff.length > 0) {
-                serializedTowns.hash[id].changelog.push({
-                    author: serializedHistory[i].updatedBy,
-                    date: serializedHistory[i].updatedAt,
-                    diff,
-                });
-            }
-        }
-
-        // Inverser le changelog pour avoir les modifications les plus récentes en premier
-        Object.keys(serializedTowns.hash).forEach((shantytownId) => {
-            serializedTowns.hash[shantytownId].changelog = serializedTowns.hash[shantytownId].changelog.slice().reverse();
-        });
-    }
-
-    // @todo: move the serialization of these entities to their own model component
-    Object.keys(serializedTowns.hash).forEach((shantytownId) => {
-        serializedTowns.hash[shantytownId].comments = comments[shantytownId] ?? [];
-    });
-
-    closingSolutions.forEach((closingSolution) => {
-        serializedTowns.hash[closingSolution.shantytownId].closingSolutions.push({
-            id: closingSolution.id,
-            peopleAffected: closingSolution.peopleAffected,
-            householdsAffected: closingSolution.householdsAffected,
-            message: closingSolution.message,
-        });
-    });
-
-    actors.forEach((actor) => {
-        serializedTowns.hash[actor.shantytownId].actors.push(actor);
-    });
-
-    actions.forEach((action: ShantytownAction) => {
-        action.shantytowns.forEach((shantytownId) => {
-            if (serializedTowns.hash[shantytownId]?.actions === undefined) {
-                return;
-            }
-
-            serializedTowns.hash[shantytownId].actions.push(action);
-        });
-    });
-
-    incomingTowns.forEach((incomingTown) => {
-        serializedTowns.hash[incomingTown.shantytownId].reinstallationIncomingTowns.push(incomingTown);
+    enrichTownsWithRelations(serializedTowns.hash, {
+        comments,
+        closingSolutions,
+        actors,
+        actions,
+        incomingTowns,
     });
 
     return serializedTowns.ordered;
