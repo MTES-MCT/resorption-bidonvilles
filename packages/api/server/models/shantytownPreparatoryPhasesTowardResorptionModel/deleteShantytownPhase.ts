@@ -11,7 +11,7 @@ export default async function deleteShantytownPhase(phase: Phase, argTransaction
     transaction ??= await sequelize.transaction();
 
     try {
-        const response = await sequelize.query(
+        const [result] = await sequelize.query(
             `DELETE FROM
                 shantytown_preparatory_phases_toward_resorption
              WHERE
@@ -26,7 +26,7 @@ export default async function deleteShantytownPhase(phase: Phase, argTransaction
                 },
             },
         );
-        const rowCount: number = response[0] as unknown as number;
+        const rowCount = result as unknown as number;
 
         if (rowCount === 0) {
             throw new Error(`La phase ${phase.fk_preparatory_phase} du site ${phase.fk_shantytown} est introuvable`);
