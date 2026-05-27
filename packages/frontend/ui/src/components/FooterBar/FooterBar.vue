@@ -1,83 +1,126 @@
 <template>
-    <footer>
-        <section class="bg-blue100 py-8">
-            <ContentWrapper class="flex flex-col lg:flex-row md:justify-between">
-                <FooterBarNewsletter v-if="$i18n.locale === 'fr'" />
-                <FooterBarHotline :CONTACT_EMAIL="CONTACT_EMAIL" />
-                <FooterBarSocialMedia />
-            </ContentWrapper>
-        </section>
-
-        <ContentWrapper class="mt-4 lg:mt-8">
-            <div class="flex flex-col space-y-2 md:flex-row md:items-center md:justify-between">
-                <IdentiteVisuelle class="-ml-3" :keepLogo="true" size="large" />
-                <div class="flex space-x-3">
-                    <FooterBarPartnerLink
-                        href="https://www.gouvernement.fr/delegation-interministerielle-a-l-hebergement-et-a-l-acces-au-logement">
-                        DIHAL</FooterBarPartnerLink>
-                </div>
+    <DsfrFollow class="mt-8">
+        <template #default lang="fr" class="fr-container">
+          <div class="fr-col-12 fr-col-md-8">
+            <div class="fr-follow__newsletter">
+              <div>
+                <h2 class="fr-h5">{{ followDatas.contact.title }}</h2>
+                <p class="fr-text--sm">{{ followDatas.contact.description }}</p>
+              </div>
+              <div class="w-full">
+                <DsfrButtonGroup
+                  inline-layout-when="md"
+                  :iconRight="false"
+                  :buttons="followDatas.contact.button"
+                />
+              </div>
             </div>
-            <div class="border-t mt-4 pt-4 pb-8 flex flex-wrap gap-4 items-center">
-                <FooterBarFootLink to="https://github.com/MTES-MCT/resorption-bidonvilles"
-                    title="Accéder au dépôt du code source de l'application">
-                    <Icon icon="fa-brands fa-github" class="mr-1" />{{ $t('footer.sourceCode') }}
-                </FooterBarFootLink>
-                <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
-
-                <FooterBarFootLink :to="`${(URL || '')}/stats`"
-                    title="Afficher les statistiques publiques de la plateforme">
-                    {{ $t('footer.statistics') }}
-                </FooterBarFootLink>
-                <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
-
-                <FooterBarFootLink :to="`${(URL || '')}/mentions-legales`"
-                    title="Afficher les mentions légales relatives à l'utilisation de la plateforme">
-                    {{ $t('footer.legal') }}
-                </FooterBarFootLink>
-                <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
-
-                <FooterBarFootLink target="_blank" :to="`${(URL || '')}/doc/conditions-d-utilisation.pdf`"
-                    title="Afficher les conditions générales d'utilisation de la plateforme">
-                    {{ $t('footer.cgus') }}
-                </FooterBarFootLink>
-                <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
-
-                <FooterBarFootLink :to="`${(URL || '')}/accessibilite`"
-                    title="Afficher la définition du référentiel général d'amélioration de l'accessibilité">
-                    {{ $t('footer.RGAA') }}
-                </FooterBarFootLink>
-                <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
-
-                <router-link to="/plan-du-site" v-if="showSiteMapLink"
-                    class="text-xs border-b-2 border-transparent hover:border-G500" :class="focusClasses.ring">
-                    {{ $t('footer.siteMap') }}
-                </router-link>
-                <span class="w-px bg-G300 mx-3 h-4 hidden md:inline"></span>
+          </div>
+          <div class="fr-col-12 fr-col-md-4">
+            <div class="fr-follow__social">
+              <h2 class="fr-h5">{{ followDatas.networks.title }}</h2>
+              <DsfrButtonGroup
+                equisized
+                :buttons="followDatas.networks.buttons"
+              />
             </div>
-        </ContentWrapper>
-    </footer>
+          </div>
+      </template>
+    </DsfrFollow>
+    <DsfrFooter
+        :descText="footerDatas.descText"
+        :logoText="footerDatas.logoText"
+        :ecosystemLinks="footerDatas.ecosystemLinks"
+        :beforeMandatoryLinks="footerDatas.beforeMandatoryLinks"
+        :mandatoryLinks="footerDatas.mandatoryLinks"
+        :afterMandatoryLinks="footerDatas.afterMandatoryLinks"
+        :licenceName="footerDatas.licenceName"
+        :licenceTo="footerDatas.licenceTo"
+    />
 </template>
 
 <script setup>
 import { toRefs } from "vue";
-import focusClasses from '../../../../common/utils/focus_classes';
-import Icon from "../Icon.vue";
-import ContentWrapper from "../ContentWrapper.vue";
-import IdentiteVisuelle from "../IdentiteVisuelle/IdentiteVisuelle.vue";
-import FooterBarNewsletter from "./FooterBarNewsletter.vue";
-import FooterBarHotline from "./FooterBarHotline.vue";
-import FooterBarSocialMedia from "./FooterBarSocialMedia.vue";
-import FooterBarFootLink from "./FooterBarFootLink.vue";
-import FooterBarPartnerLink from "./FooterBarPartnerLink.vue";
 
 const props = defineProps({
     CONTACT_EMAIL: String,
-    URL: String,
-    showSiteMapLink: {
-        type: Boolean,
-        required: false,
-        default: false
-    }
 });
-const { CONTACT_EMAIL, URL, showSiteMapLink } = toRefs(props);
+const { CONTACT_EMAIL } = toRefs(props);
+
+// Paramétrage du follow DSFR
+const followDatas = {
+  contact: {
+    title: 'Une question sur la plateforme\u00A0?',
+    description: 'Appelez nous au +33\u00A01\u00A040\u00A081\u00A098\u00A080',
+    button: [
+      {
+        label: 'Nous contacter par courriel',
+        title: 'Contactez-nous par courriel  - Ouverture de votre outils de courrier électronique',
+        primary: true,
+        onClick: () => globalThis.window != undefined && globalThis.window.open(`mailto:${CONTACT_EMAIL.value}`)
+      }
+    ],
+  },
+  networks: {
+    title: 'Suivez nous sur LinkedIn',
+    buttons: [
+      {
+        label: 'LinkedIn',
+        title: 'Page LinkedIn de la DIHAL - Ouverture dans une nouvelle fenêtre',
+        icon: 'fr-icon-linkedin-box-fill',
+        href: 'https://fr.linkedin.com/company/dihal',
+        target: '_blank'
+      }
+    ]
+  }
+}
+
+// Paramétrage du footer DSFR
+const footerDatas = {
+    descText: "Un produit de la Délégation Interministérielle à l'Hébergement et à l'Accès au Logement (DIHAL).",
+    ecosystemLinks: [
+      {
+        label: CONTACT_EMAIL.value,
+        href: `mailto:${CONTACT_EMAIL.value}`
+      },
+      {
+        label: 'DIHAL',
+        href: 'https://www.dihal.gouv.fr/'
+      }
+    ],
+    beforeMandatoryLinks: [
+      {
+        label: 'Code source',
+        target: '_blank',
+        class: 'fr-icon-github-fill fr-link--icon-left mr-0',
+        href: 'https://github.com/MTES-MCT/resorption-bidonvilles'
+      },
+      {
+        label: 'Mesures d\'impact',
+        to: "/stats"
+      },
+      {
+        label: 'Conditions générales d\'utilisation',
+        target: '_blank',
+        to: "/doc/conditions-d-utilisation.pdf"
+      },
+    ],
+    mandatoryLinks: [
+      {
+        label: 'Accessibilité: non conforme',
+        to: "/accessibilite"
+      }, {
+        label: 'Mentions légales',
+        to: "/mentions-legales"
+      }, {
+        label: 'Données personnelles',
+        to: "/doc/conditions-d-utilisation.pdf"
+      }, {
+        label: 'Gestion des cookies',
+        to: "/doc/conditions-d-utilisation.pdf"
+      }
+    ],
+    licenceName: "licence AGPL-3.0",
+    licenceTo: "https://github.com/MTES-MCT/resorption-bidonvilles/blob/develop/LICENSE",
+}
 </script>

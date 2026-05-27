@@ -8,8 +8,12 @@ import {
     DsfrCard,
     DsfrCheckbox,
     DsfrCheckboxSet,
+    DsfrFollow,
+    DsfrFooter,
+    DsfrHeader,
     DsfrInput,
     DsfrInputGroup,
+    DsfrNavigation,
     DsfrNotice,
     DsfrPagination,
     DsfrRadioButton,
@@ -49,8 +53,12 @@ export function useDsfr(app) {
     app.component("DsfrCard", DsfrCard);
     app.component("DsfrCheckbox", DsfrCheckbox);
     app.component("DsfrCheckboxSet", DsfrCheckboxSet);
+    app.component("DsfrFollow", DsfrFollow);
+    app.component("DsfrFooter", DsfrFooter);
+    app.component("DsfrHeader", DsfrHeader);
     app.component("DsfrInput", DsfrInput);
     app.component("DsfrInputGroup", DsfrInputGroup);
+    app.component("DsfrNavigation", DsfrNavigation);
     app.component("DsfrNotice", DsfrNotice);
     app.component("DsfrPagination", DsfrPagination);
     app.component("DsfrRadioButton", DsfrRadioButton);
