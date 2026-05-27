@@ -17,7 +17,7 @@ export default async function updateAction(action: Action, author: User, data: A
         await update(action.id, {
             ...data,
             updated_by: author.id,
-        }, transaction);
+        }, canWriteFinances, transaction);
     } catch (error) {
         await transaction.rollback();
 
