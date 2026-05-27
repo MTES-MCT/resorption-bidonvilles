@@ -8,4 +8,5 @@ import moment from 'moment';
  * @param format - Format moment.js (ex: 'DD/MM/YYYY')
  * @returns Date formatée en UTC
  */
-export default (date, format) => moment(date * 1000).utc().locale('fr').format(format);
+const formatDate = (date: number, format: string) => moment(date * 1000).utc().locale('fr').format(format);
+export default formatDate;

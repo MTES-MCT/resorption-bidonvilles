@@ -10,12 +10,12 @@ const format = 'MMMM YYYY';
 
 const safeParseInt = (value: string | number): number => {
     if (typeof value === 'string') {
-        return parseInt(value, 10);
+        return Number.parseInt(value, 10);
     }
     return value;
 };
 
-export default async (user: User, argFrom: Date, argTo: Date):Promise<NationalMetricsEvolution> => {
+export default async function getNationalEvolutionMetrics(user: User, argFrom: Date, argTo: Date): Promise<NationalMetricsEvolution> {
     let data:NationalEvolutionMetricsRawData[];
     try {
         data = await metricsModel.getNationalEvolutionData(user, argFrom, argTo);
@@ -51,4 +51,4 @@ export default async (user: User, argFrom: Date, argTo: Date):Promise<NationalMe
     });
 
     return metrics;
-};
+}

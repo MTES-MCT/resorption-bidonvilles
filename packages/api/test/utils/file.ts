@@ -1,4 +1,4 @@
-import { Readable } from 'stream';
+import { Readable } from 'node:stream';
 
 const fakeFile = (override: Partial<Express.Multer.File> = {}) => {
     const f = {

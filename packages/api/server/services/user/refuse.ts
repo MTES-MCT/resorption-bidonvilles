@@ -4,7 +4,7 @@ import userAccessModel from '#server/models/userAccessModel/index';
 import ServiceError from '#server/errors/ServiceError';
 import { User } from '#root/types/resources/User.d';
 
-export default async (id: number): Promise<User> => {
+export default async function refuse(id: number): Promise<User> {
     const transaction = await sequelize.transaction();
 
     let user: User;
@@ -49,4 +49,4 @@ export default async (id: number): Promise<User> => {
         throw new ServiceError('transaction_failure', error);
     }
     return user;
-};
+}

@@ -72,9 +72,8 @@ describe('userService/register', () => {
         try {
             await register(fakeContactBody());
             expect.fail('should have thrown an error');
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
+            // DO NOTHING
         }
 
         expect(accessRequestService.handleNewAccessRequest).to.not.have.been.called;

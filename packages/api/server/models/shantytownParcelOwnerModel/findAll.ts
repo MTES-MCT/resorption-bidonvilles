@@ -4,7 +4,7 @@ import ServiceError from '#server/errors/ServiceError';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { RawParcelOwner } from '#root/types/resources/ParcelOwner.d';
 
-export default async (user: AuthUser, shantytownId: number, transaction?: Transaction): Promise<RawParcelOwner[]> => {
+export default async function findAll(user: AuthUser, shantytownId: number, transaction?: Transaction): Promise<RawParcelOwner[]> {
     try {
         const [results]: any = await sequelize.query(`
             SELECT * FROM shantytown_parcel_owners WHERE fk_shantytown = :shantytownId
@@ -15,4 +15,4 @@ export default async (user: AuthUser, shantytownId: number, transaction?: Transa
     } catch (error) {
         throw new ServiceError('parcel_owner_fetch_failed', new Error(error?.message));
     }
-};
+}

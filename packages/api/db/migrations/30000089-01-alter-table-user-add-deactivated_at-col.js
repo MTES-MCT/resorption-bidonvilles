@@ -21,9 +21,7 @@ async function addColumnsTo(queryInterface, Sequelize, tableName, transaction) {
 }
 
 async function removeColumnsFrom(queryInterface, tableName, transaction) {
-    return Promise.all([
-        queryInterface.removeColumn(tableName, 'deactivated_at', { transaction }),
-    ]);
+    return queryInterface.removeColumn(tableName, 'deactivated_at', { transaction });
 }
 
 async function addOrDeleteTableColumns(upOrDown, tableNames, queryInterface, Sequelize) {

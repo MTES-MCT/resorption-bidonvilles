@@ -5,7 +5,7 @@ import { sequelize } from '#db/sequelize';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { ParcelOwnerInsert } from '#root/types/resources/ParcelOwner.d';
 
-export default async (user: AuthUser, shantytownId: number, owners: ParcelOwnerInsert[], argTransaction: Transaction | undefined = undefined): Promise<{ parcelOwnerId: number }> => {
+export default async function create(user: AuthUser, shantytownId: number, owners: ParcelOwnerInsert[], argTransaction: Transaction | undefined = undefined): Promise<{ parcelOwnerId: number }> {
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
 
@@ -22,4 +22,4 @@ export default async (user: AuthUser, shantytownId: number, owners: ParcelOwnerI
     }
 
     return parcelOwnerId;
-};
+}

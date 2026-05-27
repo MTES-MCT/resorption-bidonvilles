@@ -1,6 +1,5 @@
 import { sequelize } from '#db/sequelize';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
-import shantytownModel from '#server/models/shantytownModel';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel';
 import attachmentService from '#server/services/attachment';
 import scanAttachmentErrors from '#server/services/attachment/scanAttachmentErrors';
@@ -16,7 +15,7 @@ import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownComme
 import { ShantytownCommentTag } from '#root/types/resources/ShantytownCommentTag.d';
 import enrichCommentsAttachments from '../shantytown/_common/enrichCommentsAttachments';
 
-export default async (comment, shantytown, author): Promise<{ comments: ShantytownEnrichedComment[], numberOfWatchers: number } > => {
+export default async function createComment(comment, shantytown, author): Promise<{ comments: ShantytownEnrichedComment[], numberOfWatchers: number } > {
     // on insère le commentaire
     let commentId: number;
     const transaction = await sequelize.transaction();
@@ -100,7 +99,7 @@ export default async (comment, shantytown, author): Promise<{ comments: Shantyto
     // on retourne la liste mise à jour des commentaires du site
     let comments: { [key: number]: ShantytownRawComment[] } = [];
     try {
-        comments = await shantytownModel.getComments(author, [shantytown.id]);
+        comments = await shantytownCommentModel.findByShantytown(author, [shantytown.id]);
         if (!comments[shantytown.id]) {
             throw new ServiceError('fetch_failed', new Error('Impossible de retrouver les commentaires en base de données'));
         }
@@ -116,4 +115,4 @@ export default async (comment, shantytown, author): Promise<{ comments: Shantyto
         comments: commentsWithEnrichedAttachments,
         numberOfWatchers: watchers.length,
     };
-};
+}

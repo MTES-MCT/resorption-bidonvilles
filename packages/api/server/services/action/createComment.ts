@@ -1,7 +1,7 @@
 import ServiceError from '#server/errors/ServiceError';
 import { sequelize } from '#db/sequelize';
 import { Transaction } from 'sequelize';
-import createComment from '#server/models/actionModel/createComment/createComment';
+import createCommentInModel from '#server/models/actionModel/createComment/createComment';
 import fetchComments from '#server/models/actionModel/fetchComments/fetchComments';
 import serializeComment from '#server/models/actionModel/fetchComments/serializeComment';
 import uploadAttachments from '#server/services/attachment/upload';
@@ -19,14 +19,14 @@ type ActionCommentInput = {
     files: any[]
 };
 
-export default async (authorId: number, action: Action, commentInput: ActionCommentInput): Promise<{ comment: ActionEnrichedComment, numberOfObservers: number }> => {
+export default async function createComment(authorId: number, action: Action, commentInput: ActionCommentInput): Promise<{ comment: ActionEnrichedComment, numberOfObservers: number }> {
     let comment: ActionRawComment;
     let commentId: number;
     let transaction: Transaction;
 
     try {
         transaction = await sequelize.transaction();
-        commentId = await createComment(action.id, {
+        commentId = await createCommentInModel(action.id, {
             description: commentInput.description,
             created_by: authorId,
         }, transaction);
@@ -53,7 +53,7 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
 
     // on finalise
     try {
-        const [commentRow]: ActionRowComment[] = await fetchComments(null, [commentId], {}, transaction);
+        const [commentRow]: ActionRowComment[] = await fetchComments(undefined, [commentId], {}, transaction);
         comment = serializeComment(commentRow);
         await transaction.commit();
     } catch (error) {
@@ -65,9 +65,8 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
     // on tente d'envoyer une notification mattermost
     try {
         await sendMattermostNotification(action, comment);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // DO NOTHING
     }
 
     // On récupère les fichiers joints avec les liens signés
@@ -77,10 +76,9 @@ export default async (authorId: number, action: Action, commentInput: ActionComm
     let numberOfObservers: number = 0;
     try {
         numberOfObservers = await sendMailNotifications(action, comment);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // DO NOTHING
     }
 
     return { comment: commentWithEnrichedAttachments, numberOfObservers };
-};
+}

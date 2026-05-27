@@ -10,7 +10,7 @@ import { Transaction } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
 import { ShantytownAttachmentObject } from '#root/types/resources/Shantytown.d';
 
-export default async (entityType: AttachmentEntityType, entityId: number, createdBy: number, files: Express.Multer.File[], transaction?: Transaction, attachmentType?: ShantytownAttachmentObject[]): Promise<any[]> => {
+export default async function uploadAttachments(entityType: AttachmentEntityType, entityId: number, createdBy: number, files: Express.Multer.File[], transaction?: Transaction, attachmentType?: ShantytownAttachmentObject[]): Promise<any[]> {
     // Scan les fichiers à la recherche d'un éventuelle virus
     const results = await Promise.all(files.map(scanAttachment));
 
@@ -32,7 +32,7 @@ export default async (entityType: AttachmentEntityType, entityId: number, create
     );
 
     return Promise.all(
-        files.map((f, index) => {
+        files.flatMap((f, index) => {
             const uid = uuidv4();
 
             const Key = `${entityType}_author${createdBy}_comment${entityId}_file${index + 1}_${uid}.${fromMimeToExtension[f.mimetype]}`;
@@ -76,6 +76,6 @@ export default async (entityType: AttachmentEntityType, entityId: number, create
             );
 
             return promises;
-        }).flat(),
+        }),
     );
-};
+}

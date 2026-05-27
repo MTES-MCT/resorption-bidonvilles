@@ -22,6 +22,11 @@ const accessRequestService = {
 const authUtils = {
     getExpiracyDateForActivationTokenCreatedAt: sandbox.stub(),
 };
+const scheduler = {
+    scheduleEvent: {
+        accessAboutToExpire: sandbox.stub(),
+    },
+};
 
 rewiremock('#db/config/sequelize').with(sequelize);
 rewiremock('#server/models/userModel/setPermissionOptions').with(setPermissionOptions);
@@ -29,6 +34,7 @@ rewiremock('#server/models/userModel/findOne').with(findSingleUser);
 rewiremock('#server/models/userAccessModel/create').with(createUserAccess);
 rewiremock('#server/services/accessRequest/accessRequestService').with(accessRequestService);
 rewiremock('#server/utils/auth').with(authUtils);
+rewiremock('#server/services/accessRequest/scheduler').with(scheduler);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -65,7 +71,7 @@ describe('userService/sendActivationLink', () => {
     });
 
     it('crée un nouvel accès pour l\'utilisateur', async () => {
-        const clock = sinon.useFakeTimers(new Date().getTime());
+        const clock = sinon.useFakeTimers(Date.now());
 
         const activator = fakeUser({ id: 42 });
         const user = fakeUser({ id: 1 });
@@ -133,9 +139,7 @@ describe('userService/sendActivationLink', () => {
 
         try {
             await sendActivationLink(fakeUser({ id: 42 }), fakeUser({ id: 1 }));
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.have.been.called;
             return;
         }
@@ -149,9 +153,7 @@ describe('userService/sendActivationLink', () => {
 
         try {
             await sendActivationLink(fakeUser({ id: 42 }), fakeUser({ id: 1 }), [], transaction);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
             expect(transaction.rollback).to.not.have.been.called;
             return;
         }

@@ -3,7 +3,7 @@ import ServiceError from '#server/errors/ServiceError';
 import enrichQuestion from '#server/services/question/common/enrichQuestion';
 import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 
-export default async (questionId: number, transaction?: Transaction): Promise<EnrichedQuestion> => {
+export default async function findOne(questionId: number, transaction?: Transaction): Promise<EnrichedQuestion> {
     let enrichedQuestion: EnrichedQuestion | null = null;
 
     try {
@@ -17,4 +17,4 @@ export default async (questionId: number, transaction?: Transaction): Promise<En
     }
 
     return enrichedQuestion;
-};
+}

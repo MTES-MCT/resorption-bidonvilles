@@ -26,8 +26,7 @@ export default async (townData: TownInput, user: User): Promise<void> => {
 
     try {
         await mails.sendConfirmationOfTownReporting(user);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // DO NOTHING
     }
 };

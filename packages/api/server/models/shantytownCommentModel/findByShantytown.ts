@@ -3,13 +3,13 @@ import { QueryTypes } from 'sequelize';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
 import { AuthUser } from '#server/middlewares/authMiddleware';
+import serializeComment from '#server/models/shantytownModel/_common/serializeComment';
 import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
-import { ShantytownCommentRow } from '../../shantytownCommentModel/ShantytownCommentRow.d';
-import serializeComment from './serializeComment';
+import { ShantytownCommentRow } from './ShantytownCommentRow.d';
 
 type CommentObject = { [key: number]: ShantytownRawComment[] };
 
-export default async (user: AuthUser, shantytownIds: string[]): Promise<CommentObject> => {
+export default async function findByShantytown(user: AuthUser, shantytownIds: string[]): Promise<CommentObject> {
     if (!user.isAllowedTo('list', 'shantytown_comment')) {
         return {};
     }
@@ -117,4 +117,4 @@ export default async (user: AuthUser, shantytownIds: string[]): Promise<CommentO
         }));
         return acc;
     }, {});
-};
+}

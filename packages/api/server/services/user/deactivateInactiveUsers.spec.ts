@@ -61,9 +61,8 @@ describe('userService/deactivateInactiveUsers', () => {
 
         try {
             await deactivateInactiveUsers();
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
+            // DO NOTHING
         }
 
         expect(mails.sendInactiveUserDeactivationAlert).to.not.have.been.called;

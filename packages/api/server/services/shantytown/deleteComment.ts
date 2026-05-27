@@ -16,7 +16,7 @@ import enrichCommentsAttachments from './_common/enrichCommentsAttachments';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 
-export default async (user: AuthUser, shantytownId: number, commentId: number, deletionMessage: string): Promise<{ comments: ShantytownEnrichedComment[] }> => {
+export default async function deleteComment(user: AuthUser, shantytownId: number, commentId: number, deletionMessage: string): Promise<{ comments: ShantytownEnrichedComment[] }> {
     let town: Shantytown;
     try {
         town = await shantytownModel.findOne(user, shantytownId);
@@ -108,4 +108,4 @@ export default async (user: AuthUser, shantytownId: number, commentId: number, d
     return {
         comments: commentsWithEnrichedAttachments,
     };
-};
+}

@@ -55,9 +55,8 @@ describe('services/action.getActionReport()', () => {
     it('vérifie que l\'utilisateur a le droit d\'exporter les commentaires des actions au niveau national', async () => {
         try {
             await getCommentReport(user);
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
+            // DO NOTHING
         }
         expect(stubs.can).to.have.been.calledOnceWith(user);
         expect(stubs.do).to.have.been.calledOnceWith('export', 'action_comment');

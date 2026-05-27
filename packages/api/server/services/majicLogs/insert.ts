@@ -1,7 +1,7 @@
 import majicLogsModel from '#server/models/majicLogsModel';
 import ServiceError from '#server/errors/ServiceError';
 
-export default async (fk_user: number, fk_organization: number, fk_parcel: string): Promise<number> => {
+export default async function insertMajicLog(fk_user: number, fk_organization: number, fk_parcel: string): Promise<number> {
     let landRegistryRequestId: number;
 
     try {
@@ -10,4 +10,4 @@ export default async (fk_user: number, fk_organization: number, fk_parcel: strin
         throw new ServiceError('insert_failed', error);
     }
     return landRegistryRequestId;
-};
+}

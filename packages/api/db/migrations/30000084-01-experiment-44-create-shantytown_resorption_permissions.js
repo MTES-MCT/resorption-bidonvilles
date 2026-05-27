@@ -55,7 +55,10 @@ async function insertPermissions(queryInterface, users, transaction) {
 }
 
 async function deleteFromTable(queryInterface, tableName, condition, transaction) {
-    const query = `DELETE FROM ${tableName} WHERE ${Object.keys(condition).map(key => `${key} = :${key}`).join(' AND ')}`;
+    const whereConditions = Object.keys(condition)
+        .map(key => `${key} = :${key}`)
+        .join(' AND ');
+    const query = `DELETE FROM ${tableName} WHERE ${whereConditions}`;
     await queryInterface.sequelize.query(
         query,
         {

@@ -38,7 +38,7 @@ async function deactivateUserWithTransaction(id: number, anonymizationRequested:
     try {
         const updatedUsers = await userModel.deactivate([id], 'admin', anonymizationRequested, transaction);
 
-        if (!updatedUsers || updatedUsers.length !== 1) {
+        if (updatedUsers?.length !== 1) {
             throw new Error('Erreur de mise à jour');
         }
 
@@ -70,9 +70,8 @@ async function sendNotifications(user: User, selfDeactivation: boolean, reason: 
                 },
             });
         }
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // DO NOTHING
     }
 }
 
@@ -82,25 +81,19 @@ async function sendNotifications(user: User, selfDeactivation: boolean, reason: 
  * @param jobName - Nom du job à annuler
  * @param userId - ID de l'utilisateur
  */async function checkAndCancelJob(agenda, jobName: string, userId: number): Promise<void> {
-    try {
     // On recherche le job par son nom et l'identifiant du compte utilisateur
-        const jobs = await agenda.jobs({
+    const jobs = await agenda.jobs({
+        name: jobName,
+        'data.user.id': userId,
+    });
+
+    // On vérifie que le job existe
+    if (jobs && jobs.length > 0) {
+        // On annule le job
+        await agenda.cancel({
             name: jobName,
             'data.user.id': userId,
         });
-
-        // On vérifie que le job existe
-        if (jobs && jobs.length > 0) {
-            // On annule le job
-            await agenda.cancel({
-                name: jobName,
-                'data.user.id': userId,
-            });
-        }
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-        throw error;
     }
 }
 
@@ -113,15 +106,15 @@ const onboardingJob = [
     'user_share',
 ];
 
-export default async (id: number, selfDeactivation: boolean, author: User, reason: string = null, anonymizationRequested: boolean = false): Promise<User> => {
+export default async function deactivate(id: number, selfDeactivation: boolean, author: User, reason: string = null, anonymizationRequested: boolean = false): Promise<User> {
     if (!can(author).do('deactivate', 'user')) {
-        throw new ServiceError('deactivation_permission_failure', Error('Erreur de permission'));
+        throw new ServiceError('deactivation_permission_failure', new Error('Erreur de permission'));
     }
     let user: User;
     try {
         user = await findAndValidateUser(id);
     } catch (e) {
-        throw new ServiceError('user_search_failure', Error(e.message));
+        throw new ServiceError('user_search_failure', new Error(e.message));
     }
     const updatedUser = await deactivateUserWithTransaction(id, anonymizationRequested, user);
 
@@ -131,10 +124,9 @@ export default async (id: number, selfDeactivation: boolean, author: User, reaso
     await Promise.all(onboardingJob.map(async (jobName) => {
         try {
             await checkAndCancelJob(agenda, jobName, id);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
+        } catch {
+            // DO NOTHING
         }
     }));
     return updatedUser;
-};
+}

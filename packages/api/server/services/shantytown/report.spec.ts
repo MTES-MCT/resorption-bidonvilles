@@ -72,10 +72,7 @@ describe('shantytownService.report()', () => {
         mails.sendConfirmationOfTownReporting.rejects(new Error());
         try {
             await reportService(townData, fakeUser());
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-
+        } catch {
             expect.fail('should not have thrown an error');
         }
     });

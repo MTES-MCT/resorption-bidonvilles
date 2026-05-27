@@ -3,7 +3,7 @@ import ServiceError from '#server/errors/ServiceError';
 import { ActionRawComment } from '#root/types/resources/ActionCommentRaw.d';
 import { ActionEnrichedComment } from '#root/types/resources/ActionCommentEnriched.d';
 
-export default async (comment: ActionRawComment): Promise<ActionEnrichedComment> => {
+export default async function enrichCommentsAttachments(comment: ActionRawComment): Promise<ActionEnrichedComment> {
     try {
         let enrichedComment: ActionEnrichedComment | null = null;
         const { attachments, ...commentWithoutAttachments } = comment;
@@ -22,4 +22,4 @@ export default async (comment: ActionRawComment): Promise<ActionEnrichedComment>
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
-};
+}

@@ -4,7 +4,6 @@ import findAll from './findAll';
 import findNearby from './findNearby';
 import findOne from './findOne';
 import getClosureYearRange from './getClosureYearRange';
-import getComments from './_common/getComments';
 import getHistory from './getHistory';
 import getHistoryAtGivenDate from './getHistoryAtGivenDate';
 import getUsenameOf from './_common/getUsenameOf';
@@ -24,7 +23,6 @@ export default {
     findOne,
     fixClosedStatus,
     getClosureYearRange,
-    getComments,
     getHistory,
     getHistoryAtGivenDate,
     getUsenameOf,

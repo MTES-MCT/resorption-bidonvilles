@@ -24,9 +24,8 @@ export default async (data, createdBy: number = null): Promise<User> => {
         if (user.organization.type.uid === 'rectorat') {
             try {
                 await mattermostUtils.triggerNotifyNewUserFromRectorat(user);
-            } catch (error) {
-                // eslint-disable-next-line no-console
-                console.error(error);
+            } catch {
+                // DO NOTHING
             }
         }
 

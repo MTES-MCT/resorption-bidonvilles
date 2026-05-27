@@ -7,7 +7,7 @@ import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 import { EnrichedAnswer } from '#root/types/resources/AnswerEnriched.d';
 import { RawAnswer } from '#root/types/resources/AnswerRaw.d';
 
-export default async (questionId: number, transaction?: Transaction): Promise<EnrichedQuestion> => {
+export default async function enrichQuestion(questionId: number, transaction?: Transaction): Promise<EnrichedQuestion> {
     try {
         let enrichedQuestion: EnrichedQuestion | null = null;
         const question: RawQuestion = await questionModel.findOne(questionId, transaction);
@@ -45,4 +45,4 @@ export default async (questionId: number, transaction?: Transaction): Promise<En
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
-};
+}

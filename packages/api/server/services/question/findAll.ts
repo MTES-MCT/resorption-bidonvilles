@@ -5,7 +5,7 @@ import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 import { RawQuestion } from '#root/types/resources/QuestionRaw.d';
 import enrichQuestion from './common/enrichQuestion';
 
-export default async (transaction?: Transaction): Promise<EnrichedQuestion[]> => {
+export default async function findAll(transaction?: Transaction): Promise<EnrichedQuestion[]> {
     let questions: RawQuestion[];
     let enrichedQuestions: EnrichedQuestion[] = [];
     try {
@@ -25,4 +25,4 @@ export default async (transaction?: Transaction): Promise<EnrichedQuestion[]> =>
     }
 
     return enrichedQuestions;
-};
+}

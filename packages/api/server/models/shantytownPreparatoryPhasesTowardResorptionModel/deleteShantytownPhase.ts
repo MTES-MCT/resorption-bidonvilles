@@ -6,12 +6,12 @@ type Phase = {
     fk_preparatory_phase: string,
 };
 
-export default async (phase: Phase, argTransaction: Transaction = undefined): Promise<void> => {
+export default async function deleteShantytownPhase(phase: Phase, argTransaction: Transaction = undefined): Promise<void> {
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
 
     try {
-        const response = await sequelize.query(
+        const [result] = await sequelize.query(
             `DELETE FROM
                 shantytown_preparatory_phases_toward_resorption
              WHERE
@@ -26,7 +26,7 @@ export default async (phase: Phase, argTransaction: Transaction = undefined): Pr
                 },
             },
         );
-        const rowCount: number = response[0] as unknown as number;
+        const rowCount = result as unknown as number;
 
         if (rowCount === 0) {
             throw new Error(`La phase ${phase.fk_preparatory_phase} du site ${phase.fk_shantytown} est introuvable`);
@@ -41,4 +41,4 @@ export default async (phase: Phase, argTransaction: Transaction = undefined): Pr
         }
         throw error;
     }
-};
+}

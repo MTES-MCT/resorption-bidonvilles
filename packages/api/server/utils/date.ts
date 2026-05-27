@@ -116,6 +116,23 @@ function toTimestampSeconds(date: string | Date | null): number | null {
     return date.getTime() / 1000;
 }
 
+function normalizeDateToMidnight(date: Date | string): Date {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+}
+
+function isOutOfDate(date: Date | string, thresholdInMonths: number): boolean {
+    const now = new Date();
+    const targetDate = new Date(date);
+
+    const diffInMs = now.getTime() - targetDate.getTime();
+    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+    const diffInMonths = diffInDays / 30;
+
+    return diffInMonths >= thresholdInMonths;
+}
+
 export default {
     formatDate,
     substractWeek,
@@ -125,4 +142,6 @@ export default {
     getMonthDiffBetween,
     toTimestamp,
     toTimestampSeconds,
+    normalizeDateToMidnight,
+    isOutOfDate,
 };

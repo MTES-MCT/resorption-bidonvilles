@@ -1,7 +1,7 @@
 import shantytownModel from '#server/models/shantytownModel';
 import mattermostUtils from '#server/utils/mattermost';
 
-export default async (): Promise<{ shantytownLines: number, shantytownHistoryLines: number }> | null => {
+export default async function anonymizeOwners(): Promise<{ shantytownLines: number, shantytownHistoryLines: number }> | null {
     let result = {
         shantytownLines: 0,
         shantytownHistoryLines: 0,
@@ -19,4 +19,4 @@ export default async (): Promise<{ shantytownLines: number, shantytownHistoryLin
         return result;
     }
     return null;
-};
+}

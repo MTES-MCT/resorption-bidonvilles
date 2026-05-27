@@ -8,7 +8,7 @@ interface ShantytownParcelOwnerCreationResult {
     shantytown_parcel_owner_id: number;
 }
 
-export default async (user: AuthUser, shantytownId: number, owners: ParcelOwnerInsert[], argTransaction: Transaction | undefined = undefined): Promise<number[]> => {
+export default async function create(user: AuthUser, shantytownId: number, owners: ParcelOwnerInsert[], argTransaction: Transaction | undefined = undefined): Promise<number[]> {
     const transaction: Transaction = argTransaction ?? await sequelize.transaction();
 
     if (!owners || owners.length === 0) {
@@ -42,4 +42,4 @@ export default async (user: AuthUser, shantytownId: number, owners: ParcelOwnerI
     } catch (error) {
         throw new ServiceError('parcel_owner_creation_failed', error);
     }
-};
+}
