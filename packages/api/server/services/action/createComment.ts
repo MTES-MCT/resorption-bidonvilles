@@ -53,7 +53,7 @@ export default async function createComment(authorId: number, action: Action, co
 
     // on finalise
     try {
-        const [commentRow]: ActionRowComment[] = await fetchComments(null, [commentId], {}, transaction);
+        const [commentRow]: ActionRowComment[] = await fetchComments(undefined, [commentId], {}, transaction);
         comment = serializeComment(commentRow);
         await transaction.commit();
     } catch (error) {
@@ -65,9 +65,8 @@ export default async function createComment(authorId: number, action: Action, co
     // on tente d'envoyer une notification mattermost
     try {
         await sendMattermostNotification(action, comment);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // DO NOTHING
     }
 
     // On récupère les fichiers joints avec les liens signés
@@ -77,9 +76,8 @@ export default async function createComment(authorId: number, action: Action, co
     let numberOfObservers: number = 0;
     try {
         numberOfObservers = await sendMailNotifications(action, comment);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // DO NOTHING
     }
 
     return { comment: commentWithEnrichedAttachments, numberOfObservers };
