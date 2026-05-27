@@ -198,7 +198,7 @@ describe('services/answer.createAnswer()', () => {
                 fakeUser({ id: 2 }),
                 [],
             );
-        } catch (error) {
+        } catch {
             fail('Une exception a été lancée');
         }
     });
@@ -288,7 +288,7 @@ describe('services/answer.createAnswer()', () => {
                 answerAuthor,
                 [],
             );
-        } catch (error) {
+        } catch {
             fail('Une exception a été lancée');
         }
     });
