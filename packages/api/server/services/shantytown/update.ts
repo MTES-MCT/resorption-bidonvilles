@@ -195,7 +195,6 @@ async function updateShantytownData(user, shantytownId: number, payload, transac
     try {
         await shantytownModel.update(user, shantytownId, payload, transaction);
     } catch (error) {
-        await transaction.rollback();
         throw new ServiceError('insert_failed', error);
     }
 }
@@ -215,7 +214,6 @@ async function uploadDecreeAttachments(decreeAttachments: DecreeAttachments, sha
             existingAttachments,
         );
     } catch (error) {
-        await transaction.rollback();
         throw new ServiceError('upload_failed', error);
     }
 }
@@ -228,7 +226,6 @@ async function updateParcelOwners(user, shantytown, transaction) {
     try {
         await shantytownParcelOwnerService.update(user, shantytown, shantytown.owners, transaction);
     } catch (error) {
-        await transaction.rollback();
         throw new ServiceError('parcel_owner_update_failed', error);
     }
 }
@@ -254,7 +251,6 @@ async function updatePreparatoryPhases(user, shantytown, transaction) {
             transaction,
         );
     } catch (error) {
-        await transaction.rollback();
         throw new ServiceError('update_failed', error);
     }
 }
