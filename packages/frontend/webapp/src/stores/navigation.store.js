@@ -201,7 +201,7 @@ export const useNavigationStore = defineStore("navigation", {
 
             return itemsFilteredByPermission.map((item) => {
                 item.active =
-                    router.resolve(item.route).meta.navTab === currentNavTab;
+                    router.resolve(item.to).meta.navTab === currentNavTab;
                 return item;
             });
         },
