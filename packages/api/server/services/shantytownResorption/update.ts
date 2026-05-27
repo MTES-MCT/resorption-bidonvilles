@@ -110,13 +110,33 @@ function extractExistingPhases(result: ShantytownPreparatoryPhasesTowardResorpti
     }));
 }
 
-function buildUpdatedPhases(preparatoryPhasesTowardResorption, terminatedPreparatoryPhasesTowardResorption): SimplifiedPhase[] {
-    return preparatoryPhasesTowardResorption.map(phase => ({
-        preparatoryPhaseId: phase,
-        completedAt: terminatedPreparatoryPhasesTowardResorption[phase]
-            ? new Date(terminatedPreparatoryPhasesTowardResorption[phase]).toISOString()
-            : null,
-    }));
+function buildUpdatedPhases(
+    preparatoryPhasesTowardResorption: string[],
+    terminatedPreparatoryPhasesTowardResorption: Record<string, string>,
+): SimplifiedPhase[] {
+    return preparatoryPhasesTowardResorption.map((phase: string) => {
+        const dateValue = terminatedPreparatoryPhasesTowardResorption[phase];
+
+        if (!dateValue) {
+            return {
+                preparatoryPhaseId: phase,
+                completedAt: null,
+            };
+        }
+
+        const date = new Date(dateValue);
+        if (Number.isNaN(date.getTime())) {
+            return {
+                preparatoryPhaseId: phase,
+                completedAt: null,
+            };
+        }
+
+        return {
+            preparatoryPhaseId: phase,
+            completedAt: date.toISOString(),
+        };
+    });
 }
 
 function createAllPromises(differences: Differences, shantytownId: string, userId: number, transaction: Transaction) {
@@ -127,7 +147,13 @@ function createAllPromises(differences: Differences, shantytownId: string, userI
     ];
 }
 
-export default async function update(shantytownId: string, preparatoryPhasesTowardResorption, terminatedPreparatoryPhasesTowardResorption, user, argTransaction: Transaction = undefined) {
+export default async function update(
+    shantytownId: string,
+    preparatoryPhasesTowardResorption: string[],
+    terminatedPreparatoryPhasesTowardResorption: Record<string, string>,
+    user,
+    argTransaction: Transaction = undefined,
+) {
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
 
