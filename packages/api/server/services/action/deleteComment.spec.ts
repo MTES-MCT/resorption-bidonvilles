@@ -98,7 +98,8 @@ describe('services/action.deleteComment()', () => {
         fakeTestUser.id = 1; // Surcharge l'ID pour ne pas être le propriétaire du message
         try {
             await deleteActionComment(fakeTestUser, fakeAction().id, 1, deletionMessage);
-        } catch (error) {
+        } catch {
+            // DO NOTHING
         }
         expect(stubs.can).to.have.been.calledOnceWith(fakeTestUser);
         expect(stubs.do).to.have.been.calledOnceWith('moderate', 'data');
@@ -204,7 +205,8 @@ describe('services/action.deleteComment()', () => {
 
         try {
             await deleteActionComment(fakeTestUser, fakeAction().id, 1, deletionMessage);
-        } catch (error) {
+        } catch {
+            // DO NOTHING
         }
 
         expect(stubs.mails.sendUserCommentDeletion).to.have.been.calledOnce;

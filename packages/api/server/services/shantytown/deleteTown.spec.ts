@@ -39,7 +39,8 @@ describe('services/shantytown', () => {
                     }),
                     1,
                 );
-            } catch (error) {
+            } catch {
+                // DO NOTHING
             }
 
             expect(stubs.deleteShantytown).to.have.been.calledOnceWith(town.id);

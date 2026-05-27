@@ -62,6 +62,7 @@ describe('userService/deactivateInactiveUsers', () => {
         try {
             await deactivateInactiveUsers();
         } catch {
+            // DO NOTHING
         }
 
         expect(mails.sendInactiveUserDeactivationAlert).to.not.have.been.called;

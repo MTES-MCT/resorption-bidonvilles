@@ -100,7 +100,8 @@ describe('services/shantytown', () => {
         it('vérifie que l\'utilisateur a le droit de supprimer le commentaire', async () => {
             try {
                 await deleteCommentService(user, shantytownId, commentId, deletionMessage);
-            } catch (error) {
+            } catch {
+                // DO NOTHING
             }
             expect(stubs.can).to.have.been.calledOnceWith(user);
             expect(stubs.do).to.have.been.calledOnceWith('moderate', 'data');
@@ -208,7 +209,8 @@ describe('services/shantytown', () => {
 
             try {
                 await deleteCommentService(user, shantytownId, commentId, deletionMessage);
-            } catch (error) {
+            } catch {
+                // DO NOTHING
             }
 
             expect(stubs.mails.sendUserCommentDeletion).to.have.been.calledOnce;

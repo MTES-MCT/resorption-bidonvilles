@@ -50,7 +50,8 @@ describe('services/heatwave/get', () => {
     it('récupère les dates de début et de fin de la période de canicule en DB', async () => {
         try {
             await get();
-        } catch (error) {
+        } catch {
+            // DO NOTHING
         }
         expect(stubs.heatwaveModel.get).to.have.been.calledOnce;
     });

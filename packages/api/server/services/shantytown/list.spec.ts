@@ -54,7 +54,8 @@ describe('services/shantytown', () => {
             let shantytownsResponse;
             try {
                 shantytownsResponse = await listService(user);
-            } catch (error) {
+            } catch {
+                // DO NOTHING
             }
             expect(shantytownsResponse).to.be.eql(towns);
         });

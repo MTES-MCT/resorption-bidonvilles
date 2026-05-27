@@ -56,6 +56,7 @@ describe('services/action.getActionReport()', () => {
         try {
             await getCommentReport(user);
         } catch {
+            // DO NOTHING
         }
         expect(stubs.can).to.have.been.calledOnceWith(user);
         expect(stubs.do).to.have.been.calledOnceWith('export', 'action_comment');
