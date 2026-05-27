@@ -2,7 +2,7 @@
 import shantytownPreparatoryPhasesTowardResorptionModel from '#server/models/shantytownPreparatoryPhasesTowardResorptionModel';
 import { sequelize } from '#db/sequelize';
 import { Transaction } from 'sequelize';
-import { Differences, SimplifiedPhase } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
+import { Differences, SimplifiedPhase, ShantytownPreparatoryPhasesTowardResorption } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 
 function createPhaseEntry(phaseId: string, completedAt: string | null): SimplifiedPhase {
     return {
@@ -100,8 +100,8 @@ function createModifiedPhasesPromises(
     ));
 }
 
-function extractExistingPhases(result): SimplifiedPhase[] {
-    if (!result) {
+function extractExistingPhases(result: ShantytownPreparatoryPhasesTowardResorption[]): SimplifiedPhase[] {
+    if (!result?.length) {
         return [];
     }
     return result[0].preparatoryPhases.map(phase => ({
