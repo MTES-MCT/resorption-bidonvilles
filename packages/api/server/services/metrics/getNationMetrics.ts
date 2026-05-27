@@ -2,7 +2,6 @@
 import { NationMetricsRawData } from '#server/models/metricsModel/getNationData';
 import metricsModel from '#server/models/metricsModel';
 import ServiceError from '#server/errors/ServiceError';
-import getSince from '#server/services/shantytown/_common/getSince';
 import dateUtils from '#server/utils/date';
 import { NationMetrics } from '#root/types/resources/NationMetrics.d';
 import { NationMetricsList } from '#root/types/services/MetricsService.d';
@@ -46,16 +45,11 @@ function hasUnknownOrigin(row: NationMetricsRawData): boolean {
     return row.population_total === null || row.origins === null;
 }
 
-function isOutOfDate(inputDate: Date): boolean {
-    const updatedSitesInTheLastSixMonths = getSince(new Date(inputDate).getTime() / 1000);
-    return updatedSitesInTheLastSixMonths.months >= 6;
-}
-
 function incrementMetrics(metrics: NationMetrics['metrics'], row: NationMetricsRawData, period: 'from' | 'to', includeWater: boolean) {
     const population = row.population_total ?? 0;
     const isEuropean10Plus = isEuropeanOriginWith10Plus(row);
     const isUnknown = hasUnknownOrigin(row);
-    const isOld = isOutOfDate(row.input_date);
+    const isOld = dateUtils.isOutOfDate(row.input_date, 6);
 
     metrics.number_of_persons[period] += population;
     metrics.number_of_persons_european_10_and_over[period] += isEuropean10Plus ? population : 0;
