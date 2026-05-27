@@ -1,24 +1,20 @@
 function addColumnsTo(queryInterface, Sequelize, tableName, transaction) {
-    return Promise.all([
-        queryInterface.addColumn(
-            tableName,
-            'updated_without_any_change',
-            {
-                type: Sequelize.BOOLEAN,
-                defaultValue: false,
-                allowNull: false,
-            },
-            {
-                transaction,
-            },
-        ),
-    ]);
+    return queryInterface.addColumn(
+        tableName,
+        'updated_without_any_change',
+        {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+            allowNull: false,
+        },
+        {
+            transaction,
+        },
+    );
 }
 
 function removeColumnsFrom(queryInterface, tableName, transaction) {
-    return Promise.all([
-        queryInterface.removeColumn(tableName, 'updated_without_any_change', { transaction }),
-    ]);
+    return queryInterface.removeColumn(tableName, 'updated_without_any_change', { transaction });
 }
 
 async function addOrDeleteTableColumns(upOrDown, tableNames, queryInterface, Sequelize) {

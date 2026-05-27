@@ -3,7 +3,7 @@ import { Transaction } from 'sequelize';
 import ServiceError from '#server/errors/ServiceError';
 import { ParcelOwnerInsert, RawParcelOwner } from '#root/types/resources/ParcelOwner.d';
 
-export default async (owners: ParcelOwnerInsert[], transaction: Transaction | undefined = undefined): Promise<RawParcelOwner[]> => {
+export default async function update(owners: ParcelOwnerInsert[], transaction: Transaction | undefined = undefined): Promise<RawParcelOwner[]> {
     if (!owners || owners.length === 0) {
         throw new ServiceError('invalid_data', new Error('Au moins un propriétaire de parcelle doit être fourni'));
     }
@@ -59,4 +59,4 @@ export default async (owners: ParcelOwnerInsert[], transaction: Transaction | un
     } catch (error) {
         throw new ServiceError('parcel_owner_update_failed', new Error(error?.message));
     }
-};
+}

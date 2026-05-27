@@ -49,9 +49,8 @@ describe('services/blog/get', () => {
     it('récupère les dates de début et de fin de la période d\'affichage du badge en DB', async () => {
         try {
             await get();
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
+        } catch {
+            // DO NOTHING
         }
         expect(stubs.blogModel.get).to.have.been.calledOnce;
     });

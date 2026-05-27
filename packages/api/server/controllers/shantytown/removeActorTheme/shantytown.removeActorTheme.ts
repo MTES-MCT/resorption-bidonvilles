@@ -26,9 +26,7 @@ export default async (req, res, next) => {
         return next(error);
     }
 
-    const actor = actors
-        .map(shantytownActorModel.serializeActor)
-        .find(({ id }) => id === req.body.user.id);
+    const actor = actors.find(({ id }) => id === req.body.user.id);
 
     return res.status(200).send(actor);
 };

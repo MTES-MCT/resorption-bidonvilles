@@ -8,7 +8,7 @@ import { RawAnswer } from '#root/types/resources/AnswerRaw.d';
 import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 import { User } from '#root/types/resources/User.d';
 
-export default async (question: EnrichedQuestion, answer: RawAnswer, reason?: string): Promise<void> => {
+export default async function deleteAnswerService(question: EnrichedQuestion, answer: RawAnswer, reason?: string): Promise<void> {
     try {
         await deleteAnswer(answer.id);
     } catch (error) {
@@ -19,14 +19,13 @@ export default async (question: EnrichedQuestion, answer: RawAnswer, reason?: st
         let nationalAdmins: User[] = [];
         try {
             nationalAdmins = await getNationalAdmins();
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
+            // Erreur ignorée - l'envoi de mail continue sans les admins nationaux en copie
         }
 
         try {
             const fullUser = await userModel.findOne(answer.createdBy.id);
-            if (fullUser === null || fullUser.status !== 'active') {
+            if (fullUser?.status !== 'active') {
                 return;
             }
 
@@ -39,9 +38,8 @@ export default async (question: EnrichedQuestion, answer: RawAnswer, reason?: st
                 },
                 bcc: nationalAdmins,
             });
-        } catch (e) {
-            // eslint-disable-next-line no-console
-            console.error(e);
+        } catch {
+            // Erreur ignorée - l'envoi de mail ne doit pas bloquer la suppression
         }
     }
-};
+}

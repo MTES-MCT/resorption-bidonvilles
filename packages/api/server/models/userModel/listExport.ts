@@ -24,7 +24,7 @@ type UserListExportRow = {
     "Départements d'intervention": string[];
 };
 
-export default async (permission?: Permission): Promise<UserListExportRow[]> => {
+export default async function list(permission?: Permission): Promise<UserListExportRow[]> {
     try {
         const replacements = {};
 
@@ -108,7 +108,7 @@ export default async (permission?: Permission): Promise<UserListExportRow[]> => 
             LEFT JOIN roles_regular rr ON rr.role_id = u.fk_role_regular
             LEFT JOIN user_last_connection ulc ON ulc.fk_user = u.user_id
             WHERE u.anonymized_at IS NULL
-            ${where !== null ? `AND (${where})` : ''}
+            ${where === null ? '' : `AND (${where})`}
             ORDER BY
                 "Statut calculé",
                 used_at ASC,
@@ -118,9 +118,7 @@ export default async (permission?: Permission): Promise<UserListExportRow[]> => 
                 replacements,
             },
         );
-    } catch (error) {
-        // eslint-disable-next-line
-        console.error(error);
+    } catch {
         return [];
     }
-};
+}

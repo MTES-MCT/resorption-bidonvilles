@@ -1,12 +1,12 @@
 import ServiceError from '#server/errors/ServiceError';
-import update from '#server/models/questionModel/update';
+import updateModel from '#server/models/questionModel/update';
 import { UpdateQuestionInput } from '#server/models/questionModel/QuestionInput.d';
 import type { RawQuestion } from '#root/types/resources/QuestionRaw.d';
 
-export default async (questionId: number, question: UpdateQuestionInput, author: number): Promise<RawQuestion> => {
+export default async function update(questionId: number, question: UpdateQuestionInput, author: number): Promise<RawQuestion> {
     let questionResult: RawQuestion;
     try {
-        questionResult = await update(
+        questionResult = await updateModel(
             {
                 question_id: questionId,
                 question: question.question,
@@ -22,4 +22,4 @@ export default async (questionId: number, question: UpdateQuestionInput, author:
     }
 
     return questionResult;
-};
+}

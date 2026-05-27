@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { Transaction } from 'sequelize';
 
-export default async (ids: number[], transaction: Transaction = undefined): Promise<void> => {
+export default async function anonymizationRequest(ids: number[], transaction: Transaction = undefined): Promise<void> {
     await sequelize.query(
         `UPDATE
             users
@@ -18,4 +18,4 @@ export default async (ids: number[], transaction: Transaction = undefined): Prom
             transaction,
         },
     );
-};
+}

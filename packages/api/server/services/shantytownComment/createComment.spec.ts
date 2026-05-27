@@ -20,13 +20,11 @@ const sandbox = sinon.createSandbox();
 const stubs = {
     shantytownCommentModel: {
         create: sandbox.stub(),
+        findByShantytown: sandbox.stub(),
         findOne: sandbox.stub(),
     },
     shantytownCommentTagModel: {
         create: sandbox.stub(),
-    },
-    shantytownModel: {
-        getComments: sandbox.stub(),
     },
     userModel: {
         getShantytownWatchers: sandbox.stub(),
@@ -53,7 +51,6 @@ const stubs = {
 
 rewiremock('#server/models/shantytownCommentModel').with(stubs.shantytownCommentModel);
 rewiremock('#server/models/shantytownCommentTagModel').with(stubs.shantytownCommentTagModel);
-rewiremock('#server/models/shantytownModel').with(stubs.shantytownModel);
 rewiremock('#server/models/userModel').with(stubs.userModel);
 rewiremock('#server/services/attachment').with(stubs.attachment);
 rewiremock('#server/utils/mattermost').with(stubs.mattermostUtils);
@@ -185,7 +182,7 @@ describe.skip('services/shantytownComment.create', () => {
                 stubs.attachment.upload.resolves();
 
                 // getComments() retourne une liste de commentaires
-                stubs.shantytownModel.getComments
+                stubs.shantytownCommentModel.findByShantytown
                     .withArgs(input.user, { shantytown: [input.shantytown.id] })
                     .resolves(fakeCommentInput);
 
@@ -266,7 +263,7 @@ describe.skip('services/shantytownComment.create', () => {
 
         it('les pièces sont bien uploadées', async () => {
             const files = [fakeFile()];
-            stubs.shantytownModel.getComments.resolves({
+            stubs.shantytownCommentModel.findByShantytown.resolves({
                 1: [fakeCommentInput()],
             });
             stubs.userModel.getShantytownWatchers.resolves([]);
@@ -340,7 +337,7 @@ describe.skip('services/shantytownComment.create', () => {
             const nativeError = new Error('une erreur');
             beforeEach(() => {
                 dependencies.triggerNewComment.rejects(nativeError);
-                dependencies.getComments.resolves({ 1: [] });
+                dependencies.findByShantytown.resolves({ 1: [] });
                 dependencies.getShantytownWatchers.resolves([]);
             });
 
@@ -370,7 +367,7 @@ describe.skip('services/shantytownComment.create', () => {
             const user = fakeUser();
             const nativeError = new Error('une erreur');
             beforeEach(() => {
-                dependencies.getComments
+                dependencies.findByShantytown
                     .withArgs(user, [1])
                     .rejects(nativeError);
 

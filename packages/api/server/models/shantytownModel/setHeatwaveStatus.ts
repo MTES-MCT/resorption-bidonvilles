@@ -1,6 +1,6 @@
 import { sequelize } from '#db/sequelize';
 
-export default async (shantytownId, heatwaveStatus) => {
+export default async function setHeatwaveStatus(shantytownId, heatwaveStatus) {
     sequelize.query(
         `UPDATE shantytowns
         SET 
@@ -14,4 +14,4 @@ export default async (shantytownId, heatwaveStatus) => {
 
         },
     );
-};
+}

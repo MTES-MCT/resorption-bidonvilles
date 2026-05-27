@@ -6,7 +6,7 @@ import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { ParcelOwnerInsert, RawParcelOwner } from '#root/types/resources/ParcelOwner.d';
 
-export default async (user: AuthUser, shantytown: Shantytown, owners: ParcelOwnerInsert[], argTransaction: Transaction | undefined = undefined): Promise<void> => {
+export default async function update(user: AuthUser, shantytown: Shantytown, owners: ParcelOwnerInsert[], argTransaction: Transaction | undefined = undefined): Promise<void> {
     let transaction: Transaction = argTransaction;
     transaction ??= await sequelize.transaction();
 
@@ -80,4 +80,4 @@ export default async (user: AuthUser, shantytown: Shantytown, owners: ParcelOwne
         }
         throw new ServiceError('parcel_owner_update_failed', new Error(error?.message));
     }
-};
+}

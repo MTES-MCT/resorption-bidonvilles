@@ -3,7 +3,7 @@ import userModel from '#server/models/userModel/index';
 import ServiceError from '#server/errors/ServiceError';
 import { User } from '#root/types/resources/User.d';
 
-export default async (ids: number[]): Promise<User> => {
+export default async function anonymizationRequest(ids: number[]): Promise<User> {
     const transaction = await sequelize.transaction();
 
     try {
@@ -24,4 +24,4 @@ export default async (ids: number[]): Promise<User> => {
         throw new ServiceError('refresh_failure', error);
     }
     return user;
-};
+}

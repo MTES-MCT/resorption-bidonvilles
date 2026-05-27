@@ -3,7 +3,7 @@ import ServiceError from '#server/errors/ServiceError';
 import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
 import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
 
-export default async (comment: ShantytownRawComment): Promise<ShantytownEnrichedComment> => {
+export default async function enrichCommentsAttachments(comment: ShantytownRawComment): Promise<ShantytownEnrichedComment> {
     try {
         let enrichedComment: ShantytownEnrichedComment | null = null;
         const { attachments, ...commentWithoutAttachments } = comment;
@@ -22,4 +22,4 @@ export default async (comment: ShantytownRawComment): Promise<ShantytownEnriched
     } catch (error) {
         throw new ServiceError('fetch_failed', error);
     }
-};
+}

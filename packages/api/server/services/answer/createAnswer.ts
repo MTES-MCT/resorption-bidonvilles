@@ -23,7 +23,7 @@ export type CreateAnswerServiceResponse = {
     subscribed: boolean,
 };
 
-export default async (answer: AnswerData, question: EnrichedQuestion, author: User, files: Express.Multer.File[]): Promise<CreateAnswerServiceResponse> => {
+export default async function createAnswer(answer: AnswerData, question: EnrichedQuestion, author: User, files: Express.Multer.File[]): Promise<CreateAnswerServiceResponse> {
     // on démarre une transaction
     const transaction = await sequelize.transaction();
 
@@ -108,9 +108,8 @@ export default async (answer: AnswerData, question: EnrichedQuestion, author: Us
                 });
             }),
         );
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // Erreur ignorée - l'envoi de notifications ne doit pas bloquer la création de la réponse
     }
 
     // on essaie d'abonner l'auteur de la réponse à la question
@@ -120,13 +119,12 @@ export default async (answer: AnswerData, question: EnrichedQuestion, author: Us
             await userQuestionSubscriptionModel.createSubscription(author.id, question.id);
             subscribed = true;
         }
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // Erreur ignorée - l'abonnement ne doit pas bloquer la création de la réponse
     }
 
     return {
         answer: enrichedAnswer,
         subscribed,
     };
-};
+}

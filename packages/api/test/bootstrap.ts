@@ -1,4 +1,5 @@
 import '../module_alias';
+import { randomInt, randomBytes } from 'node:crypto';
 
 /**
  * A set of functions that can generate random values of a certain type
@@ -10,7 +11,7 @@ const generators = {
         return new Date();
     },
     string() {
-        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        return randomBytes(16).toString('hex');
     },
     stringdate() {
         return (new Date()).toString();
@@ -31,10 +32,10 @@ const generators = {
         return () => { };
     },
     number() {
-        return Math.round(Math.random() * 1989);
+        return randomInt(0, 1990);
     },
     boolean() {
-        return Math.round(Math.random()) === 1;
+        return randomInt(0, 2) === 1;
     },
 };
 
@@ -48,7 +49,7 @@ const generators = {
 function getRandomValue(types) {
     const values = types.map(type => generators[type]());
 
-    return values[Math.round(Math.random() * (values.length - 1))];
+    return values[randomInt(0, values.length)];
 }
 
 /**
@@ -59,7 +60,7 @@ function getRandomValue(types) {
  * @returns {Array.<string>}
  */
 function getAllTypesOtherThan(types) {
-    return Object.keys(generators).filter(type => types.indexOf(type) === -1);
+    return Object.keys(generators).filter(type => !types.includes(type));
 }
 
 /**
@@ -76,7 +77,7 @@ function getAllTypesOtherThan(types) {
  *
  * @returns {Object|Object.<Function>} Either your value, or a "not" function
  */
-global.generate = (types) => {
+globalThis.generate = (types) => {
     if (types === undefined) {
         return {
             not(argTypes) {

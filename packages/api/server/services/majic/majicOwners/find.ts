@@ -10,7 +10,7 @@ import config from '#server/config';
 import { RawParcel } from '#server/models/majicModel/findParcel/RawParcel.d';
 import { RawOwner } from '#server/models/majicModel/findOwners/RawOwner.d';
 
-export default async (parcelId: string, departementId: string, user: AuthUser) => {
+export default async function findMajicOwners(parcelId: string, departementId: string, user: AuthUser) {
     if (!permissionUtils.can(user).do('access', 'land_registry').on(
         { type: 'departement', departement: { code: departementId } } as Departement,
     )) {
@@ -87,4 +87,4 @@ export default async (parcelId: string, departementId: string, user: AuthUser) =
         // eslint-disable-next-line no-console
         console.error(e);
     }
-};
+}

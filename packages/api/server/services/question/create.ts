@@ -17,7 +17,7 @@ type AuthorData = {
 
 const { testEmail } = config;
 
-export default async (question: QuestionInput, author: AuthorData, files: Express.Multer.File[]): Promise<EnrichedQuestion> => {
+export default async function create(question: QuestionInput, author: AuthorData, files: Express.Multer.File[]): Promise<EnrichedQuestion> {
     const transaction = await sequelize.transaction();
     let questionId: number;
 
@@ -65,9 +65,8 @@ export default async (question: QuestionInput, author: AuthorData, files: Expres
     // on insère l'abonnement pour l'auteur de la question
     try {
         await userQuestionSubscriptionModel.createSubscription(author.id, questionId);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // Erreur ignorée - l'abonnement ne doit pas bloquer la création de la question
     }
 
     // on notifie tous les utilisateurs concernés
@@ -81,10 +80,9 @@ export default async (question: QuestionInput, author: AuthorData, files: Expres
                 },
             })),
         );
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // Erreur ignorée - l'envoi de notifications ne doit pas bloquer la création de la question
     }
 
     return enrichedQuestion;
-};
+}

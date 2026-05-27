@@ -6,7 +6,7 @@ import permissionUtils from '#server/utils/permission';
 import dateUtils from '#server/utils/date';
 import ServiceError from '#server/errors/ServiceError';
 import { Location } from '#server/models/geoModel/Location.d';
-import deleteComment from '#server/models/actionModel/deleteComment/deleteComment';
+import deleteCommentFromModel from '#server/models/actionModel/deleteComment/deleteComment';
 import Action, { Comment } from '#root/types/resources/Action.d';
 import { ActionRawComment } from '#root/types/resources/ActionCommentRaw.d';
 import { ActionEnrichedComment } from '#root/types/resources/ActionCommentEnriched.d';
@@ -15,7 +15,7 @@ import enrichCommentsAttachments from './enrichCommentsAttachments';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 
-export default async (user, actionId, commentId, deletionMessage): Promise<{ comments: ActionEnrichedComment[] }> => {
+export default async function deleteComment(user, actionId, commentId, deletionMessage): Promise<{ comments: ActionEnrichedComment[] }> {
     let actions: Action[];
     try {
         actions = await actionModel.fetch(user, [actionId]);
@@ -23,7 +23,7 @@ export default async (user, actionId, commentId, deletionMessage): Promise<{ com
         throw new ServiceError('fetch_failed', error);
     }
 
-    const comment: Comment = actions[0].comments.find(({ id }) => id === parseInt(commentId, 10));
+    const comment: Comment = actions[0].comments.find(({ id }) => id === Number.parseInt(commentId, 10));
 
     if (comment === undefined) {
         throw new ServiceError('fetch_failed', new Error('Le commentaire à supprimer n\'a pas été retrouvé en base de données'));
@@ -57,7 +57,7 @@ export default async (user, actionId, commentId, deletionMessage): Promise<{ com
     }
 
     try {
-        await deleteComment(commentId);
+        await deleteCommentFromModel(commentId);
     } catch (error) {
         throw new ServiceError('delete_failed', error);
     }
@@ -100,7 +100,7 @@ export default async (user, actionId, commentId, deletionMessage): Promise<{ com
     // on retourne la liste mise à jour des commentaires de l'action
     let commentsWithEnrichedAttachments: ActionEnrichedComment[] = [];
     try {
-        const rawComments: ActionRawComment[] = actions[0].comments.filter(({ id }) => id !== parseInt(commentId, 10));
+        const rawComments: ActionRawComment[] = actions[0].comments.filter(({ id }) => id !== Number.parseInt(commentId, 10));
         commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => enrichCommentsAttachments(rawComment)));
     } catch (error) {
         // eslint-disable-next-line no-console
@@ -110,4 +110,4 @@ export default async (user, actionId, commentId, deletionMessage): Promise<{ com
     return {
         comments: commentsWithEnrichedAttachments,
     };
-};
+}

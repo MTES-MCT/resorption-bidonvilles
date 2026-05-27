@@ -8,14 +8,19 @@ import resetOperators from './resetOperators';
 import resetShantytowns from './resetShantytowns';
 import resetTopics from './resetTopics';
 
-export default async function resetAsideData(id: number, transaction: Transaction): Promise<void> {
-    await Promise.all([
+export default async function resetAsideData(id: number, canWriteFinances: boolean, transaction: Transaction): Promise<void> {
+    const promises = [
         resetAddresses(id, transaction),
         resetManagers(id, transaction),
         resetMetrics(id, transaction),
         resetOperators(id, transaction),
         resetShantytowns(id, transaction),
         resetTopics(id, transaction),
-        resetFinances(id, transaction),
-    ]);
+    ];
+
+    if (canWriteFinances) {
+        promises.push(resetFinances(id, transaction));
+    }
+
+    await Promise.all(promises);
 }

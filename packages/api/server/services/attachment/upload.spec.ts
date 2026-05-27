@@ -40,22 +40,16 @@ import upload from './upload';
 rewiremock.disable();
 
 describe.skip('services/attachment/upload', () => {
-    // let upload;
-
     const sharpStubs = {
         resize: null,
         toBuffer: null,
     };
     beforeEach(async () => {
-        // rewiremock.enable();
-        // ({ default: upload } = await rewiremock.module(() => import('./upload')));
-
         sharpStubs.resize = sandbox.stub().returns(sharpStubs);
         sharpStubs.toBuffer = sandbox.stub();
         sharp.returns(sharpStubs);
     });
     afterEach(() => {
-        // rewiremock.disable();
         sandbox.reset();
     });
 
@@ -90,7 +84,7 @@ describe.skip('services/attachment/upload', () => {
 
     it('les paramètres d\'envoi vers S3 (nom du bucket, ACL, .) sont corrects pour chaque fichier envoyé', async () => {
         const file = fakeFile({
-            buffer: global.generate('string'),
+            buffer: globalThis.generate('string'),
         });
         await upload('shantytown_comment', 42, 35, [file]);
 

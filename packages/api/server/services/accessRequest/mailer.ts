@@ -109,9 +109,9 @@ export default {
                 variables: {
                     activationUrl: activationLink,
                     activationUrlExpDate: dateToString(expiracyDate, true),
-                    hoursBeforeExpirationDate: hoursBeforeExpirationDate !== undefined
-                        ? `${hoursBeforeExpirationDate} heures`
-                        : undefined,
+                    hoursBeforeExpirationDate: hoursBeforeExpirationDate === undefined
+                        ? undefined
+                        : `${hoursBeforeExpirationDate} heures`,
                 },
             });
         },

@@ -4,7 +4,7 @@ import { AuthUser } from '#server/middlewares/authMiddleware';
 import permissionUtils from '#server/utils/permission';
 import { Departement } from '#server/models/geoModel/Location.d';
 
-export default async (departementId: string, user: AuthUser) => {
+export default async function getDataYear(departementId: string, user: AuthUser) {
     if (!permissionUtils.can(user).do('access', 'land_registry').on(
         { type: 'departement', departement: { code: departementId } } as Departement,
     )) {
@@ -20,4 +20,4 @@ export default async (departementId: string, user: AuthUser) => {
         throw new ServiceError('fetch_error', new Error(`Une erreur est survenue lors de la récupération du millésime du registre foncier: ${e}`));
     }
     return majicYear;
-};
+}

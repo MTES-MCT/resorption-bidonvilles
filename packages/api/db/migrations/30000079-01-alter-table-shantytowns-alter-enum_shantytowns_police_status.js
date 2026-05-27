@@ -1,12 +1,10 @@
 function addValueFromEnumShantytownPoliceStatus(queryInterface, tableName, transaction) {
-    return Promise.all([
-        queryInterface.sequelize.query(
-            `ALTER TYPE "enum_${tableName}_police_status" ADD VALUE 'refused' ;`,
-            {
-                transaction,
-            },
-        ),
-    ]);
+    return queryInterface.sequelize.query(
+        `ALTER TYPE "enum_${tableName}_police_status" ADD VALUE 'refused' ;`,
+        {
+            transaction,
+        },
+    );
 }
 
 

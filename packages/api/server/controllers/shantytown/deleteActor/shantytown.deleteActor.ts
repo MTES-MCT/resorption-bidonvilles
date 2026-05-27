@@ -35,6 +35,6 @@ export default async (req, res, next) => {
     }
 
     return res.status(200).send({
-        actors: actors.map(shantytownActorModel.serializeActor),
+        actors,
     });
 };

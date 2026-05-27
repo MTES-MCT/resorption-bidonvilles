@@ -242,7 +242,7 @@ describe('userService.deactivate()', () => {
         try {
             await deactivateUser(42, true, user);
             expect.fail('should have thrown an error');
-        } catch (e) {
+        } catch {
             expect(transaction.rollback).to.have.been.called;
         }
     });

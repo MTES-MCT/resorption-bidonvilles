@@ -1,8 +1,8 @@
+/* eslint-disable no-param-reassign */
 import { NationMetricsRawData } from '#server/models/metricsModel/getNationData';
 import metricsModel from '#server/models/metricsModel';
 import ServiceError from '#server/errors/ServiceError';
-import moment from 'moment';
-import getSince from '#server/services/shantytown/_common/getSince';
+import dateUtils from '#server/utils/date';
 import { NationMetrics } from '#root/types/resources/NationMetrics.d';
 import { NationMetricsList } from '#root/types/services/MetricsService.d';
 import { User } from '#root/types/resources/User.d';
@@ -33,7 +33,153 @@ const baseMetrics: (metricsLevel: 'nation' | 'region' | 'departement', metricsUi
     children: [],
 });
 
-export default async (user: User, argFrom: Date, argTo: Date):Promise<NationMetricsList> => {
+function isEuropeanOriginWith10Plus(row: NationMetricsRawData): boolean {
+    return row.population_total >= 10
+        && row.origins !== null
+        && Array.isArray(row.origins)
+        && row.origins.length === 1
+        && row.origins.includes('european');
+}
+
+function hasUnknownOrigin(row: NationMetricsRawData): boolean {
+    return row.population_total === null || row.origins === null;
+}
+
+function incrementMetrics(metrics: NationMetrics['metrics'], row: NationMetricsRawData, period: 'from' | 'to', includeWater: boolean) {
+    const population = row.population_total ?? 0;
+    const isEuropean10Plus = isEuropeanOriginWith10Plus(row);
+    const isUnknown = hasUnknownOrigin(row);
+    const isOld = dateUtils.isOutOfDate(row.input_date, 6);
+
+    metrics.number_of_persons[period] += population;
+    metrics.number_of_persons_european_10_and_over[period] += isEuropean10Plus ? population : 0;
+    metrics.number_of_towns[period] += 1;
+    metrics.number_of_towns_european_10_and_over[period] += isEuropean10Plus ? 1 : 0;
+    metrics.number_of_towns_unknown_origin[period] += isUnknown ? 1 : 0;
+    metrics.number_of_towns_out_of_date[period] += isOld ? 1 : 0;
+
+    if (includeWater && row.access_to_water) {
+        metrics.number_of_towns_with_water += 1;
+        metrics.number_of_persons_with_water += population;
+    }
+}
+
+// eslint-disable-next-line no-param-reassign
+function ensureRegionExists(hashRegions: NationMetricsObject, row: NationMetricsRawData) {
+    if (!hashRegions[row.region_code]) {
+        hashRegions[row.region_code] = baseMetrics('region', row.region_code, row.region_name);
+    }
+}
+
+// eslint-disable-next-line no-param-reassign
+function ensureDepartementExists(hashRegions: NationMetricsObject, hashDepartements: HashObject, row: NationMetricsRawData) {
+    if (hashDepartements[row.departement_code] === undefined) {
+        hashDepartements[row.departement_code] = hashRegions[row.region_code].children.length;
+        hashRegions[row.region_code].children.push(baseMetrics('departement', row.departement_code, row.departement_name));
+    }
+}
+
+function processRowForPeriod(
+    row: NationMetricsRawData,
+    period: 'from' | 'to',
+    franceData: NationMetrics,
+    metropoleData: NationMetrics,
+    outremerData: NationMetrics,
+    hashRegions: NationMetricsObject,
+    hashDepartements: HashObject,
+) {
+    const includeWater = period === 'to' && row.closed_at === null;
+
+    // Données nationales
+    incrementMetrics(franceData.metrics, row, period, includeWater);
+
+    // Données outremer/métropole
+    if (row.is_oversea) {
+        incrementMetrics(outremerData.metrics, row, period, includeWater);
+    } else {
+        incrementMetrics(metropoleData.metrics, row, period, includeWater);
+    }
+
+    // Données région
+    ensureRegionExists(hashRegions, row);
+    incrementMetrics(hashRegions[row.region_code].metrics, row, period, includeWater);
+
+    // Données département
+    ensureDepartementExists(hashRegions, hashDepartements, row);
+    const departementMetrics = hashRegions[row.region_code].children[hashDepartements[row.departement_code]].metrics;
+    incrementMetrics(departementMetrics, row, period, includeWater);
+}
+
+const OUTREMER_REGION_CODES = new Set(['01', '02', '03', '04', '06']);
+
+function isOutremerRegion(regionCode: string): boolean {
+    return OUTREMER_REGION_CODES.has(regionCode);
+}
+
+function buildChildrenHierarchy(
+    franceData: NationMetrics,
+    metropoleData: NationMetrics,
+    outremerData: NationMetrics,
+    regionData: NationMetrics[],
+) {
+    franceData.children = regionData.map((regionMetric) => {
+        if (isOutremerRegion(regionMetric.uid)) {
+            return regionMetric.children[0];
+        }
+        return regionMetric;
+    });
+
+    metropoleData.children = regionData.filter(el => !isOutremerRegion(el.uid));
+    outremerData.children = regionData
+        .filter(el => isOutremerRegion(el.uid))
+        .map(regionMetric => regionMetric.children[0]);
+}
+
+function getUserRegionCodes(user: User): string[] {
+    return Object.keys(user.permissions.shantytown.list.allowed_on)
+        .flatMap(key => user.permissions.shantytown.list.allowed_on[key].reduce((acc, location) => {
+            if (location.region?.code) {
+                acc.push(location.region.code);
+            }
+            return acc;
+        }, []));
+}
+
+function determineUserTerritoryAccess(user: User): { hasMetropole: boolean; hasOutremer: boolean } {
+    if (user.permissions.shantytown.list.allowed_on_national) {
+        return { hasMetropole: true, hasOutremer: true };
+    }
+
+    const regionCodes = getUserRegionCodes(user);
+    return {
+        hasOutremer: regionCodes.some(code => isOutremerRegion(code)),
+        hasMetropole: regionCodes.some(code => !isOutremerRegion(code)),
+    };
+}
+
+function filterMetricsByPermissions(
+    franceData: NationMetrics,
+    metropoleData: NationMetrics,
+    outremerData: NationMetrics,
+    hasMetropole: boolean,
+    hasOutremer: boolean,
+): NationMetricsList {
+    if (hasMetropole && hasOutremer) {
+        return [franceData, metropoleData, outremerData];
+    }
+
+    if (hasMetropole) {
+        return metropoleData.children;
+    }
+
+    if (hasOutremer) {
+        return outremerData.children;
+    }
+
+    return [];
+}
+
+export default async function getNationMetrics(user: User, argFrom: Date, argTo: Date): Promise<NationMetricsList> {
     const franceData = baseMetrics('nation', 'france', 'France entière');
     const metropoleData = baseMetrics('nation', 'metropole', 'Hexagone');
     const outremerData = baseMetrics('nation', 'outremer', 'Outre-mer');
@@ -48,210 +194,42 @@ export default async (user: User, argFrom: Date, argTo: Date):Promise<NationMetr
         throw new ServiceError('fetch_failed', error);
     }
 
-    const from = moment(argFrom).set({
-        hour: 0, minute: 0, second: 0, millisecond: 0,
-    });
+    const from = dateUtils.normalizeDateToMidnight(argFrom);
 
-    const to = moment(argTo).set({
-        hour: 0, minute: 0, second: 0, millisecond: 0,
-    });
-
+    const to = dateUtils.normalizeDateToMidnight(argTo);
 
     data.forEach((row, index) => {
-        let previousInputDate = null;
-
-        const inputDate = moment(row.input_date).set({
-            hour: 0, minute: 0, second: 0, millisecond: 0,
-        });
-        if (index !== 0) {
-            previousInputDate = moment(data[index - 1].input_date).set({
-                hour: 0, minute: 0, second: 0, millisecond: 0,
-            });
-        }
-        const knownSince = moment(row.known_since).set({
-            hour: 0, minute: 0, second: 0, millisecond: 0,
-        });
+        const inputDate = dateUtils.normalizeDateToMidnight(row.input_date);
+        const previousInputDate = index === 0 ? null : dateUtils.normalizeDateToMidnight(data[index - 1].input_date);
+        const knownSince = dateUtils.normalizeDateToMidnight(row.known_since);
 
         const isMostRecent = index === 0 || row.shantytown_id !== data[index - 1].shantytown_id;
         const isMostAncient = data[index + 1]?.shantytown_id !== row.shantytown_id;
 
-        const incrementTo = (
+        const shouldIncrementTo = (
             (inputDate <= to && (isMostRecent || previousInputDate > to))
-            || (isMostAncient && inputDate > to));
+            || (isMostAncient && inputDate > to)
+        );
 
-
-        const incrementFrom = (
+        const shouldIncrementFrom = (
             (inputDate <= from && (isMostRecent || previousInputDate > from))
-            || (isMostAncient && inputDate > from && knownSince < from));
+            || (isMostAncient && inputDate > from && knownSince < from)
+        );
 
-        if (incrementTo && row.closed_at === null) {
-            const updatedSitesInTheLastSixMonths = getSince(new Date(row.input_date).getTime() / 1000);
-            // on incrémente la donnée nationale
-            franceData.metrics.number_of_persons.to += row.population_total ?? 0;
-            franceData.metrics.number_of_persons_european_10_and_over.to += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? row.population_total : 0;
-            franceData.metrics.number_of_towns.to += 1;
-            franceData.metrics.number_of_towns_european_10_and_over.to += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? 1 : 0;
-            franceData.metrics.number_of_towns_unknown_origin.to += row.population_total === null || row.origins === null ? 1 : 0;
-            franceData.metrics.number_of_towns_out_of_date.to += updatedSitesInTheLastSixMonths.months >= 6 ? 1 : 0;
-            if (row.access_to_water) {
-                franceData.metrics.number_of_towns_with_water += 1;
-                franceData.metrics.number_of_persons_with_water += row.population_total ?? 0;
-            }
-            // on incrémente la donnée outremer
-            if (row.is_oversea) {
-                outremerData.metrics.number_of_persons.to += row.population_total ?? 0;
-                outremerData.metrics.number_of_persons_european_10_and_over.to += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? row.population_total : 0;
-                outremerData.metrics.number_of_towns.to += 1;
-                outremerData.metrics.number_of_towns_european_10_and_over.to += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? 1 : 0;
-                outremerData.metrics.number_of_towns_unknown_origin.to += row.population_total === null || row.origins === null ? 1 : 0;
-                outremerData.metrics.number_of_towns_out_of_date.to += updatedSitesInTheLastSixMonths.months >= 6 ? 1 : 0;
-                if (row.access_to_water) {
-                    outremerData.metrics.number_of_towns_with_water += 1;
-                    outremerData.metrics.number_of_persons_with_water += row.population_total ?? 0;
-                }
-            } else {
-                // on incrémente la donnée métropole
-                metropoleData.metrics.number_of_persons.to += row.population_total ?? 0;
-                metropoleData.metrics.number_of_persons_european_10_and_over.to += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? row.population_total : 0;
-                metropoleData.metrics.number_of_towns.to += 1;
-                metropoleData.metrics.number_of_towns_european_10_and_over.to += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? 1 : 0;
-                metropoleData.metrics.number_of_towns_unknown_origin.to += row.population_total === null || row.origins === null ? 1 : 0;
-                metropoleData.metrics.number_of_towns_out_of_date.to += updatedSitesInTheLastSixMonths.months >= 6 ? 1 : 0;
-                if (row.access_to_water) {
-                    metropoleData.metrics.number_of_towns_with_water += 1;
-                    metropoleData.metrics.number_of_persons_with_water += row.population_total ?? 0;
-                }
-            }
-
-
-            // on incrémente la donnée région
-            if (!hashRegions[row.region_code]) {
-                hashRegions[row.region_code] = baseMetrics('region', row.region_code, row.region_name);
-            }
-            hashRegions[row.region_code].metrics.number_of_persons.to += row.population_total ?? 0;
-            hashRegions[row.region_code].metrics.number_of_persons_european_10_and_over.to += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? row.population_total : 0;
-            hashRegions[row.region_code].metrics.number_of_towns.to += 1;
-            hashRegions[row.region_code].metrics.number_of_towns_out_of_date.to += updatedSitesInTheLastSixMonths.months >= 6 ? 1 : 0;
-            if (row.access_to_water) {
-                hashRegions[row.region_code].metrics.number_of_towns_with_water += 1;
-                hashRegions[row.region_code].metrics.number_of_persons_with_water += row.population_total ?? 0;
-            }
-
-            // on incrémente la donnée département
-            if (hashDepartements[row.departement_code] === undefined) {
-                hashDepartements[row.departement_code] = hashRegions[row.region_code].children.length;
-                hashRegions[row.region_code].children.push(baseMetrics('departement', row.departement_code, row.departement_name));
-            }
-            hashRegions[row.region_code].children[hashDepartements[row.departement_code]].metrics.number_of_persons.to += row.population_total ?? 0;
-            hashRegions[row.region_code].children[hashDepartements[row.departement_code]].metrics.number_of_persons_european_10_and_over.to += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? row.population_total : 0;
-            hashRegions[row.region_code].children[hashDepartements[row.departement_code]].metrics.number_of_towns.to += 1;
-            hashRegions[row.region_code].children[hashDepartements[row.departement_code]].metrics.number_of_towns_out_of_date.to += updatedSitesInTheLastSixMonths.months >= 6 ? 1 : 0;
-            if (row.access_to_water) {
-                hashRegions[row.region_code].children[hashDepartements[row.departement_code]].metrics.number_of_towns_with_water += 1;
-                hashRegions[row.region_code].children[hashDepartements[row.departement_code]].metrics.number_of_persons_with_water += row.population_total ?? 0;
-            }
+        if (shouldIncrementTo && row.closed_at === null) {
+            processRowForPeriod(row, 'to', franceData, metropoleData, outremerData, hashRegions, hashDepartements);
         }
 
-        if (incrementFrom) {
-            const updatedSitesInTheLastSixMonths = getSince(new Date(row.input_date).getTime() / 1000);
-            // on incrémente la donnée nationale
-            franceData.metrics.number_of_persons.from += row.population_total ?? 0;
-            franceData.metrics.number_of_persons_european_10_and_over.from += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? row.population_total : 0;
-            franceData.metrics.number_of_towns.from += 1;
-            franceData.metrics.number_of_towns_european_10_and_over.from += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? 1 : 0;
-            franceData.metrics.number_of_towns_unknown_origin.from += row.population_total === null || row.origins === null ? 1 : 0;
-            franceData.metrics.number_of_towns_out_of_date.from += updatedSitesInTheLastSixMonths.months >= 6 ? 1 : 0;
-            // on incrémente la donnée outremer
-            if (row.is_oversea) {
-                outremerData.metrics.number_of_persons.from += row.population_total ?? 0;
-                outremerData.metrics.number_of_persons_european_10_and_over.from += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.includes('european') ? row.population_total : 0;
-                outremerData.metrics.number_of_towns.from += 1;
-                outremerData.metrics.number_of_towns_european_10_and_over.from += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.includes('european') ? 1 : 0;
-                outremerData.metrics.number_of_towns_unknown_origin.from += row.population_total === null || row.origins === null ? 1 : 0;
-                outremerData.metrics.number_of_towns_out_of_date.from += updatedSitesInTheLastSixMonths.months >= 6 ? 1 : 0;
-            } else {
-                // on incrémente la donnée métropole
-                metropoleData.metrics.number_of_persons.from += row.population_total ?? 0;
-                metropoleData.metrics.number_of_persons_european_10_and_over.from += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? row.population_total : 0;
-                metropoleData.metrics.number_of_towns.from += 1;
-                metropoleData.metrics.number_of_towns_european_10_and_over.from += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? 1 : 0;
-                metropoleData.metrics.number_of_towns_unknown_origin.from += row.population_total === null || row.origins === null ? 1 : 0;
-                metropoleData.metrics.number_of_towns_out_of_date.from += updatedSitesInTheLastSixMonths.months >= 6 ? 1 : 0;
-            }
-
-            // on incrémente la donnée région
-            if (!hashRegions[row.region_code]) {
-                hashRegions[row.region_code] = baseMetrics('region', row.region_code, row.region_name);
-            }
-            hashRegions[row.region_code].metrics.number_of_persons.from += row.population_total ?? 0;
-            hashRegions[row.region_code].metrics.number_of_persons_european_10_and_over.from += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? row.population_total : 0;
-            hashRegions[row.region_code].metrics.number_of_towns.from += 1;
-            hashRegions[row.region_code].metrics.number_of_towns_european_10_and_over.from += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? 1 : 0;
-            hashRegions[row.region_code].metrics.number_of_towns_unknown_origin.from += row.population_total === null || row.origins === null ? 1 : 0;
-            hashRegions[row.region_code].metrics.number_of_towns_out_of_date.from += updatedSitesInTheLastSixMonths.months >= 6 ? 1 : 0;
-
-            // on incrémente la donnée département
-            if (hashDepartements[row.departement_code] === undefined) {
-                hashDepartements[row.departement_code] = hashRegions[row.region_code].children.length;
-                hashRegions[row.region_code].children.push(baseMetrics('departement', row.departement_code, row.departement_name));
-            }
-            hashRegions[row.region_code].children[hashDepartements[row.departement_code]].metrics.number_of_persons.from += row.population_total ?? 0;
-            hashRegions[row.region_code].children[hashDepartements[row.departement_code]].metrics.number_of_persons_european_10_and_over.from += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? row.population_total : 0;
-            hashRegions[row.region_code].children[hashDepartements[row.departement_code]].metrics.number_of_towns.from += 1;
-            hashRegions[row.region_code].children[hashDepartements[row.departement_code]].metrics.number_of_towns_european_10_and_over.from += row.population_total >= 10 && row.origins !== null && Array.isArray(row.origins) && row.origins.length === 1 && row.origins.includes('european') ? 1 : 0;
-            hashRegions[row.region_code].children[hashDepartements[row.departement_code]].metrics.number_of_towns_unknown_origin.from += row.population_total === null || row.origins === null ? 1 : 0;
-            hashRegions[row.region_code].children[hashDepartements[row.departement_code]].metrics.number_of_towns_out_of_date.from += updatedSitesInTheLastSixMonths.months >= 6 ? 1 : 0;
+        if (shouldIncrementFrom) {
+            processRowForPeriod(row, 'from', franceData, metropoleData, outremerData, hashRegions, hashDepartements);
         }
     });
 
     const regionData = Object.values(hashRegions);
 
-    franceData.children = regionData.map((regionMetric) => {
-        if (['01', '02', '03', '04', '06'].includes(regionMetric.uid)) {
-            // on supprime le niveau régional pour les départements outremer
-            return regionMetric.children[0];
-        }
-        return regionMetric;
-    });
-    metropoleData.children = regionData.filter(el => !['01', '02', '03', '04', '06'].includes(el.uid));
-    // on supprime le niveau régional pour les départements outremer
-    outremerData.children = regionData.filter(el => ['01', '02', '03', '04', '06'].includes(el.uid)).map(regionMetric => regionMetric.children[0]);
+    buildChildrenHierarchy(franceData, metropoleData, outremerData, regionData);
 
-    // on fait le tri des lignes qu'il faut renvoyer à l'utilisateur, pour éviter de
-    // lui renvoyer des lignes vides juste parce qu'il n'a pas les permissions d'accès
-    // aux territoires considérés
-    // (typiquement, on ne veut pas renvoyer une ligne "Outremer" aux utilisateurs métropolitains, et
-    // inversement)
-    let hasMetropole = true;
-    let hasOutremer = true;
-    if (!user.permissions.shantytown.list.allowed_on_national) {
-        const regionCodes = Object.keys(user.permissions.shantytown.list.allowed_on)
-            .map(key => user.permissions.shantytown.list.allowed_on[key].reduce((acc, location) => {
-                if (!location.region?.code) {
-                    return acc;
-                }
+    const { hasMetropole, hasOutremer } = determineUserTerritoryAccess(user);
 
-                acc.push(location.region.code);
-                return acc;
-            }, []))
-            .flat();
-
-        hasOutremer = regionCodes.some(code => ['01', '02', '03', '04', '06'].includes(code));
-        hasMetropole = regionCodes.some(code => !['01', '02', '03', '04', '06'].includes(code));
-    }
-
-    // on retourne le résultat, bien filtré
-    if (hasMetropole && hasOutremer) {
-        return [franceData, metropoleData, outremerData];
-    }
-
-    if (hasMetropole) {
-        return metropoleData.children;
-    }
-
-    if (hasOutremer) {
-        return outremerData.children;
-    }
-
-    return [];
-};
+    return filterMetricsByPermissions(franceData, metropoleData, outremerData, hasMetropole, hasOutremer);
+}

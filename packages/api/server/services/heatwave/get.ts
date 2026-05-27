@@ -11,7 +11,7 @@ const isHeatwavePeriodActive = (heatwaveRecord: Heatwave[]): boolean => {
     return ActiveHeatwavePeriod;
 };
 
-export default async (): Promise<Heatwave> => {
+export default async function get(): Promise<Heatwave> {
     let heatwaveRecord: Heatwave[];
     try {
         heatwaveRecord = await heatwaveModel.get();
@@ -26,4 +26,4 @@ export default async (): Promise<Heatwave> => {
     }
 
     return heatwaveRecord[0];
-};
+}

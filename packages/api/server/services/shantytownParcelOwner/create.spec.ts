@@ -90,9 +90,8 @@ describe('services/shantytownParcelOwners.create()', () => {
 
         try {
             parcelOwnerId = await create(stubs.user, fakeTown.id, fakeOwner);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
+        } catch {
+            // DO NOTHING
         }
 
         expect(parcelOwnerId).to.deep.equal({ parcelOwnerId: 123 });
