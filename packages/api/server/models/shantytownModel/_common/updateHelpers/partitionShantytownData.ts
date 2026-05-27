@@ -88,6 +88,6 @@ export default function partitionShantytownData(data: ShantytownUpdateData): Par
                 },
             };
         },
-        { commonData: {}, justiceData: {}, ownerData: {} } as PartitionedData,
+        { commonData: {}, justiceData: {}, ownerData: {} },
     );
 }
