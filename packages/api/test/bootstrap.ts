@@ -1,5 +1,5 @@
 import '../module_alias';
-import { randomInt, randomBytes } from 'crypto';
+import { randomInt, randomBytes } from 'node:crypto';
 
 /**
  * A set of functions that can generate random values of a certain type
