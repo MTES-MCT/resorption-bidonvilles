@@ -241,6 +241,34 @@ describe('services/action.update()', () => {
             expect(calledData.updated_by).to.equal(user.id);
         });
 
+        it('passe canWriteFinances=false au modèle quand l\'utilisateur n\'a pas la permission action_finances', async () => {
+            stubs.can.returns({
+                do: () => ({
+                    on: () => false,
+                }),
+            });
+            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            await update(action, user, buildActionData(operators));
+
+            expect(stubs.updateActionModel).to.have.been.calledOnce;
+            const [, , canWriteFinances] = stubs.updateActionModel.firstCall.args;
+            expect(canWriteFinances).to.equal(false);
+        });
+
+        it('passe canWriteFinances=true au modèle quand l\'utilisateur a la permission action_finances', async () => {
+            stubs.can.returns({
+                do: () => ({
+                    on: () => true,
+                }),
+            });
+            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            await update(action, user, buildActionData(operators));
+
+            expect(stubs.updateActionModel).to.have.been.calledOnce;
+            const [, , canWriteFinances] = stubs.updateActionModel.firstCall.args;
+            expect(canWriteFinances).to.equal(true);
+        });
+
         it('commit la transaction après la mise à jour', async () => {
             const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
             await update(action, user, buildActionData(operators));
