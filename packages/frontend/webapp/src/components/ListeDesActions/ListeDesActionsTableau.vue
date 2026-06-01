@@ -61,13 +61,11 @@ import { useActionsStore } from "@/stores/actions.store";
 import getSince from "@/utils/getSince";
 import formatMetricsUpdatedAt from "@/utils/formatMetricsUpdatedAt";
 import { formatProjectName } from "@/utils/formatActionName";
-import { useNotificationStore } from "@/stores/notification.store";
 import formatTimestamp from "@common/utils/formatTimestamp";
 import DsfrTagCopy from "@/components/DsfrTagCopy/DsfrTagCopy.vue";
 
 const router = useRouter();
 const actionsStore = useActionsStore();
-const notificationStore = useNotificationStore();
 
 const headers = [
     "Identifiant de l'action",
