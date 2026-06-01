@@ -10,7 +10,7 @@ const formatUserWithOrganization = (label) => {
         return "";
     }
 
-    const match = label.match(/^(.+?)\s*\((.+?)\)$/);
+    const match = label.match(/^([^(]+?)\s*\(([^)]+)\)$/);
 
     if (!match) {
         return label;
