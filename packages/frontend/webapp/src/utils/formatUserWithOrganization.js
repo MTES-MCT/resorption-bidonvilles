@@ -10,14 +10,25 @@ const formatUserWithOrganization = (label) => {
         return "";
     }
 
-    const match = label.match(/^([^(]+?)\s*\(([^)]+)\)$/);
+    // Format attendu : "Prénom Nom (Organisation)". On localise la dernière
+    // parenthèse ouvrante et la parenthèse fermante de fin pour découper
+    // sans regex (évite tout risque ReDoS et reste robuste si le nom de
+    // l'utilisateur contient lui-même des parenthèses).
+    const openParenIndex = label.lastIndexOf("(");
+    const closeParenIndex = label.length - 1;
 
-    if (!match) {
+    if (
+        openParenIndex === -1 ||
+        label[closeParenIndex] !== ")" ||
+        openParenIndex >= closeParenIndex
+    ) {
         return label;
     }
 
-    const userName = match[1].trim();
-    const organizationName = match[2].trim();
+    const userName = label.slice(0, openParenIndex).trim();
+    const organizationName = label
+        .slice(openParenIndex + 1, closeParenIndex)
+        .trim();
 
     return `${capitalizeFirstLetter(organizationName)} - ${userName}`;
 };
