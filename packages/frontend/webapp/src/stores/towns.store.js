@@ -18,6 +18,7 @@ import {
     fetch,
     fetchList,
     findNearby,
+    forceUpdateWithoutAnyChanges,
     inviteNewActor,
     removeActor,
     removeActorTheme,
@@ -234,6 +235,10 @@ export const useTownsStore = defineStore("towns", () => {
         setTowns(townId);
     }
 
+    const forceUpdateWithoutChanges = async (townId) => {
+        return await forceUpdateWithoutAnyChanges(townId);
+    };
+
     const { bus } = useEventBus();
     watch(() => bus.value.get("new-user"), reset);
     reset();
@@ -293,6 +298,7 @@ export const useTownsStore = defineStore("towns", () => {
             return town;
         },
         setTown,
+        forceUpdateWithoutChanges,
         async destroy(townId) {
             await destroy(townId);
 

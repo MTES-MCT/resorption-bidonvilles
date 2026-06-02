@@ -3,6 +3,14 @@
         class="flex flex-wrap justify-end md:h-10 items-end m-4 gap-3 print:hidden sm:flex-row"
     >
         <DsfrButton
+            v-if="isOpen && hasUpdateShantytownPermission"
+            size="sm"
+            label="Considérer à jour"
+            icon="fr-icon-checkbox-line"
+            secondary
+            @click.prevent.stop="handleNoChangeModalIfNeeded"
+        />
+        <DsfrButton
             v-if="isOpen"
             size="sm"
             :label="
@@ -41,13 +49,16 @@
             @click.prevent.stop="navigateTo(null)"
         />
     </div>
+    <ModaleMajSiteSansModification ref="modaleMajSiteSansModification" />
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { computed, markRaw, toRefs } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
+import { useModaleStore } from "@/stores/modale.store";
+import { trackEvent } from "@/helpers/matomo";
 import { useResorptionTarget } from "@/utils/useResorptionTarget";
 
 import router from "@/helpers/router";
@@ -67,6 +78,7 @@ const { resorptionTargetIsLoading, markAsResorptionTarget } =
 const hasUpdateShantytownPermission = computed(() => {
     return userStore.hasUpdateShantytownPermission(shantytown.value);
 });
+
 const heatwaveStatus = computed(() => {
     return shantytown.value.heatwaveStatus;
 });
@@ -138,6 +150,59 @@ const navigateTo = (target) => {
         router.push(path);
     }
 };
+
+async function handleNoChangeModalIfNeeded() {
+    if (shantytownId.value) {
+        const modaleStore = useModaleStore();
+        shantytown.value.updatedWithoutAnyChange = true;
+        const { default: ModaleMajSiteSansModification } = await import(
+            "@/components/ModaleMajSiteSansModification/ModaleMajSiteSansModification.vue"
+        );
+
+        const submitWithoutChanges = async () => {
+            const submit = async (id) => {
+                try {
+                    const townUpdateResult =
+                        await townsStore.forceUpdateWithoutChanges(id);
+
+                    // Certains appels renvoient directement la donnée, d'autres un objet enveloppé
+                    const responseData =
+                        townUpdateResult?.data ?? townUpdateResult;
+
+                    if (responseData?.error) {
+                        throw new Error(responseData.error);
+                    }
+
+                    notificationStore.success(
+                        "Mise à jour sans modification",
+                        "Le site a été mis à jour sans modification"
+                    );
+                    trackEvent("Site", "Mise à jour site", `S${id}`);
+                    return responseData;
+                } catch (error) {
+                    const message =
+                        error?.response?.data?.user_message ||
+                        error?.user_message ||
+                        error?.message ||
+                        "Une erreur inconnue est survenue";
+
+                    notificationStore.error(
+                        "Mise à jour sans modification",
+                        message
+                    );
+                    throw error;
+                }
+            };
+            await submit(shantytown.value?.id);
+        };
+
+        modaleStore.open(markRaw(ModaleMajSiteSansModification), {
+            onConfirm: submitWithoutChanges,
+        });
+        return true;
+    }
+    return false;
+}
 </script>
 
 <style scoped>
