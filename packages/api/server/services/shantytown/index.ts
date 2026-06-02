@@ -3,6 +3,7 @@ import create from './create';
 import list from './list';
 import find from './find';
 import findJusticeReaders from './findJusticeReaders';
+import forceUpdateWithoutChanges from './forceUpdateWithoutChanges';
 import getClosureYearRange from './getClosureYearRange';
 import close from './close';
 import deleteTown from './deleteTown';
@@ -28,6 +29,7 @@ export default {
     fixClosedStatus,
     setHeatwaveStatus,
     setResorptionTarget,
+    forceUpdateWithoutChanges,
     report,
     update,
 };
