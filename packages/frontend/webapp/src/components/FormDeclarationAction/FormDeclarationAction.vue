@@ -486,11 +486,31 @@ function formatValuesForApi(v) {
                         a.localeCompare(b, "fr", { sensitivity: "base" })
                     );
 
-                    acc[year] = sortedKeys.reduce((yearAcc, key) => {
+                    const normalizedYear = sortedKeys.reduce((yearAcc, key) => {
                         const value = yearValues[key];
-                        yearAcc[key] = value === "" ? null : value ?? null;
+                        // Convertir en nombre si c'est une string numérique, sinon null
+                        if (
+                            value === "" ||
+                            value === null ||
+                            value === undefined
+                        ) {
+                            yearAcc[key] = null;
+                        } else if (typeof value === "string") {
+                            const parsed = Number.parseInt(value, 10);
+                            yearAcc[key] = Number.isNaN(parsed) ? null : parsed;
+                        } else {
+                            yearAcc[key] = value;
+                        }
                         return yearAcc;
                     }, {});
+
+                    // Ne garder l'année que si au moins un champ n'est pas null
+                    const hasData = Object.values(normalizedYear).some(
+                        (val) => val !== null
+                    );
+                    if (hasData) {
+                        acc[year] = normalizedYear;
+                    }
                 }
                 return acc;
             },
