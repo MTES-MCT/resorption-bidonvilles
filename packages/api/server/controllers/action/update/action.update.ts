@@ -7,6 +7,9 @@ const ERRORS = {
     action_insert_error: { code: 500, message: 'Une erreur est survenue lors de l\'écriture en base de données' },
     action_fetch_error: { code: 500, message: 'Une erreur est survenue lors de la vérifiation d\'écriture en base de données' },
     action_not_found: { code: 404, message: 'L\'insertion de l\'action en base de donnée n\'a pas pu aboutir' },
+    no_principal_operator: { code: 400, message: 'Vous devez désigner un opérateur principal' },
+    multiple_principal_operators: { code: 400, message: 'Un seul opérateur peut être désigné comme principal' },
+    forbidden_principal_change: { code: 403, message: 'Seuls les pilotes de l\'action et les administrateurs nationaux peuvent désigner l\'opérateur principal' },
 };
 
 export default async (req, res, next) => {

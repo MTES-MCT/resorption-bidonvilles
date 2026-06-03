@@ -152,7 +152,8 @@ export default async function getHistory(user: User, actionId: number): Promise<
                             jsonb_build_object(
                                 'id', o.organization_id,
                                 'name', o.name,
-                                'abbreviation', o.abbreviation
+                                'abbreviation', o.abbreviation,
+                                'is_principal', aoh.is_principal
                             )
                         ) FILTER (WHERE o.organization_id IS NOT NULL),
                         '[]'::jsonb
@@ -368,7 +369,8 @@ export default async function getHistory(user: User, actionId: number): Promise<
                                 jsonb_build_object(
                                     'id', o.organization_id,
                                     'name', o.name,
-                                    'abbreviation', o.abbreviation
+                                    'abbreviation', o.abbreviation,
+                                    'is_principal', ao.is_principal
                                 )
                             )
                             FROM action_operators ao

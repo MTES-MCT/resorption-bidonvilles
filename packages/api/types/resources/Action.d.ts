@@ -10,6 +10,8 @@ export type ActionItem = {
     region_name: string,
     action_id: number,
     action_name: string,
+    operator_name: string | null,
+    project_name: string,
     started_at: string,
     ended_at: string | null,
     location_type: string,
@@ -27,16 +29,13 @@ export type ActionItem = {
     hebergement_nombre_menages: number | null,
     logement_nombre_personnes: number | null,
     logement_nombre_menages: number | null,
-    scolaire_mineurs_moins_de_trois_ans: number | null,
-    scolaire_mineurs_trois_ans_et_plus: number | null,
-    scolaire_mediation_moins_de_trois_ans: number | null,
-    scolaire_mediation_trois_ans_et_plus: number | null,
+    scolaire_mineurs_scolarisables: number | null,
+    scolaire_mineurs_en_mediation: number | null,
     scolaire_nombre_maternelle: number | null,
     scolaire_nombre_elementaire: number | null,
     scolaire_nombre_college: number | null,
     scolaire_nombre_lycee: number | null,
     scolaire_nombre_autre: number | null,
-    scolaire_mineur_scolarise_dans_annee: number | null,
     finance_etatique: number | null,
     finance_dedie: number | null,
     finance_collectivite: number | null,
@@ -131,17 +130,19 @@ export type ActionOrganizationMember = {
     phone: string | null,
     role: string,
     is_admin: boolean,
+    is_principal?: boolean,
     organization: {
         id: number,
         name: string,
         abbreviation: string,
     }
 };
-type ActionOrganization = {
+export type ActionOrganization = {
     id: number,
     name: string,
     abbreviation: string | null,
-    users: ActionOrganizationMember[]
+    is_principal?: boolean,
+    users: ActionOrganizationMember[],
 };
 type ActionFinances = {
     [key: number]: ActionFinanceRow[],
@@ -159,6 +160,8 @@ type ActionFinanceRow = {
 interface IAction {
     id: number,
     name: string,
+    project_name?: string,
+    operator_name?: string,
     topics: ActionTopic[],
     operators: ActionOrganization[],
     location: {
@@ -213,6 +216,7 @@ interface GenericAction extends IAction {
     created_by: ActionUser,
     updated_at: number | null,
     updated_by: ActionUser | null,
+    is_pilot_or_national_admin?: boolean,
 }
 
 export interface Action extends GenericAction {

@@ -92,8 +92,14 @@ const exportActions = async (user: AuthUser, year: string, dihalFinancing = fals
         throw new ServiceError('fetch_failed', new Error('Il n\'y a aucune action à exporter'));
     }
 
-    const buffer = await generateExportFile(data, fetchedYear, includeFinances, allowedDepartements);
-    return buffer;
+    try { // Génération du fichier Excel
+        const buffer = await generateExportFile(data, fetchedYear, includeFinances, allowedDepartements);
+        return buffer;
+    } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Error generating export file:', error);
+        throw new ServiceError('export_failed', error instanceof Error ? error : new Error('Une erreur inconnue est survenue'));
+    }
 };
 
 export default exportActions;

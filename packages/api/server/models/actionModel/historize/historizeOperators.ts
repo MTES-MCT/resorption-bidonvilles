@@ -4,8 +4,9 @@ import { sequelize } from '#db/sequelize';
 export default (id: number, hid: number, transaction: Transaction): Promise<[number, number]> => sequelize.query(`
 INSERT INTO action_operators_history(
     fk_action,
-    fk_user
-) (SELECT :hid, fk_user FROM action_operators WHERE fk_action = :id)
+    fk_user,
+    is_principal
+) (SELECT :hid, fk_user, is_principal FROM action_operators WHERE fk_action = :id)
 `, {
     type: QueryTypes.INSERT,
     transaction,

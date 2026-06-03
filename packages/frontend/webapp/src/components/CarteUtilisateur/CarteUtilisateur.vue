@@ -15,9 +15,7 @@
                     {{ user.first_name }}
                 </p>
                 <p v-if="includeOrganization" class="text-black">
-                    {{
-                        user.organization.abbreviation || user.organization.name
-                    }}
+                    {{ organizationName }}
                 </p>
             </h2>
             <p>{{ user.position }}</p>
@@ -78,7 +76,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { defineProps, toRefs, computed } from "vue";
 import { trackEvent } from "@/helpers/matomo";
 import focusClasses from "@common/utils/focus_classes";
 import { Icon, Link } from "@resorptionbidonvilles/ui";
@@ -101,8 +99,27 @@ const props = defineProps({
         required: false,
         default: false,
     },
+    displayLeadOperatorInfo: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 const { user, linkToUser } = toRefs(props);
+
+const capitalizeFirstLetter = (str) => {
+    if (!str) {
+        return str;
+    }
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+const organizationName = computed(() => {
+    if (user.value.organization.abbreviation) {
+        return user.value.organization.abbreviation;
+    }
+    return capitalizeFirstLetter(user.value.organization.name);
+});
 
 function trackEmail(event) {
     event.stopPropagation();

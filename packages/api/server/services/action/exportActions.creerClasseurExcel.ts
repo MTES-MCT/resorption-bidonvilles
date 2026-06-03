@@ -30,16 +30,16 @@ type HeaderCell = {
 };
 
 const sectionTitles = [
-    { name: 'ACTION', range: { from: 'A6', to: 'J6' } },
-    { name: 'OPÉRATEURS', range: { from: 'K6', to: 'K6' } },
-    { name: 'INDICATEURS GÉNÉRAUX', range: { from: 'L6', to: 'O6' } },
-    { name: 'SANTÉ', range: { from: 'P6', to: 'P6' } },
-    { name: 'EMPLOI', range: { from: 'Q6', to: 'R6' } },
-    { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'S6', to: 'V6' } },
-    { name: 'SCOLARISATION', range: { from: 'W6', to: 'AG6' } },
-    { name: 'FINANCEMENT', range: { from: 'AH6', to: 'AS6' } },
-    { name: 'COMMENTAIRES', range: { from: 'AT6', to: 'AV6' } },
-    { name: 'MISE À JOUR', range: { from: 'AW6', to: 'AX6' } },
+    { name: 'ACTION', range: { from: 'A6', to: 'L6' } },
+    { name: 'OPÉRATEURS', range: { from: 'M6', to: 'M6' } },
+    { name: 'INDICATEURS GÉNÉRAUX', range: { from: 'N6', to: 'Q6' } },
+    { name: 'SANTÉ', range: { from: 'R6', to: 'R6' } },
+    { name: 'EMPLOI', range: { from: 'S6', to: 'T6' } },
+    { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'U6', to: 'X6' } },
+    { name: 'SCOLARISATION', range: { from: 'Y6', to: 'AE6' } },
+    { name: 'FINANCEMENT', range: { from: 'AF6', to: 'AQ6' } },
+    { name: 'COMMENTAIRES', range: { from: 'AR6', to: 'AT6' } },
+    { name: 'MISE À JOUR', range: { from: 'AU6', to: 'AV6' } },
 ];
 
 const headers = [
@@ -47,7 +47,8 @@ const headers = [
     { label: 'Code région', width: '3' },
     { label: 'Région', width: '7' },
     { label: 'ID action', width: '3' },
-    { label: 'Nom action', width: '8' },
+    { label: 'Opérateur principal', width: '6' },
+    { label: 'Nom du projet', width: '8' },
     { label: 'Date de lancement/début', width: '3' },
     { label: 'Date de fin (prévue)', width: '3' },
     { label: 'Lieu', width: '4' },
@@ -65,17 +66,13 @@ const headers = [
     { label: 'Nombre de ménages ayant eu accès à une solution longue durée en hébergement ou logement adapté avec accompagnement, dont espace temporaire d\'accompagnement', width: '5' },
     { label: 'Nombre de personnes ayant eu accès à un logement', width: '5' },
     { label: 'Nombre de ménages ayant eu accès à un logement', width: '5' },
-    { label: 'Mineurs de moins de 3 ans identifiés sur site', width: '5' },
-    { label: 'Mineurs de 3 ans et plus identifiés sur site', width: '5' },
-    { label: 'Mineurs de moins de 3 ans bénéficiant d\'une action de médiation', width: '5' },
-    { label: 'Mineurs de 3 ans et plus bénéficiant d\'une action de médiation', width: '5' },
-    { label: 'Mineurs nouvellement scolarisés depuis la rentrée scolaire', width: '5' },
-    { label: 'Total mineurs scolarisés (maternelle/élémentaire/collège/lycée ou formation professionnelle, hors "Autre")', width: '5' },
-    { label: 'Mineurs en maternelle', width: '5' },
-    { label: 'Mineurs en élémentaire', width: '5' },
-    { label: 'Mineurs au collège', width: '5' },
-    { label: 'Mineurs au lycée ou en formation professionnelle', width: '5' },
-    { label: 'Autre - jeunes en dispositif d\'insertion', width: '5' },
+    { label: 'Nombre de mineurs en âge d\'être scolarisés ou de suivre une formation', width: '5' },
+    { label: 'Nombre de mineurs bénéficiant d\'une action de médiation (3 - 18 ans)', width: '5' },
+    { label: 'Nombre de mineurs scolarisés en maternelle', width: '5' },
+    { label: 'Nombre de mineurs scolarisés en élémentaire', width: '5' },
+    { label: 'Nombre de mineurs scolarisés au collège', width: '5' },
+    { label: 'Nombre de mineurs scolarisés au lycée ou en formation professionnelle', width: '5' },
+    { label: 'Nombre de mineurs scolarisés: autre', width: '5' },
     { label: 'Financement étatique hors crédits dédiés', width: '5' },
     { label: 'Dépense sur financement étatique hors crédits dédiés', width: '5' },
     { label: 'Crédits dédiés à la résorption des bidonvilles', width: '5' },
@@ -103,7 +100,7 @@ function regrouperParDepartement(data: ActionReportRow[]): DepartementObject[] {
             departement_name: item.departement_name,
             data: [],
         };
-        acc[departement_code].data.push(rest as ActionItem);
+        acc[departement_code].data.push(rest);
         return acc;
     }, {});
 
@@ -251,36 +248,17 @@ const setDepartementHeader = (worksheet: ExcelJS.Worksheet, departement: Departe
     }
 };
 
-function sumNumbers(values: Array<number | null | undefined>): number | null {
-    const numericValues = values
-        .map(value => (typeof value === 'number' ? value : Number(value)))
-        .filter(value => Number.isFinite(value));
-
-    if (numericValues.length === 0) {
-        return null;
-    }
-
-    return numericValues.reduce((acc, value) => acc + value, 0);
-}
-
 // Ajouter les lignes de données
 function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, includeFinances: boolean = true) {
     data.forEach((item: ActionItem) => {
-        // Calcul du total des mineurs scolarisés (hors "Autre")
-        const mineursScolarisesTotal = sumNumbers([
-            item.scolaire_nombre_maternelle,
-            item.scolaire_nombre_elementaire,
-            item.scolaire_nombre_college,
-            item.scolaire_nombre_lycee,
-        ]);
-
         // Construire la ligne de données selon les permissions
         const rowData = [
             item.departement_name,
             item.region_code,
             item.region_name,
             item.action_id,
-            item.action_name,
+            item.operator_name ?? '',
+            item.project_name,
             item.started_at,
             item.ended_at,
             item.location_type,
@@ -298,12 +276,8 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, in
             item.hebergement_nombre_menages,
             item.logement_nombre_personnes,
             item.logement_nombre_menages,
-            item.scolaire_mineurs_moins_de_trois_ans,
-            item.scolaire_mineurs_trois_ans_et_plus,
-            item.scolaire_mediation_moins_de_trois_ans,
-            item.scolaire_mediation_trois_ans_et_plus,
-            item.scolaire_mineur_scolarise_dans_annee,
-            mineursScolarisesTotal,
+            item.scolaire_mineurs_scolarisables,
+            item.scolaire_mineurs_en_mediation,
             item.scolaire_nombre_maternelle,
             item.scolaire_nombre_elementaire,
             item.scolaire_nombre_college,
@@ -381,7 +355,7 @@ function formatWorksheetCells(worksheet: ExcelJS.Worksheet, columnNumbers: numbe
 }
 
 function formatCommentCol(worksheet: ExcelJS.Worksheet) {
-    const commentsCol = worksheet.getColumn('AT');
+    const commentsCol = worksheet.getColumn('AR');
     commentsCol.eachCell((cell) => {
         if (cell.value) {
             formaterCommentaires(cell, cell.value);
@@ -444,10 +418,10 @@ export default function exportActions(
             .filter(s => s.name !== 'FINANCEMENT')
             .map((section) => {
                 if (section.name === 'COMMENTAIRES') {
-                    return { name: section.name, range: { from: 'AD1', to: 'AF1' } };
+                    return { name: section.name, range: { from: 'AR6', to: 'AT6' } };
                 }
                 if (section.name === 'MISE À JOUR') {
-                    return { name: section.name, range: { from: 'AG1', to: 'AH1' } };
+                    return { name: section.name, range: { from: 'AU6', to: 'AV6' } };
                 }
                 return section;
             });
@@ -455,7 +429,7 @@ export default function exportActions(
 
     // Déterminer les headers à inclure selon les permissions
     // Les colonnes de financement vont de l'index 29 (finance_etatique) à 40 (depense_finance_autre)
-    const headersToInclude = includeFinances ? headers : headers.filter((_, index) => index < 29 || index > 40);
+    const headersToInclude = includeFinances ? headers : headers.filter((_, index) => index < 30 || index > 41);
 
     // Trouver la section "FINANCEMENT" si elle existe
     const financementSection = includeFinances ? findSection('FINANCEMENT') : null;

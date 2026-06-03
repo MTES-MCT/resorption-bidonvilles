@@ -4,7 +4,7 @@
 
         <FormParagraph title="Quels sont les contacts ?">
             <InputManagers :disable="disableManagers" />
-            <InputOperators />
+            <InputOperators :can-edit-principal="canEditPrincipal" />
         </FormParagraph>
     </FormSection>
 </template>
@@ -19,6 +19,10 @@ import InputOperators from "../inputs/FormDeclarationActionInputOperators.vue";
 
 const props = defineProps({
     disableManagers: Boolean,
+    canEditPrincipal: {
+        type: Boolean,
+        default: false,
+    },
 });
-const { disableManagers } = toRefs(props);
+const { disableManagers, canEditPrincipal } = toRefs(props);
 </script>

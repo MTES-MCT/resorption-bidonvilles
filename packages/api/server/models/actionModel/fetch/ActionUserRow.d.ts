@@ -11,6 +11,7 @@ type ActionUserRow = {
     organization_id: number | null,
     organization_name: string | null,
     organization_abbreviation: string | null,
+    is_principal: boolean,
 };
 
 export default ActionUserRow;

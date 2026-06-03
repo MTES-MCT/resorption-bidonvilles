@@ -14,6 +14,8 @@ export default function hashActions(actions: ActionSelectRow[]): ActionHash {
                 return `ID${row.departement_code}${createdYear}${paddedActionId}`;
             })(),
             name: row.name,
+            project_name: row.name,
+            operator_name: '',
             started_at: new Date(row.started_at).getTime(),
             ended_at: row.ended_at !== null ? new Date(row.ended_at).getTime() : null,
             goals: row.goals,

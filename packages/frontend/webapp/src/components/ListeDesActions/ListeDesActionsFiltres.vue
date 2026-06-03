@@ -47,7 +47,13 @@ import { Filter, Sort } from "@resorptionbidonvilles/ui";
 
 const actionsStore = useActionsStore();
 
-const sortOptions = [sorts.startedAt, sorts.updatedAt, sorts.lastMetricUpdate];
+const sortOptions = [
+    sorts.startedAt,
+    sorts.updatedAt,
+    sorts.lastMetricUpdate,
+    sorts.operatorName,
+    sorts.projectName,
+];
 
 const dihalYearOptions = computed(() => {
     const years = new Set();

@@ -1,4 +1,5 @@
 import { normalizeShantytownIds } from "./normalizeShantytownIds";
+import sortOperatorsByPrincipal from "./sortOperatorsByPrincipal";
 
 export const fields = [
     "nombre_personnes",
@@ -26,7 +27,7 @@ export const fields = [
 
 export const formatFormAction = (data) => {
     const formatted = {
-        name: data.name || "",
+        name: data.project_name || data.name || "",
         started_at: data.started_at ? new Date(data.started_at) : undefined,
         ended_at: data.ended_at ? new Date(data.ended_at) : undefined,
         topics: data.topics ? data.topics.map(({ uid }) => uid) : [],
@@ -59,27 +60,29 @@ export const formatFormAction = (data) => {
         managers: {
             organizations: [],
             users: data.managers
-                ? data.managers
-                      .map(({ users }) =>
-                          users.map((user) => ({
-                              id: user.id,
-                              label: `${user.first_name} ${user.last_name}`,
-                          }))
-                      )
-                      .flat()
+                ? data.managers.flatMap(({ name, abbreviation, users }) =>
+                      users.map((user) => ({
+                          id: user.id,
+                          label: `${user.first_name} ${user.last_name} (${
+                              abbreviation || name
+                          })`,
+                      }))
+                  )
                 : [],
         },
         operators: {
             organizations: [],
             users: data.operators
-                ? data.operators
-                      .map(({ users }) =>
+                ? sortOperatorsByPrincipal(data.operators).flatMap(
+                      ({ name, abbreviation, users }) =>
                           users.map((user) => ({
                               id: user.id,
-                              label: `${user.first_name} ${user.last_name}`,
+                              label: `${user.first_name} ${user.last_name} (${
+                                  abbreviation || name
+                              })`,
+                              is_principal: user.is_principal === true,
                           }))
-                      )
-                      .flat()
+                  )
                 : [],
         },
         finances: Object.keys(data.finances || {}).reduce((acc, year) => {

@@ -3,7 +3,13 @@ import ActionLocationType from '#root/types/resources/ActionLocationType.d';
 
 type ActionInputUser = {
     id: number,
-    organization_id: number
+    organization_id: number,
+};
+
+export type ActionOperatorInput = {
+    id: number,
+    organization_id: number,
+    is_principal?: boolean,
 };
 
 type ActionFinanceType = 'etatique' | 'dedie' | 'collectivite' | 'europeen' | 'prive' | 'autre';
@@ -38,7 +44,7 @@ export interface ActionInput {
     location_shantytowns: number[] | null,
     location_autre: string | null,
     managers: ActionInputUser[],
-    operators: ActionInputUser[],
+    operators: ActionOperatorInput[],
     indicateurs: {
         [key: string]: {
             nombre_personnes: number | null,

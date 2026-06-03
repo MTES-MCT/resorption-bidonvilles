@@ -628,7 +628,49 @@ export default (mode: 'create' | 'update') => [
 
         return value;
     }),
-    createUserValidator('operators', 'Opérateurs de l\'action'),
+    body('operators')
+        .exists({ checkNull: true }).bail().withMessage('Le champ "Opérateurs de l\'action" est obligatoire')
+        .isArray().bail().withMessage('Le format des utilisateurs ciblés n\'est pas valide')
+        .isLength({ min: 1 }).bail().withMessage('Le champ "Opérateurs de l\'action" est obligatoire')
+        .customSanitizer(async (value) => {
+            const filteredValue = value.filter(op => op?.id !== undefined && op?.id !== null);
+            if (filteredValue.length === 0) {
+                return null;
+            }
+
+            const ids = filteredValue.map(op => op.id);
+            const users = await userModel.findByIds(null, ids);
+            if (users.length !== ids.length) {
+                return null;
+            }
+
+            const isPrincipalById = new Map(filteredValue.map(op => [op.id, op.is_principal === true]));
+            return users.map(u => ({
+                id: u.id,
+                organization_id: u.organization.id,
+                is_principal: isPrincipalById.get(u.id) === true,
+            }));
+        })
+        .custom((value) => {
+            if (value === null) {
+                throw new Error('Un ou plusieurs utilisateurs ciblés n\'existent pas');
+            }
+
+            return true;
+        })
+        .bail()
+        .custom((value) => {
+            if (!Array.isArray(value) || value.length < 2) {
+                return true;
+            }
+
+            const principalCount = value.filter(op => op.is_principal === true).length;
+            if (principalCount !== 1) {
+                throw new Error('Vous devez désigner exactement un opérateur principal parmi les opérateurs de l\'action');
+            }
+
+            return true;
+        }),
 
     // financements
     // transformer finances en un array pour faciliter la validation plus bas

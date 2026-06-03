@@ -13,6 +13,8 @@ export default (actions: ActionSelectRow[]): ActionHash => {
         acc[row.id] = {
             id: row.id,
             name: row.name,
+            project_name: row.name,
+            operator_name: '',
             topics: [],
             operators: [],
             shantytowns: row.shantytowns,

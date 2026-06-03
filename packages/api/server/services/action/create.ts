@@ -5,10 +5,13 @@ import createActionModel from '#server/models/actionModel/create/create';
 import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 import { User } from '#root/types/resources/User.d';
 import { ActionInput } from './ActionInput.d';
+import validateAndNormalizeOperators from './operatorValidation';
 
 import fetchAction from './write.fetchAction';
 
 export default async function create(user: User, data: ActionInput): Promise<EnrichedAction> {
+    validateAndNormalizeOperators(data.operators);
+
     const transaction = await sequelize.transaction();
 
     let actionId: number;

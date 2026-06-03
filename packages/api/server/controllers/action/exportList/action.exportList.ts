@@ -8,6 +8,7 @@ const ERROR_RESPONSES = {
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
     permission_denied: { code: 403, message: 'Accès refusé' },
     write_failed: { code: 500, message: 'Une écriture en base de données a échoué' },
+    export_failed: { code: 500, message: 'Une erreur est survenue lors de la génération du fichier d\'export' },
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 interface ExportActionsRequest extends Request {

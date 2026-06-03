@@ -89,7 +89,7 @@ const descriptions: RolePermissionDescriptions = {
                     type: 'deny', label: 'hors procédures judiciaires', comments: null, option: 'access_justice',
                 },
             ],
-            [{ type: 'view', label: 'Mettre à jour les %actions%', comments: 'hors financements' }],
+            [{ type: 'view', label: 'Mettre à jour les %actions% dont il est opérateur', comments: 'hors financements' }],
             [{ type: 'edit', label: 'Exporter les actions', comments: 'hors financements' }],
         ],
         options: [
