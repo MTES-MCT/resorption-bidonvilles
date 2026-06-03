@@ -12,7 +12,7 @@
                     }}
                     <template v-if="actionsStore.filters.status === 'open'"
                         >en cours
-                        <div>
+                        <div v-if="actionsFinancedByDIHAL > 0">
                             <DsfrBadge
                                 :type="badgeDIHALVariant"
                                 :label="badgeDIHALLabel"
@@ -25,7 +25,7 @@
                             }}
                             actions sur {{ actionsFinancedByDIHAL }})
                         </div>
-                        <div>
+                        <div v-if="currentActionsCount > 0">
                             <DsfrBadge
                                 :type="badgeVariant"
                                 :label="badgeLabel"
