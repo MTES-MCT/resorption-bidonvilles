@@ -30,16 +30,15 @@ type HeaderCell = {
 };
 
 const sectionTitles = [
-    { name: 'ACTION', range: { from: 'A6', to: 'L6' } },
-    { name: 'OPÉRATEURS', range: { from: 'M6', to: 'M6' } },
-    { name: 'INDICATEURS GÉNÉRAUX', range: { from: 'N6', to: 'Q6' } },
-    { name: 'SANTÉ', range: { from: 'R6', to: 'R6' } },
-    { name: 'EMPLOI', range: { from: 'S6', to: 'T6' } },
-    { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'U6', to: 'X6' } },
-    { name: 'SCOLARISATION', range: { from: 'Y6', to: 'AE6' } },
-    { name: 'FINANCEMENT', range: { from: 'AF6', to: 'AQ6' } },
-    { name: 'COMMENTAIRES', range: { from: 'AR6', to: 'AT6' } },
-    { name: 'MISE À JOUR', range: { from: 'AU6', to: 'AV6' } },
+    { name: 'ACTION', range: { from: 'A6', to: 'M6' } },
+    { name: 'INDICATEURS GÉNÉRAUX', range: { from: 'N6', to: 'P6' } },
+    { name: 'SANTÉ', range: { from: 'Q6', to: 'Q6' } },
+    { name: 'EMPLOI', range: { from: 'R6', to: 'S6' } },
+    { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'T6', to: 'W6' } },
+    { name: 'SCOLARISATION', range: { from: 'X6', to: 'AJ6' } },
+    { name: 'FINANCEMENT', range: { from: 'AK6', to: 'AV6' } },
+    { name: 'COMMENTAIRES', range: { from: 'AW6', to: 'AY6' } },
+    { name: 'MISE À JOUR', range: { from: 'AZ6', to: 'BA6' } },
 ];
 
 const headers = [
@@ -66,8 +65,14 @@ const headers = [
     { label: 'Nombre de ménages ayant eu accès à une solution longue durée en hébergement ou logement adapté avec accompagnement, dont espace temporaire d\'accompagnement', width: '5' },
     { label: 'Nombre de personnes ayant eu accès à un logement', width: '5' },
     { label: 'Nombre de ménages ayant eu accès à un logement', width: '5' },
-    { label: 'Nombre de mineurs en âge d\'être scolarisés ou de suivre une formation', width: '5' },
-    { label: 'Nombre de mineurs bénéficiant d\'une action de médiation (3 - 18 ans)', width: '5' },
+    { label: 'Nombre de mineurs identifiés sur site', width: '5' },
+    { label: 'Nombre de mineurs identifiés sur le site de moins de 3 ans', width: '5' },
+    { label: 'Nombre de mineurs identifiés sur le site de 3 ans et plus', width: '5' },
+    { label: 'Nombre de mineurs bénéficiant d\'une action de médiation', width: '5' },
+    { label: 'Nombre de mineurs de moins de 3 ans bénéficiant d\'une action de médiation', width: '5' },
+    { label: 'Nombre de mineurs de 3 ans et plus bénéficiant d\'une action de médiation', width: '5' },
+    { label: 'Nombre de mineurs dont la scolarisation a débuté cette année', width: '5' },
+    { label: 'Nombre total de mineurs scolarisés tous niveaux scolaires confondus (3-18 ans)', width: '5' },
     { label: 'Nombre de mineurs scolarisés en maternelle', width: '5' },
     { label: 'Nombre de mineurs scolarisés en élémentaire', width: '5' },
     { label: 'Nombre de mineurs scolarisés au collège', width: '5' },
@@ -248,9 +253,39 @@ const setDepartementHeader = (worksheet: ExcelJS.Worksheet, departement: Departe
     }
 };
 
+function sumNumbers(values: Array<number | null | undefined>): number | null {
+    const numericValues = values
+        .map(value => (typeof value === 'number' ? value : Number(value)))
+        .filter(value => Number.isFinite(value));
+
+    if (numericValues.length === 0) {
+        return null;
+    }
+
+    return numericValues.reduce((acc, value) => acc + value, 0);
+}
+
 // Ajouter les lignes de données
 function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, includeFinances: boolean = true) {
     data.forEach((item: ActionItem) => {
+        // Calculs pour les colonnes de scolarisation
+        const mineursIdentifiesTotal = sumNumbers([
+            item.scolaire_mineurs_moins_de_trois_ans,
+            item.scolaire_mineurs_trois_ans_et_plus,
+        ]);
+
+        const mineursMediationTotal = sumNumbers([
+            item.scolaire_mediation_moins_de_trois_ans,
+            item.scolaire_mediation_trois_ans_et_plus,
+        ]);
+
+        const mineursScolarisesTotal = sumNumbers([
+            item.scolaire_nombre_maternelle,
+            item.scolaire_nombre_elementaire,
+            item.scolaire_nombre_college,
+            item.scolaire_nombre_lycee,
+        ]);
+
         // Construire la ligne de données selon les permissions
         const rowData = [
             item.departement_name,
@@ -276,8 +311,14 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, in
             item.hebergement_nombre_menages,
             item.logement_nombre_personnes,
             item.logement_nombre_menages,
-            item.scolaire_mineurs_scolarisables,
-            item.scolaire_mineurs_en_mediation,
+            mineursIdentifiesTotal,
+            item.scolaire_mineurs_moins_de_trois_ans,
+            item.scolaire_mineurs_trois_ans_et_plus,
+            mineursMediationTotal,
+            item.scolaire_mediation_moins_de_trois_ans,
+            item.scolaire_mediation_trois_ans_et_plus,
+            item.scolaire_mineur_scolarise_dans_annee,
+            mineursScolarisesTotal,
             item.scolaire_nombre_maternelle,
             item.scolaire_nombre_elementaire,
             item.scolaire_nombre_college,
@@ -355,7 +396,7 @@ function formatWorksheetCells(worksheet: ExcelJS.Worksheet, columnNumbers: numbe
 }
 
 function formatCommentCol(worksheet: ExcelJS.Worksheet) {
-    const commentsCol = worksheet.getColumn('AR');
+    const commentsCol = worksheet.getColumn('AX');
     commentsCol.eachCell((cell) => {
         if (cell.value) {
             formaterCommentaires(cell, cell.value);
@@ -418,18 +459,18 @@ export default function exportActions(
             .filter(s => s.name !== 'FINANCEMENT')
             .map((section) => {
                 if (section.name === 'COMMENTAIRES') {
-                    return { name: section.name, range: { from: 'AR6', to: 'AT6' } };
+                    return { name: section.name, range: { from: 'AK6', to: 'AM6' } };
                 }
                 if (section.name === 'MISE À JOUR') {
-                    return { name: section.name, range: { from: 'AU6', to: 'AV6' } };
+                    return { name: section.name, range: { from: 'AN6', to: 'AO6' } };
                 }
                 return section;
             });
     }
 
     // Déterminer les headers à inclure selon les permissions
-    // Les colonnes de financement vont de l'index 29 (finance_etatique) à 40 (depense_finance_autre)
-    const headersToInclude = includeFinances ? headers : headers.filter((_, index) => index < 30 || index > 41);
+    // Les colonnes de financement vont de l'index 36 (finance_etatique) à 47 (depense_finance_autre)
+    const headersToInclude = includeFinances ? headers : headers.filter((_, index) => index < 35 || index > 46);
 
     // Trouver la section "FINANCEMENT" si elle existe
     const financementSection = includeFinances ? findSection('FINANCEMENT') : null;
