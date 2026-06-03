@@ -1,4 +1,4 @@
-import { ref, computed, onBeforeUnmount, watch } from "vue";
+import { ref, computed, onBeforeUnmount, onMounted, watch } from "vue";
 import debounce from "../utils/debounce";
 
 const defaultBuildResults = (rawResults) => {
@@ -112,6 +112,12 @@ export default function useAutocomplete({
         },
         { immediate: true }
     );
+
+    onMounted(() => {
+        if (modelValue.value) {
+            setInputValue(getInitialLabel(modelValue.value));
+        }
+    });
 
     if (value && value !== modelValue) {
         watch(value, (val) => {
