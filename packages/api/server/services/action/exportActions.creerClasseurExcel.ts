@@ -30,16 +30,16 @@ type HeaderCell = {
 };
 
 const sectionTitles = [
-    { name: 'ACTION', range: { from: 'A1', to: 'J1' } },
-    { name: 'OPÉRATEURS', range: { from: 'K1', to: 'K1' } },
-    { name: 'INDICATEURS GÉNÉRAUX', range: { from: 'L1', to: 'O1' } },
-    { name: 'SANTÉ', range: { from: 'P1', to: 'P1' } },
-    { name: 'EMPLOI', range: { from: 'Q1', to: 'R1' } },
-    { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'S1', to: 'V1' } },
-    { name: 'SCOLARISATION', range: { from: 'W1', to: 'AG1' } },
-    { name: 'FINANCEMENT', range: { from: 'AH1', to: 'AS1' } },
-    { name: 'COMMENTAIRES', range: { from: 'AT1', to: 'AV1' } },
-    { name: 'MISE À JOUR', range: { from: 'AW1', to: 'AW1' } },
+    { name: 'ACTION', range: { from: 'A6', to: 'J6' } },
+    { name: 'OPÉRATEURS', range: { from: 'K6', to: 'K6' } },
+    { name: 'INDICATEURS GÉNÉRAUX', range: { from: 'L6', to: 'O6' } },
+    { name: 'SANTÉ', range: { from: 'P6', to: 'P6' } },
+    { name: 'EMPLOI', range: { from: 'Q6', to: 'R6' } },
+    { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'S6', to: 'V6' } },
+    { name: 'SCOLARISATION', range: { from: 'W6', to: 'AG6' } },
+    { name: 'FINANCEMENT', range: { from: 'AH6', to: 'AS6' } },
+    { name: 'COMMENTAIRES', range: { from: 'AT6', to: 'AV6' } },
+    { name: 'MISE À JOUR', range: { from: 'AW6', to: 'AX6' } },
 ];
 
 const headers = [
@@ -222,10 +222,12 @@ const setDepartementHeader = (worksheet: ExcelJS.Worksheet, departement: Departe
         }];
         // On ajoute les financements DIHAL si l'on est dans l'année N-1 ou N
         if (dihalFinanceCampagn.has(year)) {
-            const updatedActionsFinanceesDihalPercentage = departement.data.length > 0 && actionFinanceesDihal > 0 ? `${Math.round((updatedActionsFinanceesDihal / actionFinanceesDihal) * 100)}%` : 'N/A';
+            const percentageText = actionFinanceesDihal > 0
+                ? ` (${Math.round((updatedActionsFinanceesDihal / actionFinanceesDihal) * 100)}%)`
+                : '';
             headerDatas.push({
                 cell: `${startingCol}5`,
-                value: `${updatedActionsFinanceesDihal} actions financées par la DIHAL sur ${actionFinanceesDihal} ont été mises à jour il y a moins de 3 mois (${updatedActionsFinanceesDihalPercentage})`,
+                value: `${updatedActionsFinanceesDihal} actions financées par la DIHAL sur ${actionFinanceesDihal} ont été mises à jour il y a moins de 3 mois${percentageText}`,
                 fontSpecific: {
                     size: 10,
                 },
@@ -350,6 +352,10 @@ function addDepartmentWorksheet(workbook: ExcelJS.Workbook, departement: string)
 function formatWorksheetCells(worksheet: ExcelJS.Worksheet, columnNumbers: number[], financementColumns: number[]) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     worksheet.eachRow({ includeEmpty: true }, (row, _rowNumber) => {
+        // Ignorer les 5 premières lignes (en-tête)
+        if (_rowNumber <= 5) {
+            return;
+        }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         row.eachCell({ includeEmpty: true }, (cell, _colNumber) => {
             cell.border = {
@@ -384,9 +390,9 @@ function formatCommentCol(worksheet: ExcelJS.Worksheet) {
 }
 
 function setSectionHeadersHeight(worksheet: ExcelJS.Worksheet) {
-    const firstRow = worksheet.getRow(1);
-    firstRow.height = 30;
-    firstRow.eachCell((cell) => {
+    const sectionRow = worksheet.getRow(6);
+    sectionRow.height = 30;
+    sectionRow.eachCell((cell) => {
         cell.alignment = {
             wrapText: true, horizontal: 'left', vertical: 'middle', indent: 2,
         };
@@ -394,8 +400,8 @@ function setSectionHeadersHeight(worksheet: ExcelJS.Worksheet) {
 }
 
 function setColumnHeadersHeight(worksheet: ExcelJS.Worksheet) {
-    const secondRow = worksheet.getRow(2);
-    secondRow.eachCell((cell) => {
+    const headerRow = worksheet.getRow(7);
+    headerRow.eachCell((cell) => {
         cell.fill = {
             type: 'pattern',
             pattern: 'solid',
@@ -485,10 +491,13 @@ export default function exportActions(
         const worksheet = addDepartmentWorksheet(workbook, donneeParDepartement.departement);
         worksheet.properties.defaultColWidth = 25; // Largeur par défaut des colonnes
 
-        // Ajouter les entêtes de sections
+        // Ajouter l'entête du département en premier (lignes 1-5)
+        setDepartementHeader(worksheet, donneeParDepartement, fetchedYear);
+
+        // Ajouter les entêtes de sections (ligne 6)
         setSectionTitles(sectionsToInclude, worksheet);
 
-        // Ajouter les entêtes de colonnes
+        // Ajouter les entêtes de colonnes (ligne 7)
         worksheet.addRow(headersToInclude.map(header => header.label));
 
         // Fixer la largeur des colonnes
@@ -510,10 +519,6 @@ export default function exportActions(
 
         // Fixer la hauteur des lignes et formater les entêtes de colonnes
         setColumnHeadersHeight(worksheet);
-
-        // Ajouter l'entête du département après le formatage global
-        // pour conserver un texte non tronqué et sans bordure.
-        setDepartementHeader(worksheet, donneeParDepartement, fetchedYear);
 
         // Masquer les colonnes A, B et C
         hideThreeFirstColumns(worksheet);
