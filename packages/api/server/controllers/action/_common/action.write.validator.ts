@@ -34,7 +34,11 @@ function canWriteManagersAndDepartement(mode: 'create' | 'update', req) {
 // Fonction factory qui génère un validateur d'utilisateurs
 // initialSanitizer (optionnel) est appliqué avant les contrôles de format,
 // par exemple pour conserver les pilotes actuels quand l'utilisateur n'a pas le droit de les modifier
-const createUserValidator = (fieldName: string | string[] | undefined, displayName: string, initialSanitizer?) => {
+const createUserValidator = (
+    fieldName: string | string[] | undefined,
+    displayName: string,
+    initialSanitizer?: (value: any, meta: { req: any }) => any,
+) => {
     let chain = body(fieldName);
 
     if (initialSanitizer) {
@@ -184,6 +188,42 @@ type IndicatorConfig = {
     };
 };
 
+// Helper pour valider le champ scolaire_mineur_scolarise_dans_annee
+const validateScolariseDansAnnee = (value: any, indicateur: any): true => {
+    if (value === null || value === undefined) {
+        return true;
+    }
+
+    // Vérifier que nombre_mineurs est renseigné
+    if (!Number.isInteger(indicateur.nombre_mineurs)) {
+        throw new TypeError('Le nombre de mineurs scolarisés dans l\'année ne peut être renseigné que si le nombre total de mineurs concernés par l\'action est également renseigné');
+    }
+
+    // Vérifier que la valeur ne dépasse pas le nombre de mineurs
+    if (value > indicateur.nombre_mineurs) {
+        throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut pas dépasser le nombre total de mineurs concernés par l\'action');
+    }
+
+    // Calculer le total des enfants scolarisés par niveau
+    const totalScolarises = [
+        'scolaire_nombre_maternelle',
+        'scolaire_nombre_elementaire',
+        'scolaire_nombre_college',
+        'scolaire_nombre_lycee',
+        'scolaire_nombre_autre',
+    ].reduce((total, field) => {
+        const val = indicateur[field];
+        return Number.isInteger(val) ? total + val : total;
+    }, 0);
+
+    // Vérifier que la valeur n'est pas inférieure à la somme des niveaux
+    if (value < totalScolarises) {
+        throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut pas être inférieur à la somme des mineurs scolarisés par niveau');
+    }
+
+    return true;
+};
+
 const INDICATOR_CONFIGS: IndicatorConfig[] = [
     {
         fieldName: 'indicateurs.*.nombre_personnes',
@@ -279,15 +319,15 @@ const INDICATOR_CONFIGS: IndicatorConfig[] = [
         options: { topic: 'school', maxComparisons: schoolMinorsMax('mineurs de moins de 3 ans identifiés sur site') },
     },
     {
-        fieldName: 'scolaire_mediation_moins_de_trois_ans',
-        displayName: 'Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation',
+        fieldName: 'indicateurs.*.scolaire_mediation_moins_de_trois_ans',
+        displayName: 'Nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation',
         options: {
             topic: 'school',
             maxComparisons: [maxComp('scolaire_mineurs_moins_de_trois_ans', 'Le nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de moins de 3 ans identifiés sur site')],
         },
     },
     {
-        fieldName: 'scolaire_mediation_trois_ans_et_plus',
+        fieldName: 'indicateurs.*.scolaire_mediation_trois_ans_et_plus',
         displayName: 'Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation',
         options: {
             topic: 'school',
@@ -712,40 +752,9 @@ export default (mode: 'create' | 'update') => [
     )),
     body('indicateurs.*.scolaire_mineur_scolarise_dans_annee')
         .custom((value, { req, path }) => {
-            if (value === null || value === undefined) {
-                return true;
-            }
-
             const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
             const indicateur = req.body.indicateurs[key];
-
-            // Vérifier que nombre_mineurs est renseigné
-            if (!Number.isInteger(indicateur.nombre_mineurs)) {
-                throw new TypeError('Le nombre de mineurs scolarisés dans l\'année ne peut être renseigné que si le nombre total de mineurs concernés par l\'action est également renseigné');
-            }
-
-            // Vérifier que la valeur ne dépasse pas le nombre de mineurs
-            if (value > indicateur.nombre_mineurs) {
-                throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut pas dépasser le nombre total de mineurs concernés par l\'action');
-            }
-
-            // Vérifier par rapport au nombre total d'enfants scolarisés
-            const totalScolarises = [
-                'scolaire_nombre_maternelle',
-                'scolaire_nombre_elementaire',
-                'scolaire_nombre_college',
-                'scolaire_nombre_lycee',
-                'scolaire_nombre_autre',
-            ].reduce((total, field) => {
-                const val = indicateur[field];
-                return Number.isInteger(val) ? total + val : total;
-            }, 0);
-
-            if (value < totalScolarises) {
-                throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut pas être inférieur à la somme des mineurs scolarisés par niveau');
-            }
-
-            return true;
+            return validateScolariseDansAnnee(value, indicateur);
         })
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
