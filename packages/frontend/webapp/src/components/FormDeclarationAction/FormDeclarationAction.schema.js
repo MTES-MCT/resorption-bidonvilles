@@ -63,7 +63,7 @@ function addSchoolLevelsSumValidation(schema) {
 addMethod(object, "usersIsNotEmpty", function () {
     return this.test(
         "usersIsNotEmpty",
-        ({ label }) => `${label} est obligatoire`,
+        ({ label }) => `"${label}" est un champ requis`,
         async function (value) {
             if (value?.users === undefined || value?.users === null) {
                 return true;
@@ -71,7 +71,7 @@ addMethod(object, "usersIsNotEmpty", function () {
 
             try {
                 await array()
-                    .min(1, ({ label }) => `${label} est obligatoire`)
+                    .min(1, ({ label }) => `"${label}" est un champ requis`)
                     .validate(value.users);
                 return true;
             } catch {
@@ -416,10 +416,11 @@ export default function formDeclarationAction() {
     const configStore = useConfigStore();
 
     const schema = {
-        name: string().required().label(labels.name),
+        name: string().required().label(`"${labels.name}"`),
         started_at: date()
-            .typeError(`${labels.started_at} est obligatoire`)
-            .label(labels.started_at),
+            .required()
+            .typeError(`${labels.started_at} est invalide`)
+            .label(`"${labels.started_at}"`),
         ended_at: date()
             .nullable()
             .typeError(`${labels.ended_at} est invalide`)
@@ -431,16 +432,16 @@ export default function formDeclarationAction() {
         topics: array()
             .of(string().oneOf(configStore.config.topics.map(({ uid }) => uid)))
             .required()
-            .min(1, ({ label }) => `${label} est un champ obligatoire`)
+            .min(1, ({ label }) => `"${label}" est un champ requis`)
             .label(labels.topics),
-        goals: string().required().label(labels.goals),
+        goals: string().required().label(`"${labels.goals}"`),
         location_departement: string()
             .required()
             .label(labels.location_departement),
         location_type: string()
             .oneOf(locationTypes.map(({ uid }) => uid))
             .required()
-            .label(labels.location_type),
+            .label(`"${labels.location_type}"`),
         location_eti_addresses: array()
             .of(
                 object().shape({
@@ -484,7 +485,11 @@ export default function formDeclarationAction() {
         location_autre: string()
             .when("location_type", {
                 is: "autre",
-                then: (schema) => schema.required(),
+                then: (schema) =>
+                    schema
+                        .required("Vous devez préciser où se déroule l'action")
+                        .trim()
+                        .min(1, "Vous devez préciser où se déroule l'action"),
             })
             .label(labels.location_autre),
         managers: object().required().usersIsNotEmpty().label(labels.managers),
