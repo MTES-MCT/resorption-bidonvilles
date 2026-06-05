@@ -87,17 +87,28 @@ export const useActionsStore = defineStore("actions", () => {
     });
 
     const filteredActions = computed(() => {
-        const STATUSES = ["open", "closed"];
+        const STATUSES = ["open", "closed", "myOrganization"];
         return Object.fromEntries(
-            STATUSES.map((status) => [
-                status,
-                filterActions(actions.value, {
-                    status,
+            STATUSES.map((status) => {
+                const baseFilters = {
                     search: filters.search.value,
                     location: filters.location.value,
                     ...filters.properties.value,
-                }),
-            ])
+                };
+
+                if (status === "myOrganization") {
+                    const userStore = useUserStore();
+                    const organizationId = userStore.user?.organization?.id;
+                    if (!organizationId) {
+                        return [status, []];
+                    }
+                    baseFilters.organizationId = organizationId;
+                } else {
+                    baseFilters.status = status;
+                }
+
+                return [status, filterActions(actions.value, baseFilters)];
+            })
         );
     });
 

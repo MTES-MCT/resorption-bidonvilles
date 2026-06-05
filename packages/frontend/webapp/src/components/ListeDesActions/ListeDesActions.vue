@@ -41,6 +41,11 @@ const tabs = computed(() => {
             total: actionsStore.filteredActions["open"].length,
         },
         {
+            id: "myOrganization",
+            label: "Actions de ma structure",
+            total: actionsStore.filteredActions["myOrganization"].length,
+        },
+        {
             id: "closed",
             label: "Actions terminées",
             total: actionsStore.filteredActions["closed"].length,
