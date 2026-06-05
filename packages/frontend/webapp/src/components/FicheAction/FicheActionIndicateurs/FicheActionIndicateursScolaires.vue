@@ -92,7 +92,10 @@ const scolarisesAvecTotal = computed(() => {
 
         // Les 4 premières catégories sont maintenant dans le bon ordre
         // Le total est déjà calculé par le backend à la position 4
-        return yearData;
+        const total = yearData
+            .slice(0, 4)
+            .reduce((sum, val) => sum + (val || 0), 0);
+        return [...yearData.slice(0, 4), total];
     });
 });
 </script>
