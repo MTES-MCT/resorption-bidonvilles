@@ -171,4 +171,173 @@ describe('services/action/fetch()', () => {
             expect(stubs.actionModelFetch).to.have.been.calledWith(user, undefined);
         });
     });
+
+    describe('filtrage par structure (organizationId)', () => {
+        it('retourne uniquement les actions ayant au moins un opérateur de la structure spécifiée', async () => {
+            const actionsWithDifferentOrgs = [
+                fakeAction({
+                    id: 1,
+                    name: 'Action avec opérateur structure 1',
+                    managers: [],
+                    operators: [{
+                        id: 1,
+                        name: 'Structure 1',
+                        abbreviation: 'S1',
+                        users: [{
+                            id: 10,
+                            email: 'user1@structure1.fr',
+                            first_name: 'User',
+                            last_name: 'One',
+                            position: 'Chef',
+                            phone: null,
+                            role: 'collaborator',
+                            is_admin: false,
+                            organization: { id: 1, name: 'Structure 1', abbreviation: 'S1' },
+                        }],
+                    }],
+                }),
+                fakeAction({
+                    id: 2,
+                    name: 'Action avec opérateur structure 2',
+                    managers: [],
+                    operators: [{
+                        id: 2,
+                        name: 'Structure 2',
+                        abbreviation: 'S2',
+                        users: [{
+                            id: 20,
+                            email: 'user2@structure2.fr',
+                            first_name: 'User',
+                            last_name: 'Two',
+                            position: 'Chef',
+                            phone: null,
+                            role: 'collaborator',
+                            is_admin: false,
+                            organization: { id: 2, name: 'Structure 2', abbreviation: 'S2' },
+                        }],
+                    }],
+                }),
+                fakeAction({
+                    id: 3,
+                    name: 'Action avec manager structure 1 mais pas opérateur',
+                    managers: [{
+                        id: 1,
+                        name: 'Structure 1',
+                        abbreviation: 'S1',
+                        users: [{
+                            id: 11,
+                            email: 'user3@structure1.fr',
+                            first_name: 'User',
+                            last_name: 'Three',
+                            position: 'Chef',
+                            phone: null,
+                            role: 'collaborator',
+                            is_admin: false,
+                            organization: { id: 1, name: 'Structure 1', abbreviation: 'S1' },
+                        }],
+                    }],
+                    operators: [],
+                }),
+            ];
+
+            stubs.actionModelFetch.resolves(actionsWithDifferentOrgs);
+
+            const result = await fetch(user, undefined, 1);
+
+            expect(result).to.have.lengthOf(1);
+            expect(result[0]).to.have.property('id', 1);
+        });
+
+        it('retourne un tableau vide si aucune action ne correspond à la structure', async () => {
+            const actionsWithoutTargetOrg = [
+                fakeAction({
+                    id: 1,
+                    managers: [{
+                        id: 2,
+                        name: 'Structure 2',
+                        abbreviation: 'S2',
+                        users: [{
+                            id: 20,
+                            email: 'user@structure2.fr',
+                            first_name: 'User',
+                            last_name: 'Two',
+                            position: 'Chef',
+                            phone: null,
+                            role: 'collaborator',
+                            is_admin: false,
+                            organization: { id: 2, name: 'Structure 2', abbreviation: 'S2' },
+                        }],
+                    }],
+                    operators: [],
+                }),
+            ];
+
+            stubs.actionModelFetch.resolves(actionsWithoutTargetOrg);
+
+            const result = await fetch(user, undefined, 1);
+
+            expect(result).to.be.an('array').that.is.empty;
+        });
+
+        it('vérifie uniquement les opérateurs (pas les managers)', async () => {
+            const actionWithManagerButNotOperator = fakeAction({
+                id: 1,
+                name: 'Action avec manager structure 1 mais opérateur structure 2',
+                managers: [{
+                    id: 1,
+                    name: 'Structure 1',
+                    abbreviation: 'S1',
+                    users: [{
+                        id: 10,
+                        email: 'user@structure1.fr',
+                        first_name: 'User',
+                        last_name: 'One',
+                        position: 'Chef',
+                        phone: null,
+                        role: 'collaborator',
+                        is_admin: false,
+                        organization: { id: 1, name: 'Structure 1', abbreviation: 'S1' },
+                    }],
+                }],
+                operators: [{
+                    id: 2,
+                    name: 'Structure 2',
+                    abbreviation: 'S2',
+                    users: [{
+                        id: 20,
+                        email: 'user@structure2.fr',
+                        first_name: 'User',
+                        last_name: 'Two',
+                        position: 'Chef',
+                        phone: null,
+                        role: 'collaborator',
+                        is_admin: false,
+                        organization: { id: 2, name: 'Structure 2', abbreviation: 'S2' },
+                    }],
+                }],
+            });
+
+            stubs.actionModelFetch.resolves([actionWithManagerButNotOperator]);
+
+            const result = await fetch(user, undefined, 1);
+
+            expect(result).to.be.an('array').that.is.empty;
+        });
+
+        it('retourne toutes les actions si organizationId est undefined', async () => {
+            stubs.actionModelFetch.resolves(mockActions);
+
+            const result = await fetch(user, undefined, undefined);
+
+            expect(result).to.have.lengthOf(2);
+        });
+
+        it('retourne toutes les actions si organizationId est null', async () => {
+            stubs.actionModelFetch.resolves(mockActions);
+
+            const result = await fetch(user, undefined, null);
+
+            expect(result).to.have.lengthOf(2);
+        });
+    });
 });
