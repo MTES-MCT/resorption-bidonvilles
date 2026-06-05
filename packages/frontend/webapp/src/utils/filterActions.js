@@ -1,63 +1,62 @@
-export default function filterActions(actions, filters) {
+// Chaque entrée décrit un filtre : `isActive` indique si le filtre est
+// renseigné, `predicate` teste si une action doit être conservée.
+// Une action est retenue uniquement si elle passe tous les filtres actifs.
+function buildActiveFilters(filters) {
     const now = new Date();
     const searchRegex = filters.search
         ? new RegExp(filters.search, "ig")
         : null;
+    const isOrganizationLocation = filters.location?.type === "organization";
 
-    return actions.filter((action) => {
-        if (
-            filters.organizationId !== undefined &&
-            !checkUserOrganization(action, filters.organizationId)
-        ) {
-            return false;
-        }
+    const definitions = [
+        {
+            isActive: filters.organizationId !== undefined,
+            predicate: (action) =>
+                checkUserOrganization(action, filters.organizationId),
+        },
+        {
+            isActive: isOrganizationLocation,
+            predicate: (action) =>
+                checkOrganization(action, filters.location.organizationId),
+        },
+        {
+            isActive: !isOrganizationLocation,
+            predicate: (action) => checkLocation(action, filters),
+        },
+        {
+            isActive: !!filters.status,
+            predicate: (action) => checkStatus(action, filters.status, now),
+        },
+        {
+            isActive: !filters.location && !!filters.search,
+            predicate: (action) => checkSearch(action, searchRegex),
+        },
+        {
+            isActive: filters.topic.length > 0,
+            predicate: (action) => checkTopic(action, filters.topic),
+        },
+        {
+            isActive: filters.interventionLocation.length > 0,
+            predicate: (action) =>
+                checkInterventionLocation(action, filters.interventionLocation),
+        },
+        {
+            isActive: filters.dihalFinancing.length > 0,
+            predicate: (action) =>
+                checkDihalFinancing(action, filters.dihalFinancing),
+        },
+    ];
 
-        if (
-            filters.location?.type === "organization" &&
-            !checkOrganization(action, filters.location.organizationId)
-        ) {
-            return false;
-        }
+    return definitions
+        .filter(({ isActive }) => isActive)
+        .map(({ predicate }) => predicate);
+}
 
-        if (
-            filters.location?.type !== "organization" &&
-            !checkLocation(action, filters)
-        ) {
-            return false;
-        }
-
-        if (filters.status && !checkStatus(action, filters.status, now)) {
-            return false;
-        }
-
-        if (
-            !filters.location &&
-            filters.search &&
-            !checkSearch(action, searchRegex)
-        ) {
-            return false;
-        }
-
-        if (filters.topic.length > 0 && !checkTopic(action, filters.topic)) {
-            return false;
-        }
-
-        if (
-            filters.interventionLocation.length > 0 &&
-            !checkInterventionLocation(action, filters.interventionLocation)
-        ) {
-            return false;
-        }
-
-        if (
-            filters.dihalFinancing.length > 0 &&
-            !checkDihalFinancing(action, filters.dihalFinancing)
-        ) {
-            return false;
-        }
-
-        return true;
-    });
+export default function filterActions(actions, filters) {
+    const activeFilters = buildActiveFilters(filters);
+    return actions.filter((action) =>
+        activeFilters.every((predicate) => predicate(action))
+    );
 }
 
 function checkStatus(action, status, now) {
@@ -73,13 +72,11 @@ function checkSearch(action, searchRegex) {
         !!action.name?.match(searchRegex) ||
         !!action.operators?.find(
             ({ name, abbreviation }) =>
-                name.match(searchRegex) ||
-                (abbreviation && abbreviation.match(searchRegex))
+                name.match(searchRegex) || abbreviation?.match(searchRegex)
         ) ||
         !!action.managers?.find(
             ({ name, abbreviation }) =>
-                name.match(searchRegex) ||
-                (abbreviation && abbreviation.match(searchRegex))
+                name.match(searchRegex) || abbreviation?.match(searchRegex)
         )
     );
 }
