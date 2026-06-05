@@ -32,16 +32,16 @@ function buildActiveFilters(filters) {
             predicate: (action) => checkSearch(action, searchRegex),
         },
         {
-            isActive: filters.topic.length > 0,
+            isActive: filters.topic?.length > 0,
             predicate: (action) => checkTopic(action, filters.topic),
         },
         {
-            isActive: filters.interventionLocation.length > 0,
+            isActive: filters.interventionLocation?.length > 0,
             predicate: (action) =>
                 checkInterventionLocation(action, filters.interventionLocation),
         },
         {
-            isActive: filters.dihalFinancing.length > 0,
+            isActive: filters.dihalFinancing?.length > 0,
             predicate: (action) =>
                 checkDihalFinancing(action, filters.dihalFinancing),
         },
