@@ -6,6 +6,13 @@ export default function filterActions(actions, filters) {
 
     return actions.filter((action) => {
         if (
+            filters.organizationId !== undefined &&
+            !checkUserOrganization(action, filters.organizationId)
+        ) {
+            return false;
+        }
+
+        if (
             filters.location?.type === "organization" &&
             !checkOrganization(action, filters.location.organizationId)
         ) {
@@ -110,6 +117,11 @@ function checkTopic(action, filters) {
 
 function checkInterventionLocation(action, filters) {
     return filters.includes(action.location_type);
+}
+
+function checkUserOrganization(action, organizationId) {
+    const allUsers = [...action.operators.flatMap((org) => org.users)];
+    return allUsers.some((u) => u.organization.id === organizationId);
 }
 
 function checkOrganization(action, organizationId) {
