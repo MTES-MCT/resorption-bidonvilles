@@ -327,7 +327,7 @@ describe('services/action/fetch()', () => {
         it('retourne toutes les actions si organizationId est undefined', async () => {
             stubs.actionModelFetch.resolves(mockActions);
 
-            const result = await fetch(user, undefined, undefined);
+            const result = await fetch(user);
 
             expect(result).to.have.lengthOf(2);
         });
