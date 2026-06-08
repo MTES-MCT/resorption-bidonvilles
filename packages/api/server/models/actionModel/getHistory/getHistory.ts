@@ -215,13 +215,16 @@ export default async function getHistory(user: User, actionId: number): Promise<
                                 'hebergement_nombre_menages', amh.hebergement_nombre_menages,
                                 'logement_nombre_personnes', amh.logement_nombre_personnes,
                                 'logement_nombre_menages', amh.logement_nombre_menages,
-                                'scolaire_mineurs_scolarisables', amh.scolaire_mineurs_scolarisables,
-                                'scolaire_mineurs_en_mediation', amh.scolaire_mineurs_en_mediation,
+                                'scolaire_mineurs_moins_de_trois_ans', amh.scolaire_mineurs_moins_de_trois_ans,
+                                'scolaire_mineurs_trois_ans_et_plus', amh.scolaire_mineurs_trois_ans_et_plus,
+                                'scolaire_mediation_moins_de_trois_ans', amh.scolaire_mediation_moins_de_trois_ans,
+                                'scolaire_mediation_trois_ans_et_plus', amh.scolaire_mediation_trois_ans_et_plus,
                                 'scolaire_nombre_maternelle', amh.scolaire_nombre_maternelle,
                                 'scolaire_nombre_elementaire', amh.scolaire_nombre_elementaire,
                                 'scolaire_nombre_college', amh.scolaire_nombre_college,
                                 'scolaire_nombre_lycee', amh.scolaire_nombre_lycee,
-                                'scolaire_nombre_autre', amh.scolaire_nombre_autre
+                                'scolaire_nombre_autre', amh.scolaire_nombre_autre,
+                                'scolaire_mineur_scolarise_dans_annee', amh.scolaire_mineur_scolarise_dans_annee
                             )
                         ) FILTER (WHERE amh.date IS NOT NULL),
                         '{}'::jsonb
@@ -438,13 +441,16 @@ export default async function getHistory(user: User, actionId: number): Promise<
                                     'hebergement_nombre_menages', am.hebergement_nombre_menages,
                                     'logement_nombre_personnes', am.logement_nombre_personnes,
                                     'logement_nombre_menages', am.logement_nombre_menages,
-                                    'scolaire_mineurs_scolarisables', am.scolaire_mineurs_scolarisables,
-                                    'scolaire_mineurs_en_mediation', am.scolaire_mineurs_en_mediation,
+                                    'scolaire_mineurs_moins_de_trois_ans', am.scolaire_mineurs_moins_de_trois_ans,
+                                    'scolaire_mineurs_trois_ans_et_plus', am.scolaire_mineurs_trois_ans_et_plus,
+                                    'scolaire_mediation_moins_de_trois_ans', am.scolaire_mediation_moins_de_trois_ans,
+                                    'scolaire_mediation_trois_ans_et_plus', am.scolaire_mediation_trois_ans_et_plus,
                                     'scolaire_nombre_maternelle', am.scolaire_nombre_maternelle,
                                     'scolaire_nombre_elementaire', am.scolaire_nombre_elementaire,
                                     'scolaire_nombre_college', am.scolaire_nombre_college,
                                     'scolaire_nombre_lycee', am.scolaire_nombre_lycee,
-                                    'scolaire_nombre_autre', am.scolaire_nombre_autre
+                                    'scolaire_nombre_autre', am.scolaire_nombre_autre,
+                                    'scolaire_mineur_scolarise_dans_annee', am.scolaire_mineur_scolarise_dans_annee
                                 )
                             )
                             FROM action_metrics am

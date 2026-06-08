@@ -214,13 +214,16 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
         hebergement_nombre_menages: 'Hébergement - Nombre de ménages',
         logement_nombre_personnes: 'Logement - Nombre de personnes',
         logement_nombre_menages: 'Logement - Nombre de ménages',
-        scolaire_mineurs_scolarisables: 'Scolaire - Mineurs scolarisables',
-        scolaire_mineurs_en_mediation: 'Scolaire - Mineurs en médiation',
+        scolaire_mineurs_moins_de_trois_ans: 'Scolaire - Mineurs scolarisables de moins de 3 ans',
+        scolaire_mineurs_trois_ans_et_plus: 'Scolaire - Mineurs scolarisables de 3 ans et plus',
+        scolaire_mediation_moins_de_trois_ans: 'Scolaire - Mineurs en médiation de moins de 3 ans',
+        scolaire_mediation_trois_ans_et_plus: 'Scolaire - Mineurs en médiation de 3 ans et plus',
         scolaire_nombre_maternelle: 'Scolaire - Nombre en maternelle',
         scolaire_nombre_elementaire: 'Scolaire - Nombre en élémentaire',
         scolaire_nombre_college: 'Scolaire - Nombre au collège',
         scolaire_nombre_lycee: 'Scolaire - Nombre au lycée',
         scolaire_nombre_autre: 'Scolaire - Nombre autre',
+        scolaire_mineur_scolarise_dans_annee: 'Scolaire - Mineurs scolarisés dans l\'année',
     };
 
     const result: Diff[] = [];
