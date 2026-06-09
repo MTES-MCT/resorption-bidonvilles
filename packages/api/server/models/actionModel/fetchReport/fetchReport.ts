@@ -154,8 +154,6 @@ export default function fetchReport(
                 action_metrics.fk_action AS action_id,
                 MAX(action_metrics.created_at) AS last_metrics_update
             FROM action_metrics
-            WHERE
-                TO_CHAR(action_metrics.date, 'YYYY') = :annee::varchar
             GROUP BY action_metrics.fk_action
         ),
         scolarmetrics AS
