@@ -30,15 +30,15 @@ type HeaderCell = {
 };
 
 const sectionTitles = [
-    { name: 'ACTION', range: { from: 'A6', to: 'M6' } },
-    { name: 'INDICATEURS GÉNÉRAUX', range: { from: 'N6', to: 'P6' } },
-    { name: 'SANTÉ', range: { from: 'Q6', to: 'Q6' } },
-    { name: 'EMPLOI', range: { from: 'R6', to: 'S6' } },
-    { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'T6', to: 'W6' } },
-    { name: 'SCOLARISATION', range: { from: 'X6', to: 'AJ6' } },
-    { name: 'FINANCEMENT', range: { from: 'AK6', to: 'AV6' } },
-    { name: 'COMMENTAIRES', range: { from: 'AW6', to: 'AY6' } },
-    { name: 'MISE À JOUR', range: { from: 'AZ6', to: 'BA6' } },
+    { name: 'ACTION', range: { from: 'A6', to: 'K6' } },
+    { name: 'INDICATEURS GÉNÉRAUX', range: { from: 'L6', to: 'O6' } },
+    { name: 'SANTÉ', range: { from: 'P6', to: 'P6' } },
+    { name: 'EMPLOI', range: { from: 'Q6', to: 'R6' } },
+    { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'S6', to: 'V6' } },
+    { name: 'SCOLARISATION', range: { from: 'W6', to: 'AI6' } },
+    { name: 'FINANCEMENT', range: { from: 'AJ6', to: 'AU6' } },
+    { name: 'COMMENTAIRES', range: { from: 'AV6', to: 'AX6' } },
+    { name: 'MISE À JOUR', range: { from: 'AY6', to: 'AZ6' } },
 ];
 
 const headers = [
@@ -53,7 +53,6 @@ const headers = [
     { label: 'Lieu', width: '4' },
     { label: 'Champs d\'intervention', width: '7' },
     { label: 'Objectifs de l\'action', width: '10' },
-    { label: 'Opérateurs', width: '7' },
     { label: 'Nombre total de personnes concernées par l\'action', width: '5' },
     { label: 'Nombre de ménages', width: '5' },
     { label: 'Nombre de femmes', width: '5' },
@@ -299,7 +298,6 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, in
             item.location_type,
             item.topics === null ? '' : item.topics.join(', '),
             item.goals,
-            item.operators === null ? '' : item.operators.join('\n'),
             item.nombre_personnes,
             item.nombre_menages,
             item.nombre_femmes,
@@ -459,10 +457,10 @@ export default function exportActions(
             .filter(s => s.name !== 'FINANCEMENT')
             .map((section) => {
                 if (section.name === 'COMMENTAIRES') {
-                    return { name: section.name, range: { from: 'AK6', to: 'AM6' } };
+                    return { name: section.name, range: { from: 'AJ6', to: 'AL6' } };
                 }
                 if (section.name === 'MISE À JOUR') {
-                    return { name: section.name, range: { from: 'AN6', to: 'AO6' } };
+                    return { name: section.name, range: { from: 'AM6', to: 'AN6' } };
                 }
                 return section;
             });
