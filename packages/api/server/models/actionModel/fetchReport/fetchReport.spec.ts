@@ -64,4 +64,15 @@ describe('models/actionModel/fetchReport/fetchReport()', () => {
         const sql: string = queryStub.firstCall.args[0];
         expect(sql).to.include('action_name');
     });
+
+    // ── Test 4 : NULLIF utilisé pour les financements ────────────────────────
+    it('utilise NULLIF pour retourner NULL au lieu de 0 pour les financements sans valeur', async () => {
+        await fetchReport(YEAR);
+
+        const sql: string = queryStub.firstCall.args[0];
+        expect(sql).to.include('NULLIF(SUM(CASE WHEN af.fk_action_finance_type');
+        expect(sql).to.include('finance_etatique');
+        expect(sql).to.include('finance_dedie');
+        expect(sql).to.include('depense_finance_etatique');
+    });
 });

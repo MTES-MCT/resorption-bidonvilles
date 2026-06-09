@@ -54,18 +54,18 @@ export default function fetchReport(
             SELECT
             af.fk_action as "action_id",
             af."year" as "Année",
-            SUM(CASE WHEN af.fk_action_finance_type = 'etatique' THEN af.amount ELSE 0 END) as "finance_etatique",
-            SUM(CASE WHEN af.fk_action_finance_type = 'dedie' THEN af.amount ELSE 0 END) as "finance_dedie",
-            SUM(CASE WHEN af.fk_action_finance_type = 'collectivite' THEN af.amount ELSE 0 END) as "finance_collectivite",
-            SUM(CASE WHEN af.fk_action_finance_type = 'europeen' THEN af.amount ELSE 0 END) as "finance_europeen",
-            SUM(CASE WHEN af.fk_action_finance_type = 'prive' THEN af.amount ELSE 0 END) as "finance_prive",
-            SUM(CASE WHEN af.fk_action_finance_type = 'autre' THEN af.amount ELSE 0 END) as "finance_autre",
-            SUM(CASE WHEN af.fk_action_finance_type = 'etatique' THEN af.real_amount ELSE 0 END) as "depense_finance_etatique",
-            SUM(CASE WHEN af.fk_action_finance_type = 'dedie' THEN af.real_amount ELSE 0 END) as "depense_finance_dedie",
-            SUM(CASE WHEN af.fk_action_finance_type = 'collectivite' THEN af.real_amount ELSE 0 END) as "depense_finance_collectivite",
-            SUM(CASE WHEN af.fk_action_finance_type = 'europeen' THEN af.real_amount ELSE 0 END) as "depense_finance_europeen",
-            SUM(CASE WHEN af.fk_action_finance_type = 'prive' THEN af.real_amount ELSE 0 END) as "depense_finance_prive",
-            SUM(CASE WHEN af.fk_action_finance_type = 'autre' THEN af.real_amount ELSE 0 END) as "depense_finance_autre"
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'etatique' THEN af.amount ELSE 0 END), 0) as "finance_etatique",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'dedie' THEN af.amount ELSE 0 END), 0) as "finance_dedie",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'collectivite' THEN af.amount ELSE 0 END), 0) as "finance_collectivite",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'europeen' THEN af.amount ELSE 0 END), 0) as "finance_europeen",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'prive' THEN af.amount ELSE 0 END), 0) as "finance_prive",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'autre' THEN af.amount ELSE 0 END), 0) as "finance_autre",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'etatique' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_etatique",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'dedie' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_dedie",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'collectivite' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_collectivite",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'europeen' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_europeen",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'prive' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_prive",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'autre' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_autre"
         FROM 
             action_finances af
         LEFT JOIN actions ON af.fk_action = actions.action_id
