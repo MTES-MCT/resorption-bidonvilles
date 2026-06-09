@@ -36,13 +36,16 @@ function buildActionItem(override: Partial<ActionItemExtended> = {}): ActionItem
         hebergement_nombre_menages: null,
         logement_nombre_personnes: null,
         logement_nombre_menages: null,
-        scolaire_mineurs_scolarisables: null,
-        scolaire_mineurs_en_mediation: null,
+        scolaire_mineurs_moins_de_trois_ans: null,
+        scolaire_mineurs_trois_ans_et_plus: null,
+        scolaire_mediation_moins_de_trois_ans: null,
+        scolaire_mediation_trois_ans_et_plus: null,
         scolaire_nombre_maternelle: null,
         scolaire_nombre_elementaire: null,
         scolaire_nombre_college: null,
         scolaire_nombre_lycee: null,
         scolaire_nombre_autre: null,
+        scolaire_mineur_scolarise_dans_annee: null,
         finance_etatique: null,
         finance_dedie: null,
         finance_collectivite: null,
@@ -247,5 +250,116 @@ describe('services/action/exportActions.creerClasseurExcel()', () => {
         );
         expect(actionSectionCall, 'appel mergeCells pour la section ACTION non trouvé').to.exist;
         expect(actionSectionCall.args[1]).to.equal('K6');
+    });
+
+    // ── Test 6 : Actions sans indicateurs ne sont pas comptées ──────────────
+    it('ne compte pas les actions financées DIHAL sans indicateurs renseignés dans updatedActionsFinanceesDihal', async () => {
+        const now = new Date();
+        const recentDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
+
+        const actionWithMetrics = buildActionReportRow({
+            finance_dedie: 1000,
+            metrics_updated_at: recentDate,
+            nombre_personnes: 50,
+        });
+
+        const actionWithoutMetrics = buildActionReportRow({
+            finance_dedie: 2000,
+            metrics_updated_at: recentDate,
+            nombre_personnes: null,
+            nombre_menages: null,
+            nombre_femmes: null,
+            nombre_mineurs: null,
+        });
+
+        await exportActions([actionWithMetrics, actionWithoutMetrics], YEAR);
+
+        const headerCalls = addRowStub.getCalls().filter((call) => {
+            const firstArg = call.args[0];
+            return Array.isArray(firstArg) && firstArg.some(val => typeof val === 'string' && val.includes('indicateurs mis à jour'));
+        });
+
+        expect(headerCalls.length).to.be.greaterThan(0);
+    });
+
+    // ── Test 7 : Valeurs nulles affichées avec un tiret ─────────────────────
+    it('affiche un tiret "-" pour les valeurs numériques nulles au lieu de 0 ou vide', async () => {
+        const actionWithNullMetrics = buildActionReportRow({
+            nombre_personnes: null,
+            nombre_menages: null,
+            finance_dedie: null,
+        });
+
+        await exportActions([actionWithNullMetrics], YEAR);
+
+        const dataRowCall = addRowStub.getCalls().find((call) => {
+            const firstArg = call.args[0];
+            return Array.isArray(firstArg) && firstArg.includes('Projet intégration');
+        });
+
+        expect(dataRowCall, 'appel addRow pour la ligne de données non trouvé').to.exist;
+
+        const rowData = dataRowCall.args[0];
+        const nombrePersonnesIndex = 11;
+        const nombreMenagesIndex = 12;
+
+        expect(rowData[nombrePersonnesIndex]).to.equal('-');
+        expect(rowData[nombreMenagesIndex]).to.equal('-');
+    });
+
+    // ── Test 8 : Totaux calculés affichent "-" quand toutes les valeurs sont null ───
+    it('affiche un tiret "-" pour les totaux calculés quand toutes les valeurs sources sont null', async () => {
+        const actionWithNullScolarMetrics = buildActionReportRow({
+            scolaire_mineurs_moins_de_trois_ans: null,
+            scolaire_mineurs_trois_ans_et_plus: null,
+            scolaire_nombre_maternelle: null,
+            scolaire_nombre_elementaire: null,
+            scolaire_nombre_college: null,
+            scolaire_nombre_lycee: null,
+        });
+
+        await exportActions([actionWithNullScolarMetrics], YEAR);
+
+        const dataRowCall = addRowStub.getCalls().find((call) => {
+            const firstArg = call.args[0];
+            return Array.isArray(firstArg) && firstArg.includes('Projet intégration');
+        });
+
+        expect(dataRowCall, 'appel addRow pour la ligne de données non trouvé').to.exist;
+
+        const rowData = dataRowCall.args[0];
+        const mineursIdentifiesTotalIndex = 22;
+        const mineursScolarisesTotalIndex = 28;
+
+        expect(rowData[mineursIdentifiesTotalIndex]).to.equal('-');
+        expect(rowData[mineursScolarisesTotalIndex]).to.equal('-');
+    });
+
+    // ── Test 9 : Totaux calculés affichent 0 quand au moins une valeur est 0 ───
+    it('affiche 0 pour les totaux calculés quand au moins une valeur source est 0', async () => {
+        const actionWithZeroScolarMetrics = buildActionReportRow({
+            scolaire_mineurs_moins_de_trois_ans: 0,
+            scolaire_mineurs_trois_ans_et_plus: null,
+            scolaire_nombre_maternelle: 0,
+            scolaire_nombre_elementaire: null,
+            scolaire_nombre_college: null,
+            scolaire_nombre_lycee: null,
+        });
+
+        await exportActions([actionWithZeroScolarMetrics], YEAR);
+
+        const dataRowCall = addRowStub.getCalls().find((call) => {
+            const firstArg = call.args[0];
+            return Array.isArray(firstArg) && firstArg.includes('Projet intégration');
+        });
+
+        expect(dataRowCall, 'appel addRow pour la ligne de données non trouvé').to.exist;
+
+        const rowData = dataRowCall.args[0];
+        const mineursIdentifiesTotalIndex = 22;
+        const mineursScolarisesTotalIndex = 28;
+
+        expect(rowData[mineursIdentifiesTotalIndex]).to.equal(0);
+        expect(rowData[mineursScolarisesTotalIndex]).to.equal(0);
     });
 });

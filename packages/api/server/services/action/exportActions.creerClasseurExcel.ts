@@ -189,11 +189,30 @@ function setSectionTitles(sections: SectionTitle[], worksheet: ExcelJS.Worksheet
     });
 }
 
+const hasAtLeastOneMetricValue = (action: ActionItem): boolean => {
+    const metricFields = [
+        'nombre_personnes', 'nombre_menages', 'nombre_femmes', 'nombre_mineurs',
+        'sante_nombre_personnes', 'travail_nombre_personnes', 'travail_nombre_femmes',
+        'hebergement_nombre_personnes', 'hebergement_nombre_menages',
+        'logement_nombre_personnes', 'logement_nombre_menages',
+        'scolaire_mineurs_moins_de_trois_ans', 'scolaire_mineurs_trois_ans_et_plus',
+        'scolaire_mediation_moins_de_trois_ans', 'scolaire_mediation_trois_ans_et_plus',
+        'scolaire_nombre_maternelle', 'scolaire_nombre_elementaire',
+        'scolaire_nombre_college', 'scolaire_nombre_lycee', 'scolaire_nombre_autre',
+        'scolaire_mineur_scolarise_dans_annee',
+    ];
+    return metricFields.some(field => action[field] !== null && action[field] !== undefined);
+};
+
 const setDepartementHeader = (worksheet: ExcelJS.Worksheet, departement: DepartementObject, year: number) => {
     const startingCol: string = departement.departement === 'Tous' ? 'A' : 'D';
     const dihalFinanceCampagn: Set<number> = new Set([new Date().getFullYear() - 1, new Date().getFullYear()]);
     const actionFinanceesDihal: number = departement.data.filter(action => action.finance_dedie !== null && action.finance_dedie > 0).length;
-    const updatedActionsFinanceesDihal: number = departement.data.filter(action => action.finance_dedie !== null && action.finance_dedie > 0 && action.metrics_updated_at !== null && (new Date(action.metrics_updated_at) >= new Date(Date.now() - 90 * 24 * 60 * 60 * 1000))).length;
+    const updatedActionsFinanceesDihal: number = departement.data.filter(action => action.finance_dedie !== null
+        && action.finance_dedie > 0
+        && action.metrics_updated_at !== null
+        && hasAtLeastOneMetricValue(action)
+        && (new Date(action.metrics_updated_at) >= new Date(Date.now() - 90 * 24 * 60 * 60 * 1000))).length;
 
     try {
         const headerDatas: HeaderCell[] = [{
@@ -254,6 +273,7 @@ const setDepartementHeader = (worksheet: ExcelJS.Worksheet, departement: Departe
 
 function sumNumbers(values: Array<number | null | undefined>): number | null {
     const numericValues = values
+        .filter(value => value !== null && value !== undefined)
         .map(value => (typeof value === 'number' ? value : Number(value)))
         .filter(value => Number.isFinite(value));
 
@@ -263,6 +283,13 @@ function sumNumbers(values: Array<number | null | undefined>): number | null {
 
     return numericValues.reduce((acc, value) => acc + value, 0);
 }
+
+const formatNumericValue = (value: number | null | undefined): number | string => {
+    if (value === null || value === undefined) {
+        return '-';
+    }
+    return value;
+};
 
 // Ajouter les lignes de données
 function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, includeFinances: boolean = true) {
@@ -298,47 +325,47 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, in
             item.location_type,
             item.topics === null ? '' : item.topics.join(', '),
             item.goals,
-            item.nombre_personnes,
-            item.nombre_menages,
-            item.nombre_femmes,
-            item.nombre_mineurs,
-            item.sante_nombre_personnes,
-            item.travail_nombre_personnes,
-            item.travail_nombre_femmes,
-            item.hebergement_nombre_personnes,
-            item.hebergement_nombre_menages,
-            item.logement_nombre_personnes,
-            item.logement_nombre_menages,
-            mineursIdentifiesTotal,
-            item.scolaire_mineurs_moins_de_trois_ans,
-            item.scolaire_mineurs_trois_ans_et_plus,
-            mineursMediationTotal,
-            item.scolaire_mediation_moins_de_trois_ans,
-            item.scolaire_mediation_trois_ans_et_plus,
-            item.scolaire_mineur_scolarise_dans_annee,
-            mineursScolarisesTotal,
-            item.scolaire_nombre_maternelle,
-            item.scolaire_nombre_elementaire,
-            item.scolaire_nombre_college,
-            item.scolaire_nombre_lycee,
-            item.scolaire_nombre_autre,
+            formatNumericValue(item.nombre_personnes),
+            formatNumericValue(item.nombre_menages),
+            formatNumericValue(item.nombre_femmes),
+            formatNumericValue(item.nombre_mineurs),
+            formatNumericValue(item.sante_nombre_personnes),
+            formatNumericValue(item.travail_nombre_personnes),
+            formatNumericValue(item.travail_nombre_femmes),
+            formatNumericValue(item.hebergement_nombre_personnes),
+            formatNumericValue(item.hebergement_nombre_menages),
+            formatNumericValue(item.logement_nombre_personnes),
+            formatNumericValue(item.logement_nombre_menages),
+            formatNumericValue(mineursIdentifiesTotal),
+            formatNumericValue(item.scolaire_mineurs_moins_de_trois_ans),
+            formatNumericValue(item.scolaire_mineurs_trois_ans_et_plus),
+            formatNumericValue(mineursMediationTotal),
+            formatNumericValue(item.scolaire_mediation_moins_de_trois_ans),
+            formatNumericValue(item.scolaire_mediation_trois_ans_et_plus),
+            formatNumericValue(item.scolaire_mineur_scolarise_dans_annee),
+            formatNumericValue(mineursScolarisesTotal),
+            formatNumericValue(item.scolaire_nombre_maternelle),
+            formatNumericValue(item.scolaire_nombre_elementaire),
+            formatNumericValue(item.scolaire_nombre_college),
+            formatNumericValue(item.scolaire_nombre_lycee),
+            formatNumericValue(item.scolaire_nombre_autre),
         ];
 
         // Ajouter les colonnes de financement si l'utilisateur a les permissions
         if (includeFinances) {
             rowData.push(
-                item.finance_etatique,
-                item.depense_finance_etatique,
-                item.finance_dedie,
-                item.depense_finance_dedie,
-                item.finance_collectivite,
-                item.depense_finance_collectivite,
-                item.finance_europeen,
-                item.depense_finance_europeen,
-                item.finance_prive,
-                item.depense_finance_prive,
-                item.finance_autre,
-                item.depense_finance_autre,
+                formatNumericValue(item.finance_etatique),
+                formatNumericValue(item.depense_finance_etatique),
+                formatNumericValue(item.finance_dedie),
+                formatNumericValue(item.depense_finance_dedie),
+                formatNumericValue(item.finance_collectivite),
+                formatNumericValue(item.depense_finance_collectivite),
+                formatNumericValue(item.finance_europeen),
+                formatNumericValue(item.depense_finance_europeen),
+                formatNumericValue(item.finance_prive),
+                formatNumericValue(item.depense_finance_prive),
+                formatNumericValue(item.finance_autre),
+                formatNumericValue(item.depense_finance_autre),
             );
         }
 
