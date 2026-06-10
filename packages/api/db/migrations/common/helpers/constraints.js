@@ -1,6 +1,6 @@
 const { Op, col } = require('sequelize');
 
-function lessOrEqualColumnOrNull(leftField, rightField = 'nombre_mineurs') {
+function lessOrEqualColumnOrNull(leftField, rightField) {
     return {
         [Op.or]: [
             { [rightField]: { [Op.eq]: null } },

@@ -18,7 +18,7 @@ module.exports = {
                 fields: ['scolaire_mineur_scolarise_dans_annee', 'nombre_mineurs'],
                 type: 'check',
                 name: 'check__scolaire_mineur_scolarise_dans_annee_lte_nombre_mineurs',
-                where: lessOrEqualColumnOrNull('scolaire_mineur_scolarise_dans_annee'),
+                where: lessOrEqualColumnOrNull('scolaire_mineur_scolarise_dans_annee', 'nombre_mineurs'),
                 transaction,
             });
         });

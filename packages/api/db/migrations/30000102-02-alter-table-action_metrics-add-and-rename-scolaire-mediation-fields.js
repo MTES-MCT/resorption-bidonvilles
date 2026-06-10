@@ -40,7 +40,7 @@ module.exports = {
                 fields: ['scolaire_mineurs_moins_de_trois_ans', 'nombre_mineurs'],
                 type: 'check',
                 name: 'check__scolaire_mineurs_moins_de_trois_ans_lte_nombre_mineurs',
-                where: lessOrEqualColumnOrNull('scolaire_mineurs_moins_de_trois_ans'),
+                where: lessOrEqualColumnOrNull('scolaire_mineurs_moins_de_trois_ans', 'nombre_mineurs'),
                 transaction,
             });
 
