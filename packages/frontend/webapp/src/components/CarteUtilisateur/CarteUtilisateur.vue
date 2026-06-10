@@ -100,11 +100,6 @@ const props = defineProps({
         required: false,
         default: false,
     },
-    displayLeadOperatorInfo: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
 });
 const { user, linkToUser } = toRefs(props);
 
