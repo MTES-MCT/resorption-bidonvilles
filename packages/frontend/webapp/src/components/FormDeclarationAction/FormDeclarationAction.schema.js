@@ -22,6 +22,35 @@ function calculateSchoolLevelsSum(parent) {
     ].reduce((sum, val) => sum + (Number.isInteger(val) ? val : 0), 0);
 }
 
+// Helper générique : impose que la valeur du champ ne dépasse pas celle d'un
+// champ frère de référence (au sein du même objet indicateurs[année]).
+// La contrainte ne s'applique que si la référence est un entier renseigné.
+// Le message utilise le format "FIELD:nom|MESSAGE:texte" décodé par InputIndicateurs.
+function addMaxFieldValidation(schema, fieldName, referenceField, message) {
+    return schema.test(
+        `max-${fieldName}-le-${referenceField}`,
+        `FIELD:${fieldName}|MESSAGE:${message}`,
+        function (value) {
+            if (!Number.isInteger(value)) {
+                return true;
+            }
+            const reference = this.parent[referenceField];
+            return !Number.isInteger(reference) || value <= reference;
+        }
+    );
+}
+
+// Applique une validation uniquement si le champ d'intervention (topic) est sélectionné.
+// $topics est alimenté par vee-validate à partir des valeurs racine du formulaire.
+function addTopicValidation(field, topic, addValidation) {
+    return field.when("$topics", (topics, schema) => {
+        if (topics?.includes(topic)) {
+            return addValidation(schema);
+        }
+        return schema;
+    });
+}
+
 // Helper pour la validation max-mineurs (pour les mineurs de moins/plus de 3 ans)
 function addMaxMineursValidation(schema) {
     return schema.test(
@@ -300,6 +329,103 @@ const createIndicateurFields = () => {
                 "FIELD:nombre_femmes|MESSAGE:Le nombre de femmes ne peut être supérieur au nombre de personnes"
             ),
     });
+
+    // R1 - Démographie : les "dont" ne peuvent dépasser le nombre total de personnes
+    fields.nombre_mineurs = addMaxFieldValidation(
+        fields.nombre_mineurs,
+        "nombre_mineurs",
+        "nombre_personnes",
+        "Le nombre de mineurs ne peut être supérieur au nombre de personnes"
+    );
+    fields.nombre_menages = addMaxFieldValidation(
+        fields.nombre_menages,
+        "nombre_menages",
+        "nombre_personnes",
+        "Le nombre de ménages ne peut être supérieur au nombre de personnes"
+    );
+
+    // R2 - Santé (topic "health") : accompagnement santé ≤ personnes concernées
+    fields.sante_nombre_personnes = addTopicValidation(
+        fields.sante_nombre_personnes,
+        "health",
+        (schema) =>
+            addMaxFieldValidation(
+                schema,
+                "sante_nombre_personnes",
+                "nombre_personnes",
+                "Le nombre de personnes ayant bénéficié d'un accompagnement vers la santé ne peut être supérieur au nombre de personnes concernées par l'action"
+            )
+    );
+
+    // R4 - Formation et emploi (topic "work")
+    fields.travail_nombre_personnes = addTopicValidation(
+        fields.travail_nombre_personnes,
+        "work",
+        (schema) =>
+            addMaxFieldValidation(
+                schema,
+                "travail_nombre_personnes",
+                "nombre_personnes",
+                "Le nombre de personnes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de personnes concernées par l'action"
+            )
+    );
+    fields.travail_nombre_femmes = addTopicValidation(
+        fields.travail_nombre_femmes,
+        "work",
+        (schema) =>
+            addMaxFieldValidation(
+                schema,
+                "travail_nombre_femmes",
+                "nombre_femmes",
+                "Le nombre de femmes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de femmes concernées par l'action"
+            )
+    );
+
+    // R5 - Logement (topic "housing") : hébergement et logement, personnes et ménages
+    fields.hebergement_nombre_personnes = addTopicValidation(
+        fields.hebergement_nombre_personnes,
+        "housing",
+        (schema) =>
+            addMaxFieldValidation(
+                schema,
+                "hebergement_nombre_personnes",
+                "nombre_personnes",
+                "Le nombre de personnes ayant eu accès à une solution longue durée en hébergement ou logement adapté ne peut être supérieur au nombre de personnes concernées par l'action"
+            )
+    );
+    fields.hebergement_nombre_menages = addTopicValidation(
+        fields.hebergement_nombre_menages,
+        "housing",
+        (schema) =>
+            addMaxFieldValidation(
+                schema,
+                "hebergement_nombre_menages",
+                "nombre_menages",
+                "Le nombre de ménages ayant eu accès à une solution longue durée en hébergement ou logement adapté ne peut être supérieur au nombre de ménages concernés par l'action"
+            )
+    );
+    fields.logement_nombre_personnes = addTopicValidation(
+        fields.logement_nombre_personnes,
+        "housing",
+        (schema) =>
+            addMaxFieldValidation(
+                schema,
+                "logement_nombre_personnes",
+                "nombre_personnes",
+                "Le nombre de personnes ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l'action"
+            )
+    );
+    fields.logement_nombre_menages = addTopicValidation(
+        fields.logement_nombre_menages,
+        "housing",
+        (schema) =>
+            addMaxFieldValidation(
+                schema,
+                "logement_nombre_menages",
+                "nombre_menages",
+                "Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de ménages concernés par l'action"
+            )
+    );
 
     // Particularités scolaires : appliquées uniquement si le champ d'intervention "school" est sélectionné
     const addSchoolValidation = (field, addValidation) =>
