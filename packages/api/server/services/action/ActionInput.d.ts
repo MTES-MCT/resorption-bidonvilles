@@ -6,9 +6,7 @@ type ActionInputUser = {
     organization_id: number,
 };
 
-export type ActionOperatorInput = {
-    id: number,
-    organization_id: number,
+export type ActionOperatorInput = ActionInputUser & {
     is_principal?: boolean,
 };
 
