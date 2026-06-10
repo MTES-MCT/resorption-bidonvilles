@@ -76,7 +76,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { trackEvent } from "@/helpers/matomo";
 import focusClasses from "@common/utils/focus_classes";
 import { Icon, Link } from "@resorptionbidonvilles/ui";
