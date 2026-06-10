@@ -11,16 +11,9 @@ type ActionWithOperators = {
 
 export default function computeActionNames(hash: { [key: number]: ActionWithOperators }): void {
     Object.values(hash).forEach((action) => {
-        // Récupérer l'opérateur principal
-        // Si aucun opérateur n'est marqué comme principal, utiliser le premier
-        let principalOperator = action.operators && action.operators.length > 0
-            ? action.operators.find(op => op.is_principal)
-            : null;
-
-        // Fallback : si aucun opérateur principal, prendre le premier
-        if (!principalOperator && action.operators && action.operators.length > 0) {
-            [principalOperator] = action.operators;
-        }
+        // Récupérer l'opérateur principal ; à défaut, le premier opérateur
+        // (operators est toujours initialisé en tableau par hashActions)
+        const principalOperator = action.operators.find(op => op.is_principal) ?? action.operators[0] ?? null;
 
         // Nom de la structure opérateur principal (prioriser l'abréviation)
         const operatorName = principalOperator
