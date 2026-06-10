@@ -1,12 +1,8 @@
 import ServiceError from '#server/errors/ServiceError';
+import { ActionOperatorInput } from './ActionInput';
 
-type OperatorInput = {
-    id: number,
-    organization_id: number,
-    is_principal?: boolean,
-};
 
-const validateAndNormalizeOperators = (operators: OperatorInput[]): void => {
+const validateAndNormalizeOperators = (operators: ActionOperatorInput[]): void => {
     if (operators.length === 0) {
         return;
     }
