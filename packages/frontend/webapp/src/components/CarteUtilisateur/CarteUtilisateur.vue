@@ -83,6 +83,7 @@ import { Icon, Link } from "@resorptionbidonvilles/ui";
 import CarteUtilisateurWrapper from "./CarteUtilisateurWrapper.vue";
 import CarteUtilisateurDetailsIcon from "./CarteUtilisateurDetailsIcon.vue";
 import IconeAdministrateur from "@/components/IconeAdministrateur/IconeAdministrateur.vue";
+import { capitalizeFirstLetter } from "@/helpers/string";
 
 const props = defineProps({
     user: {
@@ -106,13 +107,6 @@ const props = defineProps({
     },
 });
 const { user, linkToUser } = toRefs(props);
-
-const capitalizeFirstLetter = (str) => {
-    if (!str) {
-        return str;
-    }
-    return str.charAt(0).toUpperCase() + str.slice(1);
-};
 
 const organizationName = computed(() => {
     if (user.value.organization.abbreviation) {
