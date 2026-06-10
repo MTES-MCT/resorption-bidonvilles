@@ -96,8 +96,6 @@ const exportActions = async (user: AuthUser, year: string, dihalFinancing = fals
         const buffer = await generateExportFile(data, fetchedYear, includeFinances, allowedDepartements);
         return buffer;
     } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Error generating export file:', error);
         throw new ServiceError('export_failed', error instanceof Error ? error : new Error('Une erreur inconnue est survenue'));
     }
 };
