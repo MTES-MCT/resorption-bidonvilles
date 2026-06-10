@@ -11,14 +11,15 @@ function emptyStringToNull(value, originalValue) {
     return value;
 }
 
-// Helper pour calculer la somme des niveaux scolaires
+// Helper pour calculer la somme des niveaux scolaires SAISIS (hors "autre")
+// Sert de référence au champ "Mineurs dont la scolarité a débuté cette année".
+// Volontairement aligné sur le total affiché à l'écran qui n'inclut pas "autre".
 function calculateSchoolLevelsSum(parent) {
     return [
         parent.scolaire_nombre_maternelle,
         parent.scolaire_nombre_elementaire,
         parent.scolaire_nombre_college,
         parent.scolaire_nombre_lycee,
-        parent.scolaire_nombre_autre,
     ].reduce((sum, val) => sum + (Number.isInteger(val) ? val : 0), 0);
 }
 
@@ -72,19 +73,22 @@ function addMaxMineursValidation(schema) {
     );
 }
 
-// Helper pour la validation de la somme des niveaux scolaires
+// Validation miroir de la règle 3, portée par les champs de niveau scolaire :
+// la somme des niveaux saisis (maternelle..lycée) ne peut être INFÉRIEURE au
+// nombre de mineurs dont la scolarité a débuté cette année. Affiche l'erreur
+// sur les champs de niveau quand ceux-ci sont sous-renseignés.
 function addSchoolLevelsSumValidation(schema) {
     return schema.test(
-        "max-scolarises",
-        "La somme des niveaux ne peut pas dépasser le nombre total de scolarisés",
+        "min-scolarises",
+        "La somme des niveaux ne peut être inférieure au nombre de mineurs dont la scolarité a débuté cette année",
         function () {
-            const totalScolarises =
+            const scolariseDansAnnee =
                 this.parent.scolaire_mineur_scolarise_dans_annee;
-            if (!Number.isInteger(totalScolarises)) {
+            if (!Number.isInteger(scolariseDansAnnee)) {
                 return true;
             }
             const sum = calculateSchoolLevelsSum(this.parent);
-            return sum <= totalScolarises;
+            return sum >= scolariseDansAnnee;
         }
     );
 }
@@ -429,12 +433,7 @@ const createIndicateurFields = () => {
 
     // Particularités scolaires : appliquées uniquement si le champ d'intervention "school" est sélectionné
     const addSchoolValidation = (field, addValidation) =>
-        field.when("$topics", (topics, schema) => {
-            if (topics?.includes("school")) {
-                return addValidation(schema);
-            }
-            return schema;
-        });
+        addTopicValidation(field, "school", addValidation);
 
     // Les mineurs identifiés (moins/plus de 3 ans) ne peuvent dépasser le nombre de mineurs
     fields.scolaire_mineurs_moins_de_trois_ans = addSchoolValidation(
@@ -493,16 +492,16 @@ const createIndicateurFields = () => {
                             }
                         )
                         .test(
-                            "min-somme-niveaux",
-                            "Ne peut pas être inférieur à la somme des mineurs par niveau",
+                            "max-somme-niveaux",
+                            "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:Le nombre de mineurs dont la scolarité a débuté cette année ne peut être supérieur au total des mineurs scolarisés tous niveaux confondus",
                             function (value) {
-                                if (value === null) {
+                                if (!Number.isInteger(value)) {
                                     return true;
                                 }
                                 const sum = calculateSchoolLevelsSum(
                                     this.parent
                                 );
-                                return Number.isInteger(value) && value >= sum;
+                                return value <= sum;
                             }
                         )
                         .test(
