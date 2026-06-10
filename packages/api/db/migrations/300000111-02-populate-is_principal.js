@@ -1,17 +1,8 @@
-const runInTransaction = async (queryInterface, callback) => {
-    const transaction = await queryInterface.sequelize.transaction();
-    try {
-        await callback(transaction);
-        await transaction.commit();
-    } catch (error) {
-        await transaction.rollback();
-        throw error;
-    }
-};
+const runWithinTransaction = require('./common/helpers/transaction');
 
 module.exports = {
     async up(queryInterface) {
-        await runInTransaction(queryInterface, async (transaction) => {
+        await runWithinTransaction(queryInterface, async (transaction) => {
             // 1. Marquer comme principal le premier opérateur actif (fk_status != 'inactive')
             //    de chaque action, en prenant le MIN(fk_user) parmi les actifs.
             await queryInterface.sequelize.query(

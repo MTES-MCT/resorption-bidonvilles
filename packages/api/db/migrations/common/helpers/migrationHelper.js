@@ -1,23 +1,5 @@
 const { addForeignKey, removeForeignKey } = require('./manageForeignKeys');
-
-/**
- * Exécute une opération de migration dans une transaction
- *
- * @param {Object} queryInterface - L'interface de requête Sequelize
- * @param {Function} action - La fonction contenant les opérations de migration
- * @returns {Promise} - Le résultat de l'action
- */
-const withTransaction = async (queryInterface, action) => {
-    const transaction = await queryInterface.sequelize.transaction();
-
-    try {
-        await action(transaction);
-        await transaction.commit();
-    } catch (err) {
-        await transaction.rollback();
-        throw err;
-    }
-};
+const withTransaction = require('./transaction');
 
 /**
  * Crée une table avec des clés étrangères et des index
