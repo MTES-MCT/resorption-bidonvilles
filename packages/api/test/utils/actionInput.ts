@@ -1,13 +1,7 @@
-import { ActionInput } from '#server/services/action/ActionInput.d';
-
-export type ActionInputOperator = {
-    id: number,
-    organization_id: number,
-    is_principal?: boolean,
-};
+import { ActionInput, ActionOperatorInput } from '#server/services/action/ActionInput.d';
 
 export function buildActionData(
-    operators: ActionInputOperator[],
+    operators: ActionOperatorInput[],
     override: Partial<ActionInput> = {},
 ): ActionInput {
     const defaultData: ActionInput = {
