@@ -188,8 +188,21 @@ type IndicatorConfig = {
     };
 };
 
+// Somme des mineurs scolarisés par niveau (hors "autre"), alignée sur le total
+// "Tous niveaux confondus (3-18 ans)" affiché à l'utilisateur. Sert de référence
+// à la règle 3 (scolaire_mineur_scolarise_dans_annee).
+export const sumSchoolLevels = (indicateur: any): number => [
+    'scolaire_nombre_maternelle',
+    'scolaire_nombre_elementaire',
+    'scolaire_nombre_college',
+    'scolaire_nombre_lycee',
+].reduce((total, field) => {
+    const val = indicateur[field];
+    return Number.isInteger(val) ? total + val : total;
+}, 0);
+
 // Helper pour valider le champ scolaire_mineur_scolarise_dans_annee
-const validateScolariseDansAnnee = (value: any, indicateur: any): true => {
+export const validateScolariseDansAnnee = (value: any, indicateur: any): true => {
     if (value === null || value === undefined) {
         return true;
     }
@@ -204,21 +217,10 @@ const validateScolariseDansAnnee = (value: any, indicateur: any): true => {
         throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut pas dépasser le nombre total de mineurs concernés par l\'action');
     }
 
-    // Calculer le total des enfants scolarisés par niveau
-    const totalScolarises = [
-        'scolaire_nombre_maternelle',
-        'scolaire_nombre_elementaire',
-        'scolaire_nombre_college',
-        'scolaire_nombre_lycee',
-        'scolaire_nombre_autre',
-    ].reduce((total, field) => {
-        const val = indicateur[field];
-        return Number.isInteger(val) ? total + val : total;
-    }, 0);
-
-    // Vérifier que la valeur n'est pas inférieure à la somme des niveaux
-    if (value < totalScolarises) {
-        throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut pas être inférieur à la somme des mineurs scolarisés par niveau');
+    // Règle 3 : le nombre de mineurs dont la scolarité a débuté cette année ne peut
+    // pas dépasser le total des mineurs scolarisés tous niveaux confondus
+    if (value > sumSchoolLevels(indicateur)) {
+        throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut pas dépasser le total des mineurs scolarisés tous niveaux confondus');
     }
 
     return true;
@@ -812,23 +814,14 @@ export default (mode: 'create' | 'update') => [
                 return true; // Ne pas valider si le champ n'est pas défini
             }
 
-            // Calculer la somme des niveaux scolaires
-            const niveauxScolaires = [
-                'scolaire_nombre_maternelle',
-                'scolaire_nombre_elementaire',
-                'scolaire_nombre_college',
-                'scolaire_nombre_lycee',
-                'scolaire_nombre_autre',
-            ];
+            // Somme des niveaux scolaires (hors "autre", aligné sur le total
+            // "Tous niveaux confondus" affiché à l'utilisateur)
+            const totalNiveaux = sumSchoolLevels(indicateur);
 
-            const totalNiveaux = niveauxScolaires.reduce((sum, niveau) => {
-                const val = indicateur[niveau];
-                return sum + (Number.isInteger(val) ? val : 0);
-            }, 0);
-
-            // Vérifier que la somme des niveaux ne dépasse pas le nombre total de scolarisés
-            if (totalNiveaux > indicateur.scolaire_mineur_scolarise_dans_annee) {
-                throw new Error('La somme des mineurs scolarisés par niveau ne peut pas dépasser le nombre total de mineurs scolarisés dans l\'année');
+            // Règle 3 (miroir) : nombre de mineurs dont la scolarité a débuté cette année
+            // ne peut être supérieur à la somme des niveaux
+            if (indicateur.scolaire_mineur_scolarise_dans_annee > totalNiveaux) {
+                throw new Error('Le nombre de mineurs dont la scolarité a débuté cette année ne peut être supérieur à la somme des mineurs scolarisés par niveau');
             }
 
             // Vérifier que la somme ne dépasse pas le nombre total de mineurs de 3 ans et plus
