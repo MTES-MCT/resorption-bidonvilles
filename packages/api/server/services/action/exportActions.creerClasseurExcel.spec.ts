@@ -276,7 +276,7 @@ describe('services/action/exportActions.creerClasseurExcel()', () => {
 
         const headerCalls = addRowStub.getCalls().filter((call) => {
             const firstArg = call.args[0];
-            return Array.isArray(firstArg) && firstArg.some(val => typeof val === 'string' && val.includes('indicateurs mis à jour'));
+            return Array.isArray(firstArg) && firstArg.some(val => typeof val === 'string' && val.includes('Indicateurs mis à jour'));
         });
 
         expect(headerCalls.length).to.be.greaterThan(0);
@@ -329,7 +329,7 @@ describe('services/action/exportActions.creerClasseurExcel()', () => {
 
         const rowData = dataRowCall.args[0];
         const mineursIdentifiesTotalIndex = 22;
-        const mineursScolarisesTotalIndex = 28;
+        const mineursScolarisesTotalIndex = 29;
 
         expect(rowData[mineursIdentifiesTotalIndex]).to.equal('-');
         expect(rowData[mineursScolarisesTotalIndex]).to.equal('-');
@@ -357,7 +357,7 @@ describe('services/action/exportActions.creerClasseurExcel()', () => {
 
         const rowData = dataRowCall.args[0];
         const mineursIdentifiesTotalIndex = 22;
-        const mineursScolarisesTotalIndex = 28;
+        const mineursScolarisesTotalIndex = 29;
 
         expect(rowData[mineursIdentifiesTotalIndex]).to.equal(0);
         expect(rowData[mineursScolarisesTotalIndex]).to.equal(0);
