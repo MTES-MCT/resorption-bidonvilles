@@ -21,6 +21,7 @@
               <h2 class="fr-h5">{{ followDatas.networks.title }}</h2>
               <DsfrButtonGroup
                 equisized
+                size="lg"
                 :buttons="followDatas.networks.buttons"
               />
             </div>
@@ -68,8 +69,7 @@ const followDatas = {
         label: 'LinkedIn',
         title: 'Page LinkedIn de la DIHAL - Ouverture dans une nouvelle fenêtre',
         icon: 'fr-icon-linkedin-box-fill',
-        href: 'https://fr.linkedin.com/company/dihal',
-        target: '_blank'
+        onClick: () => globalThis.window != undefined && globalThis.window.open('https://fr.linkedin.com/company/dihal', '_blank'),
       }
     ]
   }
