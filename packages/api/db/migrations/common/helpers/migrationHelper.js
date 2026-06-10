@@ -88,17 +88,7 @@ const dropTableWithForeignKeys = async (queryInterface, { tableName, refTables =
     await queryInterface.dropTable(tableName, { transaction });
 });
 
-/**
- * Modifie une table existante
- *
- * @param {Object} queryInterface - L'interface de requête Sequelize
- * @param {Function} alterAction - La fonction contenant les opérations d'altération
- */
-const alterTable = async (queryInterface, alterAction) => withTransaction(queryInterface, alterAction);
-
 module.exports = {
-    withTransaction,
     createTableWithForeignKeys,
     dropTableWithForeignKeys,
-    alterTable,
 };
