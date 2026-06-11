@@ -5,17 +5,22 @@
             <div class="grid grid-cols-1">
                 <p
                     v-for="(label, index) in labels"
-                    :key="label"
+                    :key="index"
                     class="flex items-center min-h-20"
                     :class="[
-                        label !== '' && label !== undefined ? 'px-4' : null,
+                        getLabelText(label) !== '' &&
+                        getLabelText(label) !== undefined
+                            ? 'px-4'
+                            : null,
                         index < labels.length - 1
                             ? 'border-b border-b-G400'
                             : null,
                         hasBackground(index) ? 'bg-G200' : 'bg-transparent',
+                        getLabelClass(label),
                     ]"
-                    v-html="label"
-                />
+                >
+                    {{ getLabelText(label) }}
+                </p>
             </div>
         </template>
 
@@ -68,4 +73,18 @@ const { labels, data, labelsWithoutBackground } = toRefs(props);
 
 const hasBackground = (index) =>
     labelsWithoutBackground.value.includes(index) === false;
+
+const getLabelText = (label) => {
+    if (typeof label === "object" && label !== null) {
+        return label.text || "";
+    }
+    return label || "";
+};
+
+const getLabelClass = (label) => {
+    if (typeof label === "object" && label !== null) {
+        return label.class || null;
+    }
+    return null;
+};
 </script>
