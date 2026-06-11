@@ -1,47 +1,28 @@
 <template>
-    <IndicateursTableRow :icon="icons.ecole">
-        <template v-slot:label>
-            <IndicateursLabel>Mineurs identifiés sur site</IndicateursLabel>
-        </template>
-    </IndicateursTableRow>
-
     <IndicateursTableRowData
+        :icon="icons.ecole"
         :labels="['Moins de 3 ans', '3 ans et plus']"
         :data="data.mineurs_identifies"
-        :labels-without-background="[0, 1]"
-        withoutTopBorder
-    />
-
-    <IndicateursTableRow>
-        <template v-slot:label>
-            <IndicateursLabel>
-                Mineurs bénéficiant d'une
-                <span class="text-tertiaryA11Y">action de médiation</span>
-            </IndicateursLabel>
-        </template>
-    </IndicateursTableRow>
+    >
+        <IndicateursLabel>Mineurs identifiés sur site</IndicateursLabel>
+    </IndicateursTableRowData>
 
     <IndicateursTableRowData
         :labels="['Moins de 3 ans', '3 ans et plus']"
         :data="data.mineurs_mediation"
-        :labels-without-background="[0, 1]"
-        withoutTopBorder
-    />
+    >
+        <IndicateursLabel>
+            Mineurs bénéficiant d'une
+            <span class="text-tertiaryA11Y">action de médiation</span>
+        </IndicateursLabel>
+    </IndicateursTableRowData>
 
-    <IndicateursTableRowData
-        :labels="[
-            `<span>Mineurs nouvellement scolarisés depuis <span class='text-tertiaryA11Y'>la rentrée scolaire</span></span>`,
-        ]"
-        :data="data.scolarises_dans_annee"
-        :labels-without-background="[0]"
-        withoutTopBorder
-    />
-
-    <IndicateursTableRow>
-        <template v-slot:label>
-            <IndicateursLabel>Total des mineurs scolarisés</IndicateursLabel>
-        </template>
-    </IndicateursTableRow>
+    <IndicateursTableRowData :labels="['']" :data="data.scolarises_dans_annee">
+        <IndicateursLabel>
+            Mineurs nouvellement scolarisés depuis
+            <span class="text-tertiaryA11Y">la rentrée scolaire</span>
+        </IndicateursLabel>
+    </IndicateursTableRowData>
 
     <IndicateursTableRowData
         :labels="[
@@ -52,9 +33,9 @@
             `<span class='font-bold'>Tous niveaux scolaires confondus (3-18 ans)</span>`,
         ]"
         :data="scolarisesAvecTotal"
-        :labels-without-background="[0, 1, 2, 3, 4]"
-        withoutTopBorder
-    />
+    >
+        <IndicateursLabel>Total des mineur scolarisés</IndicateursLabel>
+    </IndicateursTableRowData>
 
     <IndicateursTableRowData
         :labels="['']"
@@ -70,7 +51,6 @@
 import { defineProps, toRefs, computed } from "vue";
 import icons from "@/utils/action_metrics_icons";
 
-import IndicateursTableRow from "@/components/IndicateursTable/IndicateursTableRow.vue";
 import IndicateursTableRowData from "@/components/IndicateursTable/IndicateursTableRowData.vue";
 import IndicateursLabel from "@/components/IndicateursLabel/IndicateursLabel.vue";
 import IndicateursLabelAutres from "@/components/IndicateursLabel/IndicateursLabelAutres.vue";
