@@ -13,11 +13,18 @@
             v-if="props.canEditPrincipal && activeUsers.length >= 2"
             v-model="selectedPrincipalId"
             :name="RADIO_GROUP_NAME"
-            :legend="labels.principalOperator"
+            :id="OPERATOR_RADIO_GROUP"
             :options="radioOptions"
-            class="fr-mt-2w"
             small
-        />
+            required
+        >
+            <template #legend>
+                <label for="OPERATOR_RADIO_GROUP" class="font-bold"
+                    >{{ labels.principalOperator }}
+                    <span class="text-red500">&nbsp;*</span></label
+                >
+            </template>
+        </DsfrRadioButtonSet>
     </div>
 </template>
 
