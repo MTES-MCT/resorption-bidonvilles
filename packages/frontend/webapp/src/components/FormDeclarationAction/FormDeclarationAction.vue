@@ -499,6 +499,7 @@ function formatValuesForApi(v) {
                         a.localeCompare(b, "fr", { sensitivity: "base" })
                     );
 
+                    let hasData = false;
                     const normalizedYear = sortedKeys.reduce((yearAcc, key) => {
                         const value = yearValues[key];
                         // Convertir en nombre si c'est une string numérique, sinon null
@@ -514,13 +515,15 @@ function formatValuesForApi(v) {
                         } else {
                             yearAcc[key] = value;
                         }
+
+                        if (yearAcc[key] !== null) {
+                            hasData = true;
+                        }
+
                         return yearAcc;
                     }, {});
 
                     // Ne garder l'année que si au moins un champ n'est pas null
-                    const hasData = Object.values(normalizedYear).some(
-                        (val) => val !== null
-                    );
                     if (hasData) {
                         acc[year] = normalizedYear;
                     }
