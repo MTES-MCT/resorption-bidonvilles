@@ -63,6 +63,7 @@ import formatMetricsUpdatedAt from "@/utils/formatMetricsUpdatedAt";
 import { formatProjectName } from "@/utils/formatActionName";
 import formatTimestamp from "@common/utils/formatTimestamp";
 import DsfrTagCopy from "@/components/DsfrTagCopy/DsfrTagCopy.vue";
+import capitalizeFirstLetter from "@/utils/capitalizeFirstLetter";
 
 const router = useRouter();
 const actionsStore = useActionsStore();
@@ -103,13 +104,6 @@ const formatDate = (timestamp) => {
         return "";
     }
     return formatTimestamp(timestamp / 1000, "d/m/y");
-};
-
-const capitalizeFirstLetter = (str) => {
-    if (!str) {
-        return str;
-    }
-    return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
 const getPrincipalOperatorName = (action) => {
