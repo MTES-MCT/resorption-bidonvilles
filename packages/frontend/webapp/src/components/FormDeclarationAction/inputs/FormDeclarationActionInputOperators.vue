@@ -16,6 +16,7 @@
             :legend="labels.principalOperator"
             :options="radioOptions"
             class="fr-mt-2w"
+            small
         />
     </div>
 </template>
@@ -67,6 +68,7 @@ const radioOptions = computed(() =>
     activeUsers.value.map((u) => ({
         label: formatUserWithOrganization(u.label),
         value: u.id,
+        name: `${RADIO_GROUP_NAME}_${u.id}`,
     }))
 );
 
