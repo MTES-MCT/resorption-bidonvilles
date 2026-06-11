@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 import FormSection from "@/components/FormSection/FormSection.vue";
 import { FormParagraph } from "@resorptionbidonvilles/ui";
