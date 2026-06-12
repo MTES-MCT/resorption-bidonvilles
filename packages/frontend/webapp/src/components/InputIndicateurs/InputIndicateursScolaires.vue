@@ -161,6 +161,6 @@ const totalReadonlyValues = computed(() => {
         data.value.scolaire_nombre_lycee,
     ].reduce((acc, value) => acc + (Number(value) || 0), 0);
 
-    return [null, null, null, null, Number.isFinite(sum) ? sum : 0];
+    return [null, null, null, null, sum]; // sum est déjà un nombre
 });
 </script>
