@@ -75,7 +75,6 @@
             :labels="totalLabels"
             :fields="totalFields"
             :readonly-values="totalReadonlyValues"
-            :labels-without-background="[0, 1, 2, 3, 4]"
             :data="data"
             :errors="errors"
             withoutTopBorder
