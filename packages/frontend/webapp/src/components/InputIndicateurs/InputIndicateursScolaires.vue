@@ -11,12 +11,6 @@
         </IndicateursRow>
 
         <!-- Mineurs identifiés sur site -->
-        <IndicateursTableRow :icon="icons.ecole">
-            <template v-slot:label>
-                <IndicateursLabel>Mineurs identifiés sur site</IndicateursLabel>
-            </template>
-        </IndicateursTableRow>
-
         <IndicateursTableRowDataInputs
             :icon="icons.ecole"
             :labels="['Moins de 3 ans', '3 ans et plus']"
