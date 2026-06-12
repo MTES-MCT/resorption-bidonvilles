@@ -18,6 +18,7 @@
         </IndicateursTableRow>
 
         <IndicateursTableRowDataInputs
+            :icon="icons.ecole"
             :labels="['Moins de 3 ans', '3 ans et plus']"
             :fields="[
                 'scolaire_mineurs_moins_de_trois_ans',
@@ -25,20 +26,11 @@
             ]"
             :data="data"
             :errors="errors"
-            :labels-without-background="[0, 1]"
-            withoutTopBorder
-        />
+        >
+            <IndicateursLabel>Mineurs identifiés sur site</IndicateursLabel>
+        </IndicateursTableRowDataInputs>
 
         <!-- Mineurs bénéficiant d'une médiation -->
-        <IndicateursTableRow>
-            <template v-slot:label>
-                <IndicateursLabel>
-                    Mineurs bénéficiant d'une
-                    <span class="text-tertiaryA11Y">action de médiation</span>
-                </IndicateursLabel>
-            </template>
-        </IndicateursTableRow>
-
         <IndicateursTableRowDataInputs
             :labels="['Moins de 3 ans', '3 ans et plus']"
             :fields="[
@@ -47,10 +39,15 @@
             ]"
             :data="data"
             :errors="errors"
-            :labels-without-background="[0, 1]"
             withoutTopBorder
-        />
+        >
+            <IndicateursLabel>
+                Mineurs bénéficiant d'une
+                <span class="text-tertiaryA11Y">action de médiation</span>
+            </IndicateursLabel>
+        </IndicateursTableRowDataInputs>
 
+        <!-- Mineurs dont la scolarité a débuté cette année scolaire -->
         <IndicateursTableRow>
             <template v-slot:label>
                 <IndicateursLabel>
@@ -79,23 +76,20 @@
             </template>
         </IndicateursTableRow>
 
-        <IndicateursTableRow>
-            <template v-slot:label>
-                <IndicateursLabel>
-                    Total des mineurs scolarisés
-                </IndicateursLabel>
-            </template>
-        </IndicateursTableRow>
+        <!-- Total des mineurs scolarisés -->
         <IndicateursTableRowDataInputs
             :labels="totalLabels"
             :fields="totalFields"
             :readonly-values="totalReadonlyValues"
+            :labels-without-background="[0, 1, 2, 3, 4]"
             :data="data"
             :errors="errors"
-            :labels-without-background="[0, 1, 2, 3, 4]"
             withoutTopBorder
-        />
+        >
+            <IndicateursLabel>Total des mineurs scolarisés</IndicateursLabel>
+        </IndicateursTableRowDataInputs>
 
+        <!-- Autres -->
         <IndicateursTableRowDataInputs
             :labels="['']"
             :fields="['scolaire_nombre_autre']"
