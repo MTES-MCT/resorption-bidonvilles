@@ -36,11 +36,11 @@ export const useActionsStore = defineStore("actions", () => {
     const sort = ref("updated_at");
 
     const sortFn = computed(() => {
-        const isDateField = [
+        const isDateField = new Set([
             "started_at",
             "updated_at",
             "metrics_updated_at",
-        ].includes(sort.value);
+        ]).has(sort.value);
 
         return (a, b) => {
             let aValue = a[sort.value];
