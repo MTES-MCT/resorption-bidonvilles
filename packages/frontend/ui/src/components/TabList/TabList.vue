@@ -7,7 +7,7 @@
             :clickable="clickable"
             @click="onTabClick(tab.id)"
         >
-            <template v-if="tab.id === 'inProgress'" v-slot:ofwhich>dont</template>
+            <template v-if="['inProgress', 'myOrganization'].includes(tab.id)" v-slot:ofwhich>dont</template>
             <template v-if="tab.total !== undefined" v-slot:prefix>
                 {{ formatStat(tab.total) }}
             </template>
