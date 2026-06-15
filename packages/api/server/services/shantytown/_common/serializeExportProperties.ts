@@ -1357,6 +1357,7 @@ export default (closingSolutions: ClosingSolution[]) => {
             },
             width: COLUMN_WIDTHS.SMALL,
             sum: true,
+            wrapText: true,
         };
     });
     return properties;
