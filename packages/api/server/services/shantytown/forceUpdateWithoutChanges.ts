@@ -5,9 +5,10 @@ import permissionUtils from '#server/utils/permission';
 
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Location } from '#server/models/geoModel/Location.d';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 
 
-export default async function forceUpdateWithoutChanges(townId: number, user: AuthUser): Promise<boolean> {
+export default async function forceUpdateWithoutChanges(townId: number, user: AuthUser): Promise<Shantytown> {
     const transaction = await sequelize.transaction();
 
     try {
@@ -33,13 +34,15 @@ export default async function forceUpdateWithoutChanges(townId: number, user: Au
         }
 
         // On modifie la date de MAJ et le champ updated_without_any_change
-        townData.updated_at = new Date(Date.now());
+        townData.updated_at = new Date();
         townData.updated_without_any_change = true;
 
         await shantytownModel.update(user, townId, townData, transaction);
         await transaction.commit();
 
-        return true;
+        const updatedTown = await shantytownModel.findOne(user, townId);
+
+        return updatedTown;
     } catch (error) {
         await transaction.rollback();
 
