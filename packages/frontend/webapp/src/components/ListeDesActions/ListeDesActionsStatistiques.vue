@@ -10,12 +10,10 @@
                     <template
                         v-if="actionsStore.filters.status === 'myOrganization'"
                     >
-                        <div v-if="myOrgOpenActionsCount > 0">
-                            {{ myOrgOpenActionsCount }} action{{
-                                isPlural(myOrgOpenActionsCount) ? "s" : ""
-                            }}
+                        <div>
+                            {{ formatActionsCountLabel(myOrgOpenActionsCount) }}
                             en cours
-                            <div>
+                            <div v-if="actionsFinancedByDIHALMyOrg > 0">
                                 <DsfrBadge
                                     :type="badgeDIHALVariantMyOrg"
                                     :label="badgeDIHALLabelMyOrg"
@@ -29,7 +27,7 @@
                                 }}
                                 actions sur {{ actionsFinancedByDIHALMyOrg }})
                             </div>
-                            <div>
+                            <div v-if="myOrgOpenActionsCount > 0">
                                 <DsfrBadge
                                     :type="badgeVariantMyOrg"
                                     :label="badgeLabelMyOrg"
@@ -43,10 +41,7 @@
                                 actions sur {{ myOrgOpenActionsCount }} )
                             </div>
                         </div>
-                        <div
-                            v-if="myOrgClosedActionsCount > 0"
-                            :class="{ 'mt-4': myOrgOpenActionsCount > 0 }"
-                        >
+                        <div v-if="myOrgClosedActionsCount > 0" class="mt-4">
                             {{ myOrgClosedActionsCount }} action{{
                                 isPlural(myOrgClosedActionsCount) ? "s" : ""
                             }}
@@ -56,12 +51,10 @@
                         </div>
                     </template>
                     <template v-else>
-                        {{ currentActionsCount }} action{{
-                            isPlural(currentActionsCount) ? "s" : ""
-                        }}
+                        {{ formatActionsCountLabel(currentActionsCount) }}
                         <template v-if="actionsStore.filters.status === 'open'"
                             >en cours
-                            <div>
+                            <div v-if="actionsFinancedByDIHAL > 0">
                                 <DsfrBadge
                                     :type="badgeDIHALVariant"
                                     :label="badgeDIHALLabel"
@@ -73,7 +66,7 @@
                                 ({{ updatedActionsFinancedByDIHAL }} actions sur
                                 {{ actionsFinancedByDIHAL }})
                             </div>
-                            <div>
+                            <div v-if="currentActionsCount > 0">
                                 <DsfrBadge
                                     :type="badgeVariant"
                                     :label="badgeLabel"
@@ -125,6 +118,14 @@ const currentActions = computed(() => {
 const currentActionsCount = computed(() => {
     return formatStat(currentActions.value.length);
 });
+
+const formatActionsCountLabel = (count) => {
+    if (count <= 0) {
+        return "Pas d'action";
+    }
+
+    return `${count} action${isPlural(count) ? "s" : ""}`;
+};
 
 const updatedActionsInTheLastSixMonths = computed(() => {
     return currentActions.value.filter((action) => {
