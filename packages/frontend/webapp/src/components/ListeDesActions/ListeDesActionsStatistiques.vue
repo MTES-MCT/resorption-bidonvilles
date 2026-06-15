@@ -210,20 +210,8 @@ const myOrgOpenActions = computed(() => {
     if (actionsStore.filters.status !== "myOrganization") {
         return [];
     }
-    const now = new Date();
-    return currentActions.value.filter(
-        (action) => action.ended_at === null || now < action.ended_at
-    );
-});
-
-const myOrgClosedActions = computed(() => {
-    if (actionsStore.filters.status !== "myOrganization") {
-        return [];
-    }
-    const now = new Date();
-    return currentActions.value.filter(
-        (action) => action.ended_at !== null && now > action.ended_at
-    );
+    // Le store ne renvoie que les actions en cours pour `myOrganization`.
+    return currentActions.value;
 });
 
 const myOrgOpenActionsCount = computed(() => {
@@ -231,7 +219,7 @@ const myOrgOpenActionsCount = computed(() => {
 });
 
 const myOrgClosedActionsCount = computed(() => {
-    return formatStat(myOrgClosedActions.value.length);
+    return formatStat(actionsStore.myOrganizationClosedActions.length);
 });
 
 const updatedActionsInTheLastSixMonthsMyOrg = computed(() => {

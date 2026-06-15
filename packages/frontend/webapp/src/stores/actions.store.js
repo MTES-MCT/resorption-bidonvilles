@@ -103,6 +103,10 @@ export const useActionsStore = defineStore("actions", () => {
                         return [status, []];
                     }
                     baseFilters.organizationId = organizationId;
+                    // On ne charge que les actions en cours : les actions
+                    // terminées ne sont plus mises à jour et fausseraient les
+                    // pourcentages d'indicateurs à jour.
+                    baseFilters.status = "open";
                 } else {
                     baseFilters.status = status;
                 }
@@ -110,6 +114,26 @@ export const useActionsStore = defineStore("actions", () => {
                 return [status, filterActions(actions.value, baseFilters)];
             })
         );
+    });
+
+    // Actions terminées dont la structure de l'utilisateur est opérateur.
+    // Volontairement hors de `filteredActions.myOrganization` (qui ne contient
+    // que les actions en cours) : ce compteur est une simple indication
+    // d'activité passée, ces actions ne sont pas listées dans l'onglet.
+    const myOrganizationClosedActions = computed(() => {
+        const userStore = useUserStore();
+        const organizationId = userStore.user?.organization?.id;
+        if (!organizationId) {
+            return [];
+        }
+
+        return filterActions(actions.value, {
+            search: filters.search.value,
+            location: filters.location.value,
+            ...filters.properties.value,
+            organizationId,
+            status: "closed",
+        });
     });
 
     const currentPage = {
@@ -229,6 +253,7 @@ export const useActionsStore = defineStore("actions", () => {
         error,
         filters,
         filteredActions,
+        myOrganizationClosedActions,
         currentPage,
         hash,
         requestedPilotsForActions,
