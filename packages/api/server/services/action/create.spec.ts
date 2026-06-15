@@ -4,7 +4,8 @@ import sinonChai from 'sinon-chai';
 
 import { rewiremock } from '#test/rewiremock';
 import { serialized as fakeUser } from '#test/utils/user';
-import { buildActionData, ActionInputOperator } from '#test/utils/actionInput';
+import { buildActionData } from '#test/utils/actionInput';
+import { ActionOperatorInput } from '#server/services/action/ActionInput.d';
 import ServiceError from '#server/errors/ServiceError';
 
 const { expect } = chai;
@@ -67,7 +68,7 @@ describe('services/action.create()', () => {
 
     describe('wiring de la validation des opérateurs', () => {
         it('appelle validateAndNormalizeOperators avec les opérateurs reçus', async () => {
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
             await create(user, buildActionData(operators));
 
             expect(stubs.validateAndNormalizeOperators).to.have.been.calledOnce;
@@ -75,7 +76,7 @@ describe('services/action.create()', () => {
         });
 
         it('ne démarre pas de transaction si la validation échoue', async () => {
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: false }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: false }];
             stubs.validateAndNormalizeOperators.throws(new ServiceError('no_principal_operator', new Error('test')));
 
             let caughtError: ServiceError | null = null;
@@ -93,7 +94,7 @@ describe('services/action.create()', () => {
 
     describe('comportement nominal', () => {
         it('appelle le model createAction avec les données enrichies du created_by', async () => {
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
             await create(user, buildActionData(operators));
 
             expect(stubs.createActionModel).to.have.been.calledOnce;
@@ -102,7 +103,7 @@ describe('services/action.create()', () => {
         });
 
         it('commit la transaction après l\'insertion', async () => {
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
             await create(user, buildActionData(operators));
 
             expect(stubs.transaction.commit).to.have.been.calledOnce;
@@ -111,7 +112,7 @@ describe('services/action.create()', () => {
         it('retourne l\'action récupérée après insertion', async () => {
             const fakeCreatedAction = { id: 42, name: 'Action test' };
             stubs.fetchAction.resolves(fakeCreatedAction);
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
 
             const result = await create(user, buildActionData(operators));
 
@@ -121,7 +122,7 @@ describe('services/action.create()', () => {
         it('rollback la transaction et lève ServiceError insert_action_error si le model échoue', async () => {
             const nativeError = new Error('db error');
             stubs.createActionModel.rejects(nativeError);
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
 
             let caughtError: ServiceError | null = null;
             try {
@@ -138,7 +139,7 @@ describe('services/action.create()', () => {
         it('rollback la transaction et lève ServiceError action_fetch_error si le fetchAction échoue', async () => {
             const nativeError = new Error('fetch error');
             stubs.fetchAction.rejects(nativeError);
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
 
             let caughtError: ServiceError | null = null;
             try {

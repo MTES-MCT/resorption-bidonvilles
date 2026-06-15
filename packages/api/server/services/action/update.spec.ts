@@ -5,7 +5,8 @@ import sinonChai from 'sinon-chai';
 import { rewiremock } from '#test/rewiremock';
 import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeAction } from '#test/utils/action';
-import { buildActionData as buildBaseActionData, ActionInputOperator } from '#test/utils/actionInput';
+import { buildActionData as buildBaseActionData } from '#test/utils/actionInput';
+import { ActionOperatorInput } from '#server/services/action/ActionInput.d';
 import ServiceError from '#server/errors/ServiceError';
 
 const { expect } = chai;
@@ -47,7 +48,7 @@ rewiremock.enable();
 import update from './update';
 rewiremock.disable();
 
-const buildActionData = (operators: ActionInputOperator[]) => buildBaseActionData(operators, {
+const buildActionData = (operators: ActionOperatorInput[]) => buildBaseActionData(operators, {
     name: 'Action modifiée',
     goals: 'Objectif modifié',
 });
@@ -81,7 +82,7 @@ describe('services/action.update()', () => {
 
     describe('wiring de la validation des opérateurs', () => {
         it('appelle validateAndNormalizeOperators avec les opérateurs reçus', async () => {
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
             await update(action, user, buildActionData(operators));
 
             expect(stubs.validateAndNormalizeOperators).to.have.been.calledOnce;
@@ -89,7 +90,7 @@ describe('services/action.update()', () => {
         });
 
         it('ne démarre pas de transaction si la validation échoue', async () => {
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: false }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: false }];
             stubs.validateAndNormalizeOperators.throws(new ServiceError('no_principal_operator', new Error('test')));
 
             let caughtError: ServiceError | null = null;
@@ -153,12 +154,12 @@ describe('services/action.update()', () => {
         });
 
         // payload : le user id=10 passe de is_principal=true à is_principal=false → changement détecté
-        const operatorsChangingPrincipal: ActionInputOperator[] = [
+        const operatorsChangingPrincipal: ActionOperatorInput[] = [
             { id: 10, organization_id: 2, is_principal: false },
         ];
 
         // payload identique à la BDD : is_principal=true → pas de changement
-        const operatorsSamePrincipal: ActionInputOperator[] = [
+        const operatorsSamePrincipal: ActionOperatorInput[] = [
             { id: 10, organization_id: 2, is_principal: true },
         ];
 
@@ -211,7 +212,7 @@ describe('services/action.update()', () => {
 
         it('lève ServiceError forbidden_principal_change si un user lambda retire l\'opérateur principal (passage à undefined)', async () => {
             // payload sans is_principal explicite alors que la BDD a is_principal=true : c'est un changement
-            const operatorsRemovingPrincipal: ActionInputOperator[] = [
+            const operatorsRemovingPrincipal: ActionOperatorInput[] = [
                 { id: 10, organization_id: 2 },
             ];
             const lambdaUser = fakeUser({ id: 99, role_id: 'collaborator' });
@@ -232,7 +233,7 @@ describe('services/action.update()', () => {
 
     describe('comportement nominal', () => {
         it('appelle le model update avec l\'id de l\'action et les données enrichies du updated_by', async () => {
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
             await update(action, user, buildActionData(operators));
 
             expect(stubs.updateActionModel).to.have.been.calledOnce;
@@ -247,7 +248,7 @@ describe('services/action.update()', () => {
                     on: () => false,
                 }),
             });
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
             await update(action, user, buildActionData(operators));
 
             expect(stubs.updateActionModel).to.have.been.calledOnce;
@@ -261,7 +262,7 @@ describe('services/action.update()', () => {
                     on: () => true,
                 }),
             });
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
             await update(action, user, buildActionData(operators));
 
             expect(stubs.updateActionModel).to.have.been.calledOnce;
@@ -270,7 +271,7 @@ describe('services/action.update()', () => {
         });
 
         it('commit la transaction après la mise à jour', async () => {
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
             await update(action, user, buildActionData(operators));
 
             expect(stubs.transaction.commit).to.have.been.calledOnce;
@@ -279,7 +280,7 @@ describe('services/action.update()', () => {
         it('retourne l\'action récupérée après mise à jour', async () => {
             const fakeUpdatedAction = { id: action.id, name: 'Action modifiée' };
             stubs.fetchAction.resolves(fakeUpdatedAction);
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
 
             const result = await update(action, user, buildActionData(operators));
 
@@ -289,7 +290,7 @@ describe('services/action.update()', () => {
         it('rollback la transaction et lève ServiceError action_insert_error si le model update échoue', async () => {
             const nativeError = new Error('db error');
             stubs.updateActionModel.rejects(nativeError);
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
 
             let caughtError: ServiceError | null = null;
             try {
@@ -306,7 +307,7 @@ describe('services/action.update()', () => {
         it('rollback la transaction et lève ServiceError action_fetch_error si le fetchAction échoue', async () => {
             const nativeError = new Error('fetch error');
             stubs.fetchAction.rejects(nativeError);
-            const operators: ActionInputOperator[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
 
             let caughtError: ServiceError | null = null;
             try {
