@@ -20,6 +20,7 @@ const stubs = {
     },
     shantytownModel: {
         findRaw: sandbox.stub(),
+        findOne: sandbox.stub(),
         update: sandbox.stub(),
     },
     can: sandbox.stub(),
@@ -123,11 +124,11 @@ describe('services/shantytown', () => {
                     on: sinon.stub().returns(true),
                 }),
             });
-            stubs.shantytownModel.update.resolves(true);
+            stubs.shantytownModel.findOne.resolves(town);
 
             const result = await forceUpdateWithoutChanges(1, user);
 
-            expect(result).to.be.true;
+            expect(result).to.be.instanceOf(Object);
             expect(stubs.shantytownModel.findRaw).to.have.been.calledOnceWith(1, transaction);
             expect(stubs.shantytownModel.update).to.have.been.calledOnce;
             expect(stubs.shantytownModel.update.firstCall.args[0]).to.equal(user);
