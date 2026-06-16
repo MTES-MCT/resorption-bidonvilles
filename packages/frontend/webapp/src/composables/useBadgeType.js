@@ -1,21 +1,15 @@
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import getSince from "@/utils/getSince";
 
 /**
  * Composable pour gérer le type de badge de manière réactive
- * @param {Ref<string> | string} updatedAt
- * @param {Ref<string> | string} lastUpdatedAt
+ * @param {Ref<object> | object} town
  */
 export default function useStatusBadge(town) {
-    const townForLastUpdate = ref({
-        createdAt: town.value.createdAt,
-        updatedAt: town.value.lastUpdatedAt,
-        lastUpdatedAt: town.value.lastUpdatedAt,
-    });
     const badgeType = computed(() => {
-        const dateCreated = townForLastUpdate.value.createdAt;
-        const dateUpdate = townForLastUpdate.value.updatedAt;
-        const dateLastUpdate = townForLastUpdate.value.lastUpdatedAt;
+        const dateCreated = town.value.createdAt;
+        const dateUpdate = town.value.lastUpdatedAt;
+        const dateLastUpdate = town.value.lastUpdatedAt;
 
         let type = "success";
 
@@ -39,7 +33,5 @@ export default function useStatusBadge(town) {
         return type;
     });
 
-    return {
-        badgeType,
-    };
+    return { badgeType };
 }
