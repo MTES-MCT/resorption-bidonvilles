@@ -8,7 +8,7 @@
             label="Considérer à jour"
             icon="fr-icon-checkbox-line"
             secondary
-            :disabled="isAllowedToReUpdate"
+            :disabled="isRecentlyUpdated"
             @click.prevent.stop="handleNoChangeModalIfNeeded"
         />
         <DsfrButton
@@ -152,7 +152,7 @@ const navigateTo = (target) => {
     }
 };
 
-const isAllowedToReUpdate = computed(() => {
+const isRecentlyUpdated = computed(() => {
     // Revoie true ou false selon si le site a été mis à jour dans les dernières 24h
     return shantytown.value?.lastUpdatedAt >= Date.now() / 1000 - 24 * 60 * 60;
 });
