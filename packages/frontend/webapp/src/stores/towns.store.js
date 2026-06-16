@@ -236,7 +236,12 @@ export const useTownsStore = defineStore("towns", () => {
     }
 
     const forceUpdateWithoutChanges = async (townId) => {
-        return await forceUpdateWithoutAnyChanges(townId);
+        const updatedTown = await forceUpdateWithoutAnyChanges(townId);
+        if (updatedTown) {
+            // On force la mise à jour dans le hash
+            updateLastUpdatedAt(townId, updatedTown.updatedAt);
+        }
+        return updatedTown;
     };
 
     const { bus } = useEventBus();
