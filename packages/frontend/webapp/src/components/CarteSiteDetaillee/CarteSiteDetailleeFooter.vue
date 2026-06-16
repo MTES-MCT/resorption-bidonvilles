@@ -8,6 +8,7 @@
             label="Considérer à jour"
             icon="fr-icon-checkbox-line"
             secondary
+            :disabled="isAllowedToReUpdate"
             @click.prevent.stop="handleNoChangeModalIfNeeded"
         />
         <DsfrButton
@@ -151,53 +152,52 @@ const navigateTo = (target) => {
     }
 };
 
+const isAllowedToReUpdate = computed(() => {
+    // Revoie true ou false selon si le site a été mis à jour dans les dernières 24h
+    return shantytown.value?.lastUpdatedAt >= Date.now() / 1000 - 24 * 60 * 60;
+});
+
 async function handleNoChangeModalIfNeeded() {
     if (shantytownId.value) {
         const modaleStore = useModaleStore();
-        shantytown.value.updatedWithoutAnyChange = true;
         const { default: ModaleMajSiteSansModification } = await import(
             "@/components/ModaleMajSiteSansModification/ModaleMajSiteSansModification.vue"
         );
 
-        const submitWithoutChanges = async () => {
-            const submit = async (id) => {
-                try {
-                    const townUpdateResult =
-                        await townsStore.forceUpdateWithoutChanges(id);
+        const submitWithoutChanges = async (id) => {
+            try {
+                const townUpdateResult =
+                    await townsStore.forceUpdateWithoutChanges(id);
 
-                    // Certains appels renvoient directement la donnée, d'autres un objet enveloppé
-                    const responseData =
-                        townUpdateResult?.data ?? townUpdateResult;
+                notificationStore.success(
+                    "Mise à jour sans modification",
+                    "Le site a été mis à jour sans modification"
+                );
+                trackEvent(
+                    "Site",
+                    "Mise à jour site sans modification",
+                    `S${id}`
+                );
+                return townUpdateResult;
+            } catch (error) {
+                const message =
+                    error?.response?.data?.user_message ||
+                    error?.user_message ||
+                    error?.message ||
+                    "Une erreur inconnue est survenue";
 
-                    if (responseData?.error) {
-                        throw new Error(responseData.error);
-                    }
-
-                    notificationStore.success(
-                        "Mise à jour sans modification",
-                        "Le site a été mis à jour sans modification"
-                    );
-                    trackEvent("Site", "Mise à jour site", `S${id}`);
-                    return responseData;
-                } catch (error) {
-                    const message =
-                        error?.response?.data?.user_message ||
-                        error?.user_message ||
-                        error?.message ||
-                        "Une erreur inconnue est survenue";
-
-                    notificationStore.error(
-                        "Mise à jour sans modification",
-                        message
-                    );
-                    throw error;
-                }
-            };
-            await submit(shantytown.value?.id);
+                notificationStore.error(
+                    "Mise à jour sans modification",
+                    message
+                );
+                throw error;
+            }
         };
 
         modaleStore.open(markRaw(ModaleMajSiteSansModification), {
-            onConfirm: submitWithoutChanges,
+            onConfirm: async () => {
+                await submitWithoutChanges(shantytown.value?.id);
+            },
         });
         return true;
     }
