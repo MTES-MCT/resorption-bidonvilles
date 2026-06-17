@@ -73,24 +73,48 @@ function addMaxMineursValidation(schema) {
     );
 }
 
-// Validation miroir de la règle 3, portée par les champs de niveau scolaire :
-// la somme des niveaux saisis (maternelle..lycée) ne peut être INFÉRIEURE au
-// nombre de mineurs dont la scolarité a débuté cette année. Affiche l'erreur
-// sur les champs de niveau quand ceux-ci sont sous-renseignés.
+// Calcul de la somme des mineurs identifiés sur site (moins de 3 ans + 3 ans et plus)
+function calculateIdentifiedMinorsSum(parent) {
+    let sum = 0;
+    if (Number.isInteger(parent.scolaire_mineurs_moins_de_trois_ans)) {
+        sum += parent.scolaire_mineurs_moins_de_trois_ans;
+    }
+    if (Number.isInteger(parent.scolaire_mineurs_trois_ans_et_plus)) {
+        sum += parent.scolaire_mineurs_trois_ans_et_plus;
+    }
+    return sum;
+}
+
+// Validation miroir : la somme des niveaux saisis ne peut être INFÉRIEURE au
+// nombre de mineurs dont la scolarité a débuté cette année.
+// + La somme des niveaux ne peut dépasser le total des mineurs identifiés sur site.
 function addSchoolLevelsSumValidation(schema) {
-    return schema.test(
-        "min-scolarises",
-        "La somme des niveaux ne peut être inférieure au nombre de mineurs dont la scolarité a débuté cette année",
-        function () {
-            const scolariseDansAnnee =
-                this.parent.scolaire_mineur_scolarise_dans_annee;
-            if (!Number.isInteger(scolariseDansAnnee)) {
-                return true;
+    return schema
+        .test(
+            "min-scolarises",
+            "La somme des niveaux ne peut être inférieure au nombre de mineurs dont la scolarité a débuté cette année",
+            function () {
+                const scolariseDansAnnee =
+                    this.parent.scolaire_mineur_scolarise_dans_annee;
+                if (!Number.isInteger(scolariseDansAnnee)) {
+                    return true;
+                }
+                const sum = calculateSchoolLevelsSum(this.parent);
+                return sum >= scolariseDansAnnee;
             }
-            const sum = calculateSchoolLevelsSum(this.parent);
-            return sum >= scolariseDansAnnee;
-        }
-    );
+        )
+        .test(
+            "max-identified-minors",
+            "La somme des mineurs scolarisés par niveau ne peut pas dépasser le nombre total de mineurs identifiés sur site",
+            function () {
+                const sumLevels = calculateSchoolLevelsSum(this.parent);
+                const sumIdentified = calculateIdentifiedMinorsSum(this.parent);
+                if (sumLevels === 0 || sumIdentified === 0) {
+                    return true;
+                }
+                return sumLevels <= sumIdentified;
+            }
+        );
 }
 
 addMethod(object, "usersIsNotEmpty", function () {
@@ -376,13 +400,23 @@ const createIndicateurFields = () => {
     fields.travail_nombre_femmes = addTopicValidation(
         fields.travail_nombre_femmes,
         "work",
-        (schema) =>
-            addMaxFieldValidation(
+        (schema) => {
+            // Priorité 1 : ne peut dépasser le nombre de personnes ayant eu un contrat
+            schema = addMaxFieldValidation(
+                schema,
+                "travail_nombre_femmes",
+                "travail_nombre_personnes",
+                "Le nombre de femmes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de personnes ayant eu au moins 1 contrat de travail"
+            );
+            // Priorité 2 : ne peut dépasser le nombre de femmes concernées par l'action
+            schema = addMaxFieldValidation(
                 schema,
                 "travail_nombre_femmes",
                 "nombre_femmes",
                 "Le nombre de femmes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de femmes concernées par l'action"
-            )
+            );
+            return schema;
+        }
     );
 
     // R5 - Logement (topic "housing") : hébergement et logement, personnes et ménages
@@ -400,13 +434,30 @@ const createIndicateurFields = () => {
     fields.hebergement_nombre_menages = addTopicValidation(
         fields.hebergement_nombre_menages,
         "housing",
-        (schema) =>
-            addMaxFieldValidation(
+        (schema) => {
+            // Priorité 1 : ne peut dépasser le nombre de personnes en hébergement
+            schema = addMaxFieldValidation(
+                schema,
+                "hebergement_nombre_menages",
+                "hebergement_nombre_personnes",
+                "Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes ayant eu accès à un hébergement"
+            );
+            // Priorité 2 : ne peut dépasser le nombre de ménages concernés par l'action
+            schema = addMaxFieldValidation(
                 schema,
                 "hebergement_nombre_menages",
                 "nombre_menages",
                 "Le nombre de ménages ayant eu accès à une solution longue durée en hébergement ou logement adapté ne peut être supérieur au nombre de ménages concernés par l'action"
-            )
+            );
+            // Priorité 3 : ne peut dépasser le nombre de personnes concernées par l'action
+            schema = addMaxFieldValidation(
+                schema,
+                "hebergement_nombre_menages",
+                "nombre_personnes",
+                "Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes concernées par l'action"
+            );
+            return schema;
+        }
     );
     fields.logement_nombre_personnes = addTopicValidation(
         fields.logement_nombre_personnes,
@@ -422,28 +473,38 @@ const createIndicateurFields = () => {
     fields.logement_nombre_menages = addTopicValidation(
         fields.logement_nombre_menages,
         "housing",
-        (schema) =>
-            addMaxFieldValidation(
+        (schema) => {
+            // Priorité 1 : ne peut dépasser le nombre de personnes en logement
+            schema = addMaxFieldValidation(
+                schema,
+                "logement_nombre_menages",
+                "logement_nombre_personnes",
+                "Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes ayant eu accès à un logement"
+            );
+            // Priorité 2 : ne peut dépasser le nombre de ménages concernés par l'action
+            schema = addMaxFieldValidation(
                 schema,
                 "logement_nombre_menages",
                 "nombre_menages",
                 "Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de ménages concernés par l'action"
-            )
+            );
+            // Priorité 3 : ne peut dépasser le nombre de personnes concernées par l'action
+            schema = addMaxFieldValidation(
+                schema,
+                "logement_nombre_menages",
+                "nombre_personnes",
+                "Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l'action"
+            );
+            return schema;
+        }
     );
 
     // Particularités scolaires : appliquées uniquement si le champ d'intervention "school" est sélectionné
     const addSchoolValidation = (field, addValidation) =>
         addTopicValidation(field, "school", addValidation);
 
-    // Les mineurs identifiés (moins/plus de 3 ans) ne peuvent dépasser le nombre de mineurs
-    fields.scolaire_mineurs_moins_de_trois_ans = addSchoolValidation(
-        fields.scolaire_mineurs_moins_de_trois_ans,
-        addMaxMineursValidation
-    );
-    fields.scolaire_mineurs_trois_ans_et_plus = addSchoolValidation(
-        fields.scolaire_mineurs_trois_ans_et_plus,
-        addMaxMineursValidation
-    );
+    // Pas de validation cross-field pour les mineurs identifiés sur site et la médiation
+    // Ces champs sont indépendants de la section "Nombre total de personnes concernées par l'action"
 
     // La somme des niveaux scolaires ne peut dépasser le nombre total de scolarisés
     fields.scolaire_nombre_maternelle = addSchoolValidation(
@@ -467,7 +528,7 @@ const createIndicateurFields = () => {
         addSchoolLevelsSumValidation
     );
 
-    // Le nombre de mineurs scolarisés dans l'année : borné par les 3 ans et plus, et minoré par la somme des niveaux
+    // Le nombre de mineurs scolarisés dans l'année : validations basées sur les mineurs identifiés sur site
     fields.scolaire_mineur_scolarise_dans_annee =
         fields.scolaire_mineur_scolarise_dans_annee.when(
             "$topics",
@@ -475,58 +536,36 @@ const createIndicateurFields = () => {
                 if (topics?.includes("school")) {
                     return schema
                         .test(
-                            "max-mineurs",
-                            "Ne peut pas dépasser le nombre de mineurs de 3 ans et plus",
-                            function (value) {
-                                if (value === null) {
-                                    return true;
-                                }
-                                const { scolaire_mineurs_trois_ans_et_plus } =
-                                    this.parent;
-                                return (
-                                    !Number.isInteger(
-                                        scolaire_mineurs_trois_ans_et_plus
-                                    ) ||
-                                    value <= scolaire_mineurs_trois_ans_et_plus
-                                );
-                            }
-                        )
-                        .test(
-                            "max-somme-niveaux",
-                            "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:Le nombre de mineurs dont la scolarité a débuté cette année ne peut être supérieur au total des mineurs scolarisés tous niveaux confondus",
+                            "requires-identified-minors",
+                            "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:Le nombre de mineurs scolarisés dans l'année ne peut être renseigné que si au moins un des champs 'Mineurs identifiés sur site' est renseigné",
                             function (value) {
                                 if (!Number.isInteger(value)) {
                                     return true;
                                 }
-                                const sum = calculateSchoolLevelsSum(
-                                    this.parent
-                                );
+                                const { scolaire_mineurs_moins_de_trois_ans, scolaire_mineurs_trois_ans_et_plus } = this.parent;
+                                return Number.isInteger(scolaire_mineurs_moins_de_trois_ans) || Number.isInteger(scolaire_mineurs_trois_ans_et_plus);
+                            }
+                        )
+                        .test(
+                            "max-identified-minors",
+                            "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:Le nombre de mineurs scolarisés dans l'année ne peut pas dépasser le nombre total de mineurs identifiés sur site",
+                            function (value) {
+                                if (!Number.isInteger(value)) {
+                                    return true;
+                                }
+                                const sumIdentified = calculateIdentifiedMinorsSum(this.parent);
+                                return value <= sumIdentified;
+                            }
+                        )
+                        .test(
+                            "max-somme-niveaux",
+                            "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:Le nombre de mineurs scolarisés dans l'année ne peut être supérieur au total des mineurs scolarisés tous niveaux confondus",
+                            function (value) {
+                                if (!Number.isInteger(value)) {
+                                    return true;
+                                }
+                                const sum = calculateSchoolLevelsSum(this.parent);
                                 return value <= sum;
-                            }
-                        )
-                        .test(
-                            "requires-nombre-mineurs",
-                            "Ne peut être renseigné que si le nombre total de mineurs concernés par l'action est également renseigné",
-                            function (value) {
-                                if (value === null) {
-                                    return true;
-                                }
-                                const { nombre_mineurs } = this.parent;
-                                return Number.isInteger(nombre_mineurs);
-                            }
-                        )
-                        .test(
-                            "max-nombre-mineurs",
-                            "Ne peut pas dépasser le nombre total de mineurs concernés par l'action",
-                            function (value) {
-                                if (value === null) {
-                                    return true;
-                                }
-                                const { nombre_mineurs } = this.parent;
-                                return (
-                                    !Number.isInteger(nombre_mineurs) ||
-                                    value <= nombre_mineurs
-                                );
                             }
                         );
                 }
