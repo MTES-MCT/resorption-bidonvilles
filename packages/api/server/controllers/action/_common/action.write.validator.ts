@@ -70,7 +70,7 @@ const createUserValidator = (
         })
         .custom((value) => {
             if (value === null) {
-                throw new Error('Un ou plusieurs utilisateurs ciblés n\'existent pas');
+                throw new Error('[BACK] Un ou plusieurs utilisateurs ciblés n\'existent pas');
             }
 
             return true;
@@ -201,24 +201,37 @@ export const sumSchoolLevels = (indicateur: any): number => [
     return Number.isInteger(val) ? total + val : total;
 }, 0);
 
+// Somme des mineurs identifiés sur site (moins de 3 ans + 3 ans et plus)
+export const sumIdentifiedMinors = (indicateur: any): number => {
+    const moins3ans = indicateur.scolaire_mineurs_moins_de_trois_ans;
+    const plus3ans = indicateur.scolaire_mineurs_trois_ans_et_plus;
+    let total = 0;
+    if (Number.isInteger(moins3ans)) total += moins3ans;
+    if (Number.isInteger(plus3ans)) total += plus3ans;
+    return total;
+};
+
 // Helper pour valider le champ scolaire_mineur_scolarise_dans_annee
 export const validateScolariseDansAnnee = (value: any, indicateur: any): true => {
     if (value === null || value === undefined) {
         return true;
     }
 
-    // Vérifier que nombre_mineurs est renseigné
-    if (!Number.isInteger(indicateur.nombre_mineurs)) {
-        throw new TypeError('Le nombre de mineurs scolarisés dans l\'année ne peut être renseigné que si le nombre total de mineurs concernés par l\'action est également renseigné');
+    // Règle 1 : au moins un des deux champs (moins de 3 ans OU 3 ans et plus) doit être renseigné
+    const hasMoins3ans = Number.isInteger(indicateur.scolaire_mineurs_moins_de_trois_ans);
+    const hasPlus3ans = Number.isInteger(indicateur.scolaire_mineurs_trois_ans_et_plus);
+    
+    if (!hasMoins3ans && !hasPlus3ans) {
+        throw new TypeError('Le nombre de mineurs scolarisés dans l\'année ne peut être renseigné que si au moins un des champs "Mineurs identifiés sur site" est renseigné');
     }
 
-    // Vérifier que la valeur ne dépasse pas le nombre de mineurs
-    if (value > indicateur.nombre_mineurs) {
-        throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut pas dépasser le nombre total de mineurs concernés par l\'action');
+    // Règle 2 : ne peut dépasser la somme des mineurs identifiés sur site
+    const totalIdentified = sumIdentifiedMinors(indicateur);
+    if (value > totalIdentified) {
+        throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut pas dépasser le nombre total de mineurs identifiés sur site');
     }
 
-    // Règle 3 : le nombre de mineurs dont la scolarité a débuté cette année ne peut
-    // pas dépasser le total des mineurs scolarisés tous niveaux confondus
+    // Règle 3 : ne peut dépasser la somme des niveaux scolaires
     if (value > sumSchoolLevels(indicateur)) {
         throw new Error('Le nombre de mineurs scolarisés dans l\'année ne peut pas dépasser le total des mineurs scolarisés tous niveaux confondus');
     }
@@ -312,54 +325,48 @@ const INDICATOR_CONFIGS: IndicatorConfig[] = [
     },
     {
         fieldName: 'indicateurs.*.scolaire_mineurs_trois_ans_et_plus',
-        displayName: 'Nombre de mineurs identifiés sur site',
-        options: { topic: 'school', maxComparisons: schoolMinorsMax('mineurs identifiés sur site') },
+        displayName: 'Nombre de mineurs de 3 ans et plus identifiés sur site',
+        options: { topic: 'school' },
     },
     {
         fieldName: 'indicateurs.*.scolaire_mineurs_moins_de_trois_ans',
         displayName: 'Nombre de mineurs de moins de 3 ans identifiés sur site',
-        options: { topic: 'school', maxComparisons: schoolMinorsMax('mineurs de moins de 3 ans identifiés sur site') },
+        options: { topic: 'school' },
     },
     {
         fieldName: 'indicateurs.*.scolaire_mediation_moins_de_trois_ans',
         displayName: 'Nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation',
-        options: {
-            topic: 'school',
-            maxComparisons: [maxComp('scolaire_mineurs_moins_de_trois_ans', 'Le nombre de mineurs de moins de 3 ans bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de moins de 3 ans identifiés sur site')],
-        },
+        options: { topic: 'school' },
     },
     {
         fieldName: 'indicateurs.*.scolaire_mediation_trois_ans_et_plus',
         displayName: 'Nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation',
-        options: {
-            topic: 'school',
-            maxComparisons: [maxComp('scolaire_mineurs_trois_ans_et_plus', 'Le nombre de mineurs de 3 ans et plus bénéficiant d\'une médiation ne peut être supérieur au nombre de mineurs de 3 ans et plus identifiés sur site')],
-        },
+        options: { topic: 'school' },
     },
     {
         fieldName: 'indicateurs.*.scolaire_nombre_maternelle',
         displayName: 'Nombre de scolarisés en maternelle',
-        options: { topic: 'school', maxComparisons: schoolMinorsMax('scolarisés en maternelle') },
+        options: { topic: 'school' },
     },
     {
         fieldName: 'indicateurs.*.scolaire_nombre_elementaire',
         displayName: 'Nombre de scolarisés en élémentaire',
-        options: { topic: 'school', maxComparisons: schoolMinorsMax('scolarisés en élémentaire') },
+        options: { topic: 'school' },
     },
     {
         fieldName: 'indicateurs.*.scolaire_nombre_college',
         displayName: 'Nombre de scolarisés au collège',
-        options: { topic: 'school', maxComparisons: schoolMinorsMax('scolarisés au collège') },
+        options: { topic: 'school' },
     },
     {
         fieldName: 'indicateurs.*.scolaire_nombre_lycee',
         displayName: 'Nombre de scolarisés au lycée',
-        options: { topic: 'school', maxComparisons: schoolMinorsMax('scolarisés au lycée') },
+        options: { topic: 'school' },
     },
     {
         fieldName: 'indicateurs.*.scolaire_nombre_autre',
         displayName: 'Autre',
-        options: { topic: 'school', maxComparisons: schoolMinorsMax('d\'autres scolarisations') },
+        options: { topic: 'school' },
     },
     {
         fieldName: 'indicateurs.*.scolaire_mineur_scolarise_dans_annee',
@@ -396,7 +403,7 @@ export default (mode: 'create' | 'update') => [
             today.setHours(0, 0, 0, 0);
 
             if (value < req.body.started_at) {
-                throw new Error('La date de fin ne peut pas être antérieure à la date de début');
+                throw new Error('[BACK] La date de fin ne peut pas être antérieure à la date de début');
             }
 
             return true;
@@ -413,12 +420,12 @@ export default (mode: 'create' | 'update') => [
             try {
                 existingTopics = await topicModel.findAll();
             } catch {
-                throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Champs d\'intervention"');
+                throw new Error('[BACK] Une erreur de lecture en base de données est survenue lors de la validation du champ "Champs d\'intervention"');
             }
 
             const topics = existingTopics.filter(({ uid }) => value.includes(uid));
             if (topics.length !== value.length) {
-                throw new Error('Certains champs d\'intervention sélectionnés n\'existent pas en base de données');
+                throw new Error('[BACK] Certains champs d\'intervention sélectionnés n\'existent pas en base de données');
             }
 
             return true;
@@ -445,11 +452,11 @@ export default (mode: 'create' | 'update') => [
             try {
                 location = await geoModel.getLocation('departement', value);
             } catch {
-                throw new Error('Une lecture en base de données a échoué lors de la validation du champ "Département d\'intervention principal"');
+                throw new Error('[BACK] Une lecture en base de données a échoué lors de la validation du champ "Département d\'intervention principal"');
             }
 
             if (location === null) {
-                throw new Error('Le département sélectionné n\'existe pas en base de données');
+                throw new Error('[BACK] Le département sélectionné n\'existe pas en base de données');
             }
 
             req.body.location = location;
@@ -466,7 +473,7 @@ export default (mode: 'create' | 'update') => [
             }
 
             if (!can(req.user).do('create', 'action').on(location)) {
-                throw new Error('Votre compte ne dispose pas des droits suffisants pour déclarer une action sur ce département');
+                throw new Error('[BACK] Votre compte ne dispose pas des droits suffisants pour déclarer une action sur ce département');
             }
 
             return true;
@@ -536,7 +543,7 @@ export default (mode: 'create' | 'update') => [
                 if (e.message.startsWith('L\'adresse')) {
                     throw e;
                 }
-                throw new Error('Une erreur de lecture en base de données est survenue lors de la validation des codes communaux');
+                throw new Error('[BACK] Une erreur de lecture en base de données est survenue lors de la validation des codes communaux');
             }
 
             // Stocker les adresses parsées pour le sanitizer
@@ -594,11 +601,11 @@ export default (mode: 'create' | 'update') => [
                     { shantytown_id: { value } },
                 ]);
             } catch {
-                throw new Error('Une erreur est survenue lors de la validation des sites');
+                throw new Error('[BACK] Une erreur est survenue lors de la validation des sites');
             }
 
             if (shantytowns.length !== value.length) {
-                throw new Error('Certains des sites sélectionnés comme sites concernés n\'existent pas en base de données');
+                throw new Error('[BACK] Certains des sites sélectionnés comme sites concernés n\'existent pas en base de données');
             }
 
             return true;
@@ -655,7 +662,7 @@ export default (mode: 'create' | 'update') => [
         })
         .custom((value) => {
             if (value === null) {
-                throw new Error('Un ou plusieurs utilisateurs ciblés n\'existent pas');
+                throw new Error('[BACK] Un ou plusieurs utilisateurs ciblés n\'existent pas');
             }
 
             return true;
@@ -668,7 +675,7 @@ export default (mode: 'create' | 'update') => [
 
             const principalCount = value.filter(op => op.is_principal === true).length;
             if (principalCount !== 1) {
-                throw new Error('Vous devez désigner exactement un opérateur principal parmi les opérateurs de l\'action');
+                throw new Error('[BACK] Vous devez désigner exactement un opérateur principal parmi les opérateurs de l\'action');
             }
 
             return true;
@@ -748,11 +755,11 @@ export default (mode: 'create' | 'update') => [
                 const year = Number.parseInt(strYear, 10);
 
                 if (req.body.started_at?.getFullYear && year < req.body.started_at.getFullYear()) {
-                    throw new Error('Vous ne pouvez pas renseigner les financements pour une année précédant l\'année de début de l\'action');
+                    throw new Error('[BACK] Vous ne pouvez pas renseigner les financements pour une année précédant l\'année de début de l\'action');
                 }
 
                 if (req.body.ended_at?.getFullYear && year > req.body.ended_at.getFullYear()) {
-                    throw new Error('Vous ne pouvez pas renseigner les financements pour une année ultérieure à l\'année de fin de l\'action');
+                    throw new Error('[BACK] Vous ne pouvez pas renseigner les financements pour une année ultérieure à l\'année de fin de l\'action');
                 }
             });
 
@@ -802,31 +809,26 @@ export default (mode: 'create' | 'update') => [
         })
         .customSanitizer(value => (Number.isInteger(value) ? value : null)),
 
-    // Validation de la cohérence entre la somme des niveaux scolaires et le nombre total de scolarisés
+    // Validation de la cohérence entre la somme des niveaux scolaires et le total des mineurs identifiés sur site
     body('indicateurs.*.scolaire_nombre_maternelle')
         .if((value, { req }) => req.body.topics?.includes?.('school'))
         .custom((value, { req, path }) => {
             const key = new RegExp(/indicateurs\[(.+)\]/).exec(path)[1];
             const indicateur = req.body.indicateurs[key];
 
-            // Vérifier si le champ scolaire_mineur_scolarise_dans_annee est défini
-            if (indicateur.scolaire_mineur_scolarise_dans_annee === null || indicateur.scolaire_mineur_scolarise_dans_annee === undefined) {
-                return true; // Ne pas valider si le champ n'est pas défini
-            }
-
-            // Somme des niveaux scolaires (hors "autre", aligné sur le total
-            // "Tous niveaux confondus" affiché à l'utilisateur)
             const totalNiveaux = sumSchoolLevels(indicateur);
+            const totalIdentified = sumIdentifiedMinors(indicateur);
 
-            // Règle 3 (miroir) : nombre de mineurs dont la scolarité a débuté cette année
-            // ne peut être supérieur à la somme des niveaux
-            if (indicateur.scolaire_mineur_scolarise_dans_annee > totalNiveaux) {
-                throw new Error('Le nombre de mineurs dont la scolarité a débuté cette année ne peut être supérieur à la somme des mineurs scolarisés par niveau');
+            // Règle : la somme des niveaux ne peut dépasser le total des mineurs identifiés sur site
+            if (totalNiveaux > 0 && totalIdentified > 0 && totalNiveaux > totalIdentified) {
+                throw new Error('La somme des mineurs scolarisés par niveau ne peut pas dépasser le nombre total de mineurs identifiés sur site');
             }
 
-            // Vérifier que la somme ne dépasse pas le nombre total de mineurs de 3 ans et plus
-            if (Number.isInteger(indicateur.scolaire_mineurs_trois_ans_et_plus) && totalNiveaux > indicateur.scolaire_mineurs_trois_ans_et_plus) {
-                throw new Error('La somme des enfants scolarisés par niveau ne peut pas dépasser le nombre total de mineurs de 3 ans et plus identifiés sur site');
+            // Règle miroir : nombre de mineurs dont la scolarité a débuté cette année
+            // ne peut être supérieur à la somme des niveaux
+            if (Number.isInteger(indicateur.scolaire_mineur_scolarise_dans_annee) && 
+                indicateur.scolaire_mineur_scolarise_dans_annee > totalNiveaux) {
+                throw new Error('Le nombre de mineurs dont la scolarité a débuté cette année ne peut être supérieur à la somme des mineurs scolarisés par niveau');
             }
 
             return true;
