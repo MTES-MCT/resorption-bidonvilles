@@ -9,9 +9,7 @@ export default param('id')
 
         try {
             req.shantytown = await findOneShantytown(req.user, parseInt(value, 10));
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
+        } catch {
             throw new Error('Une erreur de lecture en base de données est survenue');
         }
 

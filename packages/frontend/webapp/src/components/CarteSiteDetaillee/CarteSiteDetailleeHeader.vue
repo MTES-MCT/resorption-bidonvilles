@@ -38,7 +38,7 @@ import { defineProps, toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import useLastUpdated from "@/composables/useLastUpdated";
 import BadgeSiteOjectifResorption from "@/composables/BadgeSiteOjectifResorption.vue";
-import getStatusBadgeType from "@/utils/getStatusBadgeType";
+import useStatusBadge from "@/composables/useBadgeType";
 
 const props = defineProps({
     shantytown: {
@@ -55,6 +55,7 @@ const props = defineProps({
 });
 const { shantytown, currentTab } = toRefs(props);
 const { townStatus } = useLastUpdated(shantytown);
+const { badgeType } = useStatusBadge(shantytown);
 
 const userStore = useUserStore();
 
@@ -90,23 +91,5 @@ const attachmentsLabel = computed(() => {
         : totalAttachments === 0
         ? null
         : `${totalAttachments} Document partagé`;
-});
-
-const badgeType = computed(() => {
-    if (
-        shantytown.value.closedAt &&
-        shantytown.value.closedWithSolutions !== "yes"
-    ) {
-        return "error";
-    } else if (
-        shantytown.value.closedAt &&
-        shantytown.value.closedWithSolutions === "yes"
-    ) {
-        return "success";
-    }
-    return getStatusBadgeType(
-        shantytown.value.updatedAt,
-        shantytown.value.lastUpdatedAt
-    );
 });
 </script>

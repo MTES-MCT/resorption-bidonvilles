@@ -1,5 +1,6 @@
 import { ParcelOwners } from '#root/types/resources/ParcelOwner.d';
 import { ShantytownPreparatoryPhaseTowardResorption } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
+import rawLocation from './rawLocation';
 
 export type ShantytownRow = {
     id: number,
@@ -278,15 +279,9 @@ export default {
         'updators_organizations.organization_id': 'updatedByOrganization',
         'updators_organizations.name': 'updatedByOrganizationName',
         'updators_organizations.abbreviation': 'updatedByOrganizationAbbreviation',
-        'cities.code': 'cityCode',
-        'cities.name': 'cityName',
-        'cities.fk_main': 'cityMain',
+        ...rawLocation.selection, // On intègre les selections de locations
         'cities.latitude': 'cityLatitude',
         'cities.longitude': 'cityLongitude',
-        'epci.code': 'epciCode',
-        'epci.name': 'epciName',
-        'departements.code': 'departementCode',
-        'departements.name': 'departementName',
         'departements.latitude': 'departementLatitude',
         'departements.longitude': 'departementLongitude',
         // Departement chieftown
@@ -294,8 +289,6 @@ export default {
         'departementChiefTown.name': 'departementChiefTownName',
         'departementChiefTown.latitude': 'departementChiefTownLatitude',
         'departementChiefTown.longitude': 'departementChiefTownLongitude',
-        'regions.code': 'regionCode',
-        'regions.name': 'regionName',
         'regions.latitude': 'regionLatitude',
         'regions.longitude': 'regionLongitude',
         'regionChiefTown.code': 'regionChiefTownCode',
@@ -338,11 +331,8 @@ export default {
     joins: [
         { table: 'field_types', on: 'shantytowns.fk_field_type = field_types.field_type_id' },
         { table: 'electricity_types', on: 'shantytowns.fk_electricity_type = electricity_types.electricity_type_id' },
-        { table: 'cities', on: 'shantytowns.fk_city = cities.code' },
-        { table: 'epci', on: 'cities.fk_epci = epci.code' },
-        { table: 'departements', on: 'cities.fk_departement = departements.code' },
+        ...rawLocation.joins, // On intègre les jointures de locations
         { table: 'cities AS departementChiefTown', on: 'departementChiefTown.code = departements.fk_city' },
-        { table: 'regions', on: 'departements.fk_region = regions.code' },
         { table: 'cities AS regionChiefTown', on: 'regionChiefTown.code = regions.fk_city' },
         { table: 'users AS creators', on: 'shantytowns.created_by = creators.user_id' },
         { table: 'organizations AS creators_organizations', on: 'creators.fk_organization = creators_organizations.organization_id' },

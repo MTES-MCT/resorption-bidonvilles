@@ -379,9 +379,7 @@ export default function getDiff(oldVersion, newVersion): Diff[] {
                         }
                     });
                     return phasesMap;
-                } catch (error) {
-                    // eslint-disable-next-line no-console
-                    console.error('Erreur lors du traitement des phases de la résorption :', error);
+                } catch {
                     return {};
                 }
             },
