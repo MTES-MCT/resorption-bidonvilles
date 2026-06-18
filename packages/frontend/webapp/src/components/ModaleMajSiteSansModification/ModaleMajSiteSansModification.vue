@@ -1,5 +1,5 @@
 <template>
-    <Modal closeWhenClickOutside ref="modale">
+    <Modal :closeWhenClickOutside="!working" ref="modale">
         <template v-slot:title>Mise à jour sans modification</template>
         <template v-slot:body>
             <div class="fr-text">
@@ -19,11 +19,12 @@
         </template>
         <template v-slot:footer>
             <div class="flex justify-end gap-2">
-                <DsfrButton secondary @click="() => modale.close()"
+                <DsfrButton secondary :disabled="working" @click="closeModale"
                     >Annuler</DsfrButton
                 >
-                <DsfrButton @click="confirmUpdate"
-                    >Confirmer la mise à jour</DsfrButton
+                <DsfrButton :disabled="working" @click="confirmUpdate">
+                    <Spinner v-show="working" class="loader" />
+                    Confirmer la mise à jour</DsfrButton
                 >
             </div>
         </template>
@@ -31,7 +32,7 @@
 </template>
 <script setup>
 import { toRefs, ref } from "vue";
-import { Modal } from "@resorptionbidonvilles/ui";
+import { Modal, Spinner } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     onConfirm: {
@@ -42,13 +43,24 @@ const props = defineProps({
 
 const { onConfirm } = toRefs(props);
 const modale = ref(null);
+const working = ref(false);
 
 const confirmUpdate = async () => {
     try {
+        working.value = true;
+
+        if (typeof onConfirm.value !== "function") {
+            throw new TypeError("Action de confirmation indisponible");
+        }
+
         await onConfirm.value();
-        modale.value.close();
-    } catch (error) {
-        console.error("Erreur lors de la mise à jour:", error);
+        modale.value?.close();
+    } finally {
+        working.value = false;
     }
+};
+
+const closeModale = () => {
+    modale.value?.close();
 };
 </script>

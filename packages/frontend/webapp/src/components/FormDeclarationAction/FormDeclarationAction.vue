@@ -10,6 +10,7 @@
         />
         <FormDeclarationActionContacts
             :disableManagers="mode === 'edit' && !canAccessFinances"
+            :canEditPrincipal="canEditPrincipal"
             class="mt-6"
         />
 
@@ -93,12 +94,20 @@ const originalFinances = ref(null);
 const mode = computed(() => {
     return action.value === null ? "create" : "edit";
 });
+
+const canEditPrincipal = computed(() => {
+    if (mode.value === "create") {
+        return true;
+    }
+    return action.value?.is_pilot_or_national_admin === true;
+});
 const validationSchema = schemaFn(mode.value);
 const {
     handleSubmit,
     values,
     errors,
     setErrors,
+    setFieldError,
     isSubmitting,
     resetForm,
     validate,
@@ -270,6 +279,8 @@ const hasDuplicates = computed(() => {
     return false;
 });
 
+const NO_CHANGE_ERROR = "Modification impossible : aucun champ n'a été modifié";
+
 function updateHasChanges() {
     if (!originalValues.value) {
         return;
@@ -277,6 +288,15 @@ function updateHasChanges() {
 
     const currentFormatted = formatValuesForApi(values);
     hasChanges.value = !_.isEqual(originalValues.value, currentFormatted);
+
+    // Si l'utilisateur a re-modifié un champ après une tentative de soumission
+    // sans changement, on efface le message applicatif correspondant (sinon il
+    // reste collé dans error.value et garde le bouton "Mettre à jour" grisé : ce
+    // message n'est pas une erreur vee-validate, donc le watch sur useFormErrors
+    // ne le nettoie pas).
+    if (hasChanges.value && error.value === NO_CHANGE_ERROR) {
+        error.value = null;
+    }
 }
 
 const debouncedUpdateHasChanges = _.debounce(updateHasChanges, 250);
@@ -425,24 +445,29 @@ function formatValuesForApi(v) {
             if (key === "ended_at") {
                 return acc;
             }
+            // NB : `structuredClone` ne sait pas cloner les Proxy réactifs Vue
+            // exposés par vee-validate (DataCloneError). On conserve donc le
+            // pattern `JSON.parse(JSON.stringify(...))` qui lit les valeurs via
+            // les getters Proxy et produit un objet brut sérialisable.
             acc[key] = v[key] ? JSON.parse(JSON.stringify(v[key])) : v[key];
             return acc;
         }, {}),
-        ...{
-            started_at: formatFormDate(v.started_at),
-            ended_at: endedAt === null ? undefined : endedAt,
-            topics: Array.isArray(v.topics)
-                ? [...v.topics].sort((a, b) =>
-                      a.localeCompare(b, "fr", { sensitivity: "base" })
-                  )
-                : v.topics,
-            location_shantytowns: normalizeShantytownIds(
-                v.location_shantytowns
-            ),
-            managers: v.managers.users.map(({ id }) => id),
-            operators: v.operators.users.map(({ id }) => id),
-            location_eti_addresses: locationEtiAddresses,
-        },
+
+        started_at: formatFormDate(v.started_at),
+        ended_at: endedAt === null ? undefined : endedAt,
+        topics: Array.isArray(v.topics)
+            ? [...v.topics].sort((a, b) =>
+                  a.localeCompare(b, "fr", { sensitivity: "base" })
+              )
+            : v.topics,
+
+        location_shantytowns: normalizeShantytownIds(v.location_shantytowns),
+        managers: v.managers.users.map(({ id }) => id),
+        operators: v.operators.users.map(({ id, is_principal }) => ({
+            id,
+            is_principal: !!is_principal,
+        })),
+        location_eti_addresses: locationEtiAddresses,
     };
 
     if (formatted.finances && typeof formatted.finances === "object") {
@@ -486,11 +511,34 @@ function formatValuesForApi(v) {
                         a.localeCompare(b, "fr", { sensitivity: "base" })
                     );
 
-                    acc[year] = sortedKeys.reduce((yearAcc, key) => {
+                    let hasData = false;
+                    const normalizedYear = sortedKeys.reduce((yearAcc, key) => {
                         const value = yearValues[key];
-                        yearAcc[key] = value === "" ? null : value ?? null;
+                        // Convertir en nombre si c'est une string numérique, sinon null
+                        if (
+                            value === "" ||
+                            value === null ||
+                            value === undefined
+                        ) {
+                            yearAcc[key] = null;
+                        } else if (typeof value === "string") {
+                            const parsed = Number.parseInt(value, 10);
+                            yearAcc[key] = Number.isNaN(parsed) ? null : parsed;
+                        } else {
+                            yearAcc[key] = value;
+                        }
+
+                        if (yearAcc[key] !== null) {
+                            hasData = true;
+                        }
+
                         return yearAcc;
                     }, {});
+
+                    // Ne garder l'année que si au moins un champ n'est pas null
+                    if (hasData) {
+                        acc[year] = normalizedYear;
+                    }
                 }
                 return acc;
             },
@@ -515,6 +563,16 @@ watch(
         const fieldResult = result.results["indicateurs"];
         if (!fieldResult || fieldResult.valid) {
             indicateursErrors.value = {};
+            // Purge des erreurs d'indicateurs restées dans errors.value (vee-validate).
+            // Le mode 'silent' ne nettoie pas errors.value, or une soumission rejetée
+            // par le backend y a pu poser des erreurs sous des clés détaillées du type
+            // "indicateurs[2026].scolaire_..." (format express-validator), distinctes de
+            // la clé hoistée "indicateurs" produite par la validation yup côté client.
+            // Sans cette purge, ces erreurs backend restent collées et gardent le bouton
+            // "Mettre à jour" grisé même après correction (cf. carte 2560).
+            Object.keys(errors.value)
+                .filter((key) => key.startsWith("indicateurs"))
+                .forEach((key) => setFieldError(key, undefined));
             return;
         }
         // vee-validate stocke toutes les erreurs des sous-champs indicateurs
@@ -621,6 +679,9 @@ function createAddressKey(addr) {
 }
 
 async function performSubmit(sentValues) {
+    error.value = null;
+    setErrors({});
+
     const formattedValues = formatValuesForApi(sentValues);
 
     // Vérifier les doublons d'adresses ETI (validation finale avant soumission)
@@ -655,7 +716,7 @@ async function performSubmit(sentValues) {
         _.isEqual(originalValues.value, formattedValues)
     ) {
         router.replace("#erreurs");
-        error.value = "Modification impossible : aucun champ n'a été modifié";
+        error.value = NO_CHANGE_ERROR;
         return;
     }
 

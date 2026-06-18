@@ -49,7 +49,7 @@ export function destroy(townId) {
 export function edit(id, data) {
     const formData = new FormData();
     let attachmentsTable = [];
-    if (data.newAttachments?.length) {
+    if (data?.newAttachments?.length) {
         for (const newAttachment of data.newAttachments) {
             formData.append("attachments", newAttachment.file);
             attachmentsTable.push({
@@ -149,6 +149,10 @@ export function findRelations(townId, query) {
     return axios.get(
         `/towns/${encodeURI(townId)}/relations?q=${encodeURIComponent(query)}`
     );
+}
+
+export function forceUpdateWithoutAnyChanges(id) {
+    return axios.patch(`/towns/${encodeURI(id)}/forcedupdate`);
 }
 
 export function getJusticeReaders(townId) {

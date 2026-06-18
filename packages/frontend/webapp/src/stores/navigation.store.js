@@ -172,10 +172,10 @@ export const useNavigationStore = defineStore("navigation", {
             }
 
             const items = [
-                { text: "Accueil", to: "/" },
+                { text: "Accueil", to: "/tableau-de-bord" },
                 { text: "Sites", to: "/liste-des-sites" },
                 { text: "Actions", to: "/liste-des-actions" },
-                { ...this.metricsItem, active: false },
+                { ...this.metricsItem },
                 { text: "Entraide", to: "/communaute" },
                 { text: "Carte", to: "/cartographie" },
                 { text: "Dernières activités", to: "/activites" },
@@ -200,7 +200,7 @@ export const useNavigationStore = defineStore("navigation", {
             }
 
             return itemsFilteredByPermission.map((item) => {
-                item.active =
+                item.ariaCurrent =
                     router.resolve(item.to).meta.navTab === currentNavTab;
                 return item;
             });

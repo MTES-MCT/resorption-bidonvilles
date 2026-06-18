@@ -8,12 +8,12 @@ export default defineNuxtConfig({
             locales: ["fr", "en", "bg", "ro"],
             defaultLocale: "fr",
             parallelPlugin: false,
-        }]
+        }],
     ],
     css: [
         "@common/fontawesome/css/fontawesome.css",
         "@common/fontawesome/css/brands.css",
-        "@common/fontawesome/css/solid.css"
+        "@common/fontawesome/css/solid.css",
     ],
     vite: {
         server: {
@@ -22,7 +22,7 @@ export default defineNuxtConfig({
                 protocol: "ws",
                 host: "localhost"
             },
-            allowedHosts: ["host.docker.internal"]
+            allowedHosts: ["host.docker.internal", "localhost"],
         },
         optimizeDeps: {
             include: [
@@ -49,7 +49,7 @@ export default defineNuxtConfig({
             MATOMO_DOMAIN: process.env.NUXT_MATOMO_DOMAIN ?? "${NUXT_MATOMO_DOMAIN}",
             MATOMO_TRACKER_FILENAME: process.env.NUXT_MATOMO_TRACKER_FILENAME ?? "${NUXT_MATOMO_TRACKER_FILENAME}",
             MATOMO_DESCRIPTION_PAGE_SEPARATOR: process.env.NUXT_MATOMO_DESCRIPTION_PAGE_SEPARATOR ?? "${NUXT_MATOMO_DESCRIPTION_PAGE_SEPARATOR}",
-        }
+        },
     },
     sourcemap: {
         server: true,
@@ -66,5 +66,5 @@ export default defineNuxtConfig({
         "@common": fileURLToPath(new URL("../common/", import.meta.url)),
         "@stores": fileURLToPath(new URL("../webapp/src/stores", import.meta.url)),
     },
-    compatibilityDate: "2024-08-30"
+    compatibilityDate: "2024-08-30",
 });

@@ -1,53 +1,46 @@
 <template>
     <IndicateursTableRowData
         :icon="icons.ecole"
-        :labels="['']"
-        :data="data.scolarisables"
+        :labels="['Moins de 3 ans', '3 ans et plus']"
+        :data="data.mineurs_identifies"
     >
-        <IndicateursLabelMineursScolarisables />
+        <IndicateursLabel>Mineurs identifiés sur site</IndicateursLabel>
     </IndicateursTableRowData>
 
     <IndicateursTableRowData
-        :labels="['']"
-        :data="data.en_mediation"
-        withoutTopBorder
+        :labels="['Moins de 3 ans', '3 ans et plus']"
+        :data="data.mineurs_mediation"
     >
-        <IndicateursLabelMineursEnMediation />
+        <IndicateursLabel>
+            Mineurs bénéficiant d'une
+            <span class="text-tertiaryA11Y">action de médiation</span>
+        </IndicateursLabel>
+    </IndicateursTableRowData>
+
+    <IndicateursTableRowData :labels="['']" :data="data.scolarises_dans_annee">
+        <IndicateursLabel>
+            Mineurs nouvellement scolarisés depuis
+            <span class="text-tertiaryA11Y">la rentrée scolaire</span>
+        </IndicateursLabel>
     </IndicateursTableRowData>
 
     <IndicateursTableRowData
-        :labels="['']"
-        :data="data.maternelle"
-        withoutTopBorder
+        :labels="[
+            { text: 'En maternelle', class: 'text-tertiaryA11Y' },
+            { text: 'En élémentaire', class: 'text-tertiaryA11Y' },
+            { text: 'Au collège', class: 'text-tertiaryA11Y' },
+            {
+                text: 'Au lycée ou en formation professionnelle',
+                class: 'text-tertiaryA11Y',
+            },
+            {
+                text: 'Tous niveaux scolaires confondus (3-18 ans)',
+                class: 'font-bold',
+            },
+        ]"
+        :data="scolarisesAvecTotal"
     >
-        <IndicateursLabelMaternelle />
-    </IndicateursTableRowData>
-
-    <IndicateursTableRowData
-        :labels="['']"
-        :data="data.elementaire"
-        withoutTopBorder
-        withoutPadding
-    >
-        <IndicateursLabelElementaire />
-    </IndicateursTableRowData>
-
-    <IndicateursTableRowData
-        :labels="['']"
-        :data="data.college"
-        withoutTopBorder
-        withoutPadding
-    >
-        <IndicateursLabelCollege />
-    </IndicateursTableRowData>
-
-    <IndicateursTableRowData
-        :labels="['']"
-        :data="data.lycee"
-        withoutTopBorder
-        withoutPadding
-    >
-        <IndicateursLabelLycee />
+        <IndicateursLabel>Total des mineur scolarisés</IndicateursLabel>
     </IndicateursTableRowData>
 
     <IndicateursTableRowData
@@ -61,16 +54,11 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { defineProps, toRefs, computed } from "vue";
 import icons from "@/utils/action_metrics_icons";
 
 import IndicateursTableRowData from "@/components/IndicateursTable/IndicateursTableRowData.vue";
-import IndicateursLabelMineursScolarisables from "@/components/IndicateursLabel/IndicateursLabelMineursScolarisables.vue";
-import IndicateursLabelMineursEnMediation from "@/components/IndicateursLabel/IndicateursLabelMineursEnMediation.vue";
-import IndicateursLabelMaternelle from "@/components/IndicateursLabel/IndicateursLabelMaternelle.vue";
-import IndicateursLabelElementaire from "@/components/IndicateursLabel/IndicateursLabelElementaire.vue";
-import IndicateursLabelCollege from "@/components/IndicateursLabel/IndicateursLabelCollege.vue";
-import IndicateursLabelLycee from "@/components/IndicateursLabel/IndicateursLabelLycee.vue";
+import IndicateursLabel from "@/components/IndicateursLabel/IndicateursLabel.vue";
 import IndicateursLabelAutres from "@/components/IndicateursLabel/IndicateursLabelAutres.vue";
 
 const props = defineProps({
@@ -80,4 +68,20 @@ const props = defineProps({
     },
 });
 const { data } = toRefs(props);
+
+// Calcul du total pour chaque année
+const scolarisesAvecTotal = computed(() => {
+    return data.value.scolarises.map((yearData) => {
+        if (!yearData || yearData.length < 4) {
+            return yearData;
+        }
+
+        // Les 4 premières catégories sont maintenant dans le bon ordre
+        // Le total est déjà calculé par le backend à la position 4
+        const total = yearData
+            .slice(0, 4)
+            .reduce((sum, val) => sum + (val || 0), 0);
+        return [...yearData.slice(0, 4), total];
+    });
+});
 </script>

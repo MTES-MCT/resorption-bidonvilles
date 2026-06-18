@@ -23,8 +23,8 @@
                             v-model="inputLocation"
                         />
                         <DsfrButton size="sm" class="-mt-1.5"
-                            >Rechercher</DsfrButton
-                        >
+                            >Rechercher
+                        </DsfrButton>
                     </div>
                     <div
                         class="flex flex-col xs:flex-row gap-1 xs:gap-2 mt-2 text-left text-sm"
@@ -60,7 +60,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, defineEmits } from "vue";
+import { toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 
 import Layout from "@/components/Layout/Layout.vue";

@@ -1,4 +1,5 @@
 import { normalizeShantytownIds } from "./normalizeShantytownIds";
+import sortOperatorsByPrincipal from "./sortOperatorsByPrincipal";
 
 export const fields = [
     "nombre_personnes",
@@ -12,18 +13,21 @@ export const fields = [
     "hebergement_nombre_menages",
     "logement_nombre_personnes",
     "logement_nombre_menages",
-    "scolaire_mineurs_scolarisables",
-    "scolaire_mineurs_en_mediation",
+    "scolaire_mineurs_moins_de_trois_ans",
+    "scolaire_mineurs_trois_ans_et_plus",
+    "scolaire_mediation_moins_de_trois_ans",
+    "scolaire_mediation_trois_ans_et_plus",
     "scolaire_nombre_maternelle",
     "scolaire_nombre_elementaire",
     "scolaire_nombre_college",
     "scolaire_nombre_lycee",
     "scolaire_nombre_autre",
+    "scolaire_mineur_scolarise_dans_annee",
 ];
 
 export const formatFormAction = (data) => {
     const formatted = {
-        name: data.name || "",
+        name: data.project_name || data.name || "",
         started_at: data.started_at ? new Date(data.started_at) : undefined,
         ended_at: data.ended_at ? new Date(data.ended_at) : undefined,
         topics: data.topics ? data.topics.map(({ uid }) => uid) : [],
@@ -56,27 +60,29 @@ export const formatFormAction = (data) => {
         managers: {
             organizations: [],
             users: data.managers
-                ? data.managers
-                      .map(({ users }) =>
-                          users.map((user) => ({
-                              id: user.id,
-                              label: `${user.first_name} ${user.last_name}`,
-                          }))
-                      )
-                      .flat()
+                ? data.managers.flatMap(({ name, abbreviation, users }) =>
+                      users.map((user) => ({
+                          id: user.id,
+                          label: `${user.first_name} ${user.last_name} (${
+                              abbreviation || name
+                          })`,
+                      }))
+                  )
                 : [],
         },
         operators: {
             organizations: [],
             users: data.operators
-                ? data.operators
-                      .map(({ users }) =>
+                ? sortOperatorsByPrincipal(data.operators).flatMap(
+                      ({ name, abbreviation, users }) =>
                           users.map((user) => ({
                               id: user.id,
-                              label: `${user.first_name} ${user.last_name}`,
+                              label: `${user.first_name} ${user.last_name} (${
+                                  abbreviation || name
+                              })`,
+                              is_principal: user.is_principal === true,
                           }))
-                      )
-                      .flat()
+                  )
                 : [],
         },
         finances: Object.keys(data.finances || {}).reduce((acc, year) => {

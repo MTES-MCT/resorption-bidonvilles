@@ -1,3 +1,3 @@
-import writeAction from '../_common/action.write.validator';
+import actionWriteValidator from '../_common/action.write.validator';
 
-export default writeAction('create');
+export default actionWriteValidator('create');

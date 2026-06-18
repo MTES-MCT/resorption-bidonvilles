@@ -18,6 +18,7 @@ import mergeMetrics from './mergeMetrics';
 import mergeOperators from './mergeOperators';
 import mergeShantytowns from './mergeShantytowns';
 import mergeTopics from './mergeTopics';
+import computeActionNames from './computeActionNames';
 import Action from '#root/types/resources/Action.d';
 import { User } from '#root/types/resources/User.d';
 
@@ -45,10 +46,17 @@ export default async function fetch(user: User, actionIds?: number[], transactio
     mergeTopics(hash, topics);
     mergeManagers(hash, managers);
     mergeOperators(hash, operators);
+    computeActionNames(hash);
     mergeShantytowns(hash, shantytowns);
     mergeComments(hash, comments);
     mergeMetrics(hash, metrics);
     mergeFinances(hash, finances);
+
+    Object.values(hash).forEach((action) => {
+        // eslint-disable-next-line no-param-reassign
+        action.is_pilot_or_national_admin = user.role_id === 'national_admin'
+            || action.managers.flatMap(org => org.users).some(u => u.id === user.id);
+    });
 
     return Object.values(hash);
 }

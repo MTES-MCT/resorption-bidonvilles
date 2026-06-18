@@ -3,7 +3,7 @@ import { sequelize } from '#db/sequelize';
 import ActionUserRow from '../fetch/ActionUserRow';
 import enrichWhere from '../fetch/enrichWhere';
 
-export default function fetchTopics(shantytownIds: number[], clauseGroup: object = {}): Promise<ActionUserRow[]> {
+export default function fetchOperators(shantytownIds: number[], clauseGroup: object = {}): Promise<ActionUserRow[]> {
     const where = [];
     const replacements = { shantytownIds };
 
@@ -21,6 +21,7 @@ export default function fetchTopics(shantytownIds: number[], clauseGroup: object
         
         SELECT
             action_operators.fk_action AS action_id,
+            action_operators.is_principal,
             users.user_id AS id,
             users.email,
             users.first_name,

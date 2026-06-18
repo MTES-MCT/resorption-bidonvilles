@@ -55,6 +55,31 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
             const uniqueOrgNames = [...new Set(orgNames)];
             return uniqueOrgNames.join(', ');
         },
+        operatorList(operators: any[]): string {
+            if (!operators || operators.length === 0) {
+                return 'non renseigné';
+            }
+            // Trier par nom canonique (sans suffixe) pour éviter les faux positifs dus à l'ordre
+            const orgEntries = operators
+                .map(o => ({
+                    canonicalName: o.name || o.abbreviation || 'Organisation inconnue',
+                    isPrincipal: o.is_principal === true,
+                }))
+                .sort((a, b) => a.canonicalName.localeCompare(b.canonicalName, 'fr', { sensitivity: 'base' }));
+            // Supprimer les doublons (par nom canonique + statut principal)
+            const seen = new Set<string>();
+            const uniqueEntries = orgEntries.filter((entry) => {
+                const key = `${entry.canonicalName}|${entry.isPrincipal}`;
+                if (seen.has(key)) {
+                    return false;
+                }
+                seen.add(key);
+                return true;
+            });
+            return uniqueEntries
+                .map(entry => (entry.isPrincipal ? `${entry.canonicalName} (principal)` : entry.canonicalName))
+                .join(', ');
+        },
         topicList(topics: any[]): string {
             if (!topics || topics.length === 0) {
                 return 'non renseignées';
@@ -96,7 +121,7 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
 
     const toDiff: { [key: string]: { label: string, processor?: (value: any) => string } } = {
         name: {
-            label: "Nom de l'action",
+            label: 'Nom du projet',
         },
         started_at: {
             label: 'Date de début',
@@ -161,7 +186,7 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
         },
         operators: {
             label: 'Intervenants',
-            processor: baseProcessors.userList,
+            processor: baseProcessors.operatorList,
         },
         location_shantytowns: {
             label: 'Sites concernés',
@@ -189,13 +214,16 @@ export default function getDiff(oldVersion: Action, newVersion: Action): Diff[] 
         hebergement_nombre_menages: 'Hébergement - Nombre de ménages',
         logement_nombre_personnes: 'Logement - Nombre de personnes',
         logement_nombre_menages: 'Logement - Nombre de ménages',
-        scolaire_mineurs_scolarisables: 'Scolaire - Mineurs scolarisables',
-        scolaire_mineurs_en_mediation: 'Scolaire - Mineurs en médiation',
+        scolaire_mineurs_moins_de_trois_ans: 'Scolaire - Mineurs scolarisables de moins de 3 ans',
+        scolaire_mineurs_trois_ans_et_plus: 'Scolaire - Mineurs scolarisables de 3 ans et plus',
+        scolaire_mediation_moins_de_trois_ans: 'Scolaire - Mineurs en médiation de moins de 3 ans',
+        scolaire_mediation_trois_ans_et_plus: 'Scolaire - Mineurs en médiation de 3 ans et plus',
         scolaire_nombre_maternelle: 'Scolaire - Nombre en maternelle',
         scolaire_nombre_elementaire: 'Scolaire - Nombre en élémentaire',
         scolaire_nombre_college: 'Scolaire - Nombre au collège',
         scolaire_nombre_lycee: 'Scolaire - Nombre au lycée',
         scolaire_nombre_autre: 'Scolaire - Nombre autre',
+        scolaire_mineur_scolarise_dans_annee: 'Scolaire - Mineurs scolarisés dans l\'année',
     };
 
     const result: Diff[] = [];

@@ -45,8 +45,12 @@ export function exportComments() {
     return axios.get("/action-comments/export/csv");
 }
 
-export function fetchList() {
-    return axios.get("/actions");
+export function fetchList(organizationId = null) {
+    const params = {};
+    if (organizationId !== null) {
+        params.organizationId = organizationId;
+    }
+    return axios.get("/actions", { params });
 }
 
 export function fetchOne(actionId) {

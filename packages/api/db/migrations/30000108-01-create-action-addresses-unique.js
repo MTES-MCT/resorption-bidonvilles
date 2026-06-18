@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const { addForeignKey } = require('./common/manageForeignKeys');
+const { addForeignKey } = require('./common/helpers/manageForeignKeys');
 
 module.exports = {
     async up(queryInterface, Sequelize) {

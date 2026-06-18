@@ -1,8 +1,10 @@
-import { ActionHash } from './hashActions';
 import ActionUserRow from './ActionUserRow.d';
-import { ActionOrganizationMember } from '#root/types/resources/Action.d';
+import { ActionOrganizationMember, ActionOrganization } from '#root/types/resources/Action.d';
 
-export default function mergeOperators(hash: ActionHash, operators: ActionUserRow[]): void {
+export default function mergeOperators<T extends { operators: ActionOrganization[] }>(
+    hash: { [key: number]: T },
+    operators: ActionUserRow[],
+): void {
     operators.forEach((row) => {
         const index = hash[row.action_id].operators.findIndex(({ id }) => id === row.organization_id);
         const user: ActionOrganizationMember = {
@@ -14,6 +16,7 @@ export default function mergeOperators(hash: ActionHash, operators: ActionUserRo
             phone: row.phone,
             role: row.admin_role_name || row.regular_role_name,
             is_admin: row.admin_role_name !== null,
+            is_principal: row.is_principal,
             organization: {
                 id: row.organization_id,
                 name: row.organization_name,
@@ -26,9 +29,15 @@ export default function mergeOperators(hash: ActionHash, operators: ActionUserRo
                 id: row.organization_id,
                 name: row.organization_name,
                 abbreviation: row.organization_abbreviation,
+                is_principal: row.is_principal,
                 users: [user],
             });
         } else {
+            // Si cet utilisateur est principal, marquer toute l'organisation comme principale
+            if (row.is_principal) {
+                /* eslint no-param-reassign: "error" */
+                hash[row.action_id].operators[index].is_principal = true;
+            }
             hash[row.action_id].operators[index].users.push(user);
         }
     });

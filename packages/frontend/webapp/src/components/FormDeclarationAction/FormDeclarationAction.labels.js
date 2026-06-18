@@ -1,5 +1,5 @@
 export default {
-    name: "Quel est le nom de l'action ?",
+    name: "Quel est le nom du projet ?",
     started_at: "Date de début",
     ended_at: "Date de fin effective",
     topics: "Quels sont les champs d'intervention de l'action ?",
@@ -13,6 +13,7 @@ export default {
     location_shantytowns: "Sites concernés",
     managers: "Pilote(s) de l'action",
     operators: "Association(s) ou service(s) en charge de la mise en œuvre",
+    principalOperator: "Opérateur principal",
     finances: "Quels sont les financements de l'action ?",
 
     // indicateurs
@@ -39,8 +40,7 @@ export default {
         raw: "Nombre de personnes ayant accédé à un logement",
         formatted: "_à un logement_",
     },
-    indicateurs_mineurs_scolarisables:
-        "Mineurs en âge d'être scolarisés ou de suivre une formation",
+    indicateurs_mineurs_scolarisables: "Mineurs identifiés sur site",
     indicateurs_mineurs_mediation:
         "Mineurs bénéficiant d'une action de médiation (3 - 18 ans)",
     indicateurs_mineurs_scolarises: {
