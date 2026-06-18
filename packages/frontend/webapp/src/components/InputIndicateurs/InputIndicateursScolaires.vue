@@ -54,7 +54,7 @@
                 <div class="grid grid-cols-1 flex-1 w-full">
                     <div class="flex items-center px-4 min-h-20 bg-G200 w-full">
                         <TextInputUi
-                            name="scolaire_mineur_scolarise_dans_annee"
+                            id="scolaire_mineur_scolarise_dans_annee"
                             v-model="data.scolaire_mineur_scolarise_dans_annee"
                             withoutMargin
                             variant="minimal"

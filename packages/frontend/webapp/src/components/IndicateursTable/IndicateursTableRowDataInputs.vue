@@ -36,7 +36,7 @@
                 >
                     <template v-if="field">
                         <TextInputUi
-                            :name="field"
+                            :id="field"
                             v-model="data[field]"
                             withoutMargin
                             variant="minimal"
