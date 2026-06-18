@@ -279,6 +279,8 @@ const hasDuplicates = computed(() => {
     return false;
 });
 
+const NO_CHANGE_ERROR = "Modification impossible : aucun champ n'a été modifié";
+
 function updateHasChanges() {
     if (!originalValues.value) {
         return;
@@ -286,6 +288,15 @@ function updateHasChanges() {
 
     const currentFormatted = formatValuesForApi(values);
     hasChanges.value = !_.isEqual(originalValues.value, currentFormatted);
+
+    // Si l'utilisateur a re-modifié un champ après une tentative de soumission
+    // sans changement, on efface le message applicatif correspondant (sinon il
+    // reste collé dans error.value et garde le bouton "Mettre à jour" grisé : ce
+    // message n'est pas une erreur vee-validate, donc le watch sur useFormErrors
+    // ne le nettoie pas).
+    if (hasChanges.value && error.value === NO_CHANGE_ERROR) {
+        error.value = null;
+    }
 }
 
 const debouncedUpdateHasChanges = _.debounce(updateHasChanges, 250);
@@ -705,7 +716,7 @@ async function performSubmit(sentValues) {
         _.isEqual(originalValues.value, formattedValues)
     ) {
         router.replace("#erreurs");
-        error.value = "Modification impossible : aucun champ n'a été modifié";
+        error.value = NO_CHANGE_ERROR;
         return;
     }
 
