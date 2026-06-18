@@ -95,7 +95,7 @@ function mountForm(initialValues) {
             indicateursErrors.value = fieldResult.errors.reduce((acc, msg) => {
                 const match =
                     typeof msg === "string"
-                        ? msg.match(/^FIELD:([^|]+)\|MESSAGE:(.+)$/)
+                        ? /^FIELD:([^|]+)\|MESSAGE:(.+)$/.RegExp.exec(msg)
                         : null;
                 if (match) {
                     acc[match[1]] = match[2];
