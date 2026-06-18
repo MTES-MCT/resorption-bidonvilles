@@ -20,8 +20,8 @@ import _ from "lodash-es";
 const NO_CHANGE_ERROR = "Modification impossible : aucun champ n'a été modifié";
 
 function makeForm(initialValues) {
-    const values = ref(_.cloneDeep(initialValues));
-    const originalValues = ref(_.cloneDeep(initialValues));
+    const values = ref(structuredClone(initialValues));
+    const originalValues = ref(structuredClone(initialValues));
     const error = ref(null);
     const hasChanges = ref(false);
     const hasErrors = computed(() => error.value !== null);
