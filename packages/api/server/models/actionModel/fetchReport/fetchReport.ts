@@ -54,18 +54,18 @@ export default function fetchReport(
             SELECT
             af.fk_action as "action_id",
             af."year" as "Année",
-            SUM(CASE WHEN af.fk_action_finance_type = 'etatique' THEN af.amount ELSE 0 END) as "finance_etatique",
-            SUM(CASE WHEN af.fk_action_finance_type = 'dedie' THEN af.amount ELSE 0 END) as "finance_dedie",
-            SUM(CASE WHEN af.fk_action_finance_type = 'collectivite' THEN af.amount ELSE 0 END) as "finance_collectivite",
-            SUM(CASE WHEN af.fk_action_finance_type = 'europeen' THEN af.amount ELSE 0 END) as "finance_europeen",
-            SUM(CASE WHEN af.fk_action_finance_type = 'prive' THEN af.amount ELSE 0 END) as "finance_prive",
-            SUM(CASE WHEN af.fk_action_finance_type = 'autre' THEN af.amount ELSE 0 END) as "finance_autre",
-            SUM(CASE WHEN af.fk_action_finance_type = 'etatique' THEN af.real_amount ELSE 0 END) as "depense_finance_etatique",
-            SUM(CASE WHEN af.fk_action_finance_type = 'dedie' THEN af.real_amount ELSE 0 END) as "depense_finance_dedie",
-            SUM(CASE WHEN af.fk_action_finance_type = 'collectivite' THEN af.real_amount ELSE 0 END) as "depense_finance_collectivite",
-            SUM(CASE WHEN af.fk_action_finance_type = 'europeen' THEN af.real_amount ELSE 0 END) as "depense_finance_europeen",
-            SUM(CASE WHEN af.fk_action_finance_type = 'prive' THEN af.real_amount ELSE 0 END) as "depense_finance_prive",
-            SUM(CASE WHEN af.fk_action_finance_type = 'autre' THEN af.real_amount ELSE 0 END) as "depense_finance_autre"
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'etatique' THEN af.amount ELSE 0 END), 0) as "finance_etatique",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'dedie' THEN af.amount ELSE 0 END), 0) as "finance_dedie",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'collectivite' THEN af.amount ELSE 0 END), 0) as "finance_collectivite",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'europeen' THEN af.amount ELSE 0 END), 0) as "finance_europeen",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'prive' THEN af.amount ELSE 0 END), 0) as "finance_prive",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'autre' THEN af.amount ELSE 0 END), 0) as "finance_autre",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'etatique' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_etatique",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'dedie' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_dedie",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'collectivite' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_collectivite",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'europeen' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_europeen",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'prive' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_prive",
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'autre' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_autre"
         FROM 
             action_finances af
         LEFT JOIN actions ON af.fk_action = actions.action_id
@@ -154,8 +154,6 @@ export default function fetchReport(
                 action_metrics.fk_action AS action_id,
                 MAX(action_metrics.created_at) AS last_metrics_update
             FROM action_metrics
-            WHERE
-                TO_CHAR(action_metrics.date, 'YYYY') = :annee::varchar
             GROUP BY action_metrics.fk_action
         ),
         scolarmetrics AS
@@ -164,13 +162,16 @@ export default function fetchReport(
                 SELECT
                     action_metrics.fk_action AS action_id,
                     action_metrics.date,
-                    action_metrics.scolaire_mineurs_scolarisables,
-                    action_metrics.scolaire_mineurs_en_mediation,
+                    action_metrics.scolaire_mineurs_moins_de_trois_ans,
+                    action_metrics.scolaire_mineurs_trois_ans_et_plus,
+                    action_metrics.scolaire_mediation_moins_de_trois_ans,
+                    action_metrics.scolaire_mediation_trois_ans_et_plus,
                     action_metrics.scolaire_nombre_maternelle,
                     action_metrics.scolaire_nombre_elementaire,
                     action_metrics.scolaire_nombre_college,
                     action_metrics.scolaire_nombre_lycee,
                     action_metrics.scolaire_nombre_autre,
+                    action_metrics.scolaire_mineur_scolarise_dans_annee,
                     action_metrics.created_at,
                     RANK() OVER(
                         PARTITION BY action_metrics.fk_action
@@ -180,13 +181,16 @@ export default function fetchReport(
                 action_metrics
                 WHERE
                 (
-                    action_metrics.scolaire_mineurs_scolarisables IS NOT NULL OR
-                    action_metrics.scolaire_mineurs_en_mediation IS NOT NULL OR
+                    action_metrics.scolaire_mineurs_moins_de_trois_ans IS NOT NULL OR
+                    action_metrics.scolaire_mineurs_trois_ans_et_plus IS NOT NULL OR
+                    action_metrics.scolaire_mediation_moins_de_trois_ans IS NOT NULL OR
+                    action_metrics.scolaire_mediation_trois_ans_et_plus IS NOT NULL OR
                     action_metrics.scolaire_nombre_maternelle IS NOT NULL OR
                     action_metrics.scolaire_nombre_elementaire IS NOT NULL OR
                     action_metrics.scolaire_nombre_college IS NOT NULL OR
                     action_metrics.scolaire_nombre_lycee IS NOT NULL OR
-                    action_metrics.scolaire_nombre_autre IS NOT NULL
+                    action_metrics.scolaire_nombre_autre IS NOT NULL OR
+                    action_metrics.scolaire_mineur_scolarise_dans_annee IS NOT NULL
                 )
                 AND
                     action_metrics.date <= TO_DATE(:annee || '-09-01', 'YYYY-MM-DD') + INTERVAL '1 year'
@@ -208,6 +212,19 @@ export default function fetchReport(
             GROUP BY
                 fk_action
         ),
+        principal_operator AS (
+            SELECT
+                ao.fk_action,
+                COALESCE(NULLIF(org.abbreviation, ''), org."name") AS operator_name
+            FROM
+                action_operators ao
+            INNER JOIN
+                users u ON u.user_id = ao.fk_user
+            INNER JOIN
+                organizations org ON org.organization_id = u.fk_organization
+            WHERE
+                ao.is_principal = true
+        ),
         action_operators AS (
             SELECT
                 fk_action,
@@ -227,7 +244,13 @@ export default function fetchReport(
         r.code AS "region_code",
         r.name AS "region_name",
         actions.action_id,
-        actions."name" AS "action_name",
+        po.operator_name AS "operator_name",
+        actions."name" AS "project_name",
+        CASE
+            WHEN po.operator_name IS NOT NULL
+                THEN po.operator_name || ' - ' || actions."name"
+            ELSE actions."name"
+        END AS "action_name",
         TO_CHAR(started_at, 'DD/MM/YYYY') AS "started_at",
         TO_CHAR(ended_at, 'DD/MM/YYYY') AS "ended_at",
         CASE actions.location_type
@@ -251,13 +274,16 @@ export default function fetchReport(
         m.hebergement_nombre_menages,
         m.logement_nombre_personnes,
         m.logement_nombre_menages,
-        sm.scolaire_mineurs_scolarisables,
-        sm.scolaire_mineurs_en_mediation,
+        sm.scolaire_mineurs_moins_de_trois_ans,
+        sm.scolaire_mineurs_trois_ans_et_plus,
+        sm.scolaire_mediation_moins_de_trois_ans,
+        sm.scolaire_mediation_trois_ans_et_plus,
         sm.scolaire_nombre_maternelle,
         sm.scolaire_nombre_elementaire,
         sm.scolaire_nombre_college,
         sm.scolaire_nombre_lycee,
         sm.scolaire_nombre_autre,
+        sm.scolaire_mineur_scolarise_dans_annee,
         fi.finance_etatique,
         fi.finance_dedie,
         fi.finance_collectivite,
@@ -297,6 +323,8 @@ export default function fetchReport(
         finances fi ON fi.action_id = actions.action_id
     LEFT JOIN
         metrics_last_update mlu ON mlu.action_id = actions.action_id
+    LEFT JOIN
+        principal_operator po ON po.fk_action = actions.action_id
     WHERE
         actions.started_at <= TO_DATE(:annee::varchar || '-12-31', 'YYYY-MM-DD')
     AND

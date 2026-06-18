@@ -11,10 +11,97 @@ function emptyStringToNull(value, originalValue) {
     return value;
 }
 
+// Helper pour calculer la somme des niveaux scolaires SAISIS (hors "autre")
+// Sert de référence au champ "Mineurs dont la scolarité a débuté cette année".
+// Volontairement aligné sur le total affiché à l'écran qui n'inclut pas "autre".
+function calculateSchoolLevelsSum(parent) {
+    return [
+        parent.scolaire_nombre_maternelle,
+        parent.scolaire_nombre_elementaire,
+        parent.scolaire_nombre_college,
+        parent.scolaire_nombre_lycee,
+    ].reduce((sum, val) => sum + (Number.isInteger(val) ? val : 0), 0);
+}
+
+// Helper générique : impose que la valeur du champ ne dépasse pas celle d'un
+// champ frère de référence (au sein du même objet indicateurs[année]).
+// La contrainte ne s'applique que si la référence est un entier renseigné.
+// Le message utilise le format "FIELD:nom|MESSAGE:texte" décodé par InputIndicateurs.
+function addMaxFieldValidation(schema, fieldName, referenceField, message) {
+    return schema.test(
+        `max-${fieldName}-le-${referenceField}`,
+        `FIELD:${fieldName}|MESSAGE:${message}`,
+        function (value) {
+            if (!Number.isInteger(value)) {
+                return true;
+            }
+            const reference = this.parent[referenceField];
+            return !Number.isInteger(reference) || value <= reference;
+        }
+    );
+}
+
+// Applique une validation uniquement si le champ d'intervention (topic) est sélectionné.
+// La liste `topics` est lue depuis les valeurs racine du formulaire et passée
+// explicitement (cf. createIndicateurFields). On évite `.when("$topics")` : la
+// variable de contexte $topics n'est pas propagée par vee-validate jusqu'aux
+// champs profondément imbriqués (indicateurs -> année -> champ), ce qui
+// désactivait silencieusement toutes ces validations côté client.
+function addTopicValidation(topics, field, topic, addValidation) {
+    if (topics?.includes(topic)) {
+        return addValidation(field);
+    }
+    return field;
+}
+
+// Calcul de la somme des mineurs identifiés sur site (moins de 3 ans + 3 ans et plus)
+function calculateIdentifiedMinorsSum(parent) {
+    let sum = 0;
+    if (Number.isInteger(parent.scolaire_mineurs_moins_de_trois_ans)) {
+        sum += parent.scolaire_mineurs_moins_de_trois_ans;
+    }
+    if (Number.isInteger(parent.scolaire_mineurs_trois_ans_et_plus)) {
+        sum += parent.scolaire_mineurs_trois_ans_et_plus;
+    }
+    return sum;
+}
+
+// Validation miroir : la somme des niveaux saisis ne peut être INFÉRIEURE au
+// nombre de mineurs dont la scolarité a débuté cette année.
+// + La somme des niveaux ne peut dépasser le total des mineurs identifiés sur site.
+function addSchoolLevelsSumValidation(schema) {
+    return schema
+        .test(
+            "min-scolarises",
+            "La somme des niveaux ne peut être inférieure au nombre de mineurs dont la scolarité a débuté cette année",
+            function () {
+                const scolariseDansAnnee =
+                    this.parent.scolaire_mineur_scolarise_dans_annee;
+                if (!Number.isInteger(scolariseDansAnnee)) {
+                    return true;
+                }
+                const sum = calculateSchoolLevelsSum(this.parent);
+                return sum >= scolariseDansAnnee;
+            }
+        )
+        .test(
+            "max-identified-minors",
+            "La somme des mineurs scolarisés par niveau ne peut pas dépasser le nombre total de mineurs identifiés sur site",
+            function () {
+                const sumLevels = calculateSchoolLevelsSum(this.parent);
+                const sumIdentified = calculateIdentifiedMinorsSum(this.parent);
+                if (sumLevels === 0 || sumIdentified === 0) {
+                    return true;
+                }
+                return sumLevels <= sumIdentified;
+            }
+        );
+}
+
 addMethod(object, "usersIsNotEmpty", function () {
     return this.test(
         "usersIsNotEmpty",
-        ({ label }) => `${label} est obligatoire`,
+        ({ label }) => `"${label}" est un champ requis`,
         async function (value) {
             if (value?.users === undefined || value?.users === null) {
                 return true;
@@ -22,12 +109,30 @@ addMethod(object, "usersIsNotEmpty", function () {
 
             try {
                 await array()
-                    .min(1, ({ label }) => `${label} est obligatoire`)
+                    .min(1, ({ label }) => `"${label}" est un champ requis`)
                     .validate(value.users);
                 return true;
             } catch {
                 return false;
             }
+        }
+    );
+});
+
+addMethod(object, "hasExactlyOnePrincipalWhenMultiple", function () {
+    return this.test(
+        "hasExactlyOnePrincipalWhenMultiple",
+        labels.principalOperator +
+            " : vous devez désigner exactement un opérateur principal",
+        function (value) {
+            const users = value?.users;
+            if (!Array.isArray(users) || users.length < 2) {
+                return true;
+            }
+            const principalCount = users.filter(
+                (u) => u.is_principal === true
+            ).length;
+            return principalCount === 1;
         }
     );
 });
@@ -175,12 +280,20 @@ const indicateursFields = [
     // Scolaire
     ...createFields([
         [
-            "scolaire_mineurs_scolarisables",
-            "Nombre de mineurs en âge d'être scolarisés",
+            "scolaire_mineurs_moins_de_trois_ans",
+            "Nombre de mineurs de moins de 3 ans identifiés sur site",
         ],
         [
-            "scolaire_mineurs_en_mediation",
-            "Nombre de mineurs bénéficiant d'une action de médiation",
+            "scolaire_mineurs_trois_ans_et_plus",
+            "Nombre de mineurs de 3 ans et plus identifiés sur site",
+        ],
+        [
+            "scolaire_mediation_moins_de_trois_ans",
+            "Nombre de mineurs de moins de 3 ans bénéficiant d'une médiation",
+        ],
+        [
+            "scolaire_mediation_trois_ans_et_plus",
+            "Nombre de mineurs de 3 ans et plus bénéficiant d'une médiation",
         ],
         [
             "scolaire_nombre_maternelle",
@@ -193,11 +306,21 @@ const indicateursFields = [
         ["scolaire_nombre_college", "Nombre de mineurs scolarisés au collège"],
         ["scolaire_nombre_lycee", "Nombre de mineurs scolarisés au lycée"],
         ["scolaire_nombre_autre", 'Nombre de mineurs scolarisés "autre"'],
+        [
+            "scolaire_mineur_scolarise_dans_annee",
+            "Nombre de mineurs scolarisés dans l'année",
+        ],
     ]),
 ];
 
-// Helper pour créer les champs d'indicateurs par catégorie
-const createIndicateurFields = () => {
+// Helper pour créer les champs d'indicateurs par catégorie.
+// `topics` (liste des champs d'intervention sélectionnés) est lu depuis les
+// valeurs racine du formulaire et conditionne les validations par topic.
+const createIndicateurFields = (topics = []) => {
+    // Applique une validation liée à un topic, en capturant la liste `topics`.
+    const applyTopic = (field, topic, addValidation) =>
+        addTopicValidation(topics, field, topic, addValidation);
+
     // Créer tous les champs de base
     const fields = {};
 
@@ -222,6 +345,226 @@ const createIndicateurFields = () => {
             ),
     });
 
+    // R1 - Démographie : les "dont" ne peuvent dépasser le nombre total de personnes
+    fields.nombre_mineurs = addMaxFieldValidation(
+        fields.nombre_mineurs,
+        "nombre_mineurs",
+        "nombre_personnes",
+        "Le nombre de mineurs ne peut être supérieur au nombre de personnes"
+    );
+    fields.nombre_menages = addMaxFieldValidation(
+        fields.nombre_menages,
+        "nombre_menages",
+        "nombre_personnes",
+        "Le nombre de ménages ne peut être supérieur au nombre de personnes"
+    );
+
+    // R2 - Santé (topic "health") : accompagnement santé ≤ personnes concernées
+    fields.sante_nombre_personnes = applyTopic(
+        fields.sante_nombre_personnes,
+        "health",
+        (schema) =>
+            addMaxFieldValidation(
+                schema,
+                "sante_nombre_personnes",
+                "nombre_personnes",
+                "Le nombre de personnes ayant bénéficié d'un accompagnement vers la santé ne peut être supérieur au nombre de personnes concernées par l'action"
+            )
+    );
+
+    // R4 - Formation et emploi (topic "work")
+    fields.travail_nombre_personnes = applyTopic(
+        fields.travail_nombre_personnes,
+        "work",
+        (schema) =>
+            addMaxFieldValidation(
+                schema,
+                "travail_nombre_personnes",
+                "nombre_personnes",
+                "Le nombre de personnes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de personnes concernées par l'action"
+            )
+    );
+    fields.travail_nombre_femmes = applyTopic(
+        fields.travail_nombre_femmes,
+        "work",
+        (schema) => {
+            // Priorité 1 : ne peut dépasser le nombre de personnes ayant eu un contrat
+            schema = addMaxFieldValidation(
+                schema,
+                "travail_nombre_femmes",
+                "travail_nombre_personnes",
+                "Le nombre de femmes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de personnes ayant eu au moins 1 contrat de travail"
+            );
+            // Priorité 2 : ne peut dépasser le nombre de femmes concernées par l'action
+            schema = addMaxFieldValidation(
+                schema,
+                "travail_nombre_femmes",
+                "nombre_femmes",
+                "Le nombre de femmes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de femmes concernées par l'action"
+            );
+            return schema;
+        }
+    );
+
+    // R5 - Logement (topic "housing") : hébergement et logement, personnes et ménages
+    fields.hebergement_nombre_personnes = applyTopic(
+        fields.hebergement_nombre_personnes,
+        "housing",
+        (schema) =>
+            addMaxFieldValidation(
+                schema,
+                "hebergement_nombre_personnes",
+                "nombre_personnes",
+                "Le nombre de personnes ayant eu accès à une solution longue durée en hébergement ou logement adapté ne peut être supérieur au nombre de personnes concernées par l'action"
+            )
+    );
+    fields.hebergement_nombre_menages = applyTopic(
+        fields.hebergement_nombre_menages,
+        "housing",
+        (schema) => {
+            // Priorité 1 : ne peut dépasser le nombre de personnes en hébergement
+            schema = addMaxFieldValidation(
+                schema,
+                "hebergement_nombre_menages",
+                "hebergement_nombre_personnes",
+                "Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes ayant eu accès à un hébergement"
+            );
+            // Priorité 2 : ne peut dépasser le nombre de ménages concernés par l'action
+            schema = addMaxFieldValidation(
+                schema,
+                "hebergement_nombre_menages",
+                "nombre_menages",
+                "Le nombre de ménages ayant eu accès à une solution longue durée en hébergement ou logement adapté ne peut être supérieur au nombre de ménages concernés par l'action"
+            );
+            // Priorité 3 : ne peut dépasser le nombre de personnes concernées par l'action
+            schema = addMaxFieldValidation(
+                schema,
+                "hebergement_nombre_menages",
+                "nombre_personnes",
+                "Le nombre de ménages ayant eu accès à un hébergement ne peut être supérieur au nombre de personnes concernées par l'action"
+            );
+            return schema;
+        }
+    );
+    fields.logement_nombre_personnes = applyTopic(
+        fields.logement_nombre_personnes,
+        "housing",
+        (schema) =>
+            addMaxFieldValidation(
+                schema,
+                "logement_nombre_personnes",
+                "nombre_personnes",
+                "Le nombre de personnes ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l'action"
+            )
+    );
+    fields.logement_nombre_menages = applyTopic(
+        fields.logement_nombre_menages,
+        "housing",
+        (schema) => {
+            // Priorité 1 : ne peut dépasser le nombre de personnes en logement
+            schema = addMaxFieldValidation(
+                schema,
+                "logement_nombre_menages",
+                "logement_nombre_personnes",
+                "Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes ayant eu accès à un logement"
+            );
+            // Priorité 2 : ne peut dépasser le nombre de ménages concernés par l'action
+            schema = addMaxFieldValidation(
+                schema,
+                "logement_nombre_menages",
+                "nombre_menages",
+                "Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de ménages concernés par l'action"
+            );
+            // Priorité 3 : ne peut dépasser le nombre de personnes concernées par l'action
+            schema = addMaxFieldValidation(
+                schema,
+                "logement_nombre_menages",
+                "nombre_personnes",
+                "Le nombre de ménages ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l'action"
+            );
+            return schema;
+        }
+    );
+
+    // Particularités scolaires : appliquées uniquement si le champ d'intervention "school" est sélectionné
+    const addSchoolValidation = (field, addValidation) =>
+        applyTopic(field, "school", addValidation);
+
+    // Pas de validation cross-field pour les mineurs identifiés sur site et la médiation
+    // Ces champs sont indépendants de la section "Nombre total de personnes concernées par l'action"
+
+    // La somme des niveaux scolaires ne peut dépasser le nombre total de scolarisés
+    fields.scolaire_nombre_maternelle = addSchoolValidation(
+        fields.scolaire_nombre_maternelle,
+        addSchoolLevelsSumValidation
+    );
+    fields.scolaire_nombre_elementaire = addSchoolValidation(
+        fields.scolaire_nombre_elementaire,
+        addSchoolLevelsSumValidation
+    );
+    fields.scolaire_nombre_college = addSchoolValidation(
+        fields.scolaire_nombre_college,
+        addSchoolLevelsSumValidation
+    );
+    fields.scolaire_nombre_lycee = addSchoolValidation(
+        fields.scolaire_nombre_lycee,
+        addSchoolLevelsSumValidation
+    );
+    fields.scolaire_nombre_autre = addSchoolValidation(
+        fields.scolaire_nombre_autre,
+        addSchoolLevelsSumValidation
+    );
+
+    // Le nombre de mineurs scolarisés dans l'année : validations basées sur les mineurs identifiés sur site
+    fields.scolaire_mineur_scolarise_dans_annee = addSchoolValidation(
+        fields.scolaire_mineur_scolarise_dans_annee,
+        (schema) =>
+            schema
+                .test(
+                    "requires-identified-minors",
+                    "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:Le nombre de mineurs scolarisés dans l'année ne peut être renseigné que si au moins un des champs 'Mineurs identifiés sur site' est renseigné",
+                    function (value) {
+                        if (!Number.isInteger(value)) {
+                            return true;
+                        }
+                        const {
+                            scolaire_mineurs_moins_de_trois_ans,
+                            scolaire_mineurs_trois_ans_et_plus,
+                        } = this.parent;
+                        return (
+                            Number.isInteger(
+                                scolaire_mineurs_moins_de_trois_ans
+                            ) ||
+                            Number.isInteger(scolaire_mineurs_trois_ans_et_plus)
+                        );
+                    }
+                )
+                .test(
+                    "max-identified-minors",
+                    "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:Le nombre de mineurs scolarisés dans l'année ne peut pas dépasser le nombre total de mineurs identifiés sur site",
+                    function (value) {
+                        if (!Number.isInteger(value)) {
+                            return true;
+                        }
+                        const sumIdentified = calculateIdentifiedMinorsSum(
+                            this.parent
+                        );
+                        return value <= sumIdentified;
+                    }
+                )
+                .test(
+                    "max-somme-niveaux",
+                    "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:Le nombre de mineurs scolarisés dans l'année ne peut être supérieur au total des mineurs scolarisés tous niveaux confondus",
+                    function (value) {
+                        if (!Number.isInteger(value)) {
+                            return true;
+                        }
+                        const sum = calculateSchoolLevelsSum(this.parent);
+                        return value <= sum;
+                    }
+                )
+    );
+
     return fields;
 };
 
@@ -229,10 +572,11 @@ export default function formDeclarationAction() {
     const configStore = useConfigStore();
 
     const schema = {
-        name: string().required().label(labels.name),
+        name: string().required().label(`"${labels.name}"`),
         started_at: date()
-            .typeError(`${labels.started_at} est obligatoire`)
-            .label(labels.started_at),
+            .required()
+            .typeError(`${labels.started_at} est invalide`)
+            .label(`"${labels.started_at}"`),
         ended_at: date()
             .nullable()
             .typeError(`${labels.ended_at} est invalide`)
@@ -244,16 +588,16 @@ export default function formDeclarationAction() {
         topics: array()
             .of(string().oneOf(configStore.config.topics.map(({ uid }) => uid)))
             .required()
-            .min(1, ({ label }) => `${label} est un champ obligatoire`)
+            .min(1, ({ label }) => `"${label}" est un champ requis`)
             .label(labels.topics),
-        goals: string().required().label(labels.goals),
+        goals: string().required().label(`"${labels.goals}"`),
         location_departement: string()
             .required()
             .label(labels.location_departement),
         location_type: string()
             .oneOf(locationTypes.map(({ uid }) => uid))
             .required()
-            .label(labels.location_type),
+            .label(`"${labels.location_type}"`),
         location_eti_addresses: array()
             .of(
                 object().shape({
@@ -297,22 +641,31 @@ export default function formDeclarationAction() {
         location_autre: string()
             .when("location_type", {
                 is: "autre",
-                then: (schema) => schema.required(),
+                then: (schema) =>
+                    schema
+                        .required("Vous devez préciser où se déroule l'action")
+                        .trim()
+                        .min(1, "Vous devez préciser où se déroule l'action"),
             })
             .label(labels.location_autre),
         managers: object().required().usersIsNotEmpty().label(labels.managers),
         operators: object()
             .required()
             .usersIsNotEmpty()
+            .hasExactlyOnePrincipalWhenMultiple()
             .label(labels.operators),
         finances: object(),
-        indicateurs: lazy((value) => {
+        indicateurs: lazy((value, options) => {
+            // Les topics sélectionnés sont lus depuis les valeurs racine du
+            // formulaire (options.parent), car la variable de contexte $topics
+            // n'est pas propagée jusqu'à ce niveau d'imbrication par vee-validate.
+            const topics = options?.parent?.topics ?? [];
             return object()
                 .shape(
                     Object.keys(value || {}).reduce((acc, key) => {
                         acc[key] = object()
                             .required()
-                            .shape(createIndicateurFields())
+                            .shape(createIndicateurFields(topics))
                             .label("Indicateurs " + key);
                         return acc;
                     }, {})

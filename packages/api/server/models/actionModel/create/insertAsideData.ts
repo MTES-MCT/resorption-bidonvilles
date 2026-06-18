@@ -13,7 +13,7 @@ export default function insertAsideData(actionId: number, authorId: number, data
     const promises: Promise<any>[] = [
         insertTopics(actionId, data.topics, transaction),
         insertManagers(actionId, data.managers.map(({ id }) => id), transaction),
-        insertOperators(actionId, data.operators.map(({ id }) => id), transaction),
+        insertOperators(actionId, data.operators.map(({ id, is_principal }) => ({ id, is_principal })), transaction),
         insertMetrics(actionId, authorId, data, transaction),
         insertAddresses(actionId, data, transaction),
     ];

@@ -67,6 +67,7 @@ import { toRefs, ref, onMounted, computed, nextTick } from "vue";
 import { useField, useFieldValue } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
 import formatDate from "@common/utils/formatDate.js";
+import pluralize from "@/utils/pluralize";
 
 import {
     CheckboxUi as Checkbox,
@@ -112,8 +113,6 @@ const checked = ref(
         return acc;
     }, {})
 );
-
-const pluralize = (count, singular, plural) => (count > 1 ? plural : singular);
 
 const tabs = computed(() => {
     const totalOpen = data.value.filter(

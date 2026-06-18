@@ -4,7 +4,7 @@ import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 import { User } from '#root/types/resources/User.d';
 import enrichCommentsAttachments from './enrichCommentsAttachments';
 
-export default async function fetch(user: User, actionIds?: number[]): Promise<EnrichedAction[]> {
+export default async function fetch(user: User, actionIds?: number[], organizationId?: number | null): Promise<EnrichedAction[]> {
     const actions = await actionModel.fetch(user, actionIds);
 
     /*
@@ -15,7 +15,15 @@ export default async function fetch(user: User, actionIds?: number[]): Promise<E
         throw new ServiceError('fetch_failed', new Error('Impossible de retrouver les données'));
     }
 
-    const enrichedActions: EnrichedAction[] = await Promise.all(actions.map(async (action) => {
+    let filteredActions = actions;
+    if (organizationId !== undefined && organizationId !== null) {
+        filteredActions = actions.filter((action) => {
+            const operatorUsers = action.operators.flatMap(org => org.users);
+            return operatorUsers.some(u => u.organization.id === organizationId);
+        });
+    }
+
+    const enrichedActions: EnrichedAction[] = await Promise.all(filteredActions.map(async (action) => {
         const { comments, ...actionWithoutComments } = action;
         const commentsWithEnrichedAttachments = await Promise.all(comments.map(async comment => enrichCommentsAttachments(comment)));
         return {

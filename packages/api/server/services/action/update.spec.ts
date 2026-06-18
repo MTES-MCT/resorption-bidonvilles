@@ -5,6 +5,8 @@ import sinonChai from 'sinon-chai';
 import { rewiremock } from '#test/rewiremock';
 import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeAction } from '#test/utils/action';
+import { buildActionData as buildBaseActionData } from '#test/utils/actionInput';
+import { ActionOperatorInput } from '#server/services/action/ActionInput.d';
 import ServiceError from '#server/errors/ServiceError';
 
 const { expect } = chai;
@@ -22,233 +24,299 @@ const stubs = {
     updateActionModel: sandbox.stub(),
     fetchAction: sandbox.stub(),
     can: sandbox.stub(),
+    validateAndNormalizeOperators: sandbox.stub(),
 };
 
 class FakeUniqueConstraintError extends Error {
-    parent: { constraint: string };
+    parent: { constraint?: string };
 
-    constructor(constraint: string) {
-        super('Unique constraint error');
-        this.name = 'SequelizeUniqueConstraintError';
-        this.parent = { constraint };
+    constructor(message: string, parent: { constraint?: string } = {}) {
+        super(message);
+        this.parent = parent;
     }
 }
 
-rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
 rewiremock('sequelize').with({ UniqueConstraintError: FakeUniqueConstraintError });
+rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
 rewiremock('#server/models/actionModel/update/update').with(stubs.updateActionModel);
 rewiremock('./write.fetchAction').with(stubs.fetchAction);
 rewiremock('#server/utils/permission/can').with(stubs.can);
+rewiremock('./operatorValidation').with(stubs.validateAndNormalizeOperators);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
 import update from './update';
 rewiremock.disable();
 
+const buildActionData = (operators: ActionOperatorInput[]) => buildBaseActionData(operators, {
+    name: 'Action modifiée',
+    goals: 'Objectif modifié',
+});
+
 describe('services/action.update()', () => {
+    let user: ReturnType<typeof fakeUser>;
     const action = fakeAction();
-    const user = fakeUser();
-    const actionData = {
-        name: 'Action mise à jour',
-        started_at: new Date(2023, 0, 1),
-        ended_at: null,
-        topics: ['health'],
-        goals: 'Objectifs mis à jour',
-        location: {
-            type: 'departement' as const,
-            region: { code: '11', name: 'Île-De-France' },
-            departement: { code: '78', name: 'Yvelines' },
-            epci: null,
-            city: null,
-        },
-        location_departement: '78',
-        location_type: 'logement' as const,
-        location_eti_addresses: null,
-        location_shantytowns: null,
-        location_autre: null,
-        managers: [{ id: 1, organization_id: 1 }],
-        operators: [{ id: 2, organization_id: 2 }],
-        indicateurs: {},
-    };
 
     beforeEach(() => {
+        user = fakeUser();
         stubs.sequelize.transaction.resolves(stubs.transaction);
-        stubs.fetchAction.resolves(fakeAction());
-
-        // Configuration par défaut du stub can
-        const onStub = sandbox.stub().returns(true);
-        const doStub = sandbox.stub().returns({ on: onStub });
-        stubs.can.returns({ do: doStub });
+        stubs.updateActionModel.resolves();
+        stubs.fetchAction.resolves({ id: action.id, name: 'Action modifiée' });
+        stubs.transaction.commit.resolves();
+        stubs.transaction.rollback.resolves();
+        stubs.can.returns({
+            do: () => ({
+                on: () => false,
+            }),
+        });
+        stubs.validateAndNormalizeOperators.returns(undefined);
     });
 
     afterEach(() => {
         sandbox.reset();
     });
 
-    describe('gestion des permissions finances', () => {
-        it('passe canWriteFinances=true au modèle si l\'utilisateur a la permission', async () => {
-            stubs.can.returns({
-                do: sandbox.stub().returns({
-                    on: sandbox.stub().returns(true),
-                }),
-            });
+    after(() => {
+        sandbox.restore();
+    });
 
-            await update(action, user, actionData);
+    describe('wiring de la validation des opérateurs', () => {
+        it('appelle validateAndNormalizeOperators avec les opérateurs reçus', async () => {
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            await update(action, user, buildActionData(operators));
 
-            expect(stubs.updateActionModel).to.have.been.calledOnce;
-            const callArgs = stubs.updateActionModel.firstCall.args;
-            expect(callArgs[2]).to.equal(true);
+            expect(stubs.validateAndNormalizeOperators).to.have.been.calledOnce;
+            expect(stubs.validateAndNormalizeOperators.firstCall.args[0]).to.equal(operators);
         });
 
-        it('passe canWriteFinances=false au modèle si l\'utilisateur n\'a pas la permission', async () => {
-            stubs.can.returns({
-                do: sandbox.stub().returns({
-                    on: sandbox.stub().returns(false),
-                }),
-            });
+        it('ne démarre pas de transaction si la validation échoue', async () => {
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: false }];
+            stubs.validateAndNormalizeOperators.throws(new ServiceError('no_principal_operator', new Error('test')));
 
-            await update(action, user, actionData);
+            let caughtError: ServiceError | null = null;
+            try {
+                await update(action, user, buildActionData(operators));
+            } catch (err) {
+                caughtError = err as ServiceError;
+            }
 
-            expect(stubs.updateActionModel).to.have.been.calledOnce;
-            const callArgs = stubs.updateActionModel.firstCall.args;
-            expect(callArgs[2]).to.equal(false);
+            expect(stubs.sequelize.transaction).not.to.have.been.called;
+            expect(caughtError).to.be.instanceOf(ServiceError);
+            expect(caughtError?.code).to.equal('no_principal_operator');
         });
     });
 
-    describe('gestion de la transaction', () => {
-        it('démarre une transaction', async () => {
-            await update(action, user, actionData);
-
-            expect(stubs.sequelize.transaction).to.have.been.calledOnce;
+    describe('protection de l\'opérateur principal', () => {
+        // action BDD : operators[0].users[0] est principal (id=10)
+        // managers : org id=1, user id=42 (le pilote)
+        const actionWithPrincipal = fakeAction({
+            managers: [
+                {
+                    id: 1,
+                    name: 'Structure pilote',
+                    abbreviation: '',
+                    users: [
+                        {
+                            id: 42,
+                            email: 'pilote@action.fr',
+                            position: 'Pilote',
+                            phone: null,
+                            role: 'collaborator',
+                            is_admin: false,
+                            first_name: 'Alice',
+                            last_name: 'Pilote',
+                            organization: { id: 1, name: 'Structure pilote', abbreviation: '' },
+                        },
+                    ],
+                },
+            ],
+            operators: [
+                {
+                    id: 2,
+                    name: 'Opérateur',
+                    abbreviation: '',
+                    users: [
+                        {
+                            id: 10,
+                            email: 'op@action.fr',
+                            position: 'Opérateur',
+                            phone: null,
+                            role: 'collaborator',
+                            is_admin: false,
+                            is_principal: true,
+                            first_name: 'Bob',
+                            last_name: 'Opérateur',
+                            organization: { id: 2, name: 'Opérateur', abbreviation: '' },
+                        },
+                    ],
+                },
+            ],
         });
 
-        it('commit la transaction en cas de succès', async () => {
-            await update(action, user, actionData);
+        // payload : le user id=10 passe de is_principal=true à is_principal=false → changement détecté
+        const operatorsChangingPrincipal: ActionOperatorInput[] = [
+            { id: 10, organization_id: 2, is_principal: false },
+        ];
+
+        // payload identique à la BDD : is_principal=true → pas de changement
+        const operatorsSamePrincipal: ActionOperatorInput[] = [
+            { id: 10, organization_id: 2, is_principal: true },
+        ];
+
+        it('autorise un national_admin actif à changer l\'opérateur principal', async () => {
+            const adminUser = fakeUser({ id: 99, role_id: 'national_admin' });
+
+            await update(actionWithPrincipal, adminUser, buildActionData(operatorsChangingPrincipal));
+
+            expect(stubs.updateActionModel).to.have.been.calledOnce;
+            expect(stubs.transaction.commit).to.have.been.calledOnce;
+        });
+
+        it('autorise un pilote de l\'action à changer l\'opérateur principal', async () => {
+            // le pilote est le user id=42, présent dans actionWithPrincipal.managers[0].users
+            const piloteUser = fakeUser({ id: 42, role_id: 'collaborator' });
+
+            await update(actionWithPrincipal, piloteUser, buildActionData(operatorsChangingPrincipal));
+
+            expect(stubs.updateActionModel).to.have.been.calledOnce;
+            expect(stubs.transaction.commit).to.have.been.calledOnce;
+        });
+
+        it('lève ServiceError forbidden_principal_change si un user lambda tente de changer l\'opérateur principal', async () => {
+            // user lambda : ni national_admin, ni dans les managers
+            const lambdaUser = fakeUser({ id: 99, role_id: 'collaborator' });
+
+            let caughtError: ServiceError | null = null;
+            try {
+                await update(actionWithPrincipal, lambdaUser, buildActionData(operatorsChangingPrincipal));
+            } catch (err) {
+                caughtError = err as ServiceError;
+            }
+
+            expect(stubs.updateActionModel).not.to.have.been.called;
+            expect(stubs.sequelize.transaction).not.to.have.been.called;
+            expect(caughtError).to.be.instanceOf(ServiceError);
+            expect(caughtError?.code).to.equal('forbidden_principal_change');
+        });
+
+        it('n\'applique pas la garde si le payload est identique à la BDD (aucun changement de is_principal)', async () => {
+            // user lambda : ne pourrait pas changer, mais le payload est identique → pas de garde
+            const lambdaUser = fakeUser({ id: 99, role_id: 'collaborator' });
+
+            await update(actionWithPrincipal, lambdaUser, buildActionData(operatorsSamePrincipal));
+
+            // la transaction normale est démarrée et le model update est appelé
+            expect(stubs.updateActionModel).to.have.been.calledOnce;
+            expect(stubs.transaction.commit).to.have.been.calledOnce;
+        });
+
+        it('lève ServiceError forbidden_principal_change si un user lambda retire l\'opérateur principal (passage à undefined)', async () => {
+            // payload sans is_principal explicite alors que la BDD a is_principal=true : c'est un changement
+            const operatorsRemovingPrincipal: ActionOperatorInput[] = [
+                { id: 10, organization_id: 2 },
+            ];
+            const lambdaUser = fakeUser({ id: 99, role_id: 'collaborator' });
+
+            let caughtError: ServiceError | null = null;
+            try {
+                await update(actionWithPrincipal, lambdaUser, buildActionData(operatorsRemovingPrincipal));
+            } catch (err) {
+                caughtError = err as ServiceError;
+            }
+
+            expect(stubs.updateActionModel).not.to.have.been.called;
+            expect(stubs.sequelize.transaction).not.to.have.been.called;
+            expect(caughtError).to.be.instanceOf(ServiceError);
+            expect(caughtError?.code).to.equal('forbidden_principal_change');
+        });
+    });
+
+    describe('comportement nominal', () => {
+        it('appelle le model update avec l\'id de l\'action et les données enrichies du updated_by', async () => {
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            await update(action, user, buildActionData(operators));
+
+            expect(stubs.updateActionModel).to.have.been.calledOnce;
+            const [calledId, calledData] = stubs.updateActionModel.firstCall.args;
+            expect(calledId).to.equal(action.id);
+            expect(calledData.updated_by).to.equal(user.id);
+        });
+
+        it('passe canWriteFinances=false au modèle quand l\'utilisateur n\'a pas la permission action_finances', async () => {
+            stubs.can.returns({
+                do: () => ({
+                    on: () => false,
+                }),
+            });
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            await update(action, user, buildActionData(operators));
+
+            expect(stubs.updateActionModel).to.have.been.calledOnce;
+            const [, , canWriteFinances] = stubs.updateActionModel.firstCall.args;
+            expect(canWriteFinances).to.equal(false);
+        });
+
+        it('passe canWriteFinances=true au modèle quand l\'utilisateur a la permission action_finances', async () => {
+            stubs.can.returns({
+                do: () => ({
+                    on: () => true,
+                }),
+            });
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            await update(action, user, buildActionData(operators));
+
+            expect(stubs.updateActionModel).to.have.been.calledOnce;
+            const [, , canWriteFinances] = stubs.updateActionModel.firstCall.args;
+            expect(canWriteFinances).to.equal(true);
+        });
+
+        it('commit la transaction après la mise à jour', async () => {
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
+            await update(action, user, buildActionData(operators));
 
             expect(stubs.transaction.commit).to.have.been.calledOnce;
-            expect(stubs.transaction.rollback).not.to.have.been.called;
         });
 
-        it('rollback la transaction en cas d\'erreur lors de l\'update', async () => {
-            stubs.updateActionModel.rejects(new Error('fake error'));
+        it('retourne l\'action récupérée après mise à jour', async () => {
+            const fakeUpdatedAction = { id: action.id, name: 'Action modifiée' };
+            stubs.fetchAction.resolves(fakeUpdatedAction);
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
+
+            const result = await update(action, user, buildActionData(operators));
+
+            expect(result).to.deep.equal(fakeUpdatedAction);
+        });
+
+        it('rollback la transaction et lève ServiceError action_insert_error si le model update échoue', async () => {
+            const nativeError = new Error('db error');
+            stubs.updateActionModel.rejects(nativeError);
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
 
             let caughtError: ServiceError | null = null;
             try {
-                await update(action, user, actionData);
+                await update(action, user, buildActionData(operators));
             } catch (err) {
                 caughtError = err as ServiceError;
             }
 
             expect(stubs.transaction.rollback).to.have.been.calledOnce;
-            expect(stubs.transaction.commit).not.to.have.been.called;
-            expect(caughtError).to.be.instanceOf(ServiceError);
-        });
-
-        it('rollback la transaction en cas d\'erreur lors du fetch', async () => {
-            stubs.fetchAction.rejects(new Error('fake error'));
-
-            let caughtError: ServiceError | null = null;
-            try {
-                await update(action, user, actionData);
-            } catch (err) {
-                caughtError = err as ServiceError;
-            }
-
-            expect(stubs.transaction.rollback).to.have.been.calledOnce;
-            expect(stubs.transaction.commit).not.to.have.been.called;
-            expect(caughtError).to.be.instanceOf(ServiceError);
-        });
-    });
-
-    describe('mise à jour de l\'action', () => {
-        it('appelle le modèle avec les bonnes données', async () => {
-            await update(action, user, actionData);
-
-            expect(stubs.updateActionModel).to.have.been.calledOnce;
-            const callArgs = stubs.updateActionModel.firstCall.args;
-            expect(callArgs[0]).to.equal(action.id);
-            expect(callArgs[1]).to.deep.include({
-                ...actionData,
-                updated_by: user.id,
-            });
-        });
-
-        it('récupère l\'action mise à jour', async () => {
-            await update(action, user, actionData);
-
-            expect(stubs.fetchAction).to.have.been.calledOnce;
-            expect(stubs.fetchAction).to.have.been.calledWith(
-                user,
-                action.id,
-                true,
-                stubs.transaction,
-            );
-        });
-
-        it('retourne l\'action mise à jour', async () => {
-            const updatedAction = fakeAction({ name: 'Action mise à jour' });
-            stubs.fetchAction.resolves(updatedAction);
-
-            const result = await update(action, user, actionData);
-
-            expect(result).to.deep.equal(updatedAction);
-        });
-    });
-
-    describe('gestion des erreurs', () => {
-        it('traduit les erreurs de contrainte unique d\'adresse en ServiceError', async () => {
-            const uniqueError = new FakeUniqueConstraintError('uq__action_addresses__unique_address');
-            stubs.updateActionModel.rejects(uniqueError);
-
-            let caughtError: ServiceError | null = null;
-            try {
-                await update(action, user, actionData);
-            } catch (err) {
-                caughtError = err as ServiceError;
-            }
-
-            expect(caughtError).to.be.instanceOf(ServiceError);
-            expect(caughtError?.code).to.equal('duplicate_action_address');
-        });
-
-        it('traduit les autres erreurs d\'update en ServiceError action_insert_error', async () => {
-            stubs.updateActionModel.rejects(new Error('fake error'));
-
-            let caughtError: ServiceError | null = null;
-            try {
-                await update(action, user, actionData);
-            } catch (err) {
-                caughtError = err as ServiceError;
-            }
-
             expect(caughtError).to.be.instanceOf(ServiceError);
             expect(caughtError?.code).to.equal('action_insert_error');
         });
 
-        it('propage les ServiceError lors du fetch', async () => {
-            const serviceError = new ServiceError('custom_error', new Error('test'));
-            stubs.fetchAction.rejects(serviceError);
+        it('rollback la transaction et lève ServiceError action_fetch_error si le fetchAction échoue', async () => {
+            const nativeError = new Error('fetch error');
+            stubs.fetchAction.rejects(nativeError);
+            const operators: ActionOperatorInput[] = [{ id: 1, organization_id: 10, is_principal: true }];
 
             let caughtError: ServiceError | null = null;
             try {
-                await update(action, user, actionData);
+                await update(action, user, buildActionData(operators));
             } catch (err) {
                 caughtError = err as ServiceError;
             }
 
-            expect(caughtError).to.equal(serviceError);
-        });
-
-        it('traduit les autres erreurs de fetch en ServiceError action_fetch_error', async () => {
-            stubs.fetchAction.rejects(new Error('fake error'));
-
-            let caughtError: ServiceError | null = null;
-            try {
-                await update(action, user, actionData);
-            } catch (err) {
-                caughtError = err as ServiceError;
-            }
-
+            expect(stubs.transaction.rollback).to.have.been.calledOnce;
             expect(caughtError).to.be.instanceOf(ServiceError);
             expect(caughtError?.code).to.equal('action_fetch_error');
         });

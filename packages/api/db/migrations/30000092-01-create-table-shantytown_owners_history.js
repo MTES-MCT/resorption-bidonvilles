@@ -1,4 +1,4 @@
-const { addForeignKey, removeForeignKey } = require('./common/manageForeignKeys');
+const { addForeignKey, removeForeignKey } = require('./common/helpers/manageForeignKeys');
 
 module.exports = {
     async up(queryInterface, Sequelize) {
@@ -53,36 +53,33 @@ module.exports = {
             );
 
             await Promise.all([
-                addForeignKey(
-                    queryInterface,
-                    'shantytown_parcel_owners_history',
-                    ['fk_shantytown'],
-                    'ShantytownHistories',
-                    'hid',
-                    'cascade',
-                    'cascade',
+                addForeignKey(queryInterface, {
+                    table: 'shantytown_parcel_owners_history',
+                    fields: ['fk_shantytown'],
+                    refTable: 'ShantytownHistories',
+                    refField: 'hid',
+                    onUpdate: 'cascade',
+                    onDelete: 'cascade',
                     transaction,
-                ),
-                addForeignKey(
-                    queryInterface,
-                    'shantytown_parcel_owners_history',
-                    ['fk_owner_type'],
-                    'owner_types',
-                    'owner_type_id',
-                    'cascade',
-                    'cascade',
+                }),
+                addForeignKey(queryInterface, {
+                    table: 'shantytown_parcel_owners_history',
+                    fields: ['fk_owner'],
+                    refTable: 'shantytown_parcel_owners',
+                    refField: 'owner_id',
+                    onUpdate: 'cascade',
+                    onDelete: 'cascade',
                     transaction,
-                ),
-                addForeignKey(
-                    queryInterface,
-                    'shantytown_parcel_owners_history',
-                    ['fk_user'],
-                    'users',
-                    'user_id',
-                    'cascade',
-                    'cascade',
+                }),
+                addForeignKey(queryInterface, {
+                    table: 'shantytown_parcel_owners_history',
+                    fields: ['fk_owner_type'],
+                    refTable: 'owner_types',
+                    refField: 'owner_type_id',
+                    onUpdate: 'cascade',
+                    onDelete: 'cascade',
                     transaction,
-                ),
+                }),
             ]);
 
             await transaction.commit();
@@ -97,24 +94,26 @@ module.exports = {
 
         try {
             await Promise.all([
-                removeForeignKey(
-                    queryInterface,
-                    'shantytown_parcel_owners_history',
-                    'ShantytownHistories',
+                removeForeignKey(queryInterface, {
+                    table: 'shantytown_parcel_owners_history',
+                    refTable: 'ShantytownHistories',
                     transaction,
-                ),
-                removeForeignKey(
-                    queryInterface,
-                    'shantytown_parcel_owners_history',
-                    'owner_types',
+                }),
+                removeForeignKey(queryInterface, {
+                    table: 'shantytown_parcel_owners_history',
+                    refTable: 'shantytown_parcel_owners',
                     transaction,
-                ),
-                removeForeignKey(
-                    queryInterface,
-                    'shantytown_parcel_owners_history',
-                    'users',
+                }),
+                removeForeignKey(queryInterface, {
+                    table: 'shantytown_parcel_owners_history',
+                    refTable: 'owner_types',
                     transaction,
-                ),
+                }),
+                removeForeignKey(queryInterface, {
+                    table: 'shantytown_parcel_owners_history',
+                    refTable: 'users',
+                    transaction,
+                }),
             ]);
 
             await queryInterface.dropTable('shantytown_parcel_owners_history', { transaction });

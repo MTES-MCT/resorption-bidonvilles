@@ -22,6 +22,7 @@
 <script setup>
 import { computed } from "vue";
 import { useActionsStore } from "@/stores/actions.store";
+import pluralize from "@/utils/pluralize";
 import { ContentWrapper, TabList } from "@resorptionbidonvilles/ui";
 import Loading from "@/components/Loading/Loading.vue";
 import ListeDesActionsHeader from "./ListeDesActionsHeader.vue";
@@ -37,17 +38,38 @@ const tabs = computed(() => {
     const initialTabs = [
         {
             id: "open",
-            label: "Actions en cours",
+            label: pluralize(
+                actionsStore.filteredActions["open"].length,
+                "Action en cours",
+                "Actions en cours"
+            ),
             total: actionsStore.filteredActions["open"].length,
         },
         {
+            id: "myOrganization",
+            label: pluralize(
+                actionsStore.filteredActions["myOrganization"].length,
+                "action de ma structure",
+                "actions de ma structure"
+            ),
+            total: actionsStore.filteredActions["myOrganization"].length,
+        },
+        {
             id: "closed",
-            label: "Actions terminées",
+            label: pluralize(
+                actionsStore.filteredActions["closed"].length,
+                "Action terminée",
+                "Actions terminées"
+            ),
             total: actionsStore.filteredActions["closed"].length,
         },
     ];
 
-    return initialTabs;
+    return initialTabs.filter(
+        (tab) =>
+            tab.id !== "myOrganization" ||
+            actionsStore.filteredActions["myOrganization"].length > 0
+    );
 });
 
 const currentTab = computed({

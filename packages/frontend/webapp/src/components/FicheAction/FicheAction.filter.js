@@ -20,6 +20,6 @@ export default {
         ],
         contacts: ["managers", "operators"],
         financements: ["finances"],
-        indicateurs: ["metrics"],
+        indicateurs: ["indicateurs"],
     },
 };

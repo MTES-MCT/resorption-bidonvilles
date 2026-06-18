@@ -3,10 +3,10 @@ import formatDateSinceActivity from "./formatDateSinceActivity";
 function compute(date) {
     const since = formatDateSinceActivity(date / 1000);
     if (since === "aujourd'hui") {
-        return since;
+        return "Mis à jour aujourd'hui";
     }
 
-    return `il y a ${since}`;
+    return `Mis à jour il y a ${since}`;
 }
 
 const formatMetricsUpdatedAt = (action) => {
@@ -14,6 +14,6 @@ const formatMetricsUpdatedAt = (action) => {
         return "Aucun indicateur renseigné";
     }
 
-    return `Indicateurs mis à jour ${compute(action.metrics_updated_at)}`;
+    return compute(action.metrics_updated_at);
 };
 export default formatMetricsUpdatedAt;

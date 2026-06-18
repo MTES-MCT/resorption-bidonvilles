@@ -41,13 +41,25 @@
 <script setup>
 import { computed } from "vue";
 import { useActionsStore } from "@/stores/actions.store";
+import { useUserStore } from "@/stores/user.store";
 import staticFilters from "./ListeDesActions.filtres";
 import sorts from "./ListeDesActions.tris";
 import { Filter, Sort } from "@resorptionbidonvilles/ui";
 
 const actionsStore = useActionsStore();
+const userStore = useUserStore();
 
-const sortOptions = [sorts.startedAt, sorts.updatedAt, sorts.lastMetricUpdate];
+const sortOptions = [
+    sorts.startedAt,
+    sorts.updatedAt,
+    sorts.lastMetricUpdate,
+    sorts.operatorName,
+    sorts.projectName,
+];
+
+const canAccessFinances = computed(() => {
+    return userStore.hasPermission("action_finances.access");
+});
 
 const dihalYearOptions = computed(() => {
     const years = new Set();
@@ -70,8 +82,8 @@ const dihalYearOptions = computed(() => {
     ];
 });
 
-const filters = computed(() =>
-    staticFilters.map((filter) =>
+const filters = computed(() => {
+    const allFilters = staticFilters.map((filter) =>
         filter.id === "dihalFinancing"
             ? {
                   ...filter,
@@ -79,8 +91,12 @@ const filters = computed(() =>
                   options: dihalYearOptions.value,
               }
             : filter
-    )
-);
+    );
+
+    return canAccessFinances.value
+        ? allFilters
+        : allFilters.filter((filter) => filter.id !== "dihalFinancing");
+});
 
 const isFiltered = computed(() => {
     const filterValues = Object.values(actionsStore.filters.properties);

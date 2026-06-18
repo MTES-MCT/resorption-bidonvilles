@@ -36,9 +36,23 @@ export const useActionsStore = defineStore("actions", () => {
     const sort = ref("updated_at");
 
     const sortFn = computed(() => {
+        const isDateField = new Set([
+            "started_at",
+            "updated_at",
+            "metrics_updated_at",
+        ]).has(sort.value);
+
         return (a, b) => {
-            const aValue = a[sort.value];
-            const bValue = b[sort.value];
+            let aValue = a[sort.value];
+            let bValue = b[sort.value];
+
+            // Pour les champs texte, remplacer les valeurs vides/null/undefined par une chaîne vide
+            if (!isDateField) {
+                aValue = aValue || "";
+                bValue = bValue || "";
+            }
+
+            // Gérer les valeurs nulles/undefined pour les dates
             if (!aValue && !bValue) {
                 return 0;
             }
@@ -48,23 +62,78 @@ export const useActionsStore = defineStore("actions", () => {
             if (!bValue) {
                 return -1;
             }
-            return new Date(bValue).getTime() - new Date(aValue).getTime();
+
+            if (isDateField) {
+                // Tri par date (décroissant)
+                return new Date(bValue).getTime() - new Date(aValue).getTime();
+            }
+
+            // Tri alphabétique (croissant) avec critère secondaire
+            const primaryCompare = aValue.localeCompare(bValue, "fr", {
+                sensitivity: "base",
+            });
+
+            // Si le critère principal est égal, utiliser le nom du projet comme critère secondaire
+            if (primaryCompare === 0 && sort.value === "operator_name") {
+                const aProject = a.project_name || "";
+                const bProject = b.project_name || "";
+                return aProject.localeCompare(bProject, "fr", {
+                    sensitivity: "base",
+                });
+            }
+
+            return primaryCompare;
         };
     });
 
     const filteredActions = computed(() => {
-        const STATUSES = ["open", "closed"];
+        const STATUSES = ["open", "closed", "myOrganization"];
         return Object.fromEntries(
-            STATUSES.map((status) => [
-                status,
-                filterActions(actions.value, {
-                    status,
+            STATUSES.map((status) => {
+                const baseFilters = {
                     search: filters.search.value,
                     location: filters.location.value,
                     ...filters.properties.value,
-                }),
-            ])
+                };
+
+                if (status === "myOrganization") {
+                    const userStore = useUserStore();
+                    const organizationId = userStore.user?.organization?.id;
+                    if (!organizationId) {
+                        return [status, []];
+                    }
+                    baseFilters.organizationId = organizationId;
+                    // On ne charge que les actions en cours : les actions
+                    // terminées ne sont plus mises à jour et fausseraient les
+                    // pourcentages d'indicateurs à jour.
+                    baseFilters.status = "open";
+                } else {
+                    baseFilters.status = status;
+                }
+
+                return [status, filterActions(actions.value, baseFilters)];
+            })
         );
+    });
+
+    // Actions terminées dont la structure de l'utilisateur est opérateur.
+    // Volontairement hors de `filteredActions.myOrganization` (qui ne contient
+    // que les actions en cours) : ce compteur est une simple indication
+    // d'activité passée, ces actions ne sont pas listées dans l'onglet.
+    const myOrganizationClosedActions = computed(() => {
+        const userStore = useUserStore();
+        const organizationId = userStore.user?.organization?.id;
+        if (!organizationId) {
+            return [];
+        }
+
+        return filterActions(actions.value, {
+            search: filters.search.value,
+            location: filters.location.value,
+            ...filters.properties.value,
+            organizationId,
+            status: "closed",
+        });
     });
 
     const currentPage = {
@@ -184,6 +253,7 @@ export const useActionsStore = defineStore("actions", () => {
         error,
         filters,
         filteredActions,
+        myOrganizationClosedActions,
         currentPage,
         hash,
         requestedPilotsForActions,
