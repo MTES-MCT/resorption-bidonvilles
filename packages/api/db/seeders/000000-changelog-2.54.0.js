@@ -1,3 +1,3 @@
 const createChangelogSeederFromJson = require('./helpers/createChangelogSeederFromJson');
 
-module.exports = createChangelogSeederFromJson('2.53.3.json');
+module.exports = createChangelogSeederFromJson('2.54.0.json');
