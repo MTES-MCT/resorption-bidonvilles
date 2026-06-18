@@ -12,7 +12,7 @@
                 type="warning"
                 title="Prévenir les risques lors des vagues de chaleur"
                 description='Pensez à identifier les sites nécessitant une intervention urgente via le bouton "Alerte canicule" sur la liste des sites, et suivez les actions mises en œuvre via le journal du site.'
-                :enabled="false"
+                :enabled="true"
             />
             <FilArianne :items="ariane" class="mb-8" />
         </ContentWrapper>
