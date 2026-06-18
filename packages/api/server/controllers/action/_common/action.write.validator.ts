@@ -206,8 +206,8 @@ export const sumIdentifiedMinors = (indicateur: any): number => {
     const moins3ans = indicateur.scolaire_mineurs_moins_de_trois_ans;
     const plus3ans = indicateur.scolaire_mineurs_trois_ans_et_plus;
     let total = 0;
-    if (Number.isInteger(moins3ans)) total += moins3ans;
-    if (Number.isInteger(plus3ans)) total += plus3ans;
+    if (Number.isInteger(moins3ans)) { total += moins3ans; }
+    if (Number.isInteger(plus3ans)) { total += plus3ans; }
     return total;
 };
 
@@ -220,7 +220,7 @@ export const validateScolariseDansAnnee = (value: any, indicateur: any): true =>
     // Règle 1 : au moins un des deux champs (moins de 3 ans OU 3 ans et plus) doit être renseigné
     const hasMoins3ans = Number.isInteger(indicateur.scolaire_mineurs_moins_de_trois_ans);
     const hasPlus3ans = Number.isInteger(indicateur.scolaire_mineurs_trois_ans_et_plus);
-    
+
     if (!hasMoins3ans && !hasPlus3ans) {
         throw new TypeError('Le nombre de mineurs scolarisés dans l\'année ne peut être renseigné que si au moins un des champs "Mineurs identifiés sur site" est renseigné');
     }
@@ -375,7 +375,7 @@ const INDICATOR_CONFIGS: IndicatorConfig[] = [
     },
 ];
 
-export default (mode: 'create' | 'update') => [
+const actionWriteValidator = (mode: 'create' | 'update') => [
     body('name')
         .isString().bail().withMessage('Le champ "Quel est le nom de l\'action ?" est obligatoire')
         .trim()
@@ -826,11 +826,12 @@ export default (mode: 'create' | 'update') => [
 
             // Règle miroir : nombre de mineurs dont la scolarité a débuté cette année
             // ne peut être supérieur à la somme des niveaux
-            if (Number.isInteger(indicateur.scolaire_mineur_scolarise_dans_annee) && 
-                indicateur.scolaire_mineur_scolarise_dans_annee > totalNiveaux) {
+            if (Number.isInteger(indicateur.scolaire_mineur_scolarise_dans_annee)
+                && indicateur.scolaire_mineur_scolarise_dans_annee > totalNiveaux) {
                 throw new Error('Le nombre de mineurs dont la scolarité a débuté cette année ne peut être supérieur à la somme des mineurs scolarisés par niveau');
             }
 
             return true;
         }),
 ];
+export default actionWriteValidator;
