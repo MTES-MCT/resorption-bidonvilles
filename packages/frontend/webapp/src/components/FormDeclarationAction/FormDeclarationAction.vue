@@ -107,6 +107,7 @@ const {
     values,
     errors,
     setErrors,
+    setFieldError,
     isSubmitting,
     resetForm,
     validate,
@@ -551,6 +552,16 @@ watch(
         const fieldResult = result.results["indicateurs"];
         if (!fieldResult || fieldResult.valid) {
             indicateursErrors.value = {};
+            // Purge des erreurs d'indicateurs restées dans errors.value (vee-validate).
+            // Le mode 'silent' ne nettoie pas errors.value, or une soumission rejetée
+            // par le backend y a pu poser des erreurs sous des clés détaillées du type
+            // "indicateurs[2026].scolaire_..." (format express-validator), distinctes de
+            // la clé hoistée "indicateurs" produite par la validation yup côté client.
+            // Sans cette purge, ces erreurs backend restent collées et gardent le bouton
+            // "Mettre à jour" grisé même après correction (cf. carte 2560).
+            Object.keys(errors.value)
+                .filter((key) => key.startsWith("indicateurs"))
+                .forEach((key) => setFieldError(key, undefined));
             return;
         }
         // vee-validate stocke toutes les erreurs des sous-champs indicateurs
