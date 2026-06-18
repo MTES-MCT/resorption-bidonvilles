@@ -2,8 +2,7 @@
     <ViewHeader icon="bell">
         <template v-slot:title>Dernières activités</template>
         <template v-slot:description
-            >Consultez les dernières activités au national ou sur votre
-            territoire</template
+            >Consultez les dernières activités de votre territoire</template
         >
         <template v-slot:actions>
             <p class="flex space-x-2">
