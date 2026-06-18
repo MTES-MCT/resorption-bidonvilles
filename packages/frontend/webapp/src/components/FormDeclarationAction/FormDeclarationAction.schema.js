@@ -42,35 +42,16 @@ function addMaxFieldValidation(schema, fieldName, referenceField, message) {
 }
 
 // Applique une validation uniquement si le champ d'intervention (topic) est sélectionné.
-// $topics est alimenté par vee-validate à partir des valeurs racine du formulaire.
-function addTopicValidation(field, topic, addValidation) {
-    return field.when("$topics", (topics, schema) => {
-        if (topics?.includes(topic)) {
-            return addValidation(schema);
-        }
-        return schema;
-    });
-}
-
-// Helper pour la validation max-mineurs (pour les mineurs de moins/plus de 3 ans)
-function addMaxMineursValidation(schema) {
-    return schema.test(
-        "max-mineurs",
-        "Ne peut pas dépasser le nombre de mineurs",
-        function (value) {
-            if (value === null) {
-                return true;
-            }
-            const { nombre_mineurs, nombre_personnes } = this.parent;
-            let max = Infinity;
-            if (Number.isInteger(nombre_mineurs)) {
-                max = nombre_mineurs;
-            } else if (Number.isInteger(nombre_personnes)) {
-                max = nombre_personnes;
-            }
-            return value <= max;
-        }
-    );
+// La liste `topics` est lue depuis les valeurs racine du formulaire et passée
+// explicitement (cf. createIndicateurFields). On évite `.when("$topics")` : la
+// variable de contexte $topics n'est pas propagée par vee-validate jusqu'aux
+// champs profondément imbriqués (indicateurs -> année -> champ), ce qui
+// désactivait silencieusement toutes ces validations côté client.
+function addTopicValidation(topics, field, topic, addValidation) {
+    if (topics?.includes(topic)) {
+        return addValidation(field);
+    }
+    return field;
 }
 
 // Calcul de la somme des mineurs identifiés sur site (moins de 3 ans + 3 ans et plus)
@@ -332,8 +313,14 @@ const indicateursFields = [
     ]),
 ];
 
-// Helper pour créer les champs d'indicateurs par catégorie
-const createIndicateurFields = () => {
+// Helper pour créer les champs d'indicateurs par catégorie.
+// `topics` (liste des champs d'intervention sélectionnés) est lu depuis les
+// valeurs racine du formulaire et conditionne les validations par topic.
+const createIndicateurFields = (topics = []) => {
+    // Applique une validation liée à un topic, en capturant la liste `topics`.
+    const applyTopic = (field, topic, addValidation) =>
+        addTopicValidation(topics, field, topic, addValidation);
+
     // Créer tous les champs de base
     const fields = {};
 
@@ -373,7 +360,7 @@ const createIndicateurFields = () => {
     );
 
     // R2 - Santé (topic "health") : accompagnement santé ≤ personnes concernées
-    fields.sante_nombre_personnes = addTopicValidation(
+    fields.sante_nombre_personnes = applyTopic(
         fields.sante_nombre_personnes,
         "health",
         (schema) =>
@@ -386,7 +373,7 @@ const createIndicateurFields = () => {
     );
 
     // R4 - Formation et emploi (topic "work")
-    fields.travail_nombre_personnes = addTopicValidation(
+    fields.travail_nombre_personnes = applyTopic(
         fields.travail_nombre_personnes,
         "work",
         (schema) =>
@@ -397,7 +384,7 @@ const createIndicateurFields = () => {
                 "Le nombre de personnes ayant eu au moins 1 contrat de travail ne peut être supérieur au nombre de personnes concernées par l'action"
             )
     );
-    fields.travail_nombre_femmes = addTopicValidation(
+    fields.travail_nombre_femmes = applyTopic(
         fields.travail_nombre_femmes,
         "work",
         (schema) => {
@@ -420,7 +407,7 @@ const createIndicateurFields = () => {
     );
 
     // R5 - Logement (topic "housing") : hébergement et logement, personnes et ménages
-    fields.hebergement_nombre_personnes = addTopicValidation(
+    fields.hebergement_nombre_personnes = applyTopic(
         fields.hebergement_nombre_personnes,
         "housing",
         (schema) =>
@@ -431,7 +418,7 @@ const createIndicateurFields = () => {
                 "Le nombre de personnes ayant eu accès à une solution longue durée en hébergement ou logement adapté ne peut être supérieur au nombre de personnes concernées par l'action"
             )
     );
-    fields.hebergement_nombre_menages = addTopicValidation(
+    fields.hebergement_nombre_menages = applyTopic(
         fields.hebergement_nombre_menages,
         "housing",
         (schema) => {
@@ -459,7 +446,7 @@ const createIndicateurFields = () => {
             return schema;
         }
     );
-    fields.logement_nombre_personnes = addTopicValidation(
+    fields.logement_nombre_personnes = applyTopic(
         fields.logement_nombre_personnes,
         "housing",
         (schema) =>
@@ -470,7 +457,7 @@ const createIndicateurFields = () => {
                 "Le nombre de personnes ayant eu accès à un logement ne peut être supérieur au nombre de personnes concernées par l'action"
             )
     );
-    fields.logement_nombre_menages = addTopicValidation(
+    fields.logement_nombre_menages = applyTopic(
         fields.logement_nombre_menages,
         "housing",
         (schema) => {
@@ -501,7 +488,7 @@ const createIndicateurFields = () => {
 
     // Particularités scolaires : appliquées uniquement si le champ d'intervention "school" est sélectionné
     const addSchoolValidation = (field, addValidation) =>
-        addTopicValidation(field, "school", addValidation);
+        applyTopic(field, "school", addValidation);
 
     // Pas de validation cross-field pour les mineurs identifiés sur site et la médiation
     // Ces champs sont indépendants de la section "Nombre total de personnes concernées par l'action"
@@ -529,49 +516,54 @@ const createIndicateurFields = () => {
     );
 
     // Le nombre de mineurs scolarisés dans l'année : validations basées sur les mineurs identifiés sur site
-    fields.scolaire_mineur_scolarise_dans_annee =
-        fields.scolaire_mineur_scolarise_dans_annee.when(
-            "$topics",
-            (topics, schema) => {
-                if (topics?.includes("school")) {
-                    return schema
-                        .test(
-                            "requires-identified-minors",
-                            "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:Le nombre de mineurs scolarisés dans l'année ne peut être renseigné que si au moins un des champs 'Mineurs identifiés sur site' est renseigné",
-                            function (value) {
-                                if (!Number.isInteger(value)) {
-                                    return true;
-                                }
-                                const { scolaire_mineurs_moins_de_trois_ans, scolaire_mineurs_trois_ans_et_plus } = this.parent;
-                                return Number.isInteger(scolaire_mineurs_moins_de_trois_ans) || Number.isInteger(scolaire_mineurs_trois_ans_et_plus);
-                            }
-                        )
-                        .test(
-                            "max-identified-minors",
-                            "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:Le nombre de mineurs scolarisés dans l'année ne peut pas dépasser le nombre total de mineurs identifiés sur site",
-                            function (value) {
-                                if (!Number.isInteger(value)) {
-                                    return true;
-                                }
-                                const sumIdentified = calculateIdentifiedMinorsSum(this.parent);
-                                return value <= sumIdentified;
-                            }
-                        )
-                        .test(
-                            "max-somme-niveaux",
-                            "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:Le nombre de mineurs scolarisés dans l'année ne peut être supérieur au total des mineurs scolarisés tous niveaux confondus",
-                            function (value) {
-                                if (!Number.isInteger(value)) {
-                                    return true;
-                                }
-                                const sum = calculateSchoolLevelsSum(this.parent);
-                                return value <= sum;
-                            }
+    fields.scolaire_mineur_scolarise_dans_annee = addSchoolValidation(
+        fields.scolaire_mineur_scolarise_dans_annee,
+        (schema) =>
+            schema
+                .test(
+                    "requires-identified-minors",
+                    "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:Le nombre de mineurs scolarisés dans l'année ne peut être renseigné que si au moins un des champs 'Mineurs identifiés sur site' est renseigné",
+                    function (value) {
+                        if (!Number.isInteger(value)) {
+                            return true;
+                        }
+                        const {
+                            scolaire_mineurs_moins_de_trois_ans,
+                            scolaire_mineurs_trois_ans_et_plus,
+                        } = this.parent;
+                        return (
+                            Number.isInteger(
+                                scolaire_mineurs_moins_de_trois_ans
+                            ) ||
+                            Number.isInteger(scolaire_mineurs_trois_ans_et_plus)
                         );
-                }
-                return schema;
-            }
-        );
+                    }
+                )
+                .test(
+                    "max-identified-minors",
+                    "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:Le nombre de mineurs scolarisés dans l'année ne peut pas dépasser le nombre total de mineurs identifiés sur site",
+                    function (value) {
+                        if (!Number.isInteger(value)) {
+                            return true;
+                        }
+                        const sumIdentified = calculateIdentifiedMinorsSum(
+                            this.parent
+                        );
+                        return value <= sumIdentified;
+                    }
+                )
+                .test(
+                    "max-somme-niveaux",
+                    "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:Le nombre de mineurs scolarisés dans l'année ne peut être supérieur au total des mineurs scolarisés tous niveaux confondus",
+                    function (value) {
+                        if (!Number.isInteger(value)) {
+                            return true;
+                        }
+                        const sum = calculateSchoolLevelsSum(this.parent);
+                        return value <= sum;
+                    }
+                )
+    );
 
     return fields;
 };
@@ -663,13 +655,17 @@ export default function formDeclarationAction() {
             .hasExactlyOnePrincipalWhenMultiple()
             .label(labels.operators),
         finances: object(),
-        indicateurs: lazy((value) => {
+        indicateurs: lazy((value, options) => {
+            // Les topics sélectionnés sont lus depuis les valeurs racine du
+            // formulaire (options.parent), car la variable de contexte $topics
+            // n'est pas propagée jusqu'à ce niveau d'imbrication par vee-validate.
+            const topics = options?.parent?.topics ?? [];
             return object()
                 .shape(
                     Object.keys(value || {}).reduce((acc, key) => {
                         acc[key] = object()
                             .required()
-                            .shape(createIndicateurFields())
+                            .shape(createIndicateurFields(topics))
                             .label("Indicateurs " + key);
                         return acc;
                     }, {})
