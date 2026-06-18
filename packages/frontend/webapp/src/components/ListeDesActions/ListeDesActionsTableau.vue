@@ -71,7 +71,7 @@ const actionsStore = useActionsStore();
 const headers = [
     "Identifiant de l'action",
     "Opérateur",
-    "Nom de l'action",
+    "Nom du projet",
     "Département",
     "Statut des indicateurs",
 ];
