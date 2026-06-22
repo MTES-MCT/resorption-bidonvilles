@@ -20,10 +20,13 @@ export async function autocomplete(search) {
                 },
             });
 
-            const features = Array.isArray(data?.features) ? data.features : [];
+            const features = Array.isArray(data?.features)
+                ? data.features.filter((f) => f?.properties?.citycode)
+                : [];
+
             return features.sort((a, b) => {
-                const cityA = a?.properties?.city?.toLowerCase() ?? "";
-                const cityB = b?.properties?.city?.toLowerCase() ?? "";
+                const cityA = a?.properties?.name?.toLowerCase() ?? "";
+                const cityB = b?.properties?.name?.toLowerCase() ?? "";
                 return cityA.localeCompare(cityB);
             });
         } catch {
