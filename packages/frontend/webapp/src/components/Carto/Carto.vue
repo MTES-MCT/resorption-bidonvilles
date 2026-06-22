@@ -395,6 +395,12 @@ function syncTownMarkers() {
         towns.value.map((town) => {
             Object.keys(territoryData).forEach((key) => {
                 const location = town[keyMap[key]];
+
+                // Vérifier que la location existe et a un code valide
+                if (!location || !location.code) {
+                    return;
+                }
+
                 if (!territoryData[key][location.code]) {
                     territoryData[key][location.code] = {
                         total: 0,
