@@ -1,16 +1,21 @@
 const filterBy = {
     waterAccessConditions(shantytown, checked) {
-        return (
-            checked.indexOf(shantytown.livingConditions.water.status.status) !==
-            -1
-        );
+        const waterStatus = shantytown.livingConditions?.water?.status?.status;
+
+        // Si les données n'existent pas, traiter comme 'unknown'
+        if (!waterStatus) {
+            return checked.indexOf("unknown") !== -1;
+        }
+
+        return checked.indexOf(waterStatus) !== -1;
     },
 
     fieldType(shantytown, checked) {
-        return (
-            shantytown.fieldType &&
-            checked.indexOf(shantytown.fieldType.id) !== -1
-        );
+        if (!shantytown.fieldType) {
+            return false;
+        }
+
+        return checked.indexOf(shantytown.fieldType.id) !== -1;
     },
 
     population(shantytown, checked) {
@@ -47,17 +52,30 @@ const filterBy = {
     },
 
     status(shantytown, checked) {
-        if (shantytown.status === "open") {
+        const isOpen = shantytown.status === "open";
+        const isInProgress = 
+            shantytown.preparatoryPhasesTowardResorption &&
+            shantytown.preparatoryPhasesTowardResorption.length > 0 &&
+            shantytown.status === "open";
+
+        // Les sites "Existants" incluent les sites ouverts ET en cours de résorption
+        if (isOpen || isInProgress) {
             return checked.indexOf("open") !== -1;
         }
 
+        // Les sites "Fermés" sont tous les autres
         return checked.indexOf("closed") !== -1;
     },
 
     ownerType(shantytown, checked) {
         const owners = shantytown.owners;
-        if (!Array.isArray(owners) || checked.length === 0) {
+        
+        if (checked.length === 0) {
             return false;
+        }
+
+        if (!Array.isArray(owners) || owners.length === 0) {
+            return checked.includes(null);
         }
 
         return owners.some((owner) => checked.includes(owner?.type ?? null));
@@ -70,9 +88,8 @@ export default function (shantytowns, filters) {
     );
 
     return shantytowns.filter((shantytown) => {
-        const toReturn = filterIds.every((filterId) => {
+        return filterIds.every((filterId) => {
             return filterBy[filterId](shantytown, filters[filterId]);
         });
-        return toReturn;
     });
 }
