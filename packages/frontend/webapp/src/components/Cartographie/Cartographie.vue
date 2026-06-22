@@ -13,7 +13,7 @@
         </div>
         <div class="flex-1" style="height: 100vh">
             <CartoNationale
-                id="carte"
+                mapId="carte"
                 ref="carte"
                 :isLoading="!timedOut"
                 :defaultView="defaultView"
