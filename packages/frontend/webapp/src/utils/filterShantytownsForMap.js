@@ -4,10 +4,10 @@ const filterBy = {
 
         // Si les données n'existent pas, traiter comme 'unknown'
         if (!waterStatus) {
-            return checked.indexOf("unknown") !== -1;
+            return checked.includes("unknown");
         }
 
-        return checked.indexOf(waterStatus) !== -1;
+        return checked.includes(waterStatus);
     },
 
     fieldType(shantytown, checked) {
@@ -15,12 +15,12 @@ const filterBy = {
             return false;
         }
 
-        return checked.indexOf(shantytown.fieldType.id) !== -1;
+        return checked.includes(shantytown.fieldType.id);
     },
 
     population(shantytown, checked) {
         if (shantytown.populationTotal === null) {
-            return checked.indexOf(null) !== -1;
+            return checked.includes(null);
         }
 
         return checked.some((value) => {
@@ -60,11 +60,11 @@ const filterBy = {
 
         // Les sites "Existants" incluent les sites ouverts ET en cours de résorption
         if (isOpen || isInProgress) {
-            return checked.indexOf("open") !== -1;
+            return checked.includes("open");
         }
 
         // Les sites "Fermés" sont tous les autres
-        return checked.indexOf("closed") !== -1;
+        return checked.includes("closed");
     },
 
     ownerType(shantytown, checked) {
