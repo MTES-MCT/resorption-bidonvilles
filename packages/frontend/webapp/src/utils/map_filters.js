@@ -116,11 +116,18 @@ export default computed(() => {
         filters.definition.ownerType = {
             icon: "users",
             label: "Type de propriétaire",
-            options: (configStore.config?.owner_types || []).map((type) => ({
-                value: type.id,
-                label: type.label,
-                checked: true,
-            })),
+            options: [
+                ...(configStore.config?.owner_types || []).map((type) => ({
+                    value: type.id,
+                    label: type.label,
+                    checked: true,
+                })),
+                {
+                    value: null,
+                    label: "Inconnu",
+                    checked: true,
+                },
+            ],
         };
         filters.order.splice(-1, 0, "ownerType");
     }
