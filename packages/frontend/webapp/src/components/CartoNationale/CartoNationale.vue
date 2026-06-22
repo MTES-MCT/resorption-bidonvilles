@@ -1,6 +1,7 @@
 <template>
     <Carto
         ref="carto"
+        :mapId="mapId"
         :layers="['Dessin', 'Satellite']"
         defaultLayer="Dessin"
         :townMarkerFn="marqueurSiteEau"
@@ -79,6 +80,11 @@ const searchAddress = computed({
 });
 
 const props = defineProps({
+    mapId: {
+        type: String,
+        required: false,
+        default: "map",
+    },
     pois: {
         type: Array,
         required: false,
@@ -102,7 +108,7 @@ const props = defineProps({
         },
     },
 });
-const { pois, showAddresses, defaultView } = toRefs(props);
+const { mapId, pois, showAddresses, defaultView } = toRefs(props);
 const emit = defineEmits([
     "poiclick",
     "viewchange",
