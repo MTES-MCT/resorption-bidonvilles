@@ -53,7 +53,7 @@ const filterBy = {
 
     status(shantytown, checked) {
         const isOpen = shantytown.status === "open";
-        const isInProgress = 
+        const isInProgress =
             shantytown.preparatoryPhasesTowardResorption &&
             shantytown.preparatoryPhasesTowardResorption.length > 0 &&
             shantytown.status === "open";
@@ -69,7 +69,7 @@ const filterBy = {
 
     ownerType(shantytown, checked) {
         const owners = shantytown.owners;
-        
+
         if (checked.length === 0) {
             return false;
         }
