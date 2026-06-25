@@ -18,6 +18,12 @@ body {
     border-radius: 0 !important;
 }
 
+.leaflet-control-zoom a:hover {
+    background-color: rgb(0 0 145) !important;
+    color: white !important;
+    border-radius: 0 !important;
+}
+
 /* CSS spécifique pour écraser le DSFR */
 :root {
     --underline-img: none; 
@@ -49,7 +55,7 @@ p {
 }
 
 @media (hover:hover) {
-     a[href]:not(.fr-nav__link, .fr-btn):hover, button:not(:disabled):not(.fr-tag):hover:not(.fr-btn), input[type=button]:not(:disabled):hover, input[type=image]:not(:disabled):hover, input[type=reset]:not(:disabled):hover, input[type=submit]:not(:disabled):hover {
+     a[href]:not(.fr-nav__link, .fr-btn):not(.leaflet-control-zoom a):hover, button:not(:disabled):not(.fr-tag):hover:not(.fr-btn), input[type=button]:not(:disabled):hover, input[type=image]:not(:disabled):hover, input[type=reset]:not(:disabled):hover, input[type=submit]:not(:disabled):hover {
         background: none;
     }
 }

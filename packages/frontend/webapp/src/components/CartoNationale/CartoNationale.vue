@@ -1,6 +1,7 @@
 <template>
     <Carto
         ref="carto"
+        :mapId="mapId"
         :layers="['Dessin', 'Satellite']"
         defaultLayer="Dessin"
         :townMarkerFn="marqueurSiteEau"
@@ -79,6 +80,11 @@ const searchAddress = computed({
 });
 
 const props = defineProps({
+    mapId: {
+        type: String,
+        required: false,
+        default: "map",
+    },
     pois: {
         type: Array,
         required: false,
@@ -102,7 +108,7 @@ const props = defineProps({
         },
     },
 });
-const { pois, showAddresses, defaultView } = toRefs(props);
+const { mapId, pois, showAddresses, defaultView } = toRefs(props);
 const emit = defineEmits([
     "poiclick",
     "viewchange",
@@ -247,10 +253,14 @@ const createAddressTogglerControl = () => {
 };
 
 const onZoomEnd = () => {
+    if (!carto.value?.map) {
+        return;
+    }
+
     const { map } = carto.value;
     const zoomLevel = map.getZoom();
 
-    if (!map || map._animatingZoom) {
+    if (map._animatingZoom) {
         return;
     }
 
@@ -271,6 +281,10 @@ const onZoomEnd = () => {
 };
 
 const onMove = () => {
+    if (!carto.value?.map) {
+        return;
+    }
+
     const { map } = carto.value;
     const { lat, lng } = map.getCenter();
     const currentZoom = map.getZoom();
@@ -282,6 +296,10 @@ const onMove = () => {
 };
 
 const updateAddress = () => {
+    if (!carto.value?.map) {
+        return;
+    }
+
     markersGroup.search.clearLayers();
 
     if (searchAddress.value?.data?.coordinates) {
@@ -299,15 +317,15 @@ const updateAddress = () => {
 };
 
 watch(
-    () => carto.value,
-    (newCarto) => {
-        if (newCarto) {
-            newCarto.map.options.zoomAnimation = false;
-            newCarto.map.options.markerZoomAnimation = false;
+    () => carto.value?.map,
+    (newMap) => {
+        if (newMap) {
+            newMap.options.zoomAnimation = false;
+            newMap.options.markerZoomAnimation = false;
 
-            newCarto.map.on("move", onMove);
-            newCarto.map.addLayer(markersGroup.search);
-            newCarto.addControl(
+            newMap.on("move", onMove);
+            newMap.addLayer(markersGroup.search);
+            carto.value.addControl(
                 "addressToggler",
                 createAddressTogglerControl()
             );
@@ -316,7 +334,7 @@ watch(
 );
 
 watch(pois, (newPois, oldPois) => {
-    if (!carto.value) {
+    if (!carto.value?.map) {
         return;
     }
 
