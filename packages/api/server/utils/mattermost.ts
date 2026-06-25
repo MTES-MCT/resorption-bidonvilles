@@ -1,6 +1,7 @@
 import IncomingWebhook from 'node-mattermost';
 import config from '#server/config';
 import statusDetails from '#server/utils/statusDetails';
+import { getActionFullName } from '#server/utils/formatActionFullName';
 import Action from '#root/types/resources/Action.d';
 import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 import { CommentAuthor } from '#root/types/resources/CommentAuthor.d';
@@ -262,7 +263,8 @@ async function triggerNewActionComment(comment: string, action: Action, author: 
     const newCommentAlert = new IncomingWebhook(mattermost);
 
     const username = formatUsername(author);
-    const actionLink = formatActionLink(action.id, action.name);
+    const actionFullName = await getActionFullName(action.id) ?? action.name;
+    const actionLink = formatActionLink(action.id, actionFullName);
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
         '#notif-action-nouveau-commentaire',

@@ -1,8 +1,8 @@
 <template>
     <LayoutSearch
         allowFreeSearch
-        searchTitle="Rechercher une action, une commune, un département, une structure..."
-        searchPlaceholder="Identifiant d'une action, commune, département, structure"
+        searchTitle="Rechercher une action, un département, une structure..."
+        searchPlaceholder="Identifiant d'une action, département, structure"
         showNationalWording="Voir toutes les actions de France"
         v-model:location="location"
     >

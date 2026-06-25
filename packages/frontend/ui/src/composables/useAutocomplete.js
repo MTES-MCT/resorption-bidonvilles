@@ -35,7 +35,7 @@ const normalizePayload = (payload) => {
     }
 
     return String(payload ?? "");
-}
+};
 
 export default function useAutocomplete({
     fn,
@@ -90,6 +90,7 @@ export default function useAutocomplete({
     let lastEvent;
     let callId = 0;
     let timeout = null;
+    let isClearing = false;
 
     function setSelectedFromValue(newValue) {
         if (!newValue) {
@@ -107,7 +108,9 @@ export default function useAutocomplete({
     watch(
         modelValue,
         (newValue) => {
-            setInputValue(getInitialLabel(newValue));
+            if (!isClearing) {
+                setInputValue(getInitialLabel(newValue));
+            }
             setSelectedFromValue(newValue);
         },
         { immediate: true }
@@ -122,7 +125,8 @@ export default function useAutocomplete({
     if (value && value !== modelValue) {
         watch(value, (val) => {
             if (val === undefined) {
-                clear();
+                rawResults.value = [];
+                selectedItem.value = null;
                 return;
             }
 
@@ -257,17 +261,26 @@ export default function useAutocomplete({
     }
 
     function clear(options = {}) {
-        rawResults.value = [];
-        selectedItem.value = null;
-        abort();
+        isClearing = true;
+        clearTimeout(timeout);
+        timeout = null;
 
-        if (options.sendEvent !== false) {
-            handleChange?.(undefined);
-            sendEvent(undefined);
+        try {
+            setInputValue("");
+
+            rawResults.value = [];
+            selectedItem.value = null;
+            abort();
+
+            if (options.sendEvent !== false) {
+                sendEvent(undefined);
+                handleChange?.(undefined);
+            }
+
+            onClear();
+        } finally {
+            isClearing = false;
         }
-
-        setInputValue("");
-        onClear();
     }
 
     function sendEvent(data) {

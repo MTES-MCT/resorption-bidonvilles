@@ -1,7 +1,9 @@
 <template>
     <table class="table-fixed text-center">
         <caption class="mb-4">
-            Récapitulatif des habitants et des habitats sur le site
+            <p class="font-bold">
+                Récapitulatif des habitants et des habitats sur le site
+            </p>
             <span class="sr-only">
                 Les caractéristiques des habitants et des habitats sont
                 présentées par ligne. Chaque colonne correspond à une date de
@@ -207,34 +209,6 @@ const sections = [
 ];
 const closestEntryDate = ref(null);
 
-watch(
-    () => town.value?.preparatoryPhasesTowardResorption,
-    (phases) => {
-        if (!phases?.length) {
-            return;
-        }
-
-        const officialOpeningDate = phases.find(
-            (phase) => phase.preparatoryPhaseId === "official_opening"
-        )?.completedAt;
-
-        if (officialOpeningDate) {
-            const entriesAfterOpening = town.value.changelog.filter(
-                (entry) =>
-                    new Date(entry.date * 1000).setHours(0, 0, 0, 0) >=
-                    new Date(officialOpeningDate * 1000).setHours(0, 0, 0, 0)
-            );
-
-            if (entriesAfterOpening.length > 0) {
-                closestEntryDate.value =
-                    entriesAfterOpening[entriesAfterOpening.length - 1].date *
-                    1000;
-            }
-        }
-    },
-    { immediate: true }
-);
-
 const populationHistory = computed(() => {
     let ref = {
         populationTotal: formatInt(town.value.populationTotal, "-"),
@@ -334,4 +308,34 @@ const populationHistory = computed(() => {
         }),
     ];
 });
+
+watch(
+    () => town.value?.preparatoryPhasesTowardResorption,
+    (phases) => {
+        const officialOpeningDate = phases?.find(
+            (phase) => phase.preparatoryPhaseId === "official_opening"
+        )?.completedAt;
+
+        if (!officialOpeningDate) {
+            return;
+        }
+
+        const openingMidnight = new Date(officialOpeningDate).setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+        const lastValidEntry = populationHistory.value.findLast(
+            (entry) =>
+                new Date(entry.fullDate).setHours(0, 0, 0, 0) >= openingMidnight
+        );
+
+        if (lastValidEntry) {
+            closestEntryDate.value = lastValidEntry.fullDate;
+        }
+    },
+    { immediate: true }
+);
 </script>

@@ -1,6 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import shantytownActorModel from '#server/models/shantytownActorModel';
+import closingSolutionModel from '#server/models/closingSolutionModel';
 import geoUtils from '#server/utils/geo';
 import permissionUtils from '#server/utils/permission';
 import serializeShantytown from '#server/models/shantytownModel/_common/serializeShantytown';
@@ -491,17 +492,59 @@ function getShantytownHistoryArray(rows: ShantytownRow[]): ShantytownRow[] {
     return Object.values(acc);
 }
 
+async function loadClosingSolutionsIntoShantytowns(shantytownHistory: ShantytownRow[], user: AuthUser): Promise<Shantytown[]> {
+    const shantytownIds = shantytownHistory.map(town => String(town.id));
+    const closingSolutions = await closingSolutionModel.findByShantytown(shantytownIds);
+
+    const serializedTowns = shantytownHistory.map(town => serializeTownWithPhases(town, user));
+
+    closingSolutions.forEach((closingSolution) => {
+        const town = serializedTowns.find(t => t.id === closingSolution.shantytownId);
+        if (town) {
+            town.closingSolutions.push({
+                id: closingSolution.id,
+                peopleAffected: closingSolution.peopleAffected,
+                householdsAffected: closingSolution.householdsAffected,
+                message: closingSolution.message,
+            });
+        }
+    });
+
+    return serializedTowns;
+}
+
 async function serializeTowns(shantytownHistory: ShantytownRow[], filters: ShantytownFilters, options: ShantytownExportListOption[], user: AuthUser, exportDate: string): Promise<Shantytown[]> {
     let serializedTowns: Shantytown[];
-    if (filters.actors || options.includes('actors')) {
-        serializedTowns = await loadActorsIntoShantytowns(shantytownHistory, user, exportDate);
+    const needsActors = filters.actors || options.includes('actors');
+    const needsClosingSolutions = shantytownHistory.some(town => town.closedAt !== null);
 
-        // Filtrer sur les intervenants
-        if (filters.actors) {
-            serializedTowns = applyActorsFilters(serializedTowns, filters);
-        }
+    if (needsActors && needsClosingSolutions) {
+        serializedTowns = await loadActorsIntoShantytowns(shantytownHistory, user, exportDate);
+        const shantytownIds = shantytownHistory.map(town => String(town.id));
+        const closingSolutions = await closingSolutionModel.findByShantytown(shantytownIds);
+
+        closingSolutions.forEach((closingSolution) => {
+            const town = serializedTowns.find(t => t.id === closingSolution.shantytownId);
+            if (town) {
+                town.closingSolutions.push({
+                    id: closingSolution.id,
+                    peopleAffected: closingSolution.peopleAffected,
+                    householdsAffected: closingSolution.householdsAffected,
+                    message: closingSolution.message,
+                });
+            }
+        });
+    } else if (needsActors) {
+        serializedTowns = await loadActorsIntoShantytowns(shantytownHistory, user, exportDate);
+    } else if (needsClosingSolutions) {
+        serializedTowns = await loadClosingSolutionsIntoShantytowns(shantytownHistory, user);
     } else {
         serializedTowns = shantytownHistory.map(town => serializeTownWithPhases(town, user));
+    }
+
+    // Filtrer sur les intervenants
+    if (filters.actors) {
+        serializedTowns = applyActorsFilters(serializedTowns, filters);
     }
 
     return serializedTowns;
