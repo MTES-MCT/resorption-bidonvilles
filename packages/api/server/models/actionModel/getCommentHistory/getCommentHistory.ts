@@ -4,6 +4,7 @@ import { QueryTypes } from 'sequelize';
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
 import outremer from '#server/utils/permission/outremer';
+import { getActionFullNames } from '#server/utils/formatActionFullName';
 
 import { Location } from '#server/models/geoModel/Location.d';
 import { ActionCommentActivity } from '#root/types/resources/Activity.d';
@@ -95,6 +96,9 @@ export default async (user: User, location: Location, numberOfActivities: number
 
     const actionComments = {};
 
+    const actionIds = [...new Set(activities.map((a: ActionCommentHistoryRow) => a.action_id))];
+    const actionFullNames = await getActionFullNames(actionIds);
+
     return activities
         .map((activity: ActionCommentHistoryRow) => {
             const o: ActionCommentActivity = {
@@ -103,7 +107,7 @@ export default async (user: User, location: Location, numberOfActivities: number
                 date: activity.date.getTime() / 1000,
                 actionEntity: {
                     id: activity.action_id,
-                    name: activity.action_name,
+                    name: actionFullNames.get(activity.action_id) ?? activity.action_name,
                 },
                 author: {
                     name: userModel.formatName({

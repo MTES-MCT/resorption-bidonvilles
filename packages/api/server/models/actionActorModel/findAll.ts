@@ -1,5 +1,6 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import { getActionFullNames } from '#server/utils/formatActionFullName';
 
 type ActionActorRow = {
     user_id: number,
@@ -58,6 +59,9 @@ export default async (year: number, activeOnly: boolean = false): Promise<Action
         },
     );
 
+    const actionIds = [...new Set(rows.map(row => row.action_id))];
+    const actionFullNames = await getActionFullNames(actionIds);
+
     const hash: { [key: number]: ActionActor } = {};
     rows.forEach((row) => {
         hash[row.user_id] ??= {
@@ -70,7 +74,7 @@ export default async (year: number, activeOnly: boolean = false): Promise<Action
 
         hash[row.user_id].actions.push({
             id: row.action_id,
-            name: row.action_name,
+            name: actionFullNames.get(row.action_id) ?? row.action_name,
         });
     });
 
