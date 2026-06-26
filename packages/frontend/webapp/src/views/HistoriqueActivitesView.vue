@@ -11,6 +11,7 @@
             <HistoriqueActivitesHeader
                 class="sticky top-0 bg-white pt-2 pb-10 !mb-0 z-10"
             />
+            <HistoriqueActivitesStatistiques />
             <TableauDeBordActivites class="mt-8 md:mt-2 z-[9]" />
         </ContentWrapper>
     </LayoutSearch>
@@ -23,6 +24,7 @@ import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import TableauDeBordActivites from "@/components/TableauDeBord/TableauDeBordActivites/TableauDeBordActivites.vue";
 import HistoriqueActivitesHeader from "@/components/HistoriqueActivites/HistoriqueActivitesHeader.vue";
+import HistoriqueActivitesStatistiques from "@/components/HistoriqueActivites/HistoriqueActivitesStatistiques.vue";
 
 const activitiesStore = useActivitiesStore();
 const ariane = [
