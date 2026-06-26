@@ -8,7 +8,7 @@
                 Phase initiale
             </div>
             <CheckableGroup
-                id="preparatory_phases_toward_resorption"
+                id="initial_preparatory_phases_toward_resorption"
                 class="!mb-2"
             >
                 <InputResorptionPhaseItem
