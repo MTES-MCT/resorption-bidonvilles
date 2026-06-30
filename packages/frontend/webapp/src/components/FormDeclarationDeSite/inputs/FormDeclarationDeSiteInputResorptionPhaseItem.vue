@@ -42,8 +42,8 @@
 </template>
 
 <script setup>
-import { computed, ref, toRefs, watch } from "vue";
-import { useFormValues } from "vee-validate";
+import { computed, ref, toRefs } from "vue";
+import { useField } from "vee-validate";
 import { DatepickerInput } from "@resorptionbidonvilles/ui";
 import { useUserStore } from "@/stores/user.store";
 
@@ -52,35 +52,50 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    activePhases: {
-        type: Array,
-        required: true,
-    },
-    index: {
-        type: Number,
-        required: true,
-    },
-    modelValue: {
-        type: [Array, String, Number, Boolean],
-        required: true,
-        default: undefined,
-    },
-    withBorder: {
-        type: Boolean,
-        default: true,
-    },
 });
 
-const { phase, activePhases } = toRefs(props);
+const { phase } = toRefs(props);
 
+// Mémorise la dernière date saisie pour la restaurer si l'utilisateur
+// repasse « Terminée » après être passé par « En cours » / « Non démarrée ».
 const initialDate = ref(null);
+
 const canUpdate = computed(() => {
     const userStore = useUserStore();
     return userStore.hasPermission("shantytown.update");
 });
 
+// Mécanisme repris de l'ancienne Checkbox : un useField en mode « checkbox »
+// partageant le name `preparatory_phases_toward_resorption` maintient le tableau
+// des UIDs cochés (source de vérité consommée par le backend). `handleChange(uid)`
+// toggle la présence de l'UID, `checked` reflète cette présence.
+const { checked, handleChange: togglePhaseUid } = useField(
+    "preparatory_phases_toward_resorption",
+    undefined,
+    {
+        type: "checkbox",
+        checkedValue: phase.value.uid,
+    }
+);
+
+// Garde le tableau d'UIDs et l'état coché alignés sur la cible voulue.
+const setChecked = (shouldBeChecked) => {
+    if (checked.value !== shouldBeChecked) {
+        togglePhaseUid(phase.value.uid);
+    }
+};
+
+// `active_preparatory_phases_toward_resorption` porte les dates de complétion.
+// On l'écrit via handleChange (et non en mutant `values`, exposé en lecture seule
+// par vee-validate) avec un tableau neuf à chaque fois pour préserver la réactivité.
+const { value: activePhases, handleChange: setActivePhases } = useField(
+    "active_preparatory_phases_toward_resorption"
+);
+
 const getAssociatedPhase = () =>
-    activePhases.value.find((p) => p.preparatoryPhaseId === phase.value.uid);
+    (activePhases.value || []).find(
+        (p) => p.preparatoryPhaseId === phase.value.uid
+    );
 
 const phaseStatus = computed({
     get() {
@@ -91,36 +106,35 @@ const phaseStatus = computed({
         return associatedPhase.completedAt ? "completed" : "started";
     },
     set(newStatus) {
-        const index = activePhases.value.findIndex(
-            (p) => p.preparatoryPhaseId === phase.value.uid
+        const others = (activePhases.value || []).filter(
+            (p) => p.preparatoryPhaseId !== phase.value.uid
         );
 
         if (newStatus === "not_started") {
             initialDate.value = completedDate.value;
-            if (index > -1) {
-                activePhases.value.splice(index, 1);
-            }
-        } else {
-            const resolvedDate =
-                newStatus === "completed"
-                    ? initialDate.value || completedDate.value || new Date()
-                    : null;
+            setActivePhases(others);
+            setChecked(false);
+            return;
+        }
 
-            const updatedPhase = {
+        const resolvedDate =
+            newStatus === "completed"
+                ? initialDate.value || completedDate.value || new Date()
+                : null;
+
+        setActivePhases([
+            ...others,
+            {
                 preparatoryPhaseId: phase.value.uid,
                 completedAt: resolvedDate ? resolvedDate.toISOString() : null,
-            };
+            },
+        ]);
 
-            if (index > -1) {
-                activePhases.value[index] = updatedPhase;
-            } else {
-                activePhases.value.push(updatedPhase);
-            }
-
-            if (newStatus === "completed") {
-                initialDate.value = null;
-            }
+        if (newStatus === "completed") {
+            initialDate.value = null;
         }
+
+        setChecked(true);
     },
 });
 
@@ -132,48 +146,18 @@ const completedDate = computed({
             : null;
     },
     set(newDate) {
-        const associatedPhase = getAssociatedPhase();
-        if (associatedPhase) {
-            associatedPhase.completedAt = newDate
-                ? newDate.toISOString()
-                : null;
-        }
+        const others = (activePhases.value || []).filter(
+            (p) => p.preparatoryPhaseId !== phase.value.uid
+        );
+        setActivePhases([
+            ...others,
+            {
+                preparatoryPhaseId: phase.value.uid,
+                completedAt: newDate ? newDate.toISOString() : null,
+            },
+        ]);
     },
 });
-
-const values = useFormValues();
-const fieldName = `phase_${props.phase.uid}_completed_at`;
-
-watch(
-    completedDate,
-    (newVal) => {
-        if (values.value && values.value[fieldName] !== newVal) {
-            values.value[fieldName] = newVal;
-        }
-    },
-    { immediate: true }
-);
-
-watch(
-    () => values.value?.[fieldName],
-    (newVal) => {
-        if (newVal === undefined) {
-            return;
-        }
-        const getTimestamp = (val) => {
-            if (val instanceof Date) {
-                return val.getTime();
-            }
-            if (val) {
-                return new Date(val).getTime();
-            }
-            return null;
-        };
-        if (getTimestamp(newVal) !== getTimestamp(completedDate.value)) {
-            completedDate.value = newVal ? new Date(newVal) : null;
-        }
-    }
-);
 </script>
 <style scoped>
 /* Rattrapage du mt-3 de la div enfant du DatePicker */
