@@ -88,6 +88,7 @@
         <div
             class="flex flex-col items-start gap-2 sm:flex-row sm:items-center"
         >
+            <BoutonFavori :townId="townId" />
             <DsfrButton
                 v-if="canMarkAsResorptionTarget"
                 size="sm"
@@ -117,6 +118,7 @@
 import { computed, defineProps, toRefs, ref, nextTick } from "vue";
 import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
+import BoutonFavori from "@/components/BoutonFavori/BoutonFavori.vue";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
 import { useModaleStore } from "@/stores/modale.store";

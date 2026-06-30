@@ -2,6 +2,7 @@
     <div
         class="flex flex-wrap justify-end md:h-10 items-end m-4 gap-3 print:hidden sm:flex-row"
     >
+        <BoutonFavori :townId="shantytown.id" />
         <DsfrButton
             v-if="isOpen && hasUpdateShantytownPermission"
             size="sm"
@@ -61,6 +62,7 @@ import { useTownsStore } from "@/stores/towns.store";
 import { useModaleStore } from "@/stores/modale.store";
 import { trackEvent } from "@/helpers/matomo";
 import { useResorptionTarget } from "@/utils/useResorptionTarget";
+import BoutonFavori from "@/components/BoutonFavori/BoutonFavori.vue";
 
 import router from "@/helpers/router";
 
