@@ -14,7 +14,12 @@
                     <DsfrBadge small :type="statusType" :label="statusText" />
                 </div>
                 <div v-if="phase.completedAt" class="shrink-0">
-                    {{ formattedDate }}
+                    {{
+                        phase.preparatoryPhaseId === "official_opening"
+                            ? ""
+                            : "le "
+                    }}
+                    {{ formattedDate }} {{ phase.preparatoryPhaseUid }}
                 </div>
             </div>
         </div>
