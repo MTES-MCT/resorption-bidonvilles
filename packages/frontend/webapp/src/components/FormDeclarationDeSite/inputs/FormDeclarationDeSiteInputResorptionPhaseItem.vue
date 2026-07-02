@@ -30,6 +30,7 @@
 
             <DatepickerInput
                 v-if="phaseStatus !== 'not_started'"
+                :key="`phase_${phase.uid}_${phaseStatus}`"
                 :name="`phase_${phase.uid}_completed_at`"
                 :id="`phase_${phase.uid}_completed_at`"
                 :maxDate="new Date()"
@@ -42,7 +43,7 @@
 </template>
 
 <script setup>
-import { computed, ref, toRefs } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 import { useField } from "vee-validate";
 import { DatepickerInput } from "@resorptionbidonvilles/ui";
 import { useUserStore } from "@/stores/user.store";
@@ -157,6 +158,23 @@ const completedDate = computed({
             },
         ]);
     },
+});
+
+// Le DatepickerInput possède son propre useField (name `phase_${uid}_completed_at`)
+// et n'émet rien vers le parent quand on efface la date via sa croix (@cleared).
+// On observe donc ce champ partagé pour propager l'effacement à la source de vérité
+// `active_preparatory_phases_toward_resorption` : la phase repasse « En cours »
+// (completedAt = null) et le DsfrSegmentedSet se repositionne sur « En cours ».
+const { value: pickerDate } = useField(`phase_${phase.value.uid}_completed_at`);
+
+watch(pickerDate, (newValue) => {
+    const isCleared =
+        newValue === null || newValue === undefined || newValue === "";
+    // On ne réagit qu'à l'effacement d'une phase actuellement « Terminée »,
+    // pour ne pas interférer avec la sélection normale d'une date.
+    if (isCleared && phaseStatus.value === "completed") {
+        completedDate.value = null;
+    }
 });
 </script>
 <style scoped>
