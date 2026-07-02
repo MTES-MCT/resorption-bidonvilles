@@ -4,7 +4,7 @@
             {{ phase.name }}
             <DsfrBadge
                 v-if="completedDate"
-                label="Validée"
+                label="Réalisée"
                 type="success"
                 small
             />
