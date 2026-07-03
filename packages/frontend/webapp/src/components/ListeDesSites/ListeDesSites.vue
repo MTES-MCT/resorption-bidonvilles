@@ -4,13 +4,14 @@
         <ListeDesSitesHeader />
 
         <template v-if="currentTab === 'favorites'">
+            <ListeDesSitesFiltres class="mt-4" :isFavoritesTab="true" />
             <section
-                v-if="favoritesStore.favoriteTowns.length > 0"
+                v-if="favoritesStore.myTowns.length > 0"
                 class="flex flex-col space-y-4 mt-4"
-                aria-label="Mes sites favoris"
+                aria-label="Mes sites"
             >
                 <CarteSiteDetaillee
-                    v-for="shantytown in favoritesStore.favoriteTowns"
+                    v-for="shantytown in favoritesStore.myTowns"
                     :key="shantytown.id"
                     :shantytown="shantytown"
                     :currentTab="currentTab"
@@ -21,7 +22,7 @@
                 class="mt-10 text-center text-G400 block"
                 aria-live="polite"
             >
-                Vous n'avez pas encore de sites favoris.
+                {{ emptyMessage }}
             </output>
         </template>
 
@@ -70,6 +71,21 @@ const canUseFavorites = computed(
     () => !EXCLUDED_ROLES.has(userStore.user?.role_id)
 );
 
+const emptyMessage = computed(() => {
+    const filter = favoritesStore.myTownsFilter;
+    const onlyIntervention =
+        filter.length === 1 && filter.includes("intervention");
+    const onlyFavorites = filter.length === 1 && filter.includes("favorites");
+
+    if (onlyIntervention) {
+        return "Vous n'intervenez sur aucun site.";
+    }
+    if (onlyFavorites) {
+        return "Vous n'avez pas encore de site épinglé.";
+    }
+    return "Vous n'avez aucun site épinglé ni site d'intervention.";
+});
+
 // Onglet actif : géré localement pour pouvoir inclure "favorites" sans polluer townsStore
 const currentTab = ref(townsStore.filters.status);
 
@@ -101,7 +117,7 @@ const tabs = computed(() => {
               {
                   id: "favorites",
                   label: "Mes sites",
-                  total: favoritesStore.favoriteTowns.length,
+                  total: favoritesStore.myTowns.length,
               },
           ]
         : [];
@@ -148,10 +164,12 @@ const hasSitesInvolvedInExperiment = computed(() => {
         (uniqueDepartments, town) => {
             if (
                 departementsInResoprtionPhases.includes(
-                    parseInt(town.departement.code, 10)
+                    Number.parseInt(town.departement.code, 10)
                 )
             ) {
-                uniqueDepartments.add(parseInt(town.departement.code, 10));
+                uniqueDepartments.add(
+                    Number.parseInt(town.departement.code, 10)
+                );
             }
             return uniqueDepartments;
         },
