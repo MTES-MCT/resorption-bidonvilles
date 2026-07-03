@@ -4,8 +4,10 @@
         size="sm"
         :icon="isFavorite ? 'ri:star-fill' : 'ri:star-line'"
         secondary
-        :label="isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'"
-        :aria-label="isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'"
+        :label="isFavorite ? 'Retirer des sites épinglés' : 'Épingler ce site'"
+        :aria-label="
+            isFavorite ? 'Retirer des sites épinglés' : 'Épingler ce site'
+        "
         :aria-pressed="isFavorite"
         @click.stop="handleClick"
     />
@@ -52,25 +54,25 @@ async function handleClick() {
         if (isFavorite.value) {
             await favoritesStore.remove(props.townId);
             trackEvent(
-                "Favoris",
+                "Sites épinglés",
                 "bookmarked_sites_remove",
                 `S${props.townId}`
             );
             notificationStore.success(
-                "Favoris",
-                "Le site a été retiré de vos favoris."
+                "Sites épinglés",
+                "Le site a été retiré des sites épinglés."
             );
         } else {
             await favoritesStore.add(props.townId);
             trackEvent("Favoris", "bookmarked_sites_add", `S${props.townId}`);
             notificationStore.success(
-                "Favoris",
-                "Le site a été ajouté à vos favoris."
+                "Sites épinglés",
+                "Le site a été ajouté aux sites épinglés."
             );
         }
     } catch {
         notificationStore.error(
-            "Favoris",
+            "Sites épinglés",
             "Une erreur est survenue. Veuillez réessayer."
         );
     }
