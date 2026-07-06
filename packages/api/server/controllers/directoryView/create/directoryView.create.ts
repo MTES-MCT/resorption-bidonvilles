@@ -1,35 +1,26 @@
-import organizationModel from '#server/models/organizationModel/index';
-import statsDirectoryViewsModel from '#server/models/statsDirectoryViewsModel';
+import directoryViewService from '#server/services/directoryView/directoryViewService';
 
-export default async (req, res, next) => {
-    const organizationId = parseInt(req.body.organization, 10);
-
-    try {
-        const organization = await organizationModel.findOneById(organizationId);
-
-        if (organization === null) {
-            return res.status(400).send({
-                user_message: 'La structure consultée n\'a pas été trouvéee en base de données',
-            });
-        }
-    } catch (error) {
-        res.status(500).send({
-            user_message: 'Une erreur est survenue lors de la lecture en base de données',
-        });
-        return next(error);
-    }
-
-    try {
-        await statsDirectoryViewsModel.create(
-            organizationId,
-            req.user.id,
-        );
-    } catch (error) {
-        res.status(500).send({
-            user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
-        });
-        return next(error);
-    }
-
-    return res.status(201).send({});
+const ERRORS = {
+    organization_not_found: { code: 400, message: 'La structure consultée n\'a pas été trouvée en base de données' },
+    fetch_failed: { code: 500, message: 'Une erreur est survenue lors de la lecture en base de données' },
+    write_failed: { code: 500, message: 'Une erreur est survenue lors de l\'écriture en base de données' },
+    undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
+
+const create = async (req, res, next) => {
+    const organizationId = Number.parseInt(req.body.organization, 10);
+
+    try {
+        await directoryViewService.create(organizationId, req.user);
+        return res.status(201).send({});
+    } catch (error) {
+        const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
+        res.status(code).send({
+            user_message: message,
+        });
+
+        return next(error?.nativeError ?? error);
+    }
+};
+
+export default create;
