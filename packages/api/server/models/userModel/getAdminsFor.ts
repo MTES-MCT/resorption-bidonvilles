@@ -3,7 +3,7 @@ import { LocationType } from '../geoModel/LocationType';
 import getLocalAdminsForDepartement from './_common/getLocalAdminsForDepartement';
 import getNationalAdmins from './_common/getNationalAdmins';
 
-export default async (user: User): Promise<User[]> => {
+const getAdminsFor = async (user: User): Promise<User[]> => {
     const admins: User[] = [];
     const mainAreas = user.intervention_areas.areas.filter(area => area.is_main_area);
     const types: LocationType[] = mainAreas.map(area => area.type);
@@ -26,3 +26,5 @@ export default async (user: User): Promise<User[]> => {
 
     return admins;
 };
+
+export default getAdminsFor;
