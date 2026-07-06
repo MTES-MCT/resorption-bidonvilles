@@ -184,23 +184,6 @@ describe('services/shantytown', () => {
             expect(responseError).to.be.instanceOf(ServiceError);
             expect(responseError.code).to.be.eql('delete_failed');
         });
-        // it('renvoie une exception ServiceError \'delete_failed\' si le modèle deleteComment échoue', async () => {
-        //     stubs.on.returns(true);
-        //     stubs.shantytownCommentModel.deleteComment.rejects(new Error());
-        //     let responseError;
-        //     try {
-        //         console.log('User:', user, 'Shantytown ID:', shantytownId, 'Comment ID:', 0, 'Deletion Message:', deletionMessage);
-
-        //         await deleteCommentService(user, shantytownId, 0, deletionMessage);
-        //     } catch (error) {
-        //         console.error('Erreur:', error, 'Message:', deletionMessage);
-
-        //         responseError = error;
-        //     }
-        //     expect(responseError).to.be.instanceOf(ServiceError);
-        //     expect(responseError.code).to.be.eql('delete_failed');
-        // });
-
         it('envoie une notification de suppression du message', async () => {
             stubs.on.returns(true);
 
