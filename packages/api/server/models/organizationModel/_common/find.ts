@@ -3,7 +3,7 @@ import { sequelize } from '#db/sequelize';
 import hashAreas from '#server/models/interventionAreaModel/hash';
 import listInterventionAreas from '#server/models/interventionAreaModel/list';
 
-import { UserExpertiseTopic, UserExpertiseTopicType } from '#root/types/resources/User.d';
+import { User, UserExpertiseTopic, UserExpertiseTopicType } from '#root/types/resources/User.d';
 import { Organization } from '#root/types/resources/Organization.d';
 
 type OrganizationRow = {
@@ -35,7 +35,7 @@ type OrganizationFindOptions = {
     nonEmpty?: boolean,
 };
 
-export default async (options: OrganizationFindOptions = {}, transaction?: Transaction): Promise<Organization[]> => {
+export default async (options: OrganizationFindOptions = {}, requestingUser?: User, transaction?: Transaction): Promise<Organization[]> => {
     const where = [];
     const replacements: any = {};
     if (options.ids !== undefined && options.ids?.length > 0) {
@@ -130,6 +130,7 @@ export default async (options: OrganizationFindOptions = {}, transaction?: Trans
         }
 
         if (user.user_id !== null && (options.activeOnly ? user.user_status === 'active' && user.user_to_be_tracked : true)) {
+            const canViewPhone = requestingUser?.is_superuser === true || requestingUser?.is_admin === true;
             hash[user.organization_id].users.push({
                 id: user.user_id,
                 is_admin: user.user_role_admin !== null,
@@ -137,7 +138,7 @@ export default async (options: OrganizationFindOptions = {}, transaction?: Trans
                 first_name: user.user_firstName,
                 last_name: user.user_lastName,
                 email: user.user_email,
-                phone: user.user_phone,
+                phone: canViewPhone ? user.user_phone : null,
                 position: user.user_position,
                 expertise_topics: user.user_topics.map((topic): UserExpertiseTopic => {
                     const [uid, type, label] = topic.split(';') as [string, UserExpertiseTopicType, string];
