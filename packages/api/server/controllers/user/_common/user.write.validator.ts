@@ -10,7 +10,7 @@ import { Organization } from '#root/types/resources/Organization.d';
 
 const { body } = expressValidator;
 
-export default (
+const createUserWriteValidator = (
     additionalValidators: ValidationChain[] = [],
     isAUserCreationCallback: CustomValidator = (() => true),
 ) => ([
@@ -151,7 +151,7 @@ export default (
 
             let organization: Organization;
             try {
-                organization = await organizationModel.findOneById(value);
+                organization = await organizationModel.findOneById(value, false, req.user);
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error(error);
@@ -175,7 +175,7 @@ export default (
         .custom(async (value, { req }) => {
             let organization: Organization;
             try {
-                organization = await organizationModel.findOneById(value);
+                organization = await organizationModel.findOneById(value, false, req.user);
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error(error);
@@ -203,7 +203,7 @@ export default (
 
             let organization: Organization;
             try {
-                organization = await organizationModel.findOneById(value?.data?.id);
+                organization = await organizationModel.findOneById(value?.data?.id, false, req.user);
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error(error);
@@ -227,7 +227,7 @@ export default (
         .custom(async (value, { req }) => {
             let organization: Organization;
             try {
-                organization = await organizationModel.findOneById(value);
+                organization = await organizationModel.findOneById(value, false, req.user);
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error(error);
@@ -251,7 +251,7 @@ export default (
         .custom(async (value, { req }) => {
             let organization: Organization;
             try {
-                organization = await organizationModel.findOneById(value);
+                organization = await organizationModel.findOneById(value, false, req.user);
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error(error);
@@ -284,3 +284,5 @@ export default (
             return true;
         }),
 ]);
+
+export default createUserWriteValidator;
