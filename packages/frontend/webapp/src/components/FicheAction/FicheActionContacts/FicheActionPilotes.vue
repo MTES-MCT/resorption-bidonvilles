@@ -7,6 +7,7 @@
             :key="user.id"
             :user="user"
             :linkToUser="false"
+            :hidePhone="hidePhone"
             includeOrganization
         />
         <div
@@ -40,6 +41,7 @@ import { defineProps, toRefs, computed, ref } from "vue";
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 import CarteUtilisateur from "@/components/CarteUtilisateur/CarteUtilisateur.vue";
 import { useActionsStore } from "@/stores/actions.store";
+import { useUserStore } from "@/stores/user.store";
 
 const props = defineProps({
     action: Object,
@@ -47,8 +49,16 @@ const props = defineProps({
 const { action } = toRefs(props);
 const loading = ref(false);
 const actionsStore = useActionsStore();
+const userStore = useUserStore();
+
+const hidePhone = computed(() => {
+    return (
+        !userStore.user?.is_admin &&
+        !userStore.user?.intervention_areas?.is_national
+    );
+});
 const users = computed(() => {
-    return action.value.managers.map(({ users }) => users).flat();
+    return action.value.managers.flatMap(({ users }) => users);
 });
 const onlyDeactivatedUsers = computed(() => {
     return (
