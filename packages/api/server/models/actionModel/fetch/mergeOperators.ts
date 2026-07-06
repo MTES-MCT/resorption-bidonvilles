@@ -9,7 +9,7 @@ export default function mergeOperators<T extends { operators: ActionOrganization
 ): void {
     operators.forEach((row) => {
         const index = hash[row.action_id].operators.findIndex(({ id }) => id === row.organization_id);
-        const canViewPhone = requestingUser?.is_superuser === true || requestingUser?.is_admin === true;
+        const canViewPhone = requestingUser?.is_admin === true;
         const user: ActionOrganizationMember = {
             id: row.id,
             email: row.email,

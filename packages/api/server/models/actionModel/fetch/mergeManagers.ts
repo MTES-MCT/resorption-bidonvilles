@@ -6,7 +6,7 @@ import { User } from '#root/types/resources/User.d';
 export default function mergeManagers(hash: ActionHash, managers: ActionUserRow[], requestingUser?: User): void {
     managers.forEach((row) => {
         const index = hash[row.action_id].managers.findIndex(({ id }) => id === row.organization_id);
-        const canViewPhone = requestingUser?.is_superuser === true || requestingUser?.is_admin === true;
+        const canViewPhone = requestingUser?.is_admin === true;
         const user: ActionOrganizationMember = {
             id: row.id,
             email: row.email,

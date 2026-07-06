@@ -28,10 +28,7 @@ const { action } = toRefs(props);
 const userStore = useUserStore();
 
 const hidePhone = computed(() => {
-    return (
-        !userStore.user?.is_admin &&
-        !userStore.user?.intervention_areas?.is_national
-    );
+    return !userStore.user?.is_admin;
 });
 const isDeactivatedUser = (user) =>
     user.first_name === "Utilisateur" && user.last_name === "Désactivé";

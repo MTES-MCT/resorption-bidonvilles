@@ -130,7 +130,7 @@ export default async (options: OrganizationFindOptions = {}, requestingUser?: Us
         }
 
         if (user.user_id !== null && (options.activeOnly ? user.user_status === 'active' && user.user_to_be_tracked : true)) {
-            const canViewPhone = requestingUser?.is_superuser === true || requestingUser?.is_admin === true;
+            const canViewPhone = requestingUser?.is_admin === true;
             hash[user.organization_id].users.push({
                 id: user.user_id,
                 is_admin: user.user_role_admin !== null,
