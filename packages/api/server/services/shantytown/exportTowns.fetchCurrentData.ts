@@ -112,8 +112,8 @@ export default async function fetchCurrentData(user: AuthUser, locations: Locati
 
         const livingConditionsFilters = decodeURIComponent(postSqlFilters.conditions).split(',');
 
-        towns = towns.filter(town => livingConditionsFilters.some(filter => filterToCondition[filter].some(key => town.livingConditions[key]
-                && ['bad', 'unknown'].includes(town.livingConditions[key].status.status))));
+        towns = towns.filter(town => livingConditionsFilters.some(filter => filterToCondition[filter].some(key => !town.livingConditions[key]
+                || ['bad', 'toImprove', 'unknown'].includes(town.livingConditions[key].status.status))));
     }
     const clauseGroup = where().can(user).do('read', 'action');
     const currentYear = moment(new Date()).format('YYYY');

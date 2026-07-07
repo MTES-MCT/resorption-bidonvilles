@@ -144,8 +144,8 @@ function checkConditions(shantytown, filters) {
 
         return filterToCondition[filter].some(
             (key) =>
-                shantytown.livingConditions[key] &&
-                ["bad", "unknown"].includes(
+                !shantytown.livingConditions[key] ||
+                ["bad", "toImprove", "unknown"].includes(
                     shantytown.livingConditions[key].status.status
                 )
         );
