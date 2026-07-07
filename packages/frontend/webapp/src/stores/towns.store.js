@@ -25,6 +25,7 @@ import {
     setHeatwaveStatus,
     setResorptionTarget,
     updateActorThemes,
+    updateComment,
     startResorption,
 } from "@/api/towns.api";
 import enrichShantytown from "@/utils/enrichShantytown";
@@ -374,6 +375,20 @@ export const useTownsStore = defineStore("towns", () => {
             );
             activitiesStore.removeComment(commentId);
             dashboardActivitiesStore.removeComment(commentId);
+        },
+        async updateComment(shantytownId, commentId, description) {
+            const notificationStore = useNotificationStore();
+            const { comments } = await updateComment(
+                shantytownId,
+                commentId,
+                description
+            );
+            updateShantytownComments(shantytownId, comments.comments);
+            setTowns(shantytownId);
+            notificationStore.success(
+                "Modification du message",
+                "Votre message a bien été modifié"
+            );
         },
         async deleteDecree(shantytownId, commentId, reason = "") {
             const activitiesStore = useActivitiesStore();
