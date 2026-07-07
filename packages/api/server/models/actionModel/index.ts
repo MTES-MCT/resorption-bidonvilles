@@ -11,6 +11,7 @@ import findActionFinancesReadersByManagers from './findActionFinancesReaders/fin
 import getCommentHistory from './getCommentHistory/getCommentHistory';
 import getHistory from './getHistory/getHistory';
 import update from './update/update';
+import updateComment from './updateComment/updateComment';
 
 export default {
     create,
@@ -26,4 +27,5 @@ export default {
     getCommentHistory,
     getHistory,
     update,
+    updateComment,
 };

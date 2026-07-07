@@ -4,6 +4,7 @@ import findByShantytown from './findByShantytown';
 import findOne from './findOne';
 import getHistory from './getHistory';
 import deleteComment from './deleteComment';
+import update from './update';
 
 export default {
     create,
@@ -12,4 +13,5 @@ export default {
     findOne,
     getHistory,
     deleteComment,
+    update,
 };
