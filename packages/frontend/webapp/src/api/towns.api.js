@@ -21,6 +21,12 @@ export function addComment(id, data, attachments) {
     });
 }
 
+export function updateComment(townId, commentId, description) {
+    return axios.patch(`/towns/${encodeURI(townId)}/comments/${commentId}`, {
+        description,
+    });
+}
+
 export function close(id, data) {
     return axios.post(`/towns/${encodeURI(id)}/close`, data);
 }
