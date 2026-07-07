@@ -6,6 +6,7 @@
         allowAttachmentDeletion
         @moderate="openModerationModal"
         @deleteAttachment="onDeleteAttachment"
+        @update="onUpdateComment"
     />
 </template>
 
@@ -15,6 +16,7 @@ import CarteCommentaire from "./CarteCommentaire.vue";
 import ModaleModerationCommentaire from "@/components/ModaleModerationCommentaire/ModaleModerationCommentaire.vue";
 import { useAttachmentsStore } from "@/stores/attachments.store";
 import { useModaleStore } from "@/stores/modale.store";
+import { useActionsStore } from "@/stores/actions.store";
 
 const props = defineProps({
     actionId: {
@@ -27,6 +29,8 @@ const props = defineProps({
     },
 });
 const { actionId, comment } = toRefs(props);
+
+const actionsStore = useActionsStore();
 
 function openModerationModal() {
     const modaleStore = useModaleStore();
@@ -43,5 +47,9 @@ function onDeleteAttachment(file) {
         actionId: actionId.value,
         commentId: comment.value.id,
     });
+}
+
+async function onUpdateComment(commentId, description) {
+    await actionsStore.updateComment(actionId.value, commentId, description);
 }
 </script>
