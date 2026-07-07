@@ -8,13 +8,24 @@
             <div class="text-G700 text-sm mb-1">
                 {{ formatTimestamp(comment.createdAt, "d M y à h:i") }}
             </div>
-            <span
-                class="text-red font-bold cursor-pointer"
-                v-if="showModeration && (isOwner || (canModerate && isHover))"
-                @click="deleteMessage"
-                >Supprimer {{ isOwner ? "mon" : "le" }} message
-                <Icon icon="trash-alt" />
-            </span>
+            <div class="flex gap-2">
+                <span
+                    class="text-primary font-bold cursor-pointer text-sm"
+                    v-if="isOwner && !isEditing"
+                    @click="startEditing"
+                    >Modifier
+                    <Icon icon="pen" />
+                </span>
+                <span
+                    class="text-red font-bold cursor-pointer text-sm"
+                    v-if="
+                        showModeration && (isOwner || (canModerate && isHover))
+                    "
+                    @click="deleteMessage"
+                    >Supprimer {{ isOwner ? "mon" : "le" }} message
+                    <Icon icon="trash-alt" />
+                </span>
+            </div>
         </div>
         <div
             v-if="
@@ -60,8 +71,23 @@
             :allowDeletion="allowAttachmentDeletion && (isOwner || canModerate)"
             @deleteFile="(file, index) => emit('deleteAttachment', file, index)"
         />
-        <div class="whitespace-pre-line break-words">
+        <div v-if="!isEditing" class="whitespace-pre-line break-words">
             {{ comment.description }}
+        </div>
+        <div v-else class="mt-2">
+            <textarea
+                v-model="editedDescription"
+                class="w-full p-2 border border-G300 rounded"
+                rows="4"
+            />
+            <div class="flex gap-2 mt-2">
+                <DsfrButton @click="saveEdit" :disabled="isLoading" secondary>
+                    Enregistrer
+                </DsfrButton>
+                <DsfrButton @click="cancelEdit" :disabled="isLoading">
+                    Annuler
+                </DsfrButton>
+            </div>
         </div>
     </div>
 </template>
@@ -92,9 +118,12 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(["moderate", "deleteAttachment"]);
+const emit = defineEmits(["moderate", "deleteAttachment", "update"]);
 
 const isHover = ref(false);
+const isEditing = ref(false);
+const isLoading = ref(false);
+const editedDescription = ref("");
 const { comment, showModeration } = toRefs(props);
 
 const isOwner = computed(() => {
@@ -109,5 +138,31 @@ const canModerate = computed(() => {
 
 function deleteMessage() {
     emit("moderate");
+}
+
+function startEditing() {
+    isEditing.value = true;
+    editedDescription.value = comment.value.description;
+}
+
+function cancelEdit() {
+    isEditing.value = false;
+    editedDescription.value = "";
+}
+
+async function saveEdit() {
+    if (!editedDescription.value.trim()) {
+        return;
+    }
+
+    isLoading.value = true;
+    try {
+        emit("update", comment.value.id, editedDescription.value);
+        isEditing.value = false;
+    } catch (error) {
+        // Error handling is done by the parent component
+    } finally {
+        isLoading.value = false;
+    }
 }
 </script>
