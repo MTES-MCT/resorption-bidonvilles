@@ -37,9 +37,11 @@
                     >{{ user.email }}</Link
                 >
             </CarteUtilisateurDetailsIcon>
-            <CarteUtilisateurDetailsIcon v-if="user.phone" icon="phone">{{
-                user.phone
-            }}</CarteUtilisateurDetailsIcon>
+            <CarteUtilisateurDetailsIcon
+                v-if="user.phone && !hidePhone"
+                icon="phone"
+                >{{ user.phone }}</CarteUtilisateurDetailsIcon
+            >
         </div>
         <div
             v-if="user.expertise_topics?.length > 0"
@@ -96,6 +98,11 @@ const props = defineProps({
         default: true,
     },
     includeOrganization: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    hidePhone: {
         type: Boolean,
         required: false,
         default: false,

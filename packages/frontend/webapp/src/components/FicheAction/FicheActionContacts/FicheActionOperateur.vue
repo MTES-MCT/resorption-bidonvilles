@@ -7,6 +7,7 @@
             :key="user.id"
             :user="user"
             :linkToUser="false"
+            :hidePhone="hidePhone"
             includeOrganization
         />
     </FicheSousRubrique>
@@ -18,11 +19,17 @@ import { defineProps, toRefs, computed } from "vue";
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 import CarteUtilisateur from "@/components/CarteUtilisateur/CarteUtilisateur.vue";
 import sortOperatorsByPrincipal from "@/utils/sortOperatorsByPrincipal";
+import { useUserStore } from "@/stores/user.store";
 
 const props = defineProps({
     action: Object,
 });
 const { action } = toRefs(props);
+const userStore = useUserStore();
+
+const hidePhone = computed(() => {
+    return !userStore.user?.is_admin;
+});
 const isDeactivatedUser = (user) =>
     user.first_name === "Utilisateur" && user.last_name === "Désactivé";
 const users = computed(() =>

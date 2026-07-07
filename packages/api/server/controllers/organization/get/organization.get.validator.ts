@@ -11,7 +11,7 @@ export default [
         .custom(async (value, { req }) => {
             let organization: Organization;
             try {
-                organization = await findOneById(value, req.query.activeOnly === 'true');
+                organization = await findOneById(value, req.query.activeOnly === 'true', req.user);
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error('Une erreur est survenue lors de la lecture en base de données:', error);

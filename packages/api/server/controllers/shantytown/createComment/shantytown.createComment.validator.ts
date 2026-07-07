@@ -60,11 +60,11 @@ export default [
         .if((value, { req }) => req.body.targets?.mode && req.body.targets.mode !== 'public')
         .isArray().bail().withMessage('Le format des structures ciblées n\'est pas valide')
         .if(value => value.length > 0)
-        .custom(async (value) => {
+        .custom(async (value, { req }) => {
             // on vérifie, à minima, que les structures existent
             // il faudrait également vérifier que les structures en question ont l'accès en lecture
             // au site concerné par le commentaire (@todo)
-            const organizations = await organizationModel.findByIds(value.map(({ id }) => id));
+            const organizations = await organizationModel.findByIds(value.map(({ id }) => id), false, req.user);
             if (organizations.length !== value.length) {
                 throw new Error('Une ou plusieurs structures ciblées n\'existent pas');
             }
@@ -74,7 +74,7 @@ export default [
 
     body('targets.users')
         .customSanitizer((value, { req }) => {
-            if (!req.body.targets || req.body.targets.mode !== 'custom') {
+            if (req.body.targets?.mode !== 'custom') {
                 return [];
             }
 
