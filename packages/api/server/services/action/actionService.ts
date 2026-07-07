@@ -8,6 +8,7 @@ import getCommentReport from './getCommentReport';
 import getHistory from './getHistory';
 import requestPilot from './requestPilot';
 import update from './update';
+import updateComment from './updateComment';
 
 export default {
     create,
@@ -20,4 +21,5 @@ export default {
     getHistory,
     requestPilot,
     update,
+    updateComment,
 };
