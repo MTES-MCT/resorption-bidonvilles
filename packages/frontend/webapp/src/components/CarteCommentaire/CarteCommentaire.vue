@@ -8,13 +8,14 @@
             <div class="text-G700 text-sm mb-1">
                 {{ formatTimestamp(comment.createdAt, "d M y à h:i") }}
             </div>
-            <span
-                class="text-red font-bold cursor-pointer"
-                v-if="showModeration && (isOwner || (canModerate && isHover))"
-                @click="deleteMessage"
-                >Supprimer {{ isOwner ? "mon" : "le" }} message
-                <Icon icon="trash-alt" />
-            </span>
+            <div>
+                <DsfrButtonGroup
+                    size="sm"
+                    :buttons="buttons"
+                    inlineLayoutWhen="always"
+                    iconRight="true"
+                />
+            </div>
         </div>
         <div
             v-if="
@@ -66,7 +67,7 @@
     </div>
 </template>
 <script setup>
-import { defineProps, defineEmits, toRefs, ref, computed } from "vue";
+import { computed, ref, toRefs } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 import { useUserStore } from "@/stores/user.store";
 import formatTimestamp from "@common/utils/formatTimestamp.js";
@@ -90,12 +91,17 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    showUpdate: {
+        type: Boolean,
+        default: true,
+    },
 });
 
-const emit = defineEmits(["moderate", "deleteAttachment"]);
+const { comment, showModeration, showUpdate } = toRefs(props);
+
+const emit = defineEmits(["moderate", "updateMessage", "deleteAttachment"]);
 
 const isHover = ref(false);
-const { comment, showModeration } = toRefs(props);
 
 const isOwner = computed(() => {
     const configStore = useConfigStore();
@@ -110,4 +116,34 @@ const canModerate = computed(() => {
 function deleteMessage() {
     emit("moderate");
 }
+
+function updateMessage() {
+    emit("updateMessage");
+}
+
+const buttons = computed(() => {
+    let controlButtons = [];
+    if (showUpdate.value && isOwner.value) {
+        controlButtons.push({
+            secondary: true,
+            size: "sm",
+            onClick: updateMessage,
+            label: "Modifier",
+            icon: "fr-icon-edit-line",
+        });
+    }
+    if (
+        showModeration.value &&
+        (isOwner.value || (canModerate.value && isHover.value))
+    ) {
+        controlButtons.push({
+            secondary: true,
+            size: "sm",
+            onClick: deleteMessage,
+            label: `${isOwner.value ? "Supprimer" : "Modérer"}`,
+            icon: "fr-icon-delete-line",
+        });
+    }
+    return controlButtons;
+});
 </script>

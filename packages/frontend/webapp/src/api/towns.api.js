@@ -200,6 +200,13 @@ export function updateActorThemes(townId, userId, themes) {
     );
 }
 
+export function updateComment(townId, commentId, comment) {
+    return axios.put(
+        `/towns/${encodeURI(townId)}/comments/${encodeURI(commentId)}`,
+        { comment }
+    );
+}
+
 export function startResorption(townId) {
     return axios.post(`/towns/${encodeURI(townId)}/resorption`);
 }

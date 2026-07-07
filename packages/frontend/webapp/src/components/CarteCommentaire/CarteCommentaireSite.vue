@@ -5,6 +5,7 @@
         showModeration
         allowAttachmentDeletion
         @moderate="openModerationModal"
+        @updateMessage="openUpdateMessageModal"
         @deleteAttachment="onDeleteAttachment"
     />
 </template>
@@ -13,6 +14,7 @@
 import { toRefs } from "vue";
 import CarteCommentaire from "./CarteCommentaire.vue";
 import ModaleModerationCommentaire from "@/components/ModaleModerationCommentaire/ModaleModerationCommentaire.vue";
+import ModaleUpdateCommentaire from "@/components/ModaleUpdateCommentaire/ModaleUpdateCommentaire.vue";
 import { useAttachmentsStore } from "@/stores/attachments.store";
 import { useModaleStore } from "@/stores/modale.store";
 
@@ -31,6 +33,14 @@ const { townId, comment } = toRefs(props);
 function openModerationModal() {
     const modaleStore = useModaleStore();
     modaleStore.open(ModaleModerationCommentaire, {
+        comment: comment.value,
+        commentType: "shantytown",
+    });
+}
+
+function openUpdateMessageModal() {
+    const modaleStore = useModaleStore();
+    modaleStore.open(ModaleUpdateCommentaire, {
         comment: comment.value,
         commentType: "shantytown",
     });
