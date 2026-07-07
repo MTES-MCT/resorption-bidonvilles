@@ -13,6 +13,7 @@ import {
     fetchOne,
     addComment,
     deleteComment,
+    updateComment,
     requestPilot,
 } from "@/api/actions.api";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
@@ -328,6 +329,26 @@ export const useActionsStore = defineStore("actions", () => {
             }
             activitiesStore.removeComment(commentId);
             dashboardActivitiesStore.removeComment(commentId);
+        },
+        async updateComment(actionId, commentId, description) {
+            const notificationStore = useNotificationStore();
+            const { comment } = await updateComment(
+                actionId,
+                commentId,
+                description
+            );
+            if (hash.value[actionId]) {
+                const commentIndex = hash.value[actionId].comments.findIndex(
+                    ({ id }) => id === commentId
+                );
+                if (commentIndex !== -1) {
+                    hash.value[actionId].comments[commentIndex] = comment;
+                }
+            }
+            notificationStore.success(
+                "Modification du message",
+                "Votre message a bien été modifié"
+            );
         },
         async deleteCommentAttachment(file, { actionId, commentId }) {
             await deleteAttachment(file.id);
