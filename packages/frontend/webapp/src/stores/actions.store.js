@@ -332,6 +332,8 @@ export const useActionsStore = defineStore("actions", () => {
         },
         async updateComment(actionId, commentId, description) {
             const notificationStore = useNotificationStore();
+            const activitiesStore = useActivitiesStore();
+            const dashboardActivitiesStore = useDashboardActivitiesStore();
             const { comment } = await updateComment(
                 actionId,
                 commentId,
@@ -345,6 +347,11 @@ export const useActionsStore = defineStore("actions", () => {
                     hash.value[actionId].comments[commentIndex] = comment;
                 }
             }
+            activitiesStore.updateComment(commentId, comment.description);
+            dashboardActivitiesStore.updateComment(
+                commentId,
+                comment.description
+            );
             notificationStore.success(
                 "Modification du message",
                 "Votre message a bien été modifié"
