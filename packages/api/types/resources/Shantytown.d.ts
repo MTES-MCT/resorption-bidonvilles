@@ -4,6 +4,7 @@ import { Diff } from '#server/models/shantytownModel/_common/getDiff';
 import { LivingConditions } from '#server/models/shantytownModel/_common/livingConditions/serializeLivingConditions';
 import { Attachment } from '#server/services/attachment/Attachment.d';
 import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
+import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
 import { ShantytownAction } from '#root/types/resources/Action.d';
 import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
 import { ShantytownPreparatoryPhaseTowardResorption } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
@@ -172,6 +173,10 @@ export type ShantytownAttachmentObject = {
 
 export type ShantytownWithFinancedAction = Shantytown & {
     hasAtLeastOneActionFinanced: boolean,
+};
+
+export type ShantytownWithEnrichedComments = Omit<Shantytown, 'comments'> & {
+    comments: ShantytownEnrichedComment[],
 };
 
 export type Shantytown = BaseShantytown | ShantytownWithJustice | ShantytownWithOwner | (ShantytownWithJustice & ShantytownWithOwner);

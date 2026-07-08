@@ -5,10 +5,10 @@ import shantytownDecreeFindAll from '#server/services/shantytownDecree/findAll';
 import serializeAttachment from '#server/services/attachment/serializeAttachment';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import enrichCommentsAttachments from './_common/enrichCommentsAttachments';
-import { Shantytown } from '#root/types/resources/Shantytown.d';
+import { ShantytownWithEnrichedComments } from '#root/types/resources/Shantytown.d';
 import { Attachment } from '../attachment/Attachment';
 
-export default async function find(user: AuthUser, townId: number): Promise<Shantytown> {
+export default async function find(user: AuthUser, townId: number): Promise<ShantytownWithEnrichedComments> {
     const town = await shantytownModel.findOne(user, townId);
 
     /*
@@ -35,5 +35,5 @@ export default async function find(user: AuthUser, townId: number): Promise<Shan
         ...townWithoutComments,
         comments: commentsWithEnrichedAttachments,
         attachments: enrichedDecrees,
-    };
+    } as unknown as ShantytownWithEnrichedComments;
 }
