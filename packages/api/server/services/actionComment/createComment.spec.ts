@@ -48,7 +48,7 @@ rewiremock.enable();
 import createComment from './createComment';
 rewiremock.disable();
 
-describe('services/action.createComment()', () => {
+describe('services/actionComment.createComment()', () => {
     beforeEach(() => {
         stubs.sequelize.transaction.resolves(stubs.transaction);
     });

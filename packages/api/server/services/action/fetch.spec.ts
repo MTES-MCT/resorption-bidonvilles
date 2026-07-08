@@ -19,7 +19,7 @@ const stubs = {
 rewiremock('#server/models/actionModel/index').with({
     fetch: stubs.actionModelFetch,
 });
-rewiremock('./enrichCommentsAttachments').with(stubs.enrichCommentsAttachments);
+rewiremock('#server/services/actionComment/enrichCommentsAttachments').with(stubs.enrichCommentsAttachments);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first

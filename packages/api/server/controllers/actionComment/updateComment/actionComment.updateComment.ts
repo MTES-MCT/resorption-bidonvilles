@@ -1,4 +1,4 @@
-import actionService from '#server/services/action/actionService';
+import actionCommentService from '#server/services/actionComment';
 import { type Response, type Request, NextFunction } from 'express';
 import { User } from '#root/types/resources/User.d';
 import { ActionEnrichedComment } from '#root/types/resources/ActionCommentEnriched.d';
@@ -25,7 +25,7 @@ interface UserUpdateCommentRequest extends Request {
 export default async (req: UserUpdateCommentRequest, res: Response, next: NextFunction) => {
     let result: { comment: ActionEnrichedComment };
     try {
-        result = await actionService.updateComment(
+        result = await actionCommentService.updateComment(
             req.user,
             Number.parseInt(req.params.id, 10),
             Number.parseInt(req.params.commentId, 10),

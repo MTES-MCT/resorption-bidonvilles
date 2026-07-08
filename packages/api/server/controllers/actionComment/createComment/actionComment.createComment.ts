@@ -1,4 +1,4 @@
-import actionService from '#server/services/action/actionService';
+import actionCommentService from '#server/services/actionComment';
 import can from '#server/utils/permission/can';
 
 const ERRORS = {
@@ -20,7 +20,7 @@ export default async (req, res, next) => {
     }
 
     try {
-        const response = await actionService.createComment(req.user.id, req.body.action, {
+        const response = await actionCommentService.createComment(req.user.id, req.body.action, {
             description: req.body.description,
             files: req.files,
         });
