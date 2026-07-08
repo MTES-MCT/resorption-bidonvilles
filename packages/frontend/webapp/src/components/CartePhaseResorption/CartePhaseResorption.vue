@@ -11,14 +11,10 @@
         <div class="flex justify-start items-center text-sm">
             <div class="flex flex-row flex-wrap md:flex-auto gap-1">
                 <div class="flex flex-row shrink-0 gap-1">
-                    <i
-                        class="w-4 h-4 rounded-full"
-                        :class="`bg-${iconColor}`"
-                    />
-                    {{ statusText }}
+                    <DsfrBadge small :type="statusType" :label="statusText" />
                 </div>
                 <div v-if="phase.completedAt" class="shrink-0">
-                    {{ formattedDate }}
+                    le {{ formattedDate }} {{ phase.preparatoryPhaseUid }}
                 </div>
             </div>
         </div>
@@ -65,13 +61,7 @@ const formattedDate = computed(() => {
     });
 });
 
-const STATUS_COLORS = {
-    done: "green",
-    inprogress: "orange600",
-    default: "G500",
-};
-
-const iconColor = computed(() => {
-    return STATUS_COLORS[status.value] || STATUS_COLORS.default;
+const statusType = computed(() => {
+    return status.value === "done" ? "success" : "info";
 });
 </script>

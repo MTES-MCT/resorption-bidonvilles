@@ -1,29 +1,41 @@
 <template>
-    <div
-        class="p-2 px-4 w-full"
-        :class="{ 'border-1 border-primary rounded ': withBorder }"
-    >
-        <div
-            class="grid grid-cols-2 gap-4 item-start"
-            :class="{ 'mt-2 mb-1': withBorder }"
-        >
-            <Checkbox
-                :value="phase.uid"
-                :checked="isChecked"
-                :key="phase.uid"
-                :label="phase.name"
-                name="preparatory_phases_toward_resorption"
-                :modelValue="modelValue"
-                :disabled="isDisabled"
-                @change="handleCheckboxChange"
+    <div class="fr-container fr-my-2v">
+        <h3 class="h3 font-bold flex flex-wrap gap-2 items-center">
+            {{ phase.name }}
+            <DsfrBadge
+                v-if="completedDate"
+                label="Réalisée"
+                type="success"
+                small
             />
+            <DsfrBadge
+                v-if="phaseStatus === 'started'"
+                label="En cours"
+                type="info"
+                small
+            />
+        </h3>
+        <div class="flex flex-col lg:flex-row gap-2 w-full">
+            <DsfrSegmentedSet
+                :options="[
+                    { label: 'Non démarrée', value: 'not_started' },
+                    { label: 'En cours', value: 'started' },
+                    { label: 'Terminée', value: 'completed' },
+                ]"
+                v-model="phaseStatus"
+                :disabled="
+                    !canUpdate || (phase.is_a_starting_phase && completedDate)
+                "
+            />
+
             <DatepickerInput
-                v-if="isChecked"
+                v-if="phaseStatus !== 'not_started'"
+                :key="`phase_${phase.uid}_${phaseStatus}`"
                 :name="`phase_${phase.uid}_completed_at`"
                 :id="`phase_${phase.uid}_completed_at`"
                 :maxDate="new Date()"
-                v-model="completed_date"
-                class="!mb-0"
+                v-model="completedDate"
+                class="!mb-0 mt-0 w-64"
                 :disabled="!canUpdate"
             />
         </div>
@@ -31,8 +43,9 @@
 </template>
 
 <script setup>
-import { computed, defineProps, ref } from "vue";
-import { Checkbox, DatepickerInput } from "@resorptionbidonvilles/ui";
+import { computed, ref, toRefs, watch } from "vue";
+import { useField } from "vee-validate";
+import { DatepickerInput } from "@resorptionbidonvilles/ui";
 import { useUserStore } from "@/stores/user.store";
 
 const props = defineProps({
@@ -40,77 +53,136 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    activePhases: {
-        type: Array,
-        required: true,
-    },
-    index: {
-        type: Number,
-        required: true,
-    },
-    modelValue: {
-        type: [Array, String, Number, Boolean],
-        required: true,
-        default: undefined,
-    },
-    withBorder: {
-        type: Boolean,
-        default: true,
-    },
 });
 
-const { phase, activePhases, withBorder } = props;
+const { phase } = toRefs(props);
 
-const isDisabled = computed(
-    () => phase.is_a_starting_phase || canUpdate.value === false
-);
-
-const isChecked = ref(false);
-
-// Utiliser un ref modifiable
-const completed_date = ref(null);
-
-// Initialiser la valeur en fonction des phases actives
-isChecked.value = activePhases.some(
-    (activePhase) => activePhase.preparatoryPhaseId === phase.uid
-);
-
-// Initialiser le ref avec la date si elle existe
-const activePhase = activePhases.find(
-    (activePhase) => activePhase.preparatoryPhaseId === phase.uid
-);
-
-if (activePhase && activePhase.completedAt) {
-    completed_date.value = new Date(activePhase.completedAt);
-}
-
-const handleCheckboxChange = (checked) => {
-    isChecked.value = checked;
-
-    // Mettre à jour activePhases pour la gestion des dates
-    if (checked) {
-        if (
-            !activePhases.some(
-                (activePhase) => activePhase.preparatoryPhaseId === phase.uid
-            )
-        ) {
-            activePhases.push({ preparatoryPhaseId: phase.uid });
-        }
-    } else {
-        const index = activePhases.findIndex(
-            (activePhase) => activePhase.preparatoryPhaseId === phase.uid
-        );
-        if (index > -1) {
-            activePhases.splice(index, 1);
-        }
-    }
-
-    // Le v-model gère déjà l'ajout/suppression dans preparatory_phases_toward_resorption
-    // Pas besoin de le faire manuellement
-};
+// Mémorise la dernière date saisie pour la restaurer si l'utilisateur
+// repasse « Terminée » après être passé par « En cours » / « Non démarrée ».
+const initialDate = ref(null);
 
 const canUpdate = computed(() => {
     const userStore = useUserStore();
     return userStore.hasPermission("shantytown.update");
 });
+
+// Mécanisme repris de l'ancienne Checkbox : un useField en mode « checkbox »
+// partageant le name `preparatory_phases_toward_resorption` maintient le tableau
+// des UIDs cochés (source de vérité consommée par le backend). `handleChange(uid)`
+// toggle la présence de l'UID, `checked` reflète cette présence.
+const { checked, handleChange: togglePhaseUid } = useField(
+    "preparatory_phases_toward_resorption",
+    undefined,
+    {
+        type: "checkbox",
+        checkedValue: phase.value.uid,
+    }
+);
+
+// Garde le tableau d'UIDs et l'état coché alignés sur la cible voulue.
+const setChecked = (shouldBeChecked) => {
+    if (checked.value !== shouldBeChecked) {
+        togglePhaseUid(phase.value.uid);
+    }
+};
+
+// `active_preparatory_phases_toward_resorption` porte les dates de complétion.
+// On l'écrit via handleChange (et non en mutant `values`, exposé en lecture seule
+// par vee-validate) avec un tableau neuf à chaque fois pour préserver la réactivité.
+const { value: activePhases, handleChange: setActivePhases } = useField(
+    "active_preparatory_phases_toward_resorption"
+);
+
+// Phase active correspondant à cet item. Mémoïsée : les getters de `phaseStatus`
+// et `completedDate` la partagent, donc un seul `.find()` est effectué par
+// invalidation (au lieu d'un par computed), et uniquement quand `activePhases`
+// ou l'UID de la phase change réellement.
+const associatedPhase = computed(() =>
+    (activePhases.value || []).find(
+        (p) => p.preparatoryPhaseId === phase.value.uid
+    )
+);
+
+const phaseStatus = computed({
+    get() {
+        if (!associatedPhase.value) {
+            return "not_started";
+        }
+        return associatedPhase.value.completedAt ? "completed" : "started";
+    },
+    set(newStatus) {
+        const others = (activePhases.value || []).filter(
+            (p) => p.preparatoryPhaseId !== phase.value.uid
+        );
+
+        if (newStatus === "not_started") {
+            initialDate.value = completedDate.value;
+            setActivePhases(others);
+            setChecked(false);
+            return;
+        }
+
+        const resolvedDate =
+            newStatus === "completed"
+                ? initialDate.value || completedDate.value || new Date()
+                : null;
+
+        setActivePhases([
+            ...others,
+            {
+                preparatoryPhaseId: phase.value.uid,
+                completedAt: resolvedDate ? resolvedDate.toISOString() : null,
+            },
+        ]);
+
+        if (newStatus === "completed") {
+            initialDate.value = null;
+        }
+
+        setChecked(true);
+    },
+});
+
+const completedDate = computed({
+    get() {
+        return associatedPhase.value?.completedAt
+            ? new Date(associatedPhase.value.completedAt)
+            : null;
+    },
+    set(newDate) {
+        const others = (activePhases.value || []).filter(
+            (p) => p.preparatoryPhaseId !== phase.value.uid
+        );
+        setActivePhases([
+            ...others,
+            {
+                preparatoryPhaseId: phase.value.uid,
+                completedAt: newDate ? newDate.toISOString() : null,
+            },
+        ]);
+    },
+});
+
+// Le DatepickerInput possède son propre useField (name `phase_${uid}_completed_at`)
+// et n'émet rien vers le parent quand on efface la date via sa croix (@cleared).
+// On observe donc ce champ partagé pour propager l'effacement à la source de vérité
+// `active_preparatory_phases_toward_resorption` : la phase repasse « En cours »
+// (completedAt = null) et le DsfrSegmentedSet se repositionne sur « En cours ».
+const { value: pickerDate } = useField(`phase_${phase.value.uid}_completed_at`);
+
+watch(pickerDate, (newValue) => {
+    const isCleared =
+        newValue === null || newValue === undefined || newValue === "";
+    // On ne réagit qu'à l'effacement d'une phase actuellement « Terminée »,
+    // pour ne pas interférer avec la sélection normale d'une date.
+    if (isCleared && phaseStatus.value === "completed") {
+        completedDate.value = null;
+    }
+});
 </script>
+<style scoped>
+/* Rattrapage du mt-3 de la div enfant du DatePicker */
+.mt-0 {
+    margin-top: -0.75rem !important;
+}
+</style>

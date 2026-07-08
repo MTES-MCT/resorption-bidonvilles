@@ -53,8 +53,6 @@
 <script setup>
 import {
     computed,
-    defineExpose,
-    defineProps,
     markRaw,
     onBeforeUnmount,
     ref,
@@ -434,12 +432,21 @@ function buildTerminatedPreparatoryPhases(initOrEdit) {
         }
     } else if (initOrEdit === "edit") {
         for (const phase of values.preparatory_phases_toward_resorption) {
-            if (values[`phase_${phase}_completed_at`] !== null) {
+            if (
+                values[`phase_${phase}_completed_at`] !== undefined &&
+                values[`phase_${phase}_completed_at`] !== null
+            ) {
                 terminatedPreparatoryPhases[phase] =
                     values[`phase_${phase}_completed_at`];
-            } else if (phase.completedAt !== null) {
-                terminatedPreparatoryPhases[phase.preparatoryPhaseId] =
-                    phase.completedAt;
+            } else {
+                const originalPhase =
+                    values.active_preparatory_phases_toward_resorption?.find(
+                        (p) => p.preparatoryPhaseId === phase
+                    );
+                if (originalPhase?.completedAt != null) {
+                    terminatedPreparatoryPhases[phase] =
+                        originalPhase.completedAt;
+                }
             }
         }
     }
