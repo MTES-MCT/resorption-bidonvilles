@@ -12,13 +12,9 @@
                 class="!mb-2"
             >
                 <InputResorptionPhaseItem
-                    v-for="(item, index) in phasesStartingResorption"
-                    v-model="preparatory_phases_toward_resorption_value"
+                    v-for="item in phasesStartingResorption"
                     :phase="item"
-                    :activePhases="activeValues"
-                    :index="index"
                     :key="item.uid"
-                    :withBorder="false"
                 />
             </CheckableGroup>
         </div>
@@ -26,11 +22,8 @@
 
     <CheckableGroup id="preparatory_phases_toward_resorption">
         <InputResorptionPhaseItem
-            v-for="(item, index) in phasesNotStartingResorption"
-            v-model="preparatory_phases_toward_resorption_value"
+            v-for="item in phasesNotStartingResorption"
             :phase="item"
-            :activePhases="activeValues"
-            :index="index"
             :key="item.uid"
             class="my-2"
         />
@@ -39,7 +32,6 @@
 
 <script setup>
 import { computed } from "vue";
-import { useFieldValue } from "vee-validate";
 import { CheckableGroup } from "@resorptionbidonvilles/ui";
 import InputResorptionPhaseItem from "./FormDeclarationDeSiteInputResorptionPhaseItem.vue";
 import { useConfigStore } from "@/stores/config.store";
@@ -50,14 +42,6 @@ const preparatory_phases_toward_resorption =
     configStore.config?.preparatory_phases_toward_resorption.sort(
         (a, b) => a.position - b.position
     ) || [];
-
-const preparatory_phases_toward_resorption_value = useFieldValue(
-    "preparatory_phases_toward_resorption"
-);
-
-const activeValues = useFieldValue(
-    "active_preparatory_phases_toward_resorption"
-);
 
 const phasesStartingResorption = computed(() =>
     preparatory_phases_toward_resorption.filter(
