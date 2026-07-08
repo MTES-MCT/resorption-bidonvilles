@@ -6,7 +6,7 @@
         allowAttachmentDeletion
         @moderate="openModerationModal"
         @deleteAttachment="onDeleteAttachment"
-        @update="onUpdateComment"
+        :onUpdate="onUpdateComment"
     />
 </template>
 
