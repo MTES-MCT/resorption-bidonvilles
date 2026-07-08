@@ -93,18 +93,22 @@ const { value: activePhases, handleChange: setActivePhases } = useField(
     "active_preparatory_phases_toward_resorption"
 );
 
-const getAssociatedPhase = () =>
+// Phase active correspondant à cet item. Mémoïsée : les getters de `phaseStatus`
+// et `completedDate` la partagent, donc un seul `.find()` est effectué par
+// invalidation (au lieu d'un par computed), et uniquement quand `activePhases`
+// ou l'UID de la phase change réellement.
+const associatedPhase = computed(() =>
     (activePhases.value || []).find(
         (p) => p.preparatoryPhaseId === phase.value.uid
-    );
+    )
+);
 
 const phaseStatus = computed({
     get() {
-        const associatedPhase = getAssociatedPhase();
-        if (!associatedPhase) {
+        if (!associatedPhase.value) {
             return "not_started";
         }
-        return associatedPhase.completedAt ? "completed" : "started";
+        return associatedPhase.value.completedAt ? "completed" : "started";
     },
     set(newStatus) {
         const others = (activePhases.value || []).filter(
@@ -141,9 +145,8 @@ const phaseStatus = computed({
 
 const completedDate = computed({
     get() {
-        const associatedPhase = getAssociatedPhase();
-        return associatedPhase?.completedAt
-            ? new Date(associatedPhase.completedAt)
+        return associatedPhase.value?.completedAt
+            ? new Date(associatedPhase.value.completedAt)
             : null;
     },
     set(newDate) {
