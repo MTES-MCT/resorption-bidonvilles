@@ -11,7 +11,7 @@
             <div class="flex gap-2">
                 <span
                     class="text-primary font-bold cursor-pointer text-sm"
-                    v-if="isOwner && !isEditing"
+                    v-if="onUpdate && isOwner && !isEditing"
                     @click="startEditing"
                     >Modifier
                     <Icon icon="pen" />
@@ -80,6 +80,9 @@
                 class="w-full p-2 border border-G300 rounded"
                 rows="4"
             />
+            <div v-if="editError" class="text-red text-sm mt-1">
+                {{ editError }}
+            </div>
             <div class="flex gap-2 mt-2">
                 <DsfrButton @click="saveEdit" :disabled="isLoading" secondary>
                     Enregistrer
@@ -116,15 +119,20 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    onUpdate: {
+        type: Function,
+        default: null,
+    },
 });
 
-const emit = defineEmits(["moderate", "deleteAttachment", "update"]);
+const emit = defineEmits(["moderate", "deleteAttachment"]);
 
 const isHover = ref(false);
 const isEditing = ref(false);
 const isLoading = ref(false);
 const editedDescription = ref("");
-const { comment, showModeration } = toRefs(props);
+const editError = ref("");
+const { comment, showModeration, onUpdate } = toRefs(props);
 
 const isOwner = computed(() => {
     const configStore = useConfigStore();
@@ -143,11 +151,13 @@ function deleteMessage() {
 function startEditing() {
     isEditing.value = true;
     editedDescription.value = comment.value.description;
+    editError.value = "";
 }
 
 function cancelEdit() {
     isEditing.value = false;
     editedDescription.value = "";
+    editError.value = "";
 }
 
 async function saveEdit() {
@@ -156,11 +166,14 @@ async function saveEdit() {
     }
 
     isLoading.value = true;
+    editError.value = "";
     try {
-        emit("update", comment.value.id, editedDescription.value);
+        await onUpdate.value(comment.value.id, editedDescription.value);
         isEditing.value = false;
+        editedDescription.value = "";
     } catch (error) {
-        // Error handling is done by the parent component
+        editError.value =
+            "La modification du message a échoué. Veuillez réessayer.";
     } finally {
         isLoading.value = false;
     }
