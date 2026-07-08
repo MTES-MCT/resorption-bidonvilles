@@ -39,10 +39,16 @@ export default async function updateComment(
     }
 
     // Mise à jour du commentaire
+    // (la clause WHERE created_by = :userId du modèle sert de garde-fou : seul l'auteur
+    // peut effectivement modifier la ligne, même si ce contrôle est déjà fait plus haut)
+    let updatedRows: { action_comment_id: number }[];
     try {
-        await actionModel.updateComment(commentId, user.id, trimmedDescription);
+        updatedRows = await actionModel.updateComment(commentId, user.id, trimmedDescription);
     } catch (error) {
         throw new ServiceError('update_failed', error);
+    }
+    if (updatedRows.length === 0) {
+        throw new ServiceError('permission_denied', new Error('Seul l\'auteur peut modifier son commentaire (contrôle base de données)'));
     }
 
     // Récupération de la liste mise à jour des commentaires

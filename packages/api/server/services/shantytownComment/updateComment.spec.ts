@@ -13,7 +13,7 @@ chai.use(sinonChai);
 
 const sandbox = sinon.createSandbox();
 const stubs = {
-    updateComment: sandbox.stub().resolves(),
+    updateComment: sandbox.stub().resolves([{ shantytown_comment_id: 1 }]),
     findByShantytown: sandbox.stub(),
     getShantytownWatchers: sandbox.stub().resolves([]),
     validator: {
@@ -54,7 +54,7 @@ describe('services/shantytownComment.updateComment()', () => {
         };
         stubs.findByShantytown.resolves(comments);
         stubs.getShantytownWatchers.resolves([]);
-        stubs.updateComment.resolves();
+        stubs.updateComment.resolves([{ shantytown_comment_id: 1 }]);
     });
 
     afterEach(() => {
