@@ -4,7 +4,6 @@ import sinonChai from 'sinon-chai';
 
 import { rewiremock } from '#test/rewiremock';
 import { serialized as fakeUser } from '#test/utils/user';
-import { serialized as fakeShantytown } from '#test/utils/shantytown';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import ServiceError from '#server/errors/ServiceError';
 
@@ -16,6 +15,7 @@ const stubs = {
     updateComment: sandbox.stub().resolves([{ shantytown_comment_id: 1 }]),
     findByShantytown: sandbox.stub(),
     getShantytownWatchers: sandbox.stub().resolves([]),
+    enrichCommentsAttachments: sandbox.stub().callsFake(comment => Promise.resolve(comment)),
     validator: {
         trim: sandbox.stub().callsFake(value => value.trim()),
     },
@@ -28,6 +28,7 @@ rewiremock('#server/models/shantytownCommentModel').with({
 rewiremock('#server/models/userModel').with({
     getShantytownWatchers: stubs.getShantytownWatchers,
 });
+rewiremock('#server/services/shantytown/_common/enrichCommentsAttachments').with(stubs.enrichCommentsAttachments);
 rewiremock('validator').with(stubs.validator);
 
 rewiremock.enable();

@@ -3,6 +3,7 @@ import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import userModel from '#server/models/userModel';
 import ServiceError from '#server/errors/ServiceError';
 import { AuthUser } from '#server/middlewares/authMiddleware';
+import enrichCommentsAttachments from '#server/services/shantytown/_common/enrichCommentsAttachments';
 import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
 
 export default async function updateComment(
@@ -60,7 +61,16 @@ export default async function updateComment(
         throw new ServiceError('fetch_failed', error);
     }
 
-    const updatedComments = updatedCommentsObject[shantytownId] || [];
+    const rawComments = updatedCommentsObject[shantytownId] || [];
+
+    // Enrichissement des pièces jointes
+    let commentsWithEnrichedAttachments: ShantytownEnrichedComment[] = [];
+    try {
+        commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => enrichCommentsAttachments(rawComment)));
+    } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+    }
 
     // Récupération du nombre de watchers
     let numberOfWatchers = 0;
@@ -73,7 +83,7 @@ export default async function updateComment(
     }
 
     return {
-        comments: updatedComments,
+        comments: commentsWithEnrichedAttachments,
         numberOfWatchers,
     };
 }
