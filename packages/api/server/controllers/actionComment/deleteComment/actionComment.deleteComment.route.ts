@@ -1,5 +1,5 @@
 import { type ApplicationWithCustomRoutes } from '#server/loaders/customRouteMethodsLoader';
-import controller from './action.deleteComment';
+import controller from './actionComment.deleteComment';
 
 export default (app: ApplicationWithCustomRoutes): void => {
     app.customRoutes.delete('/actions/:id/comments/:commentId', controller, undefined, {
