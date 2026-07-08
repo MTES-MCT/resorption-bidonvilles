@@ -13,7 +13,7 @@ chai.use(sinonChai);
 
 const sandbox = sinon.createSandbox();
 const stubs = {
-    updateComment: sandbox.stub().resolves(),
+    updateComment: sandbox.stub().resolves([{ action_comment_id: 1 }]),
     fetchAction: sandbox.stub(),
     enrichCommentsAttachments: sandbox.stub().resolves([]),
     validator: {
@@ -57,7 +57,7 @@ describe('services/action.updateComment()', () => {
             },
         ];
         stubs.fetchAction.resolves([action]);
-        stubs.updateComment.resolves();
+        stubs.updateComment.resolves([{ action_comment_id: 1 }]);
     });
 
     afterEach(() => {
