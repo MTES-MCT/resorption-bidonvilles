@@ -1,6 +1,6 @@
 import express from 'express';
-import controller from './action.updateComment';
-import validator from './action.updateComment.validator';
+import controller from './actionComment.updateComment';
+import validator from './actionComment.updateComment.validator';
 
 const router = express.Router();
 
