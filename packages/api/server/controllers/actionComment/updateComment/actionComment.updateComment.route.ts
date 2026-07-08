@@ -1,13 +1,10 @@
-import express from 'express';
-import controller from './actionComment.updateComment';
+import { type ApplicationWithCustomRoutes } from '#server/loaders/customRouteMethodsLoader';
 import validator from './actionComment.updateComment.validator';
+import controller from './actionComment.updateComment';
 
-const router = express.Router();
-
-router.patch(
-    '/:id/comments/:commentId',
-    validator,
-    controller,
-);
-
-export default router;
+export default (app: ApplicationWithCustomRoutes): void => {
+    app.customRoutes.patch('/actions/:id/comments/:commentId', controller, validator, {
+        authenticate: true,
+        multipart: false,
+    });
+};
