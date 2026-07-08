@@ -1,13 +1,10 @@
-import express from 'express';
-import controller from './shantytown.updateComment';
+import { type ApplicationWithCustomRoutes } from '#server/loaders/customRouteMethodsLoader';
 import validator from './shantytown.updateComment.validator';
+import controller from './shantytown.updateComment';
 
-const router = express.Router();
-
-router.patch(
-    '/:id/comments/:commentId',
-    validator,
-    controller,
-);
-
-export default router;
+export default (app: ApplicationWithCustomRoutes): void => {
+    app.customRoutes.patch('/towns/:id/comments/:commentId', controller, validator, {
+        authenticate: true,
+        multipart: false,
+    });
+};
