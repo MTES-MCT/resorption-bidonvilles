@@ -101,6 +101,15 @@ export const useDashboardActivitiesStore = defineStore(
                     activities.value.splice(index, 1);
                 }
             },
+            updateComment(commentId, description) {
+                const activity = activities.value.find(({ comment }) => {
+                    return comment?.id === commentId;
+                });
+
+                if (activity) {
+                    activity.comment.description = description;
+                }
+            },
             fetch: fetchActivities,
         };
     }

@@ -378,13 +378,26 @@ export const useTownsStore = defineStore("towns", () => {
         },
         async updateComment(shantytownId, commentId, description) {
             const notificationStore = useNotificationStore();
+            const activitiesStore = useActivitiesStore();
+            const dashboardActivitiesStore = useDashboardActivitiesStore();
             const { comments } = await updateComment(
                 shantytownId,
                 commentId,
                 description
             );
-            updateShantytownComments(shantytownId, comments.comments);
+            updateShantytownComments(shantytownId, comments);
             setTowns(shantytownId);
+            const updatedComment = comments.find(({ id }) => id === commentId);
+            if (updatedComment) {
+                activitiesStore.updateComment(
+                    commentId,
+                    updatedComment.description
+                );
+                dashboardActivitiesStore.updateComment(
+                    commentId,
+                    updatedComment.description
+                );
+            }
             notificationStore.success(
                 "Modification du message",
                 "Votre message a bien été modifié"
