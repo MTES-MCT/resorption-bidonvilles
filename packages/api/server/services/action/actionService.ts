@@ -1,25 +1,19 @@
 import create from './create';
-import createComment from './createComment';
 import exportActions from './exportActions';
 import fetch from './fetch';
 import findActionFinancesReadersByAction from './findActionFinancesReadersByAction';
 import findActionFinancesReadersByManagers from './findActionFinancesReadersByManagers';
-import getCommentReport from './getCommentReport';
 import getHistory from './getHistory';
 import requestPilot from './requestPilot';
 import update from './update';
-import updateComment from './updateComment';
 
 export default {
     create,
-    createComment,
     exportActions,
     fetch,
     findActionFinancesReadersByAction,
     findActionFinancesReadersByManagers,
-    getCommentReport,
     getHistory,
     requestPilot,
     update,
-    updateComment,
 };

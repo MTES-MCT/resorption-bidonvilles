@@ -1,5 +1,5 @@
 
-import deleteComment from '#server/services/action/deleteComment';
+import actionCommentService from '#server/services/actionComment';
 import { ActionEnrichedComment } from '#root/types/resources/ActionCommentEnriched.d';
 
 const ERROR_RESPONSES = {
@@ -14,7 +14,7 @@ const ERROR_RESPONSES = {
 export default async (req, res, next) => {
     let comments: { comments: ActionEnrichedComment[] };
     try {
-        comments = await deleteComment(req.user, req.params.id, req.params.commentId, req.body.message);
+        comments = await actionCommentService.deleteComment(req.user, req.params.id, req.params.commentId, req.body.message);
     } catch (error) {
         const { code, message }: { code: number; message: string } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
         res.status(code).send({

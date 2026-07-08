@@ -1,4 +1,4 @@
-import actionService from '#server/services/action/actionService';
+import actionCommentService from '#server/services/actionComment';
 
 const ERROR_RESPONSES = {
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
@@ -10,7 +10,7 @@ const ERROR_RESPONSES = {
 export default async (req, res, next) => {
     try {
         res.status(200).send({
-            csv: await actionService.getCommentReport(req.user),
+            csv: await actionCommentService.getCommentReport(req.user),
         });
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;

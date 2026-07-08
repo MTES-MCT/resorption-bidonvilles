@@ -30,10 +30,10 @@ rewiremock('validator').with(stubs.validator);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
-import updateActionComment from '#server/services/action/updateComment';
+import updateActionComment from '#server/services/actionComment/updateComment';
 rewiremock.disable();
 
-describe('services/action.updateComment()', () => {
+describe('services/actionComment.updateComment()', () => {
     let user: AuthUser;
     const newDescription = 'Description modifiée du commentaire';
     const actionId = 1;

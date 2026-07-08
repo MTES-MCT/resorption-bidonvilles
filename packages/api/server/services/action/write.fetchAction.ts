@@ -1,9 +1,9 @@
 import { Transaction } from 'sequelize';
 import ServiceError from '#server/errors/ServiceError';
 import actionModel from '#server/models/actionModel';
+import enrichCommentsAttachments from '#server/services/actionComment/enrichCommentsAttachments';
 import { User } from '#root/types/resources/User.d';
 import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
-import enrichCommentsAttachments from './enrichCommentsAttachments';
 
 const { fetch } = actionModel;
 
