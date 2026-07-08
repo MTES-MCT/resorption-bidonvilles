@@ -6,7 +6,7 @@ import shantytownParcelOwnerService from '#server/services/shantytownParcelOwner
 import ServiceError from '#server/errors/ServiceError';
 import { triggerReinstallationAlert } from '#server/utils/mattermost';
 import find from './find';
-import { Shantytown } from '#root/types/resources/Shantytown.d';
+import { ShantytownWithEnrichedComments } from '#root/types/resources/Shantytown.d';
 
 type DecreeAttachments = {
     filesDatas: {
@@ -184,7 +184,7 @@ function buildUpdatePayload(shantytown, originalShantytown) {
     };
 }
 
-function checkReinstallationChanged(originalShantytown: Shantytown, updatedShantytown: Shantytown): boolean {
+function checkReinstallationChanged(originalShantytown: ShantytownWithEnrichedComments, updatedShantytown: ShantytownWithEnrichedComments): boolean {
     return originalShantytown.isReinstallation !== updatedShantytown.isReinstallation
         || originalShantytown.reinstallationComments !== updatedShantytown.reinstallationComments
         || JSON.stringify(originalShantytown.reinstallationIncomingTowns.map(t => t.id))
@@ -255,7 +255,7 @@ async function updatePreparatoryPhases(user, shantytown, transaction) {
     }
 }
 
-async function fetchUpdatedShantytown(user, shantytownId: number): Promise<Shantytown> {
+async function fetchUpdatedShantytown(user, shantytownId: number): Promise<ShantytownWithEnrichedComments> {
     try {
         const updatedShantytown = await find(user, shantytownId);
 
@@ -269,7 +269,7 @@ async function fetchUpdatedShantytown(user, shantytownId: number): Promise<Shant
     }
 }
 
-async function sendReinstallationNotification(originalShantytown: Shantytown, updatedShantytown: Shantytown, user) {
+async function sendReinstallationNotification(originalShantytown: ShantytownWithEnrichedComments, updatedShantytown: ShantytownWithEnrichedComments, user) {
     if (!updatedShantytown.isReinstallation || !checkReinstallationChanged(originalShantytown, updatedShantytown)) {
         return;
     }
@@ -282,7 +282,7 @@ async function sendReinstallationNotification(originalShantytown: Shantytown, up
     }
 }
 
-export default async function update(shantytown, user, decreeAttachments: DecreeAttachments): Promise<Shantytown> {
+export default async function update(shantytown, user, decreeAttachments: DecreeAttachments): Promise<ShantytownWithEnrichedComments> {
     const originalShantytown = await find(user, shantytown.id);
     if (!originalShantytown) {
         throw new ServiceError('fetch_failed', new Error('Impossible de retrouver le site en base de données'));
