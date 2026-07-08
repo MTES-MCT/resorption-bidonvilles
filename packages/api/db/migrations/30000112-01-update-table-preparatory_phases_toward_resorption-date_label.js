@@ -3,10 +3,10 @@ const values = [
     { uid: 'social_assessment', oldName: 'Réalisée le', newName: 'Réalisée' },
     { uid: 'political_validation', oldName: 'Obtenue le', newName: 'Obtenue' },
     { uid: 'contract_preparation', oldName: 'Finalisée le', newName: 'Finalisée' },
-    { uid: 'land_equipment_development', oldName: 'Terminé le', newName: 'Terminé' },
+    { uid: 'land_equipment_development', oldName: 'Terminé le', newName: 'Finalisé' },
     { uid: 'family_information', oldName: 'Réalisée le', newName: 'Réalisée' },
-    { uid: 'contractualization_of_families', oldName: 'Terminée le', newName: 'Terminée' },
-    { uid: 'official_opening', oldName: 'Le', newName: 'Le' },
+    { uid: 'contractualization_of_families', oldName: 'Terminée le', newName: 'Finalisée' },
+    { uid: 'official_opening', oldName: 'Le', newName: 'Lancé' },
 ];
 
 async function updateDateLabel(queryInterface, Sequelize, uid, name, transaction) {
