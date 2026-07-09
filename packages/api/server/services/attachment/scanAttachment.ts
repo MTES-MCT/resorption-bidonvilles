@@ -13,7 +13,8 @@ export default async function scanAttachment(file: Express.Multer.File): Promise
     try {
         const formData = new FormData();
         const bufferStream = new Readable();
-        bufferStream.push(file.buffer, null);
+        bufferStream.push(file.buffer);
+        bufferStream.push(null);
 
         formData.append('file', bufferStream, {
             filename: file.originalname,
@@ -31,17 +32,15 @@ export default async function scanAttachment(file: Express.Multer.File): Promise
             message: scanAttachmentErrors[response.status].message,
         };
     } catch (error) {
-        // Vérifier si l'erreur provient d'axios
-        if (axios.isAxiosError(error)) {
+        if (axios.isAxiosError(error) && error.response) {
             const errorCodes = Object.keys(scanAttachmentErrors);
             if (errorCodes.includes(error.response.status.toString())) {
                 return {
-                    status: error.response?.status || 500,
-                    message: scanAttachmentErrors[error.response?.status].message ?? 'undefined',
+                    status: error.response.status,
+                    message: scanAttachmentErrors[error.response.status].message ?? 'undefined',
                 };
             }
         }
-        // Gérer d'autres types d'erreurs
         return {
             status: 500,
             message: 'undefined',
