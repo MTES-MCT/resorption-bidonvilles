@@ -56,7 +56,7 @@ rewiremock('#server/services/attachment').with(stubs.attachment);
 rewiremock('#server/utils/mattermost').with(stubs.mattermostUtils);
 rewiremock('#server/mails/mails').with(stubs.mails);
 rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
-rewiremock('../shantytown/_common/enrichCommentsAttachments').with(stubs.enrichCommentsAttachments);
+rewiremock('./enrichCommentsAttachments').with(stubs.enrichCommentsAttachments);
 rewiremock('#server/services/attachment/scanAttachmentErrors').with(scanAttachmentErrors);
 
 rewiremock.enable();

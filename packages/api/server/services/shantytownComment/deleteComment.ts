@@ -12,7 +12,7 @@ import { User } from '#root/types/resources/User.d';
 import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
 import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
-import enrichCommentsAttachments from './_common/enrichCommentsAttachments';
+import enrichCommentsAttachments from './enrichCommentsAttachments';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 

@@ -13,7 +13,7 @@ import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw
 import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
 
 import { ShantytownCommentTag } from '#root/types/resources/ShantytownCommentTag.d';
-import enrichCommentsAttachments from '../shantytown/_common/enrichCommentsAttachments';
+import enrichCommentsAttachments from './enrichCommentsAttachments';
 
 export default async function createComment(comment, shantytown, author): Promise<{ comments: ShantytownEnrichedComment[], numberOfWatchers: number } > {
     // on insère le commentaire

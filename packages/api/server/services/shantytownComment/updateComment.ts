@@ -3,7 +3,7 @@ import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import userModel from '#server/models/userModel';
 import ServiceError from '#server/errors/ServiceError';
 import { AuthUser } from '#server/middlewares/authMiddleware';
-import enrichCommentsAttachments from '#server/services/shantytown/_common/enrichCommentsAttachments';
+import enrichCommentsAttachments from './enrichCommentsAttachments';
 import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
 
 export default async function updateComment(

@@ -1,8 +1,8 @@
 
-import shantytownService from '#server/services/shantytown';
+import shantytownCommentService from '#server/services/shantytownComment';
 import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
 
-const { deleteComment } = shantytownService;
+const { deleteComment } = shantytownCommentService;
 
 const ERROR_RESPONSES = {
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
