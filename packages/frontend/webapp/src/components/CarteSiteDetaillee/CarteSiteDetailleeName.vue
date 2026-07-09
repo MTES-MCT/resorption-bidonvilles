@@ -31,6 +31,6 @@ const props = defineProps({
 const { shantytown } = toRefs(props);
 
 const displayName = computed(() => {
-    return shantytown.value.name.replace(/^["']/, "");
+    return shantytown.value.name?.replace(/^["']/, "") || "";
 });
 </script>
