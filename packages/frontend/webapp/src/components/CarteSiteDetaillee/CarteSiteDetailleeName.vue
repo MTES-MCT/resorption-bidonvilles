@@ -2,7 +2,7 @@
     <div class="text-md px-6">
         <div class="text-primary text-display-md font-bold">
             <span v-if="shantytown.name" class="font-bold">
-                « {{ displayName }} » - {{ shantytown.addressSimple }}
+                « {{ shantytown.name }} » - {{ shantytown.addressSimple }}
                 {{ shantytown.city.name }} ({{ shantytown.departement.code }})
             </span>
             <span v-else class="font-bold">
@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { toRefs, computed } from "vue";
+import { toRefs } from "vue";
 import formatDate from "@common/utils/formatDate.js";
 import isSolved from "@/utils/isShantytownResorbed";
 import isClosed from "@/utils/isShantytownClosed";
@@ -29,8 +29,4 @@ const props = defineProps({
     shantytown: Object,
 });
 const { shantytown } = toRefs(props);
-
-const displayName = computed(() => {
-    return shantytown.value.name?.replace(/^["']/, "") || "";
-});
 </script>
