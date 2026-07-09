@@ -4,7 +4,7 @@ import findJusticeReaders from '#server/services/shantytown/findJusticeReaders';
 import shantytownDecreeFindAll from '#server/services/shantytownDecree/findAll';
 import serializeAttachment from '#server/services/attachment/serializeAttachment';
 import { AuthUser } from '#server/middlewares/authMiddleware';
-import enrichCommentsAttachments from './_common/enrichCommentsAttachments';
+import enrichCommentsAttachments from '../shantytownComment/enrichCommentsAttachments';
 import { ShantytownWithEnrichedComments } from '#root/types/resources/Shantytown.d';
 import { Attachment } from '../attachment/Attachment';
 

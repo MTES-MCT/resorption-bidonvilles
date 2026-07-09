@@ -28,7 +28,7 @@ rewiremock('#server/models/shantytownCommentModel').with({
 rewiremock('#server/models/userModel').with({
     getShantytownWatchers: stubs.getShantytownWatchers,
 });
-rewiremock('#server/services/shantytown/_common/enrichCommentsAttachments').with(stubs.enrichCommentsAttachments);
+rewiremock('./enrichCommentsAttachments').with(stubs.enrichCommentsAttachments);
 rewiremock('validator').with(stubs.validator);
 
 rewiremock.enable();
