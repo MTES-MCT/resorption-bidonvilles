@@ -7,6 +7,7 @@ module.exports = {
             // dont la résorption a déjà démarré (présence d'une phase 'sociological_diagnosis')
             // et qui n'ont pas encore cette phase
             // Le created_by est récupéré à partir de la phase 'sociological_diagnosis' du site
+            // completed_at = null : intention métier -> les utilisateurs doivent déclarer eux-mêmes l'état de cette phase pour les sites existants
             await queryInterface.sequelize.query(
                 `INSERT INTO shantytown_preparatory_phases_toward_resorption
                     (fk_shantytown, fk_preparatory_phase, created_by, completed_at)
