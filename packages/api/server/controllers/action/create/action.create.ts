@@ -1,7 +1,8 @@
 import actionService from '#server/services/action/actionService';
 import userService from '#server/services/user/index';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
     insert_action_error: { code: 500, message: 'Une erreur est survenue lors de l\'écriture en base de données' },
     action_fetch_error: { code: 500, message: 'Une erreur est survenue lors de la vérification d\'écriture en base de données' },

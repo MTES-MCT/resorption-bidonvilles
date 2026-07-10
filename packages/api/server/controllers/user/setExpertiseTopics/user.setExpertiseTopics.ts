@@ -1,8 +1,9 @@
 import userService from '#server/services/user/index';
 import { Request, NextFunction, Response } from 'express';
 import { User } from '#root/types/resources/User.d';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
     user_update_failure: { code: 500, message: 'Une erreur est survenue lors de la mise à jour du compte' },
     topics_save_failure: { code: 500, message: 'Une erreur est survenue lors de l\'enregistrement des sujets en base de données' },

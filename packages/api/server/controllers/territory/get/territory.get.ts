@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import territoryService from '#server/services/territory/index';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
     fetch_failed: { code: 500, message: 'Une erreur est survenue lors de la récupération des départements' },
 };

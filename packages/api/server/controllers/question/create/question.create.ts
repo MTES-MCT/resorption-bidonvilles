@@ -1,7 +1,8 @@
 import questionService from '#server/services/question';
 import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     insert_failed: { code: 500, message: 'Votre question n\'a pas pu être enregistrée.' },
     upload_failed: { code: 500, message: 'L\'enregistrement des pièces jointes a échoué.' },
     fetch_failed: { code: 500, message: 'Votre question a bien été enregistrée mais la liste des questions n\'a pas pu être actualisée.' },

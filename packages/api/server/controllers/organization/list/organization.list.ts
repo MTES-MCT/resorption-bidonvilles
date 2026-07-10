@@ -1,6 +1,7 @@
 import organizationService from '#server/services/organization/organizationService';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     fetch_failed: { code: 500, message: 'Une erreur est survenue lors de la lecture en base de données' },
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };

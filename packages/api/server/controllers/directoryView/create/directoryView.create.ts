@@ -1,6 +1,7 @@
 import directoryViewService from '#server/services/directoryView/directoryViewService';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     organization_not_found: { code: 400, message: 'La structure consultée n\'a pas été trouvée en base de données' },
     fetch_failed: { code: 500, message: 'Une erreur est survenue lors de la lecture en base de données' },
     write_failed: { code: 500, message: 'Une erreur est survenue lors de l\'écriture en base de données' },

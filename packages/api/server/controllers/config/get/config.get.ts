@@ -1,12 +1,13 @@
 import configService from '#server/services/config/index';
 import { NextFunction, Request, Response } from 'express';
 import { User } from '#root/types/resources/User.d';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
 interface ConfigListRequest extends Request {
     user: User
 }
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
     fetch_failed: { code: 500, message: 'Une erreur est survenue lors de la lecture en base de données' },
 };

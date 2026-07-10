@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import actionService from '#server/services/action/actionService';
 import { User } from '#root/types/resources/User.d';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
     fetch_failed: { code: 500, message: 'Une erreur est survenue lors de la récupération de l\'historique' },
 };

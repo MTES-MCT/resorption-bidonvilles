@@ -1,6 +1,7 @@
 import sendActivationLink from '#server/services/user/sendActivationLink';
 import { NextFunction, Request, Response } from 'express';
 import { User } from '#root/types/resources/User.d';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
 interface UserSendActivationLinkRequest extends Request {
     user: User,
@@ -10,7 +11,7 @@ interface UserSendActivationLinkRequest extends Request {
     },
 }
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
