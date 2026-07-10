@@ -5,7 +5,7 @@ import {
 import heading from './heading';
 import formatDate from '../_common/formatDate';
 
-const STARTING_PHASE_UIDS = new Set(['sociological_diagnosis', 'social_assessment', 'political_validation']);
+const STARTING_PHASE_UIDS = new Set(['sociological_diagnosis', 'social_assessment', 'political_validation', 'technical_diagnosis']);
 
 const buildResorptionPhasesSection = shantytown => ({
     properties: {
