@@ -67,7 +67,7 @@ const buildResorptionPhasesSection = shantytown => ({
 
                 phaseList.forEach(({ preparatoryPhaseName, preparatoryPhaseDateLabel, completedAt }) => {
                     const status = completedAt
-                        ? `${preparatoryPhaseDateLabel.toLowerCase()} ${formatDate(completedAt, 'DD/MM/YYYY')}`
+                        ? `${preparatoryPhaseDateLabel.toLowerCase()} ${formatDate(new Date(completedAt).getTime() / 1000, 'DD/MM/YYYY')}`
                         : 'en cours';
 
                     paragraphDescriptors.push({
