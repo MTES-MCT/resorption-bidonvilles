@@ -4,7 +4,7 @@
             {{ phase.name }}
             <DsfrBadge
                 v-if="completedDate"
-                label="Réalisée"
+                :label="phase.date_label"
                 type="success"
                 small
             />
@@ -20,7 +20,7 @@
                 :options="[
                     { label: 'Non démarrée', value: 'not_started' },
                     { label: 'En cours', value: 'started' },
-                    { label: 'Terminée', value: 'completed' },
+                    { label: phase.date_label, value: 'completed' },
                 ]"
                 v-model="phaseStatus"
                 :disabled="
