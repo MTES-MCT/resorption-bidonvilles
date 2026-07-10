@@ -2,10 +2,9 @@ import {
     Paragraph, TextRun, SectionType,
 } from 'docx';
 
+import STARTING_PHASE_UIDS from '#server/config/preparatory_phases_toward_resorption';
 import heading from './heading';
 import formatDate from '../_common/formatDate';
-
-const STARTING_PHASE_UIDS = new Set(['sociological_diagnosis', 'social_assessment', 'political_validation', 'technical_diagnosis']);
 
 const buildResorptionPhasesSection = shantytown => ({
     properties: {
