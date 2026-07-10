@@ -11,9 +11,7 @@ export default [
             let shantytown;
             try {
                 shantytown = await shantytownModel.findOne(req.user, value);
-            } catch (error) {
-                // eslint-disable-next-line no-console
-                console.error(error);
+            } catch {
                 throw new Error('Impossible de retrouver le site concerné en base de données');
             }
 
@@ -127,9 +125,7 @@ export default [
                     fullTags = await commentTagModel.find({
                         ids: value,
                     });
-                } catch (error) {
-                    // eslint-disable-next-line no-console
-                    console.error(error);
+                } catch {
                     throw new Error('Une erreur de lecture en base de données est survenue lors de la validation du champ "Tags"');
                 }
 
