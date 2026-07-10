@@ -2,7 +2,7 @@ module.exports = {
     up: async (queryInterface, Sequelize) => {
         const transaction = await queryInterface.sequelize.transaction();
         try {
-            // 1. Insérer la nouvelle phase "Diagnostic technique" en position 4
+            // 1. Insérer la nouvelle phase "Diagnostic technique" en position 2
             await queryInterface.bulkInsert(
                 'preparatory_phases_toward_resorption',
                 [
@@ -17,7 +17,7 @@ module.exports = {
                 { transaction },
             );
 
-            // 2. Mettre à jour les positions des phases existantes (décaler de +1 à partir de l'ancienne position 4)
+            // 2. Mettre à jour les positions des phases existantes (décaler de +1 à partir de l'ancienne position 2)
             const positionUpdates = [
                 { uid: 'social_assessment', newPosition: 3 },
                 { uid: 'political_validation', newPosition: 4 },
@@ -53,7 +53,7 @@ module.exports = {
                 { transaction },
             );
 
-            // 2. Restaurer les positions originales des phases existantes (décaler de -1 à partir de l'ancienne position 5)
+            // 2. Restaurer les positions originales des phases existantes (décaler de -1 à partir de l'ancienne position 3)
             const positionUpdates = [
                 { uid: 'social_assessment', newPosition: 2 },
                 { uid: 'political_validation', newPosition: 3 },
