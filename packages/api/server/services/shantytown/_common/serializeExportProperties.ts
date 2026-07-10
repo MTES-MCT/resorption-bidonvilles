@@ -1254,7 +1254,7 @@ export default (closingSolutions: ClosingSolution[]) => {
                     return null;
                 }
 
-                // UIDs des phases initiales (définis dans les migrations 30000084-03 et 30000113-01)
+                // UIDs des phases initiales (définis dans les migrations 30000085-03 et 30000113-01)
                 const STARTING_PHASE_UIDS = new Set([
                     'sociological_diagnosis',
                     'social_assessment',
