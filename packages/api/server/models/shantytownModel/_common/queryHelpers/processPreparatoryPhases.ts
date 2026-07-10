@@ -5,6 +5,7 @@ const INITIAL_PHASE_UIDS = new Set([
     'sociological_diagnosis',
     'social_assessment',
     'political_validation',
+    'technical_diagnosis',
 ]);
 
 type TownPhase = {
@@ -33,7 +34,7 @@ export default function processPreparatoryPhases(
                 .filter(p => INITIAL_PHASE_UIDS.has(p.preparatoryPhaseId))
                 .map(p => p.preparatoryPhaseId);
 
-            townsHash[shantytownId].hasInitialResorptionPhases = initialPhasesPresent.length === 3;
+            townsHash[shantytownId].hasInitialResorptionPhases = initialPhasesPresent.length === 4;
         }
     });
     /* eslint-enable no-param-reassign */
