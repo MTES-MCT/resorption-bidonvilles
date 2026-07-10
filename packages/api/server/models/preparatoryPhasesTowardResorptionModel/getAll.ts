@@ -8,6 +8,7 @@ export default async (startingPhasesOnly?: boolean): Promise<PreparatoryPhaseTow
             uid,
             name,
             is_a_starting_phase,
+            date_label,
             position
         FROM 
             preparatory_phases_toward_resorption pptr`;
