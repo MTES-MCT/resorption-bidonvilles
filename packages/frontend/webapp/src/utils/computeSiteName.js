@@ -1,6 +1,6 @@
 export default function computeSiteName(shantytown) {
     if (shantytown.name) {
-        return shantytown.name.replace(/^["']/, "");
+        return shantytown.name.replace(/^["'«»]/, "");
     }
 
     const parts = [
