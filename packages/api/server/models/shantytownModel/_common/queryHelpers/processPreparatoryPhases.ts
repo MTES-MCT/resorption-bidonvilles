@@ -34,7 +34,7 @@ export default function processPreparatoryPhases(
                 .filter(p => INITIAL_PHASE_UIDS.has(p.preparatoryPhaseId))
                 .map(p => p.preparatoryPhaseId);
 
-            townsHash[shantytownId].hasInitialResorptionPhases = initialPhasesPresent.length === 4;
+            townsHash[shantytownId].hasInitialResorptionPhases = initialPhasesPresent.length === INITIAL_PHASE_UIDS.size;
         }
     });
     /* eslint-enable no-param-reassign */
