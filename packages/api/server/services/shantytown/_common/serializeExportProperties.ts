@@ -1254,11 +1254,12 @@ export default (closingSolutions: ClosingSolution[]) => {
                     return null;
                 }
 
-                // UIDs des phases initiales (définis dans la migration 30000084-03)
+                // UIDs des phases initiales (définis dans les migrations 30000084-03 et 30000113-01)
                 const STARTING_PHASE_UIDS = new Set([
                     'sociological_diagnosis',
                     'social_assessment',
                     'political_validation',
+                    'technical_diagnosis',
                 ]);
 
                 // Séparer les phases initiales des autres phases en utilisant l'UID
