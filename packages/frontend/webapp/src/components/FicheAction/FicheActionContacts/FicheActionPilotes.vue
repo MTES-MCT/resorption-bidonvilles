@@ -41,7 +41,7 @@ import { defineProps, toRefs, computed, ref } from "vue";
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 import CarteUtilisateur from "@/components/CarteUtilisateur/CarteUtilisateur.vue";
 import { useActionsStore } from "@/stores/actions.store";
-import { useUserStore } from "@/stores/user.store";
+import usePhoneVisibility from "@/composables/usePhoneVisibility";
 
 const props = defineProps({
     action: Object,
@@ -49,11 +49,7 @@ const props = defineProps({
 const { action } = toRefs(props);
 const loading = ref(false);
 const actionsStore = useActionsStore();
-const userStore = useUserStore();
-
-const hidePhone = computed(() => {
-    return !userStore.user?.is_admin;
-});
+const { hidePhone } = usePhoneVisibility();
 const users = computed(() => {
     return action.value.managers.flatMap(({ users }) => users);
 });
