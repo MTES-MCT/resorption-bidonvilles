@@ -61,8 +61,9 @@ export default [
         .custom(async (value, { req }) => {
             // on vérifie, à minima, que les structures existent
             // il faudrait également vérifier que les structures en question ont l'accès en lecture
-            // au site concerné par le commentaire (@todo)
+            // au site concerné par le commentaire
             const organizations = await organizationModel.findByIds(value.map(({ id }) => id), false, req.user);
+
             if (organizations.length !== value.length) {
                 throw new Error('Une ou plusieurs structures ciblées n\'existent pas');
             }
@@ -84,7 +85,7 @@ export default [
         .custom(async (value) => {
             // on vérifie, à minima, que les utilisateurs existent
             // il faudrait également vérifier que les utilisateurs en question ont l'accès en lecture
-            // au site concerné par le commentaire (@todo)
+            // au site concerné par le commentaire
             const users = await userModel.findByIds(null, value.map(({ id }) => id));
             if (users.length !== value.length) {
                 throw new Error('Un ou plusieurs utilisateurs ciblés n\'existent pas');
