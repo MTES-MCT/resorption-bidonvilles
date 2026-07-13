@@ -11,7 +11,7 @@ const ERROR_RESPONSES = {
 };
 
 
-export default async (req, res, next) => {
+export default async function deleteComment(req, res, next) {
     let comments: { comments: ActionEnrichedComment[] };
     try {
         comments = await actionCommentService.deleteComment(req.user, req.params.id, req.params.commentId, req.body.message);
@@ -24,4 +24,4 @@ export default async (req, res, next) => {
     }
 
     return res.status(200).send(comments);
-};
+}

@@ -13,7 +13,7 @@ const ERRORS: ControllerErrors = {
     unknown_request: { code: 500, message: 'Requête inconnue' },
 };
 
-export default async (req, res, next) => {
+export default async function createComment(req, res, next) {
     if (!can(req.user).do('create', 'action_comment').on(req.body.action)) {
         return res.status(403).send({
             user_message: 'Vous n\'avez pas les droits suffisants pour créer un commentaire sur cette action',
@@ -34,4 +34,4 @@ export default async (req, res, next) => {
         });
         return next(error.nativeError ?? error);
     }
-};
+}
