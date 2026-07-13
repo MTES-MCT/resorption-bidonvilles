@@ -12,9 +12,7 @@ export type ClamAVResponse = {
 export default async function scanAttachment(file: Express.Multer.File): Promise<ClamAVResponse> {
     try {
         const formData = new FormData();
-        const bufferStream = new Readable();
-        bufferStream.push(file.buffer);
-        bufferStream.push(null);
+        const bufferStream = Readable.from([file.buffer]);
 
         formData.append('file', bufferStream, {
             filename: file.originalname,
