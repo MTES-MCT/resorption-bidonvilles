@@ -28,7 +28,7 @@ interface UserCreateCommentRequest extends Request {
     files: Express.Multer.File[];
 }
 
-export default async (req: UserCreateCommentRequest, res: Response, next: NextFunction) => {
+export default async function createComment(req: UserCreateCommentRequest, res: Response, next: NextFunction) {
     if (!can(req.user).do('create', 'shantytown_comment').on(req.body.shantytown)) {
         return res.status(403).send({
             user_message: 'Vous n\'avez pas les droits suffisants pour ajouter un message dans le journal de ce site.',
@@ -67,4 +67,4 @@ export default async (req: UserCreateCommentRequest, res: Response, next: NextFu
     return res.status(200).send({
         comments,
     });
-};
+}

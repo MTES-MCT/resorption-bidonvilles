@@ -13,10 +13,10 @@ const ERROR_RESPONSES = {
 };
 
 
-export default async (req, res, next) => {
+export default async function moderateComment(req, res, next) {
     let comments: { comments: ShantytownEnrichedComment[] };
     try {
-        comments = await deleteComment(req.user, parseInt(req.params.id, 10), parseInt(req.params.commentId, 10), req.body.message);
+        comments = await deleteComment(req.user, Number.parseInt(req.params.id, 10), Number.parseInt(req.params.commentId, 10), req.body.message);
     } catch (error) {
         const { code, message }: { code: number; message: string } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
         res.status(code).send({
@@ -26,4 +26,4 @@ export default async (req, res, next) => {
     }
 
     return res.status(200).send(comments);
-};
+}
