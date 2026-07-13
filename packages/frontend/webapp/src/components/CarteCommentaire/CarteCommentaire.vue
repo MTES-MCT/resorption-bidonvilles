@@ -75,7 +75,13 @@
             {{ comment.description }}
         </div>
         <div v-else class="mt-2">
+            <label
+                :for="`comment-edit-${comment.id}`"
+                class="block text-sm font-bold mb-1"
+                >Modifier le message</label
+            >
             <textarea
+                :id="`comment-edit-${comment.id}`"
                 v-model="editedDescription"
                 class="w-full p-2 border border-G300 rounded"
                 rows="4"
