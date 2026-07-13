@@ -2,8 +2,8 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
-import serializeComment from '#server/models/shantytownModel/_common/serializeComment';
-import { ShantytownCommentRow } from './ShantytownCommentRow';
+import serializeComment from '#server/models/shantytownCommentModel/serializeComment';
+import { ShantytownCommentRow } from '#server/models/shantytownCommentModel/ShantytownCommentRow.d';
 
 /**
  * @param {Number} id A shantytown_comment_id
