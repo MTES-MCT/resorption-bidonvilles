@@ -2,9 +2,12 @@ import { trim } from 'validator';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import userModel from '#server/models/userModel';
 import ServiceError from '#server/errors/ServiceError';
+import assertIsCommentOwner from '#server/utils/comment/assertIsCommentOwner';
+import runUpdateComment from '#server/utils/comment/runUpdateComment';
 import { AuthUser } from '#server/middlewares/authMiddleware';
-import enrichCommentsAttachments from './enrichCommentsAttachments';
 import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
+import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
+import enrichCommentsAttachments from './enrichCommentsAttachments';
 
 export default async function updateComment(
     user: AuthUser,
@@ -12,48 +15,28 @@ export default async function updateComment(
     commentId: number,
     description: string,
 ): Promise<{ comments: ShantytownEnrichedComment[], numberOfWatchers: number }> {
-    // Récupération des commentaires du site
-    let commentsObject;
-    try {
-        commentsObject = await shantytownCommentModel.findByShantytown(user, [shantytownId.toString()]);
-    } catch (error) {
-        throw new ServiceError('fetch_failed', error);
-    }
+    await runUpdateComment<ShantytownRawComment>(
+        user.id,
+        commentId,
+        description,
+        {
+            fetchComments: async () => {
+                const commentsObject = await shantytownCommentModel.findByShantytown(user, [shantytownId.toString()]);
+                return commentsObject[shantytownId] || [];
+            },
+            findComment: (comments, id) => comments.find(({ id: commentIdInList }) => commentIdInList === Number.parseInt(id.toString(), 10)),
+            assertIsOwner: assertIsCommentOwner,
+            sanitizeDescription: (desc) => {
+                const trimmedDescription = trim(desc ?? '');
+                if (trimmedDescription === '') {
+                    throw new ServiceError('data_incomplete', new Error('La description du commentaire ne peut pas être vide'));
+                }
+                return trimmedDescription;
+            },
+            persistUpdate: async trimmedDescription => shantytownCommentModel.update(commentId, user.id, trimmedDescription),
+        },
+    );
 
-    const comments = commentsObject[shantytownId] || [];
-
-    // Vérification que le commentaire existe
-    const comment = comments.find(({ id }) => id === Number.parseInt(commentId.toString(), 10));
-    if (comment === undefined) {
-        throw new ServiceError('fetch_failed', new Error('Le commentaire à modifier n\'a pas été retrouvé en base de données'));
-    }
-
-    // Vérification que l'utilisateur est l'auteur
-    const isOwner: boolean = comment.createdBy.id === user.id;
-    if (!isOwner) {
-        throw new ServiceError('permission_denied', new Error('Seul l\'auteur peut modifier son commentaire'));
-    }
-
-    // Validation de la description
-    const trimmedDescription = trim(description ?? '');
-    if (trimmedDescription === '') {
-        throw new ServiceError('data_incomplete', new Error('La description du commentaire ne peut pas être vide'));
-    }
-
-    // Mise à jour du commentaire
-    // (la clause WHERE created_by = :userId du modèle sert de garde-fou : seul l'auteur
-    // peut effectivement modifier la ligne, même si ce contrôle est déjà fait plus haut)
-    let updatedRows: { shantytown_comment_id: number }[];
-    try {
-        updatedRows = await shantytownCommentModel.update(commentId, user.id, trimmedDescription);
-    } catch (error) {
-        throw new ServiceError('update_failed', error);
-    }
-    if (updatedRows.length === 0) {
-        throw new ServiceError('permission_denied', new Error('Seul l\'auteur peut modifier son commentaire (contrôle base de données)'));
-    }
-
-    // Récupération de la liste mise à jour des commentaires
     let updatedCommentsObject;
     try {
         updatedCommentsObject = await shantytownCommentModel.findByShantytown(user, [shantytownId.toString()]);
@@ -63,7 +46,6 @@ export default async function updateComment(
 
     const rawComments = updatedCommentsObject[shantytownId] || [];
 
-    // Enrichissement des pièces jointes
     let commentsWithEnrichedAttachments: ShantytownEnrichedComment[] = [];
     try {
         commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => enrichCommentsAttachments(rawComment)));
@@ -72,7 +54,6 @@ export default async function updateComment(
         console.error(error);
     }
 
-    // Récupération du nombre de watchers
     let numberOfWatchers = 0;
     try {
         const watchers = await userModel.getShantytownWatchers(shantytownId);
