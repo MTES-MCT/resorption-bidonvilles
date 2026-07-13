@@ -22,7 +22,7 @@ interface UserUpdateCommentRequest extends Request {
     };
 }
 
-export default async (req: UserUpdateCommentRequest, res: Response, next: NextFunction) => {
+export default async function updateComment(req: UserUpdateCommentRequest, res: Response, next: NextFunction) {
     let result: { comment: ActionEnrichedComment };
     try {
         result = await actionCommentService.updateComment(
@@ -40,4 +40,4 @@ export default async (req: UserUpdateCommentRequest, res: Response, next: NextFu
     }
 
     return res.status(200).send(result);
-};
+}

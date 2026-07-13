@@ -2,9 +2,9 @@ import { type ApplicationWithCustomRoutes } from '#server/loaders/customRouteMet
 import validator from './actionComment.updateComment.validator';
 import controller from './actionComment.updateComment';
 
-export default (app: ApplicationWithCustomRoutes): void => {
+export default function updateCommentRoute(app: ApplicationWithCustomRoutes): void {
     app.customRoutes.patch('/actions/:id/comments/:commentId', controller, validator, {
         authenticate: true,
         multipart: false,
     });
-};
+}
