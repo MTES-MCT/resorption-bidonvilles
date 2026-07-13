@@ -2,7 +2,7 @@
     <div class="bg-G100">
         <div class="mb-4 pl-2 p-1 text-lg font-bold">Phases Initiales</div>
         <div
-            class="grid md:grid-cols-2 lg:grid-cols-4 justify-between items-center gap-2 mb-2"
+            class="grid lg:grid-cols-2 xl:grid-cols-4 justify-between items-center gap-2 mb-2"
         >
             <CartePhaseResorption
                 v-for="phase in phases_initiales"
