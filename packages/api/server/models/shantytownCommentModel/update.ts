@@ -6,8 +6,7 @@ const update = async (commentId: number, userId: number, description: string, tr
         `UPDATE shantytown_comments
          SET
             description = :description,
-            updated_at = NOW(),
-            updated_by = :userId
+            updated_at = NOW()
          WHERE shantytown_comment_id = :commentId
             AND created_by = :userId
          RETURNING shantytown_comment_id`,
