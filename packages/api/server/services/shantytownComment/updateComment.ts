@@ -1,4 +1,4 @@
-import validator from 'validator';
+import { trim } from 'validator';
 import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import userModel from '#server/models/userModel';
 import ServiceError from '#server/errors/ServiceError';
@@ -35,7 +35,7 @@ export default async function updateComment(
     }
 
     // Validation de la description
-    const trimmedDescription = validator.trim(description ?? '');
+    const trimmedDescription = trim(description ?? '');
     if (trimmedDescription === '') {
         throw new ServiceError('data_incomplete', new Error('La description du commentaire ne peut pas être vide'));
     }
