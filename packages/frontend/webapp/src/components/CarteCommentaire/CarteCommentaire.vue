@@ -171,7 +171,7 @@ async function saveEdit() {
         await onUpdate.value(comment.value.id, editedDescription.value);
         isEditing.value = false;
         editedDescription.value = "";
-    } catch (error) {
+    } catch {
         editError.value =
             "La modification du message a échoué. Veuillez réessayer.";
     } finally {
