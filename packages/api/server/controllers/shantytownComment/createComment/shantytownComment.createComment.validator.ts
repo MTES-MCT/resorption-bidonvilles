@@ -74,7 +74,7 @@ export default [
 
     body('targets.users')
         .customSanitizer((value, { req }) => {
-            if (!req.body.targets || req.body.targets.mode !== 'custom') {
+            if (req.body.targets?.mode !== 'custom') {
                 return [];
             }
 
