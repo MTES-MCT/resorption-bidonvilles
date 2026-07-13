@@ -1,6 +1,8 @@
 import { trim } from 'validator';
 import actionModel from '#server/models/actionModel';
 import ServiceError from '#server/errors/ServiceError';
+import assertIsCommentOwner from '#server/utils/comment/assertIsCommentOwner';
+import runUpdateComment from '#server/utils/comment/runUpdateComment';
 import Action, { Comment } from '#root/types/resources/Action.d';
 import { ActionEnrichedComment } from '#root/types/resources/ActionCommentEnriched.d';
 import { User } from '#root/types/resources/User.d';
@@ -12,46 +14,28 @@ export default async function updateComment(
     commentId: number,
     description: string,
 ): Promise<{ comment: ActionEnrichedComment }> {
-    // Récupération de l'action
-    let actions: Action[];
-    try {
-        actions = await actionModel.fetch(user, [actionId]);
-    } catch (error) {
-        throw new ServiceError('fetch_failed', error);
-    }
+    await runUpdateComment<Comment>(
+        user.id,
+        commentId,
+        description,
+        {
+            fetchComments: async () => {
+                const actions = await actionModel.fetch(user, [actionId]);
+                return actions[0].comments;
+            },
+            findComment: (comments, id) => comments.find(({ id: commentIdInList }) => commentIdInList === Number.parseInt(id.toString(), 10)),
+            assertIsOwner: assertIsCommentOwner,
+            sanitizeDescription: (desc) => {
+                const trimmedDescription = trim(desc ?? '');
+                if (trimmedDescription === '') {
+                    throw new ServiceError('data_incomplete', new Error('La description du commentaire ne peut pas être vide'));
+                }
+                return trimmedDescription;
+            },
+            persistUpdate: async trimmedDescription => actionModel.updateComment(commentId, user.id, trimmedDescription),
+        },
+    );
 
-    // Vérification que le commentaire existe
-    const comment: Comment = actions[0].comments.find(({ id }) => id === Number.parseInt(commentId.toString(), 10));
-    if (comment === undefined) {
-        throw new ServiceError('fetch_failed', new Error('Le commentaire à modifier n\'a pas été retrouvé en base de données'));
-    }
-
-    // Vérification que l'utilisateur est l'auteur
-    const isOwner: boolean = comment.createdBy.id === user.id;
-    if (!isOwner) {
-        throw new ServiceError('permission_denied', new Error('Seul l\'auteur peut modifier son commentaire'));
-    }
-
-    // Validation de la description
-    const trimmedDescription = trim(description ?? '');
-    if (trimmedDescription === '') {
-        throw new ServiceError('data_incomplete', new Error('La description du commentaire ne peut pas être vide'));
-    }
-
-    // Mise à jour du commentaire
-    // (la clause WHERE created_by = :userId du modèle sert de garde-fou : seul l'auteur
-    // peut effectivement modifier la ligne, même si ce contrôle est déjà fait plus haut)
-    let updatedRows: { action_comment_id: number }[];
-    try {
-        updatedRows = await actionModel.updateComment(commentId, user.id, trimmedDescription);
-    } catch (error) {
-        throw new ServiceError('update_failed', error);
-    }
-    if (updatedRows.length === 0) {
-        throw new ServiceError('permission_denied', new Error('Seul l\'auteur peut modifier son commentaire (contrôle base de données)'));
-    }
-
-    // Récupération de la liste mise à jour des commentaires
     let updatedActions: Action[];
     try {
         updatedActions = await actionModel.fetch(user, [actionId]);
@@ -59,10 +43,8 @@ export default async function updateComment(
         throw new ServiceError('fetch_failed', error);
     }
 
-    // Récupération du commentaire mis à jour
     const updatedComment = updatedActions[0].comments.find(({ id }) => id === Number.parseInt(commentId.toString(), 10));
 
-    // Enrichissement avec les pièces jointes
     let enrichedComment: ActionEnrichedComment;
     try {
         enrichedComment = await enrichCommentsAttachments(updatedComment);
