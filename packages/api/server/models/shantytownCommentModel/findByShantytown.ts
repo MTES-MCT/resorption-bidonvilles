@@ -3,9 +3,9 @@ import { QueryTypes } from 'sequelize';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
 import { AuthUser } from '#server/middlewares/authMiddleware';
-import serializeComment from '#server/models/shantytownModel/_common/serializeComment';
+import serializeComment from '#server/models/shantytownCommentModel/serializeComment';
+import { ShantytownCommentRow } from '#server/models/shantytownCommentModel/ShantytownCommentRow.d';
 import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
-import { ShantytownCommentRow } from './ShantytownCommentRow.d';
 
 type CommentObject = { [key: number]: ShantytownRawComment[] };
 
