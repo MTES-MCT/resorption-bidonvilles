@@ -25,7 +25,6 @@ const REQUESTER_CAMPAIGN = 'demandeur-email';
 const USER_CAMPAIGN = 'utilisateur-email';
 const INVITE_CAMPAIGN = 'invite-email';
 const SUMMARY_CAMPAIGN = 'recap-activite-email';
-const COMMUNITY_CAMPAIGN = 'community-email';
 
 type MailOptions = {
     preserveRecipient?: boolean,
@@ -647,24 +646,6 @@ export default {
             variables: {
                 recipientName: formatName(recipient),
                 connexionUrl: `${connexionUrl}?${utm}`,
-                backUrl,
-                blogUrl,
-                webappUrl: `${webappUrl}?${utm}`,
-            },
-            preserveRecipient,
-        });
-    },
-
-    sendUserEntraideInvitation: (recipient, options: MailOptions = {}) => {
-        const { preserveRecipient } = options;
-
-        const utm = generateTrackingUTM(USER_CAMPAIGN, '3S-entraide');
-
-        return mailService.send('user_entraide_invitation', {
-            recipient,
-            variables: {
-                recipientName: formatName(recipient),
-                entraideUrl: `${webappUrl}?${utm}`,
                 backUrl,
                 blogUrl,
                 webappUrl: `${webappUrl}?${utm}`,
