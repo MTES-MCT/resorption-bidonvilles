@@ -319,8 +319,7 @@ const router = createRouter({
             component: () => import("@/views/FicheStructureView.vue"),
             meta: {
                 title: "Consulter la fiche d'une structure",
-                navTab: "communaute",
-                communauteTab: "annuaire",
+                navTab: "annuaire",
                 displayOrderOnSiteMap: 0,
             },
         },
