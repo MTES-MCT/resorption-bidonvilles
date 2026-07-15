@@ -2,7 +2,7 @@
     <DsfrButton
         v-if="canUseFavorites"
         size="sm"
-        :icon="isFavorite ? 'ri:star-fill' : 'ri:star-line'"
+        :icon="isFavorite ? 'ri:pushpin-fill' : 'ri:pushpin-line'"
         secondary
         :label="isFavorite ? 'Retirer des sites épinglés' : 'Épingler ce site'"
         :aria-label="
