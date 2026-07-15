@@ -19,8 +19,6 @@ import formatName from './_common/formatName';
 import getAdminsFor from './getAdminsFor';
 import getHistory from './getHistory';
 import getLocationWatchers from './getLocationWatchers';
-import getQuestionSubscribers from './getQuestionSubscribers';
-import getQuestionWatchers from './getQuestionWatchers';
 import getNationalAdmins from './_common/getNationalAdmins';
 import getShantytownWatchers from './getShantytownWatchers';
 import getActionObservers from './getActionObservers';
@@ -58,8 +56,6 @@ export default {
     getAdminsFor,
     getHistory,
     getLocationWatchers,
-    getQuestionSubscribers,
-    getQuestionWatchers,
     getNationalAdmins,
     getShantytownWatchers,
     getActionObservers,
