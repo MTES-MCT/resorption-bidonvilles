@@ -11,7 +11,7 @@ interface AddFavoriteRequest extends Request {
 
 const ERRORS = {
     permission_denied: { status: 403, message: 'Vous n\'avez pas les droits pour effectuer cette action' },
-    write_failed: { status: 500, message: 'Une erreur est survenue lors de l\'ajout du favori' },
+    write_failed: { status: 500, message: 'Une erreur est survenue lors de l\'ajout du site épinglé' },
     undefined: { status: 500, message: 'Une erreur inconnue est survenue' },
 };
 

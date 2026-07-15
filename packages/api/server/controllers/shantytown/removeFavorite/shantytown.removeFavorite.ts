@@ -11,7 +11,7 @@ interface RemoveFavoriteRequest extends Request {
 
 const ERRORS = {
     permission_denied: { status: 403, message: 'Vous n\'avez pas les droits pour effectuer cette action' },
-    delete_failed: { status: 500, message: 'Une erreur est survenue lors de la suppression du favori' },
+    delete_failed: { status: 500, message: 'Une erreur est survenue lors de la suppression du site épinglé' },
     undefined: { status: 500, message: 'Une erreur inconnue est survenue' },
 };
 
