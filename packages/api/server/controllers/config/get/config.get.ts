@@ -1,7 +1,7 @@
 import configService from '#server/services/config/index';
 import { NextFunction, Request, Response } from 'express';
-import { User } from '#root/types/resources/User.d';
 import { ControllerErrors } from '#server/errors/ControllerErrors';
+import { User } from '#root/types/resources/User.d';
 
 interface ConfigListRequest extends Request {
     user: User

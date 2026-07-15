@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 
 import userService from '#server/services/user/index';
 import contactService from '#server/services/contact/index';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 import { User } from '#root/types/resources/User.d';
 import { ContactBody } from '#root/types/inputs/ContactBody.d';
-import { ControllerErrors } from '#server/errors/ControllerErrors';
 
 interface ContactRequest extends Request {
     body: ContactBody,

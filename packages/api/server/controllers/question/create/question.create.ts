@@ -1,6 +1,6 @@
 import questionService from '#server/services/question';
-import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 import { ControllerErrors } from '#server/errors/ControllerErrors';
+import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 
 const ERRORS: ControllerErrors = {
     insert_failed: { code: 500, message: 'Votre question n\'a pas pu être enregistrée.' },

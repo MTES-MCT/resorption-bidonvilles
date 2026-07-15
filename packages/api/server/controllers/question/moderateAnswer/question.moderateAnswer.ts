@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import deleteAnswer from '#server/services/answer/deleteAnswer';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 import { RawAnswer } from '#root/types/resources/AnswerRaw.d';
 import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
-import { ControllerErrors } from '#server/errors/ControllerErrors';
 
 interface DeleteAnswerRequest extends Request {
     answer: RawAnswer,

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import actionService from '#server/services/action/actionService';
-import { User } from '#root/types/resources/User.d';
 import { ControllerErrors } from '#server/errors/ControllerErrors';
+import { User } from '#root/types/resources/User.d';
 
 const ERRORS: ControllerErrors = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
