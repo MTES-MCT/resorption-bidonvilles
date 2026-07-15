@@ -8,7 +8,7 @@ interface ListFavoritesRequest extends Request {
 
 const ERRORS = {
     permission_denied: { status: 403, message: 'Vous n\'avez pas les droits pour effectuer cette action' },
-    fetch_failed: { status: 500, message: 'Une erreur est survenue lors de la récupération des favoris' },
+    fetch_failed: { status: 500, message: 'Une erreur est survenue lors de la récupération des sites épinglés' },
     undefined: { status: 500, message: 'Une erreur inconnue est survenue' },
 };
 
