@@ -49,7 +49,7 @@ const isLoadingTown = computed(() => favoritesStore.isLoadingId(props.townId));
 onMounted(() => {
     if (
         canUseFavorites.value &&
-        Object.keys(favoritesStore.favoriteIds).length === 0 &&
+        favoritesStore.favoriteIds.size === 0 &&
         !favoritesStore.isLoading
     ) {
         favoritesStore.fetch();

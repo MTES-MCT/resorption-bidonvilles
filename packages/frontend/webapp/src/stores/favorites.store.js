@@ -10,7 +10,7 @@ import { useUserStore } from "@/stores/user.store";
 import filterShantytowns from "@/utils/filterShantytowns";
 
 export const useFavoritesStore = defineStore("favorites", () => {
-    const favoriteIds = ref({});
+    const favoriteIds = ref(new Set());
     const isLoading = ref(false);
     const loadingIds = ref(new Set());
     const error = ref(null);
@@ -22,8 +22,8 @@ export const useFavoritesStore = defineStore("favorites", () => {
 
     const favoriteTowns = computed(() => {
         const townsStore = useTownsStore();
-        return Object.keys(favoriteIds.value)
-            .map((id) => townsStore.hash[Number(id)])
+        return [...favoriteIds.value]
+            .map((id) => townsStore.hash[id])
             .filter(Boolean);
     });
 
@@ -86,7 +86,7 @@ export const useFavoritesStore = defineStore("favorites", () => {
         error.value = null;
         try {
             const ids = await fetchFavorites();
-            favoriteIds.value = Object.fromEntries(ids.map((id) => [id, true]));
+            favoriteIds.value = new Set(ids);
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             throw e;
@@ -100,7 +100,7 @@ export const useFavoritesStore = defineStore("favorites", () => {
         loadingIds.value.add(townId);
         try {
             await addFavorite(townId);
-            favoriteIds.value[townId] = true;
+            favoriteIds.value.add(townId);
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             throw e;
@@ -114,7 +114,7 @@ export const useFavoritesStore = defineStore("favorites", () => {
         loadingIds.value.add(townId);
         try {
             await removeFavorite(townId);
-            delete favoriteIds.value[townId];
+            favoriteIds.value.delete(townId);
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             throw e;
@@ -124,7 +124,7 @@ export const useFavoritesStore = defineStore("favorites", () => {
     }
 
     function isFavorite(townId) {
-        return !!favoriteIds.value[townId];
+        return favoriteIds.value.has(townId);
     }
 
     function isLoadingId(townId) {
