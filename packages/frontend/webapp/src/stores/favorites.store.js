@@ -98,7 +98,7 @@ export const useFavoritesStore = defineStore("favorites", () => {
         error.value = null;
         try {
             await addFavorite(townId);
-            favoriteIds.value = { ...favoriteIds.value, [townId]: true };
+            favoriteIds.value[townId] = true;
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             throw e;
@@ -109,9 +109,7 @@ export const useFavoritesStore = defineStore("favorites", () => {
         error.value = null;
         try {
             await removeFavorite(townId);
-            const updated = { ...favoriteIds.value };
-            delete updated[townId];
-            favoriteIds.value = updated;
+            delete favoriteIds.value[townId];
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             throw e;
