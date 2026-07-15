@@ -74,7 +74,7 @@
                                     small
                                 />
                                 des actions ont des indicateurs mis à jour dans
-                                6 derniers mois ({{
+                                les 6 derniers mois ({{
                                     updatedActionsInTheLastSixMonths
                                 }}
                                 actions sur {{ currentActionsCount }} )
