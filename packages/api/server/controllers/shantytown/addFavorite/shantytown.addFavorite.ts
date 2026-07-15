@@ -1,13 +1,6 @@
 import userFavoriteShantytown from '#server/services/userFavoriteShantytown';
-import { type Request, type Response, type NextFunction } from 'express';
-import { AuthUser } from '#server/middlewares/authMiddleware';
-
-interface AddFavoriteRequest extends Request {
-    user: AuthUser;
-    params: {
-        id: string;
-    };
-}
+import { type Response, type NextFunction } from 'express';
+import { ManageFavoriteRequest } from '#root/types/resources/ManageFavoriteRequestInterface.d';
 
 const ERRORS = {
     permission_denied: { status: 403, message: 'Vous n\'avez pas les droits pour effectuer cette action' },
@@ -15,7 +8,7 @@ const ERRORS = {
     undefined: { status: 500, message: 'Une erreur inconnue est survenue' },
 };
 
-export default async function addFavoriteController(req: AddFavoriteRequest, res: Response, next: NextFunction) {
+export default async function addFavoriteController(req: ManageFavoriteRequest, res: Response, next: NextFunction) {
     try {
         await userFavoriteShantytown.add(req.user, Number.parseInt(req.params.id, 10));
         return res.status(200).json({});
