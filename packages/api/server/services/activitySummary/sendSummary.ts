@@ -8,7 +8,7 @@ moment.locale('fr');
 
 const { sendActivitySummary } = mailsUtils;
 
-export default async (argFrom: Date, argTo: Date, summaries: ActivityNationalSummary, subscribers: Array<User>): Promise<any> => {
+export default async function sendSummary(argFrom: Date, argTo: Date, summaries: ActivityNationalSummary, subscribers: Array<User>): Promise<any> {
     const from = moment(argFrom);
     const to = moment(argTo);
 
@@ -44,4 +44,4 @@ export default async (argFrom: Date, argTo: Date, summaries: ActivityNationalSum
                 },
             });
         });
-};
+}
