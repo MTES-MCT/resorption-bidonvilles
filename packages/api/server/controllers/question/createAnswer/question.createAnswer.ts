@@ -1,7 +1,8 @@
 import answerService from '#server/services/answer';
 import { CreateAnswerServiceResponse } from '#server/services/answer/createAnswer';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     insert_failed: { code: 500, message: 'Votre réponse n\'a pas pu être enregistrée.' },
     upload_failed: { code: 500, message: 'L\'enregistrement des pièces jointes a échoué.' },
     fetch_failed: { code: 500, message: 'Votre réponse a bien été enregistrée mais la liste des réponse n\'a pas pu être actualisée.' },

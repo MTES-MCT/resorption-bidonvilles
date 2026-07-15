@@ -20,7 +20,7 @@ export default async function fetchByShantytown(user: User, shantytownIds: numbe
 
     const hash = hashActions(actions);
     mergeTopics(hash, topics);
-    mergeOperators(hash, operators);
+    mergeOperators(hash, operators, user);
     computeActionNames(hash);
 
     return Object.values(hash);

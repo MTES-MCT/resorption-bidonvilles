@@ -1,7 +1,8 @@
 import actionService from '#server/services/action/actionService';
 import can from '#server/utils/permission/can';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     write_fail: { code: 500, message: 'Une erreur est survenue lors de l\'écriture en base de données' },
     upload_failed: { code: 500, message: 'L\'enregistrement des pièces jointes a échoué.' },
     commit_failed: { code: 500, message: 'L\'enregistrement du commentaire et/ou des pièces jointes a échoué.' },

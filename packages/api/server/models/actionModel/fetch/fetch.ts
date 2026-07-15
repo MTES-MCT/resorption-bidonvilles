@@ -44,8 +44,8 @@ export default async function fetch(user: User, actionIds?: number[], transactio
     const hash = hashActions(actions);
     mergeAddresses(hash, addresses);
     mergeTopics(hash, topics);
-    mergeManagers(hash, managers);
-    mergeOperators(hash, operators);
+    mergeManagers(hash, managers, user);
+    mergeOperators(hash, operators, user);
     computeActionNames(hash);
     mergeShantytowns(hash, shantytowns);
     mergeComments(hash, comments);

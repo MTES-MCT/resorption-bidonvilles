@@ -1,19 +1,22 @@
 import ActionUserRow from './ActionUserRow.d';
 import { ActionOrganizationMember, ActionOrganization } from '#root/types/resources/Action.d';
+import { User } from '#root/types/resources/User.d';
 
 export default function mergeOperators<T extends { operators: ActionOrganization[] }>(
     hash: { [key: number]: T },
     operators: ActionUserRow[],
+    requestingUser?: User,
 ): void {
     operators.forEach((row) => {
         const index = hash[row.action_id].operators.findIndex(({ id }) => id === row.organization_id);
+        const canViewPhone = requestingUser?.is_admin === true;
         const user: ActionOrganizationMember = {
             id: row.id,
             email: row.email,
             first_name: row.first_name,
             last_name: row.last_name,
             position: row.position,
-            phone: row.phone,
+            phone: canViewPhone ? row.phone : null,
             role: row.admin_role_name || row.regular_role_name,
             is_admin: row.admin_role_name !== null,
             is_principal: row.is_principal,

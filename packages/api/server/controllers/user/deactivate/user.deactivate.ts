@@ -1,8 +1,9 @@
 import userService from '#server/services/user/index';
 import { Request, NextFunction, Response } from 'express';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 import { User } from '#root/types/resources/User.d';
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
     deactivation_permission_failure: { code: 500, message: 'Vous n\'avez pas la permission de désactiver ce compte' },
     deactivation_failure: { code: 500, message: 'Une erreur est survenue lors de la désactivation du compte' },
