@@ -1,7 +1,6 @@
 import svgSearch from "@/assets/img/dsfr/search.svg";
 import svgUpdate from "@/assets/img/dsfr/update.svg";
 import svgAction from "@/assets/img/dsfr/human-cooperation.svg";
-import svgCommunity from "@/assets/img/dsfr/community.svg";
 import svgListSites from "@/assets/img/dsfr/location-france.svg";
 import svgSiteAdd from "@/assets/img/dsfr/site-add.svg";
 import svgAllActions from "@/assets/img/dsfr/all-actions.svg";
