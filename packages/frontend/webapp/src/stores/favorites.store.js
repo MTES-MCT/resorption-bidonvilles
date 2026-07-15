@@ -12,6 +12,7 @@ import filterShantytowns from "@/utils/filterShantytowns";
 export const useFavoritesStore = defineStore("favorites", () => {
     const favoriteIds = ref({});
     const isLoading = ref(false);
+    const loadingIds = ref(new Set());
     const error = ref(null);
 
     // Filtre de l'onglet « Mes sites », piloté par le composant Filter
@@ -96,28 +97,38 @@ export const useFavoritesStore = defineStore("favorites", () => {
 
     async function add(townId) {
         error.value = null;
+        loadingIds.value.add(townId);
         try {
             await addFavorite(townId);
             favoriteIds.value[townId] = true;
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             throw e;
+        } finally {
+            loadingIds.value.delete(townId);
         }
     }
 
     async function remove(townId) {
         error.value = null;
+        loadingIds.value.add(townId);
         try {
             await removeFavorite(townId);
             delete favoriteIds.value[townId];
         } catch (e) {
             error.value = e?.user_message || "Une erreur inconnue est survenue";
             throw e;
+        } finally {
+            loadingIds.value.delete(townId);
         }
     }
 
     function isFavorite(townId) {
         return !!favoriteIds.value[townId];
+    }
+
+    function isLoadingId(townId) {
+        return loadingIds.value.has(townId);
     }
 
     return {
@@ -132,5 +143,6 @@ export const useFavoritesStore = defineStore("favorites", () => {
         add,
         remove,
         isFavorite,
+        isLoadingId,
     };
 });

@@ -2,8 +2,15 @@
     <DsfrButton
         v-if="canUseFavorites"
         size="sm"
-        :icon="isFavorite ? 'ri:pushpin-fill' : 'ri:pushpin-line'"
+        :icon="
+            isLoadingTown
+                ? 'ri:loader-4-line'
+                : isFavorite
+                ? 'ri:pushpin-fill'
+                : 'ri:pushpin-line'
+        "
         secondary
+        :disabled="isLoadingTown"
         :label="isFavorite ? 'Retirer des sites épinglés' : 'Épingler ce site'"
         :aria-label="
             isFavorite ? 'Retirer des sites épinglés' : 'Épingler ce site'
@@ -19,7 +26,7 @@ import { useUserStore } from "@/stores/user.store";
 import { useFavoritesStore } from "@/stores/favorites.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { trackEvent } from "@/helpers/matomo";
-import { EXCLUDED_ROLES } from "@/utils/excluded_roles.js";    
+import { EXCLUDED_ROLES } from "@/utils/excluded_roles.js";
 
 const props = defineProps({
     townId: {
@@ -37,6 +44,7 @@ const canUseFavorites = computed(
 );
 
 const isFavorite = computed(() => favoritesStore.isFavorite(props.townId));
+const isLoadingTown = computed(() => favoritesStore.isLoadingId(props.townId));
 
 onMounted(() => {
     if (
@@ -49,6 +57,9 @@ onMounted(() => {
 });
 
 async function handleClick() {
+    if (isLoadingTown.value) {
+        return;
+    }
     try {
         if (isFavorite.value) {
             await favoritesStore.remove(props.townId);
