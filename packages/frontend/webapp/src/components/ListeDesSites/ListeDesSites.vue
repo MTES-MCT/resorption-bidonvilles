@@ -83,7 +83,7 @@ const emptyMessage = computed(() => {
     if (onlyFavorites) {
         return "Vous n'avez pas encore de site épinglé.";
     }
-    return "Vous n'avez aucun site épinglé ni site d'intervention.";
+    return "Vous n'avez ni site épinglé, ni site d'intervention.";
 });
 
 // Onglet actif : géré localement pour pouvoir inclure "favorites" sans polluer townsStore
