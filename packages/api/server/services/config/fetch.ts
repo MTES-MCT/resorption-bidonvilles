@@ -11,7 +11,6 @@ import expertiseTopicModel from '#server/models/expertiseTopicsModel/index';
 import fieldTypeModel from '#server/models/fieldTypeModel/index';
 import ownerTypeModel from '#server/models/ownerTypeModel/index';
 import permissionsDescription from '#server/permissions_description';
-import questionTagModel from '#server/models/questionTagModel/index';
 import regionModel from '#server/models/regionModel/index';
 import socialOriginsModel from '#server/models/socialOriginModel/index';
 import topicModel from '#server/models/topicModel/index';
@@ -39,7 +38,6 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
             fieldTypes,
             latestCharte,
             ownerTypes,
-            questionTags,
             regions,
             socialOrigins,
             topics,
@@ -59,7 +57,6 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
             fieldTypeModel.findAll(),
             charteEngagementModel.getLatest(),
             ownerTypeModel.findAll(),
-            questionTagModel.findAll(),
             regionModel.findAll(),
             socialOriginsModel.findAll(),
             topicModel.findAll(),
@@ -71,7 +68,7 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
 
         return {
             action_finance_types: actionFinanceTypes,
-            activation_token_expires_in: parseInt(config.activationTokenExpiresIn, 10) * 3600,
+            activation_token_expires_in: Number.parseInt(config.activationTokenExpiresIn, 10) * 3600,
             actor_themes: actorThemes,
             blog_url: config.blogUrl,
             changelog,
@@ -82,7 +79,6 @@ export default async (user: User): Promise<ConfigServiceFetchResponse> => {
             field_types: fieldTypes,
             owner_types: ownerTypes,
             permissions_description: permissionsDescription,
-            question_tags: questionTags,
             regions,
             comment_tags: commentTags,
             roles,

@@ -9,7 +9,6 @@ import { ElectricityType } from '../resources/ElectricityType.d';
 import { ExpertiseTopic } from '../resources/ExpertiseTopic.d';
 import { FieldType } from '../resources/FieldType.d';
 import { OwnerType } from '../resources/OwnerType.d';
-import { QuestionTag } from '../resources/QuestionGeneric';
 import { Region } from '../resources/Region.d';
 import { ShantytownCommentTag } from '../resources/ShantytownCommentTag.d';
 import { SocialOrigin } from '../resources/SocialOrigin.d';
@@ -34,7 +33,6 @@ export type ConfigServiceFetchResponse = {
     field_types: FieldType[],
     owner_types: OwnerType[],
     permissions_description: RolePermissionDescriptions,
-    question_tags: QuestionTag[],
     regions: Region[],
     comment_tags: ShantytownCommentTag[],
     social_origins: SocialOrigin[],
