@@ -215,14 +215,21 @@ const groupedFilters = computed(() => ({
     },
 }));
 const groupedSorts = {
-    open: [sorts.cityName, sorts.builtAt, sorts.updatedAt, sorts.declaredAt],
-    inProgress: [
+    open: [
         sorts.cityName,
+        sorts.siteName,
         sorts.builtAt,
         sorts.updatedAt,
         sorts.declaredAt,
     ],
-    close: [sorts.cityName, sorts.closedAt, sorts.updatedAt],
+    inProgress: [
+        sorts.cityName,
+        sorts.siteName,
+        sorts.builtAt,
+        sorts.updatedAt,
+        sorts.declaredAt,
+    ],
+    close: [sorts.cityName, sorts.siteName, sorts.closedAt, sorts.updatedAt],
 };
 
 const currentFilters = computed(() => {

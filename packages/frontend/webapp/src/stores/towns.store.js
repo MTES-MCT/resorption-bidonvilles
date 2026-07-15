@@ -32,6 +32,7 @@ import filterShantytowns from "@/utils/filterShantytowns";
 import { deleteAttachment } from "@/api/attachments.api";
 import { getMostRecentComment } from "@/utils/townLastUpdateManager";
 import getSince from "@/utils/getSince";
+import computeSiteName from "@/utils/computeSiteName";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -83,6 +84,14 @@ export const useTownsStore = defineStore("towns", () => {
                     return 1;
                 }
                 return 0;
+            };
+        }
+
+        if (sort.value === "siteName") {
+            return (a, b) => {
+                const nameA = computeSiteName(a);
+                const nameB = computeSiteName(b);
+                return nameA.localeCompare(nameB);
             };
         }
 
