@@ -16,10 +16,7 @@ import Layout from "@/components/Layout/Layout.vue";
 import Annuaire from "@/components/Annuaire/Annuaire.vue";
 
 const directoryStore = useDirectoryStore();
-const ariane = [
-    { label: "Accueil", to: "/" },
-    { label: "Annuaire" },
-];
+const ariane = [{ label: "Accueil", to: "/" }, { label: "Annuaire" }];
 
 onMounted(() => {
     if (!directoryStore.isLoaded) {
