@@ -84,15 +84,13 @@ export default async function query(where: Where | string = [], filters: UserQue
         latestCharte = charte.version;
     }
 
+
     const users: RawUser[] = await sequelize.query(
         `WITH user_options AS (
             SELECT fk_user, ARRAY_AGG(fk_option) AS options FROM user_permission_options GROUP BY fk_user
         ),
         email_unsubscriptions AS (
             SELECT fk_user, ARRAY_AGG(email_subscription) AS unsubscriptions FROM user_email_unsubscriptions GROUP BY fk_user
-        ),
-        question_subscriptions AS (
-            SELECT fk_user, ARRAY_AGG(fk_question::text || ',' || active::text) AS subscriptions FROM user_question_subscriptions GROUP BY fk_user
         ),
         user_expertise_topics AS (
             SELECT
@@ -133,7 +131,6 @@ export default async function query(where: Where | string = [], filters: UserQue
             users.deactivation_type,
             COALESCE(user_expertise_topics.topics, array[]::text[]) AS topics,
             COALESCE(email_unsubscriptions.unsubscriptions, array[]::enum_user_email_subscriptions_email_subscription[]) AS email_unsubscriptions,
-            COALESCE(question_subscriptions.subscriptions, array[]::text[]) AS question_subscriptions,
             user_log_last_access AS last_access,
             users.admin_comments,
             v_user_areas.is_national,
@@ -176,8 +173,6 @@ export default async function query(where: Where | string = [], filters: UserQue
             user_options ON user_options.fk_user = users.user_id
         LEFT JOIN
             email_unsubscriptions ON email_unsubscriptions.fk_user = users.user_id
-        LEFT JOIN
-            question_subscriptions ON question_subscriptions.fk_user = users.user_id
         LEFT JOIN
             user_expertise_topics ON user_expertise_topics.fk_user = users.user_id
         LEFT JOIN

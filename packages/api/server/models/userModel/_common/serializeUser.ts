@@ -5,7 +5,7 @@ import serializeUserAccess from './serializeUserAccess';
 import {
     RawInterventionArea, RawUser, RawUserAccess, UserQueryFilters,
 } from './query.d';
-import { User, UserQuestionSubscriptions, UserExpertiseTopicType } from '#root/types/resources/User.d';
+import { User, UserExpertiseTopicType } from '#root/types/resources/User.d';
 
 export default (user: RawUser, userAccesses: RawUserAccess[], interventionAreas: RawInterventionArea[], latestCharte: number, filters: UserQueryFilters, permissionMap: PermissionHash): User => {
     const serialized: User = {
@@ -42,7 +42,6 @@ export default (user: RawUser, userAccesses: RawUserAccess[], interventionAreas:
         },
         charte_engagement_a_jour: latestCharte === null || user.charte_engagement_signee === latestCharte,
         email_subscriptions: EMAIL_SUBSCRIPTIONS.filter(subscription => !user.email_unsubscriptions.includes(subscription)),
-        question_subscriptions: {},
         last_access: user.last_access !== null ? user.last_access.getTime() / 1000 : null,
         admin_comments: user.admin_comments,
         is_admin: user.is_admin,
@@ -76,11 +75,6 @@ export default (user: RawUser, userAccesses: RawUserAccess[], interventionAreas:
             access_request_message: user.access_request_message,
             permissions,
             permission_options: user.permission_options,
-            question_subscriptions: user.question_subscriptions.reduce((acc: UserQuestionSubscriptions, col) => {
-                const [questionId, active] = col.split(',');
-                acc[parseInt(questionId, 10)] = active === 'true';
-                return acc;
-            }, {}),
         });
     }
 
