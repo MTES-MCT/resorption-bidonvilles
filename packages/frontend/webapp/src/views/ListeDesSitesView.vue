@@ -23,15 +23,21 @@
 <script setup>
 import { computed, onMounted } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
+import { useFavoritesStore } from "@/stores/favorites.store";
+import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";
 
 import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import BandeauNotice from "@/components/BandeauNotice/BandeauNotice.vue";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import ListeDesSites from "@/components/ListeDesSites/ListeDesSites.vue";
+import { EXCLUDED_ROLES } from "@/utils/excluded_roles.js";
 
 const ariane = [{ label: "Accueil", to: "/" }, { label: "Sites" }];
 const townsStore = useTownsStore();
+const favoritesStore = useFavoritesStore();
+const userStore = useUserStore();
+
 const location = computed({
     get() {
         return {
@@ -54,11 +60,11 @@ const location = computed({
 
 onMounted(() => {
     if (townsStore.towns.length === 0) {
-        load();
+        townsStore.fetchTowns();
+    }
+
+    if (!EXCLUDED_ROLES.has(userStore.user?.role_id)) {
+        favoritesStore.fetch();
     }
 });
-
-function load() {
-    townsStore.fetchTowns();
-}
 </script>

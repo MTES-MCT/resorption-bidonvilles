@@ -9,6 +9,13 @@
                     class="flex flex-col flex-wrap sm:flex-row gap-2 items-start"
                 >
                     <Filter
+                        v-if="isFavoritesTab"
+                        title="Mes sites"
+                        :options="myTownsFilterOptions"
+                        v-model="favoritesStore.myTownsFilter"
+                        class="border-1 !border-primary rounded hover:bg-blue200 text-sm"
+                    />
+                    <Filter
                         v-for="filter in currentFilters.default"
                         :key="filter.id"
                         :title="filter.label"
@@ -79,7 +86,7 @@
             </div>
         </article>
 
-        <article class="shrink-0">
+        <article v-if="!isFavoritesTab" class="shrink-0">
             <p>Trier par</p>
             <Sort
                 v-model="townsStore.sort"
@@ -92,7 +99,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, toRefs } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
 import { trackEvent } from "@/helpers/matomo";
@@ -101,18 +108,43 @@ import sorts from "./ListeDesSites.tris";
 import useClosureYears from "@/composables/useClosureYears";
 import FilterClosureYear from "./FilterClosureYear.vue";
 
+import { useFavoritesStore } from "@/stores/favorites.store";
+
 import { Filter, Icon, Link, Sort } from "@resorptionbidonvilles/ui";
+
+const props = defineProps({
+    // Active le contexte de l'onglet « Mes sites » : ajoute le filtre « Mes sites »
+    // en tête, restreint aux filtres pertinents et masque le tri.
+    isFavoritesTab: {
+        type: Boolean,
+        default: false,
+    },
+});
+const { isFavoritesTab } = toRefs(props);
 
 const townsStore = useTownsStore();
 const userStore = useUserStore();
+const favoritesStore = useFavoritesStore();
 const displayOptionalFilters = ref(false);
 const { closureYears } = useClosureYears();
+
+// Options du filtre « Mes sites » (cases à cocher). Aucune case = union.
+const myTownsFilterOptions = [
+    { value: "intervention", label: "Les sites sur lesquels j'interviens" },
+    { value: "favorites", label: "Mes sites épinglés" },
+];
 
 const isFiltered = computed(() => {
     const filteredValues = Object.values(townsStore.filters.properties);
     const activeFiltersCount = filteredValues.filter(
         (value) => Array.isArray(value) && value.length > 0
     ).length;
+
+    // Sur l'onglet « Mes sites », le filtre « Mes sites » compte comme un filtre
+    // actif, pour proposer « Effacer les filtres » dès qu'il est renseigné.
+    if (isFavoritesTab.value && favoritesStore.myTownsFilter.length > 0) {
+        return activeFiltersCount >= 1;
+    }
 
     return activeFiltersCount >= 2;
 });
@@ -163,6 +195,24 @@ const groupedFilters = computed(() => ({
             filters.population,
         ],
     },
+    favorites: {
+        default: [
+            filters.population,
+            filters.fieldType,
+            filters.origin,
+            filters.conditions,
+        ],
+        optional: [
+            filters.target,
+            filters.actors,
+            filters.heatwave,
+            ...(userStore.hasJusticePermission ? [filters.justice] : []),
+            ...(userStore.hasJusticePermission
+                ? [filters.administrativeOrder]
+                : []),
+            ...(userStore.hasJusticePermission ? [filters.rhi] : []),
+        ],
+    },
 }));
 const groupedSorts = {
     open: [sorts.cityName, sorts.builtAt, sorts.updatedAt, sorts.declaredAt],
@@ -176,7 +226,8 @@ const groupedSorts = {
 };
 
 const currentFilters = computed(() => {
-    return groupedFilters.value[townsStore.filters.status];
+    const key = isFavoritesTab.value ? "favorites" : townsStore.filters.status;
+    return groupedFilters.value[key];
 });
 
 function showOptional() {
@@ -215,6 +266,9 @@ const isUeOnly = ref(false);
 const resetFilters = async () => {
     try {
         townsStore.resetFilters();
+        if (isFavoritesTab.value) {
+            favoritesStore.myTownsFilter = [];
+        }
     } catch (error) {
         // eslint-disable-next-line no-console
         console.error("Erreur lors de la suppression des filtres:", error);
