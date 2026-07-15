@@ -3,7 +3,18 @@ module.exports = {
         const transaction = await queryInterface.sequelize.transaction();
 
         try {
-            // 1. Drop triggers and constraints from question_attachments and answer_attachments
+            // 1. Delete rows from attachments referenced by question_attachments and answer_attachments.
+            // A DROP TABLE does not fire ON DELETE triggers, so this DELETE is required to trigger
+            // archive_deleted_attachment_before_deletion (copy into attachments_archives before removal),
+            // exactly like any other attachment deletion in the app (see services/attachment/cleanArchives.ts).
+            await queryInterface.sequelize.query(
+                `DELETE FROM attachments
+                 WHERE attachment_id IN (SELECT fk_attachment FROM question_attachments)
+                    OR attachment_id IN (SELECT fk_attachment FROM answer_attachments)`,
+                { transaction },
+            );
+
+            // 2. Drop triggers and constraints from question_attachments and answer_attachments
             await Promise.all([
                 queryInterface.sequelize.query(
                     'DROP TRIGGER IF EXISTS delete_actual_attachment ON question_attachments',
@@ -22,42 +33,42 @@ module.exports = {
                 queryInterface.removeConstraint('answer_attachments', 'fk_attachment', { transaction }),
             ]);
 
-            // 2. Drop question_attachments and answer_attachments tables
+            // 3. Drop question_attachments and answer_attachments tables
             await Promise.all([
                 queryInterface.dropTable('question_attachments', { transaction }),
                 queryInterface.dropTable('answer_attachments', { transaction }),
             ]);
 
-            // 3. Drop question_to_tags table (FK vers questions et question_tags)
+            // 4. Drop question_to_tags table (FK vers questions et question_tags)
             await Promise.all([
                 queryInterface.removeConstraint('question_to_tags', 'fk_question_question_to_tags', { transaction }),
                 queryInterface.removeConstraint('question_to_tags', 'fk_question_tag_question_to_tags', { transaction }),
             ]);
             await queryInterface.dropTable('question_to_tags', { transaction });
 
-            // 4. Drop user_question_subscriptions table (FK vers users et questions)
+            // 5. Drop user_question_subscriptions table (FK vers users et questions)
             await Promise.all([
                 queryInterface.removeConstraint('user_question_subscriptions', 'fk__user_question_subscriptions__user', { transaction }),
                 queryInterface.removeConstraint('user_question_subscriptions', 'fk__user_question_subscriptions__question', { transaction }),
             ]);
             await queryInterface.dropTable('user_question_subscriptions', { transaction });
 
-            // 5. Drop answers table (FK vers questions)
+            // 6. Drop answers table (FK vers questions)
             await Promise.all([
                 queryInterface.removeConstraint('answers', 'fk_answers_question', { transaction }),
                 queryInterface.removeConstraint('answers', 'fk_answer_creator', { transaction }),
             ]);
             await queryInterface.dropTable('answers', { transaction });
 
-            // 6. Drop questions table (FK vers users)
+            // 7. Drop questions table (FK vers users)
             await queryInterface.removeConstraint('questions', 'fk_question_creator', { transaction });
             await queryInterface.dropTable('questions', { transaction });
 
-            // 7. Drop question_tags table
+            // 8. Drop question_tags table
             await queryInterface.removeConstraint('question_tags', 'uk_question_tags_name', { transaction });
             await queryInterface.dropTable('question_tags', { transaction });
 
-            // 8. Delete email subscription
+            // 9. Delete email subscription
             await queryInterface.sequelize.query(
                 'DELETE FROM user_email_unsubscriptions WHERE email_subscription = \'community_new_question\'',
                 { transaction },
