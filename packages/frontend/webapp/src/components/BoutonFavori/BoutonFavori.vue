@@ -64,7 +64,11 @@ async function handleClick() {
             );
         } else {
             await favoritesStore.add(props.townId);
-            trackEvent("Favoris", "bookmarked_sites_add", `S${props.townId}`);
+            trackEvent(
+                "Sites épinglés",
+                "bookmarked_sites_add",
+                `S${props.townId}`
+            );
             notificationStore.success(
                 "Sites épinglés",
                 "Le site a été ajouté aux sites épinglés."
