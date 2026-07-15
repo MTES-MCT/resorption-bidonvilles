@@ -466,8 +466,8 @@ async function applyLivingConditionsFilters(serializedTowns: Shantytown[], livin
 
     const livingConditionsFilters = decodeURIComponent(livingConditionFilters).split(',');
 
-    return serializedTowns.filter(town => livingConditionsFilters.some(filter => filterToCondition[filter].some(key => town.livingConditions[key]
-            && ['bad', 'unknown'].includes(town.livingConditions[key].status.status))));
+    return serializedTowns.filter(town => livingConditionsFilters.some(filter => filterToCondition[filter].some(key => !town.livingConditions?.[key]
+            || ['bad', 'toImprove', 'unknown'].includes(town.livingConditions[key]?.status?.status))));
 }
 
 
