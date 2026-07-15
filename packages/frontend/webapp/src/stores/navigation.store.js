@@ -176,7 +176,7 @@ export const useNavigationStore = defineStore("navigation", {
                 { text: "Sites", to: "/liste-des-sites" },
                 { text: "Actions", to: "/liste-des-actions" },
                 { ...this.metricsItem },
-                { text: "Entraide", to: "/communaute" },
+                { text: "Annuaire", to: "/annuaire" },
                 { text: "Carte", to: "/cartographie" },
                 { text: "Dernières activités", to: "/activites" },
                 { text: "Administration", to: "/acces" },

@@ -1,10 +1,10 @@
 <template>
-    <LayoutCommunaute :paddingTop="false">
+    <Layout>
         <ContentWrapper>
             <FilArianne :items="ariane" class="my-8" />
             <Annuaire />
         </ContentWrapper>
-    </LayoutCommunaute>
+    </Layout>
 </template>
 
 <script setup>
@@ -12,13 +12,12 @@ import { onMounted } from "vue";
 import { useDirectoryStore } from "@/stores/directory.store";
 
 import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
-import LayoutCommunaute from "@/components/LayoutCommunaute/LayoutCommunaute.vue";
+import Layout from "@/components/Layout/Layout.vue";
 import Annuaire from "@/components/Annuaire/Annuaire.vue";
 
 const directoryStore = useDirectoryStore();
 const ariane = [
     { label: "Accueil", to: "/" },
-    { label: "Entraide", to: "/communaute" },
     { label: "Annuaire" },
 ];
 
