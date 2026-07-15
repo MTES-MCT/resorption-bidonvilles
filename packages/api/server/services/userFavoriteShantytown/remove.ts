@@ -11,9 +11,7 @@ export default async function remove(user: AuthUser, shantytownId: number): Prom
 
     try {
         await userFavoriteShantytownModel.removeFavorite(user.id, shantytownId);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
         throw new ServiceError('delete_failed', new Error('Une erreur est survenue pendant la suppression en base de données'));
     }
 }

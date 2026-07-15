@@ -11,9 +11,7 @@ export default async function fetch(user: AuthUser): Promise<number[]> {
 
     try {
         return await userFavoriteShantytownModel.findByUser(user.id);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
         throw new ServiceError('fetch_failed', new Error('Une erreur est survenue pendant la récupération des favoris'));
     }
 }
