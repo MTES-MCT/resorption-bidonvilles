@@ -1,11 +1,12 @@
 <template>
     <div class="text-md px-6">
         <div class="text-primary text-display-md font-bold">
-            <span class="font-bold">
-                {{ shantytown.addressSimple }}
-                <span v-if="shantytown.name">« {{ shantytown.name }} » </span>
+            <span v-if="shantytown.name" class="font-bold">
+                « {{ shantytown.name }} » - {{ shantytown.addressSimple }}
+                {{ shantytown.city.name }} ({{ shantytown.departement.code }})
             </span>
-            <span class="font-normal">
+            <span v-else class="font-bold">
+                {{ shantytown.addressSimple }}
                 {{ shantytown.city.name }} ({{ shantytown.departement.code }})
             </span>
         </div>

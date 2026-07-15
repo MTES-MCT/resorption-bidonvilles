@@ -1,8 +1,9 @@
 import userService from '#server/services/user/index';
 import { Request, NextFunction, Response } from 'express';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 import { User } from '#root/types/resources/User.d';
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 

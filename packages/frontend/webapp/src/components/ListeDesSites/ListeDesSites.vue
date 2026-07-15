@@ -3,25 +3,52 @@
         <TabList :tabs="tabs" v-model="currentTab" class="mb-4 print:hidden" />
         <ListeDesSitesHeader />
 
-        <Loading v-if="townsStore.isLoading !== false" />
-        <ListeDesSitesErreur v-else-if="townsStore.error" />
+        <template v-if="currentTab === 'favorites'">
+            <ListeDesSitesFiltres class="mt-4" :isFavoritesTab="true" />
+            <section
+                v-if="favoritesStore.myTowns.length > 0"
+                class="flex flex-col space-y-4 mt-4"
+                aria-label="Mes sites"
+            >
+                <CarteSiteDetaillee
+                    v-for="shantytown in favoritesStore.myTowns"
+                    :key="shantytown.id"
+                    :shantytown="shantytown"
+                    :currentTab="currentTab"
+                />
+            </section>
+            <output
+                v-else
+                class="mt-10 text-center text-G400 block"
+                aria-live="polite"
+            >
+                {{ emptyMessage }}
+            </output>
+        </template>
 
         <template v-else>
-            <ListeDesSitesStatistiques :currentTab="currentTab" />
-            <ListeDesSitesFiltres class="mt-4" />
-            <ListeDesSitesListe
-                class="mt-4"
-                v-if="townsStore.filteredTowns.length > 0"
-                :currentTab="currentTab"
-            />
-            <ListeDesSitesVide v-else class="mt-10" />
+            <Loading v-if="townsStore.isLoading !== false" />
+            <ListeDesSitesErreur v-else-if="townsStore.error" />
+
+            <template v-else>
+                <ListeDesSitesStatistiques :currentTab="currentTab" />
+                <ListeDesSitesFiltres class="mt-4" />
+                <ListeDesSitesListe
+                    class="mt-4"
+                    v-if="townsStore.filteredTowns.length > 0"
+                    :currentTab="currentTab"
+                />
+                <ListeDesSitesVide v-else class="mt-10" />
+            </template>
         </template>
     </ContentWrapper>
 </template>
 
 <script setup>
-import { computed, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
+import { useFavoritesStore } from "@/stores/favorites.store";
+import { useUserStore } from "@/stores/user.store";
 
 import { ContentWrapper, TabList } from "@resorptionbidonvilles/ui";
 import Loading from "@/components/Loading/Loading.vue";
@@ -31,11 +58,71 @@ import ListeDesSitesFiltres from "./ListeDesSitesFiltres.vue";
 import ListeDesSitesErreur from "./ListeDesSitesErreur.vue";
 import ListeDesSitesListe from "./ListeDesSitesListe.vue";
 import ListeDesSitesVide from "./ListeDesSitesVide.vue";
+import CarteSiteDetaillee from "@/components/CarteSiteDetaillee/CarteSiteDetaillee.vue";
 import departementsInResoprtionPhases from "@/utils/departements_in_resorption_phases";
+import { EXCLUDED_ROLES } from "@/utils/excluded_roles.js";
 
 const townsStore = useTownsStore();
+const favoritesStore = useFavoritesStore();
+const userStore = useUserStore();
+
+const canUseFavorites = computed(
+    () => !EXCLUDED_ROLES.has(userStore.user?.role_id)
+);
+
+const emptyMessage = computed(() => {
+    const filter = favoritesStore.myTownsFilter;
+    const onlyIntervention =
+        filter.length === 1 && filter.includes("intervention");
+    const onlyFavorites = filter.length === 1 && filter.includes("favorites");
+
+    if (onlyIntervention) {
+        return "Vous n'intervenez sur aucun site.";
+    }
+    if (onlyFavorites) {
+        return "Vous n'avez pas encore de site épinglé.";
+    }
+    return "Vous n'avez ni site épinglé, ni site d'intervention.";
+});
+
+// Onglet actif : géré localement pour pouvoir inclure "favorites" sans polluer townsStore
+const currentTab = ref(townsStore.filters.status);
+
+watch(currentTab, (newValue) => {
+    if (newValue === "favorites") {
+        return;
+    }
+    townsStore.filters.status = newValue;
+    if (newValue === "close") {
+        townsStore.sort = "closedAt";
+    } else {
+        townsStore.sort = "lastUpdatedAt";
+    }
+});
+
+// Synchronisation inverse : si le store change (ex. depuis un autre composant), répercuter ici
+watch(
+    () => townsStore.filters.status,
+    (newValue) => {
+        if (currentTab.value !== "favorites") {
+            currentTab.value = newValue;
+        }
+    }
+);
+
 const tabs = computed(() => {
+    const favoriteTab = canUseFavorites.value
+        ? [
+              {
+                  id: "favorites",
+                  label: "Mes sites",
+                  total: favoritesStore.myTowns.length,
+              },
+          ]
+        : [];
+
     const initialTabs = [
+        ...favoriteTab,
         {
             id: "open",
             label:
@@ -70,33 +157,18 @@ const tabs = computed(() => {
     );
 });
 
-const currentTab = computed({
-    get() {
-        return townsStore.filters.status;
-    },
-    set(newValue) {
-        townsStore.filters.status = newValue;
-    },
-});
-
-watch(currentTab, () => {
-    if (currentTab.value === "close") {
-        townsStore.sort = "closedAt";
-    } else {
-        townsStore.sort = "lastUpdatedAt";
-    }
-});
-
 // Récupération des départements représentés dans la liste des sites
 const hasSitesInvolvedInExperiment = computed(() => {
     const departments = townsStore.prefilteredTowns.open.reduce(
         (uniqueDepartments, town) => {
             if (
                 departementsInResoprtionPhases.includes(
-                    parseInt(town.departement.code, 10)
+                    Number.parseInt(town.departement.code, 10)
                 )
             ) {
-                uniqueDepartments.add(parseInt(town.departement.code, 10));
+                uniqueDepartments.add(
+                    Number.parseInt(town.departement.code, 10)
+                );
             }
             return uniqueDepartments;
         },

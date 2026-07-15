@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 
 import userService from '#server/services/user/index';
 import contactService from '#server/services/contact/index';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 import { User } from '#root/types/resources/User.d';
 import { ContactBody } from '#root/types/inputs/ContactBody.d';
 
@@ -9,7 +10,7 @@ interface ContactRequest extends Request {
     body: ContactBody,
 }
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
     insert_failed: { code: 500, message: 'Une erreur est survenue lors de l\'enregistrement de votre demande en base de données' },
 };

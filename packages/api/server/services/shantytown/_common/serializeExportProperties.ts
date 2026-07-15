@@ -1,6 +1,7 @@
 import dateUtils from '#server/utils/date';
 import userModel from '#server/models/userModel';
 import shantytownActorThemes from '#server/config/shantytown_actor_themes';
+import STARTING_PHASE_UIDS from '#server/config/preparatory_phases_toward_resorption';
 import config from '#server/config';
 import electricityAccessTypes from '#server/models/electricityAccessTypesModel/_common/electricityAccessTypes';
 import waterAccessTypes from '#server/models/_common/waterAccessTypes';
@@ -1253,13 +1254,6 @@ export default (closingSolutions: ClosingSolution[]) => {
                 if (!preparatoryPhasesTowardResorption || preparatoryPhasesTowardResorption.length === 0) {
                     return null;
                 }
-
-                // UIDs des phases initiales (définis dans la migration 30000084-03)
-                const STARTING_PHASE_UIDS = new Set([
-                    'sociological_diagnosis',
-                    'social_assessment',
-                    'political_validation',
-                ]);
 
                 // Séparer les phases initiales des autres phases en utilisant l'UID
                 const startingPhases = preparatoryPhasesTowardResorption.filter(

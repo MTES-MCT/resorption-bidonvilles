@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import deleteAnswer from '#server/services/answer/deleteAnswer';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 import { RawAnswer } from '#root/types/resources/AnswerRaw.d';
 import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 
@@ -11,7 +12,7 @@ interface DeleteAnswerRequest extends Request {
     },
 }
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     delete_failed: { code: 500, message: 'Une erreur est survenue lors de la suppression de la réponse' },
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };

@@ -78,9 +78,13 @@ export default function filterShantytowns(shantytowns, filters) {
             return false;
         }
 
-        // Filtres spécifiques aux sites ouverts
+        // Filtres proposés pour les sites ouverts et pour l'onglet « Mes sites »
+        // (dont la liste mêle des sites ouverts, en cours et fermés).
+        const allowsOpenScopedFilters =
+            filters.status === "open" || filters.status === "favorites";
+
         if (
-            filters.status === "open" &&
+            allowsOpenScopedFilters &&
             filters.conditions.length > 0 &&
             !checkConditions(shantytown, filters.conditions)
         ) {
@@ -88,7 +92,7 @@ export default function filterShantytowns(shantytowns, filters) {
         }
 
         if (
-            filters.status === "open" &&
+            allowsOpenScopedFilters &&
             filters.actors.length > 0 &&
             !checkActors(shantytown, filters.actors)
         ) {
@@ -96,7 +100,7 @@ export default function filterShantytowns(shantytowns, filters) {
         }
 
         if (
-            filters.status === "open" &&
+            allowsOpenScopedFilters &&
             filters.heatwave.length > 0 &&
             !checkHeatwave(shantytown, filters.heatwave)
         ) {
@@ -144,9 +148,9 @@ function checkConditions(shantytown, filters) {
 
         return filterToCondition[filter].some(
             (key) =>
-                shantytown.livingConditions[key] &&
-                ["bad", "unknown"].includes(
-                    shantytown.livingConditions[key].status.status
+                !shantytown.livingConditions?.[key] ||
+                ["bad", "toImprove", "unknown"].includes(
+                    shantytown.livingConditions[key]?.status?.status
                 )
         );
     });
@@ -191,7 +195,7 @@ function checkSearch(shantytown, search) {
     return (
         !!shantytown.name?.match(new RegExp(search, "ig")) ||
         !!shantytown.address?.match(new RegExp(search, "ig")) ||
-        !!locations.match(new RegExp(search, "ig"))
+        !!new RegExp(new RegExp(search, "ig")).exec(locations)
     );
 }
 

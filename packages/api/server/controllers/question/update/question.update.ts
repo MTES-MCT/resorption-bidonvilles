@@ -1,6 +1,7 @@
 import questionService from '#server/services/question';
 import { Request } from 'express';
 import enrichQuestion from '#server/services/question/common/enrichQuestion';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 import { User } from '#root/types/resources/User.d';
 import { EnrichedQuestion } from '#root/types/resources/QuestionEnriched.d';
 
@@ -9,7 +10,7 @@ interface QuestionUpdateRequest extends Request {
     question: EnrichedQuestion;
 }
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 

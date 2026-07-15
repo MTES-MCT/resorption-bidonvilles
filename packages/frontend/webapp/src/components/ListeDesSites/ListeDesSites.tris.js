@@ -3,6 +3,10 @@ export default {
         value: "cityName",
         label: "Commune",
     },
+    siteName: {
+        value: "siteName",
+        label: "Nom du site",
+    },
     builtAt: {
         value: "builtAt",
         label: "Date d'installation",

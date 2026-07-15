@@ -1,6 +1,7 @@
 import actionService from '#server/services/action/actionService';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
-const ERRORS = {
+const ERRORS: ControllerErrors = {
     fetch_failed: { code: 500, message: 'Impossible de récupérer les actions' },
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
