@@ -89,19 +89,4 @@ export default [
             },
         ],
     },
-    {
-        name: "Entraide",
-        icon: "comments",
-        permission: null,
-        options: { half: true },
-        actions: [
-            {
-                label: "J'ai besoin d'aide",
-                description: "Je souhaite poser une question à la communauté.",
-                icon: svgCommunity,
-                to: "/communaute/nouvelle-question",
-                permission: null,
-            },
-        ],
-    },
 ];

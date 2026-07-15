@@ -7,6 +7,4 @@ export default {
         "Les notifications de nouveaux messages dans le journal des actions",
     shantytown_closure: "Les notifications de fermeture de sites",
     shantytown_creation: "Les notifications de déclaration de nouveaux sites",
-    community_new_question:
-        "Les notifications de nouvelle question à la communauté",
 };
