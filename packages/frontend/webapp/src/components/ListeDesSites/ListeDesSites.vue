@@ -60,8 +60,7 @@ import ListeDesSitesListe from "./ListeDesSitesListe.vue";
 import ListeDesSitesVide from "./ListeDesSitesVide.vue";
 import CarteSiteDetaillee from "@/components/CarteSiteDetaillee/CarteSiteDetaillee.vue";
 import departementsInResoprtionPhases from "@/utils/departements_in_resorption_phases";
-
-const EXCLUDED_ROLES = new Set(["intervener", "external_observator"]);
+import { EXCLUDED_ROLES } from "@/utils/excluded_roles.js";
 
 const townsStore = useTownsStore();
 const favoritesStore = useFavoritesStore();

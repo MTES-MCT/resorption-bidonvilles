@@ -31,8 +31,7 @@ import { ContentWrapper, FilArianne } from "@resorptionbidonvilles/ui";
 import BandeauNotice from "@/components/BandeauNotice/BandeauNotice.vue";
 import LayoutSearch from "@/components/LayoutSearch/LayoutSearch.vue";
 import ListeDesSites from "@/components/ListeDesSites/ListeDesSites.vue";
-
-const EXCLUDED_ROLES = new Set(["intervener", "external_observator"]);
+import { EXCLUDED_ROLES } from "@/utils/excluded_roles.js";
 
 const ariane = [{ label: "Accueil", to: "/" }, { label: "Sites" }];
 const townsStore = useTownsStore();

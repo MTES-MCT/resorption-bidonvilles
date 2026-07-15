@@ -19,8 +19,7 @@ import { useUserStore } from "@/stores/user.store";
 import { useFavoritesStore } from "@/stores/favorites.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { trackEvent } from "@/helpers/matomo";
-
-const EXCLUDED_ROLES = new Set(["intervener", "external_observator"]);
+import { EXCLUDED_ROLES } from "@/utils/excluded_roles.js";    
 
 const props = defineProps({
     townId: {
