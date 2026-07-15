@@ -2,10 +2,9 @@ import {
     Paragraph, TextRun, SectionType,
 } from 'docx';
 
+import STARTING_PHASE_UIDS from '#server/config/preparatory_phases_toward_resorption';
 import heading from './heading';
 import formatDate from '../_common/formatDate';
-
-const STARTING_PHASE_UIDS = new Set(['sociological_diagnosis', 'social_assessment', 'political_validation']);
 
 const buildResorptionPhasesSection = shantytown => ({
     properties: {
@@ -67,7 +66,7 @@ const buildResorptionPhasesSection = shantytown => ({
 
                 phaseList.forEach(({ preparatoryPhaseName, preparatoryPhaseDateLabel, completedAt }) => {
                     const status = completedAt
-                        ? `${preparatoryPhaseDateLabel.toLowerCase()} ${formatDate(completedAt, 'DD/MM/YYYY')}`
+                        ? `${preparatoryPhaseDateLabel.toLowerCase()} ${formatDate(new Date(completedAt).getTime() / 1000, 'DD/MM/YYYY')}`
                         : 'en cours';
 
                     paragraphDescriptors.push({

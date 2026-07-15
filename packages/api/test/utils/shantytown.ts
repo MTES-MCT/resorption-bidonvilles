@@ -172,6 +172,7 @@ export const updateInput = () => ({
         sociological_diagnosis: globalThis.generate('string'),
         social_assessment: globalThis.generate('string'),
         political_validation: globalThis.generate('string'),
+        technical_diagnosis: globalThis.generate('string'),
         contract_preparation: globalThis.generate('string'),
     },
     updated_without_any_change: false,

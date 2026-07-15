@@ -1,11 +1,6 @@
+import STARTING_PHASE_UIDS from '#server/config/preparatory_phases_toward_resorption';
 import { ShantytownPreparatoryPhaseTowardResorption } from '#root/types/resources/ShantytownPreparatoryPhasesTowardResorption.d';
 import { Shantytown } from '#root/types/resources/Shantytown.d';
-
-const INITIAL_PHASE_UIDS = new Set([
-    'sociological_diagnosis',
-    'social_assessment',
-    'political_validation',
-]);
 
 type TownPhase = {
     townId: number;
@@ -30,10 +25,10 @@ export default function processPreparatoryPhases(
             townsHash[shantytownId].preparatoryPhasesTowardResorption = validPhases;
 
             const initialPhasesPresent = validPhases
-                .filter(p => INITIAL_PHASE_UIDS.has(p.preparatoryPhaseId))
+                .filter(p => STARTING_PHASE_UIDS.has(p.preparatoryPhaseId))
                 .map(p => p.preparatoryPhaseId);
 
-            townsHash[shantytownId].hasInitialResorptionPhases = initialPhasesPresent.length === 3;
+            townsHash[shantytownId].hasInitialResorptionPhases = initialPhasesPresent.length === STARTING_PHASE_UIDS.size;
         }
     });
     /* eslint-enable no-param-reassign */
