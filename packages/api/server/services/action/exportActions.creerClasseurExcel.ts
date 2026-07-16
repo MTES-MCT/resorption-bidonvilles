@@ -292,8 +292,10 @@ const formatNumericValue = (value: number | null | undefined): number | string =
     return value;
 };
 
+const formatBoolean = (value: boolean | null | undefined): string => (value ? 'Oui' : 'Non');
+
 // Ajouter les lignes de données
-function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, includeFinances: boolean = true) {
+function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, includeFinances: boolean = true, allowedFinanceActions: number[] | null = null) {
     data.forEach((item: ActionItem) => {
         // Calculs pour les colonnes de scolarisation
         const mineursIdentifiesTotal = sumNumbers([
@@ -312,6 +314,10 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, in
             item.scolaire_nombre_college,
             item.scolaire_nombre_lycee,
         ]);
+
+        // Vérifier l'accès aux financements pour cette action spécifique
+        const hasFinanceAccessForThisAction = allowedFinanceActions === null || allowedFinanceActions.includes(item.action_id);
+        const financeeDihalValue = hasFinanceAccessForThisAction ? formatBoolean(item.financee_dihal) : '-';
 
         // Construire la ligne de données selon les permissions
         const rowData = [
@@ -357,7 +363,7 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, in
             rowData.push(
                 formatNumericValue(item.finance_etatique),
                 formatNumericValue(item.depense_finance_etatique),
-                item.financee_dihal ? 'Oui' : 'Non',
+                financeeDihalValue,
                 formatNumericValue(item.finance_dedie),
                 formatNumericValue(item.depense_finance_dedie),
                 formatNumericValue(item.finance_collectivite),
@@ -475,6 +481,7 @@ export default function exportActions(
     fetchedYear: number,
     includeFinances: boolean = true,
     allowedDepartements: string[] | null = null,
+    allowedFinanceActions: number[] | null = null,
 ) {
     // Déterminer les sections à inclure selon les permissions
     let sectionsToInclude: SectionTitle[];
@@ -549,7 +556,7 @@ export default function exportActions(
         });
 
         // Ajouter les lignes de données
-        addDataToWorksheet(donneeParDepartement.data, worksheet, includeFinances);
+        addDataToWorksheet(donneeParDepartement.data, worksheet, includeFinances, allowedFinanceActions);
 
         // Formater toutes les cellules
         formatWorksheetCells(worksheet, columnNumbers, financementColumns);

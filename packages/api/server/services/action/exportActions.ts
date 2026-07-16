@@ -3,9 +3,18 @@ import ServiceError from '#server/errors/ServiceError';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import actionModel from '#server/models/actionModel';
 import permissionUtils from '#server/utils/permission';
+import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import generateExportFile from './exportActions.generateExportFile';
 import { ActionReportRow } from '#root/types/resources/Action.d';
 
+// null = accès complet aux financements (aucune restriction par action)
+const calculateAllowedActionsForFinances = (financeClauseGroup: WhereClauseGroup | null): number[] | null => {
+    if (!financeClauseGroup?.actions) {
+        return null;
+    }
+
+    return (financeClauseGroup.actions.value as number[]) ?? [];
+};
 
 /**
  * Calcule la liste des départements autorisés pour l'utilisateur
@@ -65,6 +74,9 @@ const exportActions = async (user: AuthUser, year: string, dihalFinancing = fals
     // Calculer les départements autorisés pour l'export
     const allowedDepartements = calculateAllowedDepartements(user, actionClauseGroup);
 
+    // Calculer les actions autorisées pour les financements
+    const allowedFinanceActions = calculateAllowedActionsForFinances(financeClauseGroup);
+
     // on collecte les données et on génère le fichier excel
     let data: ActionReportRow[];
 
@@ -93,7 +105,7 @@ const exportActions = async (user: AuthUser, year: string, dihalFinancing = fals
     }
 
     try { // Génération du fichier Excel
-        const buffer = await generateExportFile(data, fetchedYear, includeFinances, allowedDepartements);
+        const buffer = await generateExportFile(data, fetchedYear, includeFinances, allowedDepartements, allowedFinanceActions);
         return buffer;
     } catch (error) {
         throw new ServiceError('export_failed', error instanceof Error ? error : new Error('Une erreur inconnue est survenue'));
