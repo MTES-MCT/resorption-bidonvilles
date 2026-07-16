@@ -8,23 +8,13 @@
             <div class="text-G700 text-sm mb-1">
                 {{ formatTimestamp(comment.createdAt, "d M y à h:i") }}
             </div>
-            <div class="flex gap-2">
-                <span
-                    class="text-primary font-bold cursor-pointer text-sm"
-                    v-if="onUpdate && isOwner && !isEditing"
-                    @click="startEditing"
-                    >Modifier
-                    <Icon icon="pen" />
-                </span>
-                <span
-                    class="text-red font-bold cursor-pointer text-sm"
-                    v-if="
-                        showModeration && (isOwner || (canModerate && isHover))
-                    "
-                    @click="deleteMessage"
-                    >Supprimer {{ isOwner ? "mon" : "le" }} message
-                    <Icon icon="trash-alt" />
-                </span>
+            <div>
+                <DsfrButtonGroup
+                    size="sm"
+                    :buttons="buttons"
+                    inlineLayoutWhen="always"
+                    iconRight="true"
+                />
             </div>
         </div>
         <div
@@ -80,28 +70,28 @@
                 class="block text-sm font-bold mb-1"
                 >Modifier le message</label
             >
-            <textarea
+            <DsfrInput
                 :id="`comment-edit-${comment.id}`"
                 v-model="editedDescription"
-                class="w-full p-2 border border-G300 rounded"
-                rows="4"
+                isTextarea="true"
+                :rows="3"
             />
             <div v-if="editError" class="text-red text-sm mt-1">
                 {{ editError }}
             </div>
             <div class="flex gap-2 mt-2">
-                <DsfrButton @click="saveEdit" :disabled="isLoading" secondary>
-                    Enregistrer
-                </DsfrButton>
-                <DsfrButton @click="cancelEdit" :disabled="isLoading">
-                    Annuler
-                </DsfrButton>
+                <DsfrButtonGroup
+                    size="sm"
+                    :buttons="editingButtons"
+                    inlineLayoutWhen="always"
+                    iconRight="true"
+                />
             </div>
         </div>
     </div>
 </template>
 <script setup>
-import { defineProps, defineEmits, toRefs, ref, computed } from "vue";
+import { toRefs, ref, computed } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 import { useUserStore } from "@/stores/user.store";
 import formatTimestamp from "@common/utils/formatTimestamp.js";
@@ -184,4 +174,55 @@ async function saveEdit() {
         isLoading.value = false;
     }
 }
+
+const buttons = computed(() => {
+    let controlButtons = [];
+    if (onUpdate.value && isOwner.value && !isEditing.value) {
+        controlButtons.push({
+            secondary: true,
+            size: "sm",
+            onClick: startEditing,
+            label: "Modifier",
+            icon: "fr-icon-edit-line",
+        });
+    }
+    if (
+        showModeration.value &&
+        (isOwner.value || (canModerate.value && isHover.value))
+    ) {
+        controlButtons.push({
+            primary: true,
+            size: "sm",
+            onClick: deleteMessage,
+            label: `${isOwner.value ? "Supprimer" : "Modérer"}`,
+            icon: "fr-icon-delete-line",
+        });
+    }
+    return controlButtons;
+});
+
+const isUpdated = computed(() => {
+    return editedDescription.value !== comment.value.description;
+});
+
+const editingButtons = computed(() => {
+    return [
+        {
+            primary: true,
+            size: "sm",
+            onClick: saveEdit,
+            disabled: isLoading.value || !isUpdated.value,
+            label: "Enregistrer",
+            icon: "fr-icon-check-line",
+        },
+        {
+            secondary: true,
+            size: "sm",
+            onClick: cancelEdit,
+            disabled: isLoading.value,
+            label: "Annuler",
+            icon: "fr-icon-close-line",
+        },
+    ];
+});
 </script>
