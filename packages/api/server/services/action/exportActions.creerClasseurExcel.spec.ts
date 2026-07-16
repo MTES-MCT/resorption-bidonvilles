@@ -475,4 +475,29 @@ describe('services/action/exportActions.creerClasseurExcel()', () => {
         // donc 40 colonnes au total, pas 53 (qui serait avec les 13 colonnes de financement)
         expect(rowData).to.have.lengthOf(40);
     });
+
+    // ── Test 18 : accès financement restreint à une liste d'actions ──────────
+    it('affiche "Oui"/"Non" pour financee_dihal quand l\'action fait partie des actions autorisées', async () => {
+        const row = buildActionReportRow({ action_id: 251, financee_dihal: true });
+        await exportActions([row], YEAR, true, null, [251, 410]);
+
+        const call = findFirstDataRowCall();
+        expect(call, 'appel addRow des données non trouvé').to.exist;
+
+        const rowData: any[] = call.args[0];
+        const financeDihalIndex = 37;
+        expect(rowData[financeDihalIndex]).to.equal('Oui');
+    });
+
+    it('affiche "-" pour financee_dihal quand l\'action ne fait pas partie des actions autorisées', async () => {
+        const row = buildActionReportRow({ action_id: 999, financee_dihal: true });
+        await exportActions([row], YEAR, true, null, [251, 410]);
+
+        const call = findFirstDataRowCall();
+        expect(call, 'appel addRow des données non trouvé').to.exist;
+
+        const rowData: any[] = call.args[0];
+        const financeDihalIndex = 37;
+        expect(rowData[financeDihalIndex]).to.equal('-');
+    });
 });
