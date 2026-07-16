@@ -43,6 +43,7 @@ export default [
         },
         route: "#journal_de_l_action",
         icon: "comment",
+        postIcon: "paperclip",
         variant: "tertiary",
         condition(action) {
             const userStore = useUserStore();
