@@ -36,9 +36,9 @@ const sectionTitles = [
     { name: 'EMPLOI', range: { from: 'Q6', to: 'R6' } },
     { name: 'HÉBERGEMENT/LOGEMENT', range: { from: 'S6', to: 'V6' } },
     { name: 'SCOLARISATION', range: { from: 'W6', to: 'AI6' } },
-    { name: 'FINANCEMENT', range: { from: 'AJ6', to: 'AU6' } },
-    { name: 'COMMENTAIRES', range: { from: 'AV6', to: 'AX6' } },
-    { name: 'MISE À JOUR', range: { from: 'AY6', to: 'AZ6' } },
+    { name: 'FINANCEMENT', range: { from: 'AJ6', to: 'AV6' } },
+    { name: 'COMMENTAIRES', range: { from: 'AW6', to: 'AY6' } },
+    { name: 'MISE À JOUR', range: { from: 'AZ6', to: 'BA6' } },
 ];
 
 const headers = [
@@ -79,6 +79,7 @@ const headers = [
     { label: 'Nombre de mineurs scolarisés: autre', width: '5' },
     { label: 'Financement étatique hors crédits dédiés', width: '5' },
     { label: 'Dépense sur financement étatique hors crédits dédiés', width: '5' },
+    { label: 'Financée par la DIHAL', width: '5' },
     { label: 'Crédits dédiés à la résorption des bidonvilles', width: '5' },
     { label: 'Dépense sur crédits dédiés à la résorption des bidonvilles', width: '5' },
     { label: 'Cofinancement collectivité territoriale', width: '5' },
@@ -356,6 +357,7 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, in
             rowData.push(
                 formatNumericValue(item.finance_etatique),
                 formatNumericValue(item.depense_finance_etatique),
+                item.financee_dihal ? 'Oui' : 'Non',
                 formatNumericValue(item.finance_dedie),
                 formatNumericValue(item.depense_finance_dedie),
                 formatNumericValue(item.finance_collectivite),
@@ -421,7 +423,7 @@ function formatWorksheetCells(worksheet: ExcelJS.Worksheet, columnNumbers: numbe
 }
 
 function formatCommentCol(worksheet: ExcelJS.Worksheet) {
-    const commentsCol = worksheet.getColumn('AX');
+    const commentsCol = worksheet.getColumn('AW');
     commentsCol.eachCell((cell) => {
         if (cell.value) {
             formaterCommentaires(cell, cell.value);
@@ -494,8 +496,9 @@ export default function exportActions(
     }
 
     // Déterminer les headers à inclure selon les permissions
-    // Les colonnes de financement vont de l'index 36 (finance_etatique) à 47 (depense_finance_autre)
-    const headersToInclude = includeFinances ? headers : headers.filter((_, index) => index < 35 || index > 46);
+    // Les colonnes de financement vont de l'index 35 (finance_etatique) à 47 (depense_finance_autre)
+    // Maintenant avec la nouvelle colonne 'Financée par la DIHAL', elles vont de 35 à 47
+    const headersToInclude = includeFinances ? headers : headers.filter((_, index) => index < 35 || index > 47);
 
     // Trouver la section "FINANCEMENT" si elle existe
     const financementSection = includeFinances ? findSection('FINANCEMENT') : null;

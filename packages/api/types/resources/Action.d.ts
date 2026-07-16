@@ -41,6 +41,7 @@ export type ActionItem = {
     scolaire_nombre_autre: number | null,
     finance_etatique: number | null,
     finance_dedie: number | null,
+    financee_dihal: boolean | null,
     finance_collectivite: number | null,
     finance_europeen: number | null,
     finance_prive: number | null,
