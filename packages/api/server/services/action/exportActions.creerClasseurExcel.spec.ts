@@ -58,6 +58,7 @@ function buildActionItem(override: Partial<ActionItemExtended> = {}): ActionItem
         depense_finance_europeen: null,
         depense_finance_prive: null,
         depense_finance_autre: null,
+        financee_dihal: false,
         comments: null,
         last_comment: null,
         last_comment_date: null,
@@ -361,5 +362,117 @@ describe('services/action/exportActions.creerClasseurExcel()', () => {
 
         expect(rowData[mineursIdentifiesTotalIndex]).to.equal(0);
         expect(rowData[mineursScolarisesTotalIndex]).to.equal(0);
+    });
+
+    // ── Test 10 : Section FINANCEMENT étendue jusqu'à AV6 ─────────────────────
+    it('étend la plage de la section FINANCEMENT jusqu\'en colonne AV (de AJ6 à AV6)', async () => {
+        const row = buildActionReportRow();
+        await exportActions([row], YEAR);
+
+        const financementSectionCall = mergeCellsStub.getCalls().find(
+            call => call.args[0] === 'AJ6',
+        );
+        expect(financementSectionCall, 'appel mergeCells pour la section FINANCEMENT non trouvé').to.exist;
+        expect(financementSectionCall.args[1]).to.equal('AV6');
+    });
+
+    // ── Test 11 : Section COMMENTAIRES déplacée vers AW6-AY6 ─────────────────
+    it('place la section COMMENTAIRES de AW6 à AY6 (après l\'ajout de la colonne DIHAL)', async () => {
+        const row = buildActionReportRow();
+        await exportActions([row], YEAR);
+
+        const commentairesSectionCall = mergeCellsStub.getCalls().find(
+            call => call.args[0] === 'AW6',
+        );
+        expect(commentairesSectionCall, 'appel mergeCells pour la section COMMENTAIRES non trouvé').to.exist;
+        expect(commentairesSectionCall.args[1]).to.equal('AY6');
+    });
+
+    // ── Test 12 : Section MISE À JOUR déplacée vers AZ6-BA6 ──────────────────
+    it('place la section MISE À JOUR de AZ6 à BA6 (après l\'ajout de la colonne DIHAL)', async () => {
+        const row = buildActionReportRow();
+        await exportActions([row], YEAR);
+
+        const miseAJourSectionCall = mergeCellsStub.getCalls().find(
+            call => call.args[0] === 'AZ6',
+        );
+        expect(miseAJourSectionCall, 'appel mergeCells pour la section MISE À JOUR non trouvé').to.exist;
+        expect(miseAJourSectionCall.args[1]).to.equal('BA6');
+    });
+
+    // ── Test 13 : Header "Financée par la DIHAL" présent à l'index 37 ────────
+    it('place le header "Financée par la DIHAL" à l\'index 37 (entre dépenses étatiques et crédits dédiés)', async () => {
+        const row = buildActionReportRow();
+        await exportActions([row], YEAR);
+
+        const call = findHeadersRowCall();
+        expect(call, 'appel addRow des headers non trouvé').to.exist;
+
+        const labels: string[] = call.args[0];
+        expect(labels[37]).to.equal('Financée par la DIHAL');
+        expect(labels[36]).to.equal('Dépense sur financement étatique hors crédits dédiés');
+        expect(labels[38]).to.equal('Crédits dédiés à la résorption des bidonvilles');
+    });
+
+    // ── Test 14 : Colonne financee_dihal affiche "Oui" quand true ────────────
+    it('affiche "Oui" dans la colonne financee_dihal quand la valeur est true', async () => {
+        const row = buildActionReportRow({ financee_dihal: true });
+        await exportActions([row], YEAR);
+
+        const call = findFirstDataRowCall();
+        expect(call, 'appel addRow des données non trouvé').to.exist;
+
+        const rowData: any[] = call.args[0];
+        // Index 37 dans rowData (35 colonnes avant financement + finance_etatique + depense_finance_etatique)
+        const financeDihalIndex = 37;
+        expect(rowData[financeDihalIndex]).to.equal('Oui');
+    });
+
+    // ── Test 15 : Colonne financee_dihal affiche "Non" quand false ───────────
+    it('affiche "Non" dans la colonne financee_dihal quand la valeur est false', async () => {
+        const row = buildActionReportRow({ financee_dihal: false });
+        await exportActions([row], YEAR);
+
+        const call = findFirstDataRowCall();
+        expect(call, 'appel addRow des données non trouvé').to.exist;
+
+        const rowData: any[] = call.args[0];
+        const financeDihalIndex = 37;
+        expect(rowData[financeDihalIndex]).to.equal('Non');
+    });
+
+    // ── Test 16 : Colonne financee_dihal affiche "Non" quand null ────────────
+    it('affiche "Non" dans la colonne financee_dihal quand la valeur est null', async () => {
+        const row = buildActionReportRow({ financee_dihal: null });
+        await exportActions([row], YEAR);
+
+        const call = findFirstDataRowCall();
+        expect(call, 'appel addRow des données non trouvé').to.exist;
+
+        const rowData: any[] = call.args[0];
+        const financeDihalIndex = 37;
+        expect(rowData[financeDihalIndex]).to.equal('Non');
+    });
+
+    // ── Test 17 : Colonne financee_dihal absente quand includeFinances = false ───
+    it('n\'inclut pas la colonne financee_dihal quand includeFinances est false', async () => {
+        const row = buildActionReportRow({ financee_dihal: true });
+        await exportActions([row], YEAR, false); // includeFinances = false
+
+        const headerCall = findHeadersRowCall();
+        expect(headerCall, 'appel addRow des headers non trouvé').to.exist;
+
+        const labels: string[] = headerCall.args[0];
+        expect(labels).to.not.include('Financée par la DIHAL');
+        expect(labels).to.not.include('Crédits dédiés à la résorption des bidonvilles');
+        expect(labels).to.not.include('Financement étatique hors crédits dédiés');
+
+        const dataCall = findFirstDataRowCall();
+        expect(dataCall, 'appel addRow des données non trouvé').to.exist;
+
+        const rowData: any[] = dataCall.args[0];
+        // Sans bloc financement, rowData contient 35 colonnes avant financement + 5 colonnes après (commentaires+mises à jour)
+        // donc 40 colonnes au total, pas 53 (qui serait avec les 13 colonnes de financement)
+        expect(rowData).to.have.lengthOf(40);
     });
 });
