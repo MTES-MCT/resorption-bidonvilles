@@ -1,4 +1,5 @@
 import { type Response, type Request, NextFunction } from 'express';
+import { AuthUser } from '#server/middlewares/authMiddleware';
 
 const ERROR_RESPONSES = {
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
@@ -8,8 +9,8 @@ const ERROR_RESPONSES = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
-interface DeleteCommentRequest<TUser> extends Request {
-    user: TUser;
+interface DeleteCommentRequest extends Request {
+    user: AuthUser;
     params: {
         id: string;
         commentId: string;
@@ -19,11 +20,11 @@ interface DeleteCommentRequest<TUser> extends Request {
     };
 }
 
-type DeleteCommentServiceFn<TUser, TResult> = (user: TUser, entityId: number, commentId: number, message: string) => Promise<TResult>;
+type DeleteCommentServiceFn<TComments = any> = (user: AuthUser, entityId: number, commentId: number, message: string) => Promise<TComments>;
 
-export default function makeDeleteCommentController<TUser, TResult>(deleteCommentService: DeleteCommentServiceFn<TUser, TResult>) {
-    return async (req: DeleteCommentRequest<TUser>, res: Response, next: NextFunction) => {
-        let comments: TResult;
+export default function makeDeleteCommentController<TComments = any>(deleteCommentService: DeleteCommentServiceFn<TComments>) {
+    return async (req: DeleteCommentRequest, res: Response, next: NextFunction) => {
+        let comments: TComments;
         try {
             comments = await deleteCommentService(req.user, Number.parseInt(req.params.id, 10), Number.parseInt(req.params.commentId, 10), req.body.message);
         } catch (error) {

@@ -6,6 +6,7 @@ import permissionUtils from '#server/utils/permission';
 import dateUtils from '#server/utils/date';
 import deleteCommentFromModel from '#server/models/actionModel/deleteComment/deleteComment';
 import runDeleteComment from '#server/utils/comment/runDeleteComment';
+import { AuthUser } from '#server/middlewares/authMiddleware';
 import Action, { Comment } from '#root/types/resources/Action.d';
 import { ActionRawComment } from '#root/types/resources/ActionCommentRaw.d';
 import { ActionEnrichedComment } from '#root/types/resources/ActionCommentEnriched.d';
@@ -13,7 +14,9 @@ import enrichCommentsAttachments from './enrichCommentsAttachments';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 
-export default async function deleteComment(user, actionId, commentId, deletionMessage): Promise<{ comments: ActionEnrichedComment[] }> {
+export type ServiceResult = { comments: ActionEnrichedComment[] };
+
+const deleteComment = async (user: AuthUser, actionId: number, commentId: number, deletionMessage: string): Promise<{ comments: ActionEnrichedComment[] }> => {
     let actions: Action[];
 
     await runDeleteComment<Action, Comment>(
@@ -24,7 +27,7 @@ export default async function deleteComment(user, actionId, commentId, deletionM
                 actions = await actionModel.fetch(user, [actionId]);
                 return actions[0];
             },
-            findComment: action => action.comments.find(({ id }) => id === Number.parseInt(commentId, 10)),
+            findComment: action => action.comments.find(({ id }) => id === commentId),
             fetchAuthor: authorId => userModel.findOne(authorId),
             buildLocation: action => ({
                 type: 'departement',
@@ -71,7 +74,7 @@ export default async function deleteComment(user, actionId, commentId, deletionM
 
     let commentsWithEnrichedAttachments: ActionEnrichedComment[] = [];
     try {
-        const rawComments: ActionRawComment[] = actions[0].comments.filter(({ id }) => id !== Number.parseInt(commentId, 10));
+        const rawComments: ActionRawComment[] = actions[0].comments.filter(({ id }) => id !== commentId);
         commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => enrichCommentsAttachments(rawComment)));
     } catch (error) {
         // eslint-disable-next-line no-console
@@ -81,4 +84,6 @@ export default async function deleteComment(user, actionId, commentId, deletionM
     return {
         comments: commentsWithEnrichedAttachments,
     };
-}
+};
+
+export default deleteComment;
