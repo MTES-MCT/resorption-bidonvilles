@@ -72,14 +72,8 @@ const deleteComment = async (user: AuthUser, actionId: number, commentId: number
         },
     );
 
-    let commentsWithEnrichedAttachments: ActionEnrichedComment[] = [];
-    try {
-        const rawComments: ActionRawComment[] = actions[0].comments.filter(({ id }) => id !== commentId);
-        commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => enrichCommentsAttachments(rawComment)));
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-    }
+    const rawComments: ActionRawComment[] = actions[0].comments.filter(({ id }) => id !== commentId);
+    const commentsWithEnrichedAttachments = await Promise.all(rawComments.map(async rawComment => enrichCommentsAttachments(rawComment)));
 
     return {
         comments: commentsWithEnrichedAttachments,

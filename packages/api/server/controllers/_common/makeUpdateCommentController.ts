@@ -1,6 +1,8 @@
 import { type Response, type Request, NextFunction } from 'express';
+import { AuthUser } from '#server/middlewares/authMiddleware';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
-const ERROR_RESPONSES = {
+const ERROR_RESPONSES: ControllerErrors = {
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
     data_incomplete: { code: 400, message: 'Données manquantes ou invalides' },
     permission_denied: { code: 403, message: 'Seul l\'auteur peut modifier son commentaire' },
@@ -8,8 +10,8 @@ const ERROR_RESPONSES = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
 
-interface UpdateCommentRequest<TUser> extends Request {
-    user: TUser;
+interface UpdateCommentRequest extends Request {
+    user: AuthUser;
     params: {
         id: string;
         commentId: string;
@@ -19,10 +21,10 @@ interface UpdateCommentRequest<TUser> extends Request {
     };
 }
 
-type UpdateCommentServiceFn<TUser, TResult> = (user: TUser, entityId: number, commentId: number, description: string) => Promise<TResult>;
+type UpdateCommentServiceFn<TResult> = (user: AuthUser, entityId: number, commentId: number, description: string) => Promise<TResult>;
 
-export default function makeUpdateCommentController<TUser, TResult>(updateCommentService: UpdateCommentServiceFn<TUser, TResult>) {
-    return async (req: UpdateCommentRequest<TUser>, res: Response, next: NextFunction) => {
+export default function makeUpdateCommentController<TResult>(updateCommentService: UpdateCommentServiceFn<TResult>) {
+    return async (req: UpdateCommentRequest, res: Response, next: NextFunction) => {
         let result: TResult;
         try {
             result = await updateCommentService(
@@ -32,7 +34,7 @@ export default function makeUpdateCommentController<TUser, TResult>(updateCommen
                 req.body.description,
             );
         } catch (error) {
-            const { code, message }: { code: number; message: string } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
+            const { code, message } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
             res.status(code).send({
                 user_message: message,
             });

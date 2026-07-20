@@ -1,7 +1,8 @@
 import { type Response, type Request, NextFunction } from 'express';
 import { AuthUser } from '#server/middlewares/authMiddleware';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
-const ERROR_RESPONSES = {
+const ERROR_RESPONSES: ControllerErrors = {
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
     data_incomplete: { code: 400, message: 'Données manquantes' },
     permission_denied: { code: 403, message: 'Permission refusée' },
@@ -28,7 +29,7 @@ export default function makeDeleteCommentController<TComments = any>(deleteComme
         try {
             comments = await deleteCommentService(req.user, Number.parseInt(req.params.id, 10), Number.parseInt(req.params.commentId, 10), req.body.message);
         } catch (error) {
-            const { code, message }: { code: number; message: string } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
+            const { code, message } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
             res.status(code).send({
                 user_message: message,
             });

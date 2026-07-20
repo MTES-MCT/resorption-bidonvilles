@@ -43,7 +43,7 @@ export default async function updateComment(
         throw new ServiceError('fetch_failed', error);
     }
 
-    const updatedComment = updatedActions[0].comments.find(({ id }) => id === Number.parseInt(commentId.toString(), 10));
+    const updatedComment = updatedActions[0].comments.find(({ id }) => id === commentId);
 
     let enrichedComment: ActionEnrichedComment;
     try {
