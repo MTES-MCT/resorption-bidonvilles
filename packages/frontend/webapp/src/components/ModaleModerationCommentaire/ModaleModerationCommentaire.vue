@@ -10,8 +10,10 @@
                 class="bg-G100 p-6 border-1 max-w-2xl"
             />
             <div class="mt-6" v-if="!isOwner">
-                <TextArea
+                <DsfrInput
+                    :isTextarea="true"
                     :disabled="loading"
+                    :labelVisible="true"
                     label="Pourquoi souhaitez-vous supprimer ce message ?"
                     v-model="reason"
                 />
@@ -20,31 +22,18 @@
         </template>
 
         <template v-slot:footer>
-            <Button
-                variant="primaryText"
-                class="!border-2 !border-primary hover:!bg-primaryDark hover:!text-white"
-                @click="() => modale.close()"
-                >Annuler</Button
-            >
-            <Button class="ml-5" :loading="loading" @click="remove"
-                >Supprimer</Button
-            >
+            <DsfrButtonGroup :buttons="buttons" inline-layout-when="always" />
         </template>
     </Modal>
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed } from "vue";
+import { toRefs, ref, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useTownsStore } from "@/stores/towns.store";
 import { useActionsStore } from "@/stores/actions.store";
-import {
-    Button,
-    ErrorSummary,
-    Modal,
-    TextArea,
-} from "@resorptionbidonvilles/ui";
+import { ErrorSummary, Modal } from "@resorptionbidonvilles/ui";
 
 import CarteCommentaire from "@/components/CarteCommentaire/CarteCommentaire.vue";
 
@@ -118,9 +107,17 @@ const remove = async () => {
 
     loading.value = false;
 };
+
+const buttons = [
+    {
+        label: "Annuler",
+        onClick: () => modale.value.close(),
+        secondary: true,
+    },
+    {
+        label: "Supprimer",
+        onClick: remove,
+        loading: loading.value,
+    },
+];
 </script>
-<style scoped>
-button {
-    border: inherit;
-}
-</style>

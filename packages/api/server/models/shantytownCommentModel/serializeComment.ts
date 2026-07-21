@@ -1,6 +1,6 @@
+import { ShantytownCommentRow } from '#server/models/shantytownCommentModel/ShantytownCommentRow.d';
 import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
 import { ShantytownCommentTag } from '#root/types/resources/ShantytownCommentTag.d';
-import { ShantytownCommentRow } from '../../shantytownCommentModel/ShantytownCommentRow.d';
 
 type shantytownCommentRowWithTags = ShantytownCommentRow & {
     tags: ShantytownCommentTag[]
