@@ -4,7 +4,6 @@ import { useEventBus } from "@common/helpers/event-bus";
 import { trackEvent } from "@/helpers/matomo";
 import { useUserStore } from "@/stores/user.store";
 import { useActivitiesStore } from "./activities.store";
-import { useDashboardActivitiesStore } from "./dashboard.activities.store";
 import { useNotificationStore } from "./notification.store";
 import { useConfigStore } from "./config.store";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
@@ -352,7 +351,6 @@ export const useTownsStore = defineStore("towns", () => {
         },
         async deleteComment(shantytownId, commentId, reason = "") {
             const activitiesStore = useActivitiesStore();
-            const dashboardActivitiesStore = useDashboardActivitiesStore();
             const { comments } = await deleteComment(
                 shantytownId,
                 commentId,
@@ -374,12 +372,10 @@ export const useTownsStore = defineStore("towns", () => {
                     : hash.value[shantytownId].updatedAt
             );
             activitiesStore.removeComment(commentId);
-            dashboardActivitiesStore.removeComment(commentId);
         },
         async updateComment(shantytownId, commentId, description) {
             const notificationStore = useNotificationStore();
             const activitiesStore = useActivitiesStore();
-            const dashboardActivitiesStore = useDashboardActivitiesStore();
             const { comments } = await updateComment(
                 shantytownId,
                 commentId,
@@ -393,10 +389,6 @@ export const useTownsStore = defineStore("towns", () => {
                     commentId,
                     updatedComment.description
                 );
-                dashboardActivitiesStore.updateComment(
-                    commentId,
-                    updatedComment.description
-                );
             }
             notificationStore.success(
                 "Modification du message",
@@ -405,7 +397,6 @@ export const useTownsStore = defineStore("towns", () => {
         },
         async deleteDecree(shantytownId, commentId, reason = "") {
             const activitiesStore = useActivitiesStore();
-            const dashboardActivitiesStore = useDashboardActivitiesStore();
             const { comments } = await deleteComment(
                 shantytownId,
                 commentId,
@@ -414,7 +405,6 @@ export const useTownsStore = defineStore("towns", () => {
 
             updateShantytownComments(shantytownId, comments);
             activitiesStore.removeComment(commentId);
-            dashboardActivitiesStore.removeComment(commentId);
         },
         heatwaveStatuses,
         async setHeatwaveStatus(id, status) {

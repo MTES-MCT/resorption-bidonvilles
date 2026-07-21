@@ -5,7 +5,6 @@ import { useUserStore } from "@/stores/user.store";
 import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useActivitiesStore } from "./activities.store";
-import { useDashboardActivitiesStore } from "./dashboard.activities.store";
 import {
     create,
     edit,
@@ -313,7 +312,6 @@ export const useActionsStore = defineStore("actions", () => {
         },
         async deleteComment(actionId, commentId, reason = "") {
             const activitiesStore = useActivitiesStore();
-            const dashboardActivitiesStore = useDashboardActivitiesStore();
 
             const { comments } = await deleteComment(
                 actionId,
@@ -328,12 +326,10 @@ export const useActionsStore = defineStore("actions", () => {
                 ].comments.filter((comment) => comment.id !== commentId);
             }
             activitiesStore.removeComment(commentId);
-            dashboardActivitiesStore.removeComment(commentId);
         },
         async updateComment(actionId, commentId, description) {
             const notificationStore = useNotificationStore();
             const activitiesStore = useActivitiesStore();
-            const dashboardActivitiesStore = useDashboardActivitiesStore();
             const { comment } = await updateComment(
                 actionId,
                 commentId,
@@ -348,10 +344,6 @@ export const useActionsStore = defineStore("actions", () => {
                 }
             }
             activitiesStore.updateComment(commentId, comment.description);
-            dashboardActivitiesStore.updateComment(
-                commentId,
-                comment.description
-            );
             notificationStore.success(
                 "Modification du message",
                 "Votre message a bien été modifié"
