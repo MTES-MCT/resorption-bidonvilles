@@ -48,17 +48,13 @@
                         )
                     "
                 >
-                    <Button
-                        variant="primary"
-                        icon="pen"
-                        size="sm"
-                        iconPosition="left"
+                    <DsfrButton
+                        icon="fr-icon-pencil-line"
+                        size="small"
                         @click="focusForm"
-                    >
-                        Ecrire un message
-                    </Button>
-                </div></template
-            >
+                        label="Ecrire un message"
+                    /></div
+            ></template>
             <template v-slot:body>
                 <h3 class="text-lg font-bold mr-4">
                     {{ comments.length }} message{{
@@ -84,7 +80,7 @@ import { defineProps, ref, toRefs, computed, watch } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import router from "@/helpers/router";
 
-import { Icon, Button } from "@resorptionbidonvilles/ui";
+import { Icon } from "@resorptionbidonvilles/ui";
 import FicheJournalLayout from "@/components/FicheJournalLayout/FicheJournalLayout.vue";
 import FicheSiteJournalAside from "./FicheSiteJournalAside.vue";
 import FicheSiteJournalFormNouveauMessage from "./FicheSiteJournalFormNouveauMessage/FicheSiteJournalFormNouveauMessage.vue";
