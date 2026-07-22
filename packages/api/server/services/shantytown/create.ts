@@ -9,6 +9,7 @@ import insertIncomingTown from '#server/models/incomingTownsModel/create';
 import getLocationWatchers from '#server/models/userModel/getLocationWatchers';
 import { triggerShantytownCreationAlert, triggerReinstallationAlert } from '#server/utils/mattermost';
 import baseShantytown from '#server/services/shantytown/_common/baseShantytown';
+import checkPopulationUpdate from '#server/services/shantytown/_common/populationStatus';
 import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
 import { AuthUser } from '#server/middlewares/authMiddleware';
@@ -16,13 +17,13 @@ import { TownInput } from './_common/serializeReport';
 
 export default async function create(townData: TownInput, user: AuthUser) {
     const baseTown = baseShantytown(townData, user);
-
     const transaction = await sequelize.transaction();
     let shantytown_id: number;
     try {
         shantytown_id = await createShantytown(
             {
                 ...baseTown,
+                populationUpdatedAt: checkPopulationUpdate(townData, townData),
                 ...(user.isAllowedTo('access', 'shantytown_justice')
                     ? {
                         ownerComplaint: townData.owner_complaint,
