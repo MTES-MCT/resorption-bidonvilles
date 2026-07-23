@@ -19,6 +19,7 @@ const baseShantytown = (townData: TownInput, user: User) => ({
     populationMinors12To16: townData.population_minors_12_16,
     populationMinors16To18: townData.population_minors_16_18,
     minorsInSchool: townData.minors_in_school,
+    populationUpdatedAt: townData.population_updated_at,
     caravans: townData.caravans,
     huts: townData.huts,
     tents: townData.tents,
