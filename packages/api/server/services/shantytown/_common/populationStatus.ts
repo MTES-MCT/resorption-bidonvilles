@@ -13,14 +13,22 @@ const POPULATION_FIELDS: Array<[string, string]> = [
 ];
 
 export default function checkPopulationUpdate(originalShantytown, shantytown): Date | undefined {
-    const hasChanged = POPULATION_FIELDS.some(
-        ([oldKey, newKey]) => originalShantytown[oldKey] !== shantytown[newKey],
-    );
+    let hasChanged = false;
+
+    if (!originalShantytown) { // CREATION
+        hasChanged = POPULATION_FIELDS.some(
+            ([, newKey]) => shantytown[newKey] !== null && shantytown[newKey] !== undefined,
+        );
+    } else { // UPDATE
+        hasChanged = POPULATION_FIELDS.some(
+            ([oldKey, newKey]) => originalShantytown[oldKey] !== shantytown[newKey],
+        );
+    }
 
     let hasNoChangesButHadData = false;
     if (shantytown.updated_without_any_change && !hasChanged) {
         hasNoChangesButHadData = POPULATION_FIELDS.some(
-            ([oldKey]) => originalShantytown[oldKey] !== null && originalShantytown[oldKey] !== undefined,
+            ([oldKey]) => originalShantytown?.[oldKey] !== null && originalShantytown?.[oldKey] !== undefined,
         );
     }
 

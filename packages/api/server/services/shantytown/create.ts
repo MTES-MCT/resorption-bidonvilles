@@ -23,7 +23,7 @@ export default async function create(townData: TownInput, user: AuthUser) {
         shantytown_id = await createShantytown(
             {
                 ...baseTown,
-                populationUpdatedAt: checkPopulationUpdate(townData, townData),
+                populationUpdatedAt: checkPopulationUpdate(null, townData),
                 ...(user.isAllowedTo('access', 'shantytown_justice')
                     ? {
                         ownerComplaint: townData.owner_complaint,
