@@ -9,9 +9,9 @@
                 v-for="action in actionsStore.currentPage.content"
                 :key="action.id"
                 class="cursor-pointer hover:bg-blue-france-925-125"
-                @click="navigateToAction(action.id)"
             >
-                <td @click.stop>
+                <!-- @click="navigateToAction(action.id)" -->
+                <td class="relative z-10">
                     <DsfrTagCopy
                         :label="action.displayId"
                         dataType="Identifiant de l'action"
@@ -29,7 +29,12 @@
                 </td>
                 <td>
                     <div class="font-bold">
-                        {{ formatProjectName(action) }}
+                        <RouterLink
+                            :to="`/action/${action.id}`"
+                            class="focus:outline-none after:absolute after:inset-0"
+                        >
+                            {{ formatProjectName(action) }}
+                        </RouterLink>
                     </div>
                 </td>
                 <td>
@@ -56,7 +61,6 @@
 
 <script setup>
 import { computed } from "vue";
-import { useRouter } from "vue-router";
 import { useActionsStore } from "@/stores/actions.store";
 import getSince from "@/utils/getSince";
 import formatMetricsUpdatedAt from "@/utils/formatMetricsUpdatedAt";
@@ -65,7 +69,6 @@ import formatTimestamp from "@common/utils/formatTimestamp";
 import DsfrTagCopy from "@/components/DsfrTagCopy/DsfrTagCopy.vue";
 import capitalizeFirstLetter from "@/utils/capitalizeFirstLetter";
 
-const router = useRouter();
 const actionsStore = useActionsStore();
 
 const headers = [
@@ -94,10 +97,6 @@ const currentPageIndex = computed({
         actionsStore.currentPage.index = value + 1;
     },
 });
-
-const navigateToAction = (actionId) => {
-    router.push(`/action/${actionId}`);
-};
 
 const formatDate = (timestamp) => {
     if (!timestamp) {
