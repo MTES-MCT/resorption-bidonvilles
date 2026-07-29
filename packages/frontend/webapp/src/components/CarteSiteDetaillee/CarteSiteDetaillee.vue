@@ -1,77 +1,72 @@
 <template>
-    <RouterLink custom v-slot="{ navigate }" :to="`/site/${shantytown.id}`">
-        <div
-            :class="[
-                'rounded-sm cursor-pointer border-1 border-cardBorder preventPrintBreak print:h-[17.3rem]',
-                isHover ? 'bg-blue200 border-transparent' : '',
-                !isOpen ? 'closedShantytown' : '',
-                focusClasses.outline,
-            ]"
-            :aria-label="`Fiche site ${shantytown.addressSimple} ${
-                shantytown.name ? shantytown.name : ''
-            } ${shantytown.city.name}`"
-            @click="(event) => handleClickOnCard(event, navigate)"
-            @mouseenter="isHover = true"
-            @mouseleave="isHover = false"
-        >
-            <div class="-mt-1 print:mt-0">
-                <CarteSiteDetailleeHeader
-                    class="mb-4"
+    <div
+        :class="[
+            'relative rounded-sm cursor-pointer border-1 border-cardBorder preventPrintBreak print:h-[17.3rem]',
+            isHover ? 'bg-blue200 border-transparent' : '',
+            !isOpen ? 'closedShantytown' : '',
+            focusClasses.outline,
+        ]"
+        :aria-label="`Fiche site ${shantytown.addressSimple} ${
+            shantytown.name ? shantytown.name : ''
+        } ${shantytown.city.name}`"
+        @mouseenter="isHover = true"
+        @mouseleave="isHover = false"
+    >
+        <div class="-mt-1 print:mt-0">
+            <CarteSiteDetailleeHeader
+                class="mb-4"
+                :shantytown="shantytown"
+                :isHover="isHover"
+                :currentTab="currentTab"
+            />
+            <CarteSiteDetailleeName :shantytown="shantytown" />
+            <div
+                :class="[
+                    'flex flex-col',
+                    `space-y-${nbCol}`,
+                    'lg:flex-none lg:grid',
+                    `cardGridTemplateColumns${nbCol === '5' ? 'Five' : 'Four'}`,
+                    'print:grid lg:gap-10 px-6 py-4 items-start',
+                ]"
+            >
+                <CarteSiteDetailleeFieldType :shantytown="shantytown" />
+                <CarteSiteDetailleeOrigins
                     :shantytown="shantytown"
-                    :isHover="isHover"
-                    :currentTab="currentTab"
+                    class="pl-5"
                 />
-                <CarteSiteDetailleeName :shantytown="shantytown" />
-                <div
-                    :class="[
-                        'flex flex-col',
-                        `space-y-${nbCol}`,
-                        'lg:flex-none lg:grid',
-                        `cardGridTemplateColumns${
-                            nbCol === '5' ? 'Five' : 'Four'
-                        }`,
-                        'print:grid lg:gap-10 px-6 py-4 items-start',
-                    ]"
-                >
-                    <CarteSiteDetailleeFieldType :shantytown="shantytown" />
-                    <CarteSiteDetailleeOrigins
-                        :shantytown="shantytown"
-                        class="pl-5"
-                    />
-                    <template v-if="displayPhasesPreparatoiresResorption">
-                        <CarteSiteDetailleePhasesPreparatoiresResorption
-                            v-if="isOpen"
-                            :shantytown="shantytown"
-                        />
-                    </template>
-                    <template v-else>
-                        <CarteSiteDetailleeLivingConditions
-                            v-if="isOpen"
-                            :shantytown="shantytown"
-                        />
-                        <CarteSiteDetailleeClosingSolutions
-                            v-else
-                            :shantytown="shantytown"
-                        />
-                    </template>
-                    <CarteSiteDetailleeJustice
-                        v-if="userStore.hasJusticePermission"
+                <template v-if="displayPhasesPreparatoiresResorption">
+                    <CarteSiteDetailleePhasesPreparatoiresResorption
+                        v-if="isOpen"
                         :shantytown="shantytown"
                     />
-                    <CarteSiteDetailleeActors :shantytown="shantytown" />
-                </div>
-
-                <CarteSiteDetailleeFooter
+                </template>
+                <template v-else>
+                    <CarteSiteDetailleeLivingConditions
+                        v-if="isOpen"
+                        :shantytown="shantytown"
+                    />
+                    <CarteSiteDetailleeClosingSolutions
+                        v-else
+                        :shantytown="shantytown"
+                    />
+                </template>
+                <CarteSiteDetailleeJustice
+                    v-if="userStore.hasJusticePermission"
                     :shantytown="shantytown"
-                    :isHover="isHover"
                 />
+                <CarteSiteDetailleeActors :shantytown="shantytown" />
             </div>
+
+            <CarteSiteDetailleeFooter
+                :shantytown="shantytown"
+                :isHover="isHover"
+            />
         </div>
-    </RouterLink>
+    </div>
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, ref } from "vue";
+import { toRefs, computed, ref } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import focusClasses from "@common/utils/focus_classes";
 
@@ -114,22 +109,6 @@ const displayPhasesPreparatoiresResorption = computed(() => {
 const nbCol = computed(() => {
     return userStore.hasJusticePermission ? "5" : "4";
 });
-
-function handleClickOnCard(event, navigateFunction) {
-    // On vérifie si le clic vient d'un bouton du footer ou d'un click sur intervenant ou sur la tuile complète
-    let targetElement = event.target;
-    while (targetElement && targetElement !== event.currentTarget) {
-        if (
-            targetElement.tagName === "BUTTON" ||
-            targetElement.tagName === "A" ||
-            targetElement.closest(".carte-site-detaillee-footer-wrapper")
-        ) {
-            return; // Ne pas naviguer si le clic vient d'un bouton du footer
-        }
-        targetElement = targetElement.parentElement;
-    }
-    navigateFunction();
-}
 </script>
 
 <style scoped lang="scss">

@@ -1,60 +1,141 @@
 <mj-section>
-    <mj-column>
-        <mj-text mj-class='text-display font-bold'>
-            {{ summary.code }} – {{ summary.name }}
-        </mj-text>
-        <mj-text mj-class='text-body'>
-            <mj-raw>{% if summary.shantytowns_total == 0 %}</mj-raw>
-            <span aria-label="Taux faible : 0 pour cent" class="rate-span rate-bad" title="Taux faible : 0 pour cent">0%</span>
-            <mj-raw>{% elseif summary.updated_population_3_months_percentage < 80 %}</mj-raw>
-            <span aria-label="Taux faible : {{ summary.updated_population_3_months_percentage }} pour cent" class="rate-span rate-bad" title="Taux faible : {{ summary.updated_population_3_months_percentage }} pour cent">{{ summary.updated_population_3_months_percentage }}%</span>
-            <mj-raw>{% elseif summary.updated_population_3_months_percentage < 95 %}</mj-raw>
-            <span aria-label="Taux moyen : {{ summary.updated_population_3_months_percentage }} pour cent" class="rate-span rate-medium" title="Taux moyen : {{ summary.updated_population_3_months_percentage }} pour cent">{{ summary.updated_population_3_months_percentage }}%</span>
-            <mj-raw>{% else %}</mj-raw>
-            <span aria-label="Très bon taux : {{ summary.updated_population_3_months_percentage }} pour cent" class="rate-span rate-good" title="Très bon taux : {{ summary.updated_population_3_months_percentage }} pour cent">{{ summary.updated_population_3_months_percentage }}%</span>
-            <mj-raw>{% endif %}</mj-raw>
-             de sites (soit
-                <mj-raw>{% if summary.shantytowns_total == 0 %}</mj-raw>
-                un taux faible)
-                <mj-raw>{% elseif summary.updated_population_3_months_percentage < 80 %}</mj-raw>
-                un taux faible)
-                <mj-raw>{% elseif summary.updated_population_3_months_percentage < 95 %}</mj-raw>
-                un taux moyen)
-                <mj-raw>{% else %}</mj-raw>
-                un très bon taux)
-                <mj-raw>{% endif %}</mj-raw>
-             ont fait l'objet d'une mise à jour du nombre d'habitants dans les 3 derniers mois
-        </mj-text>        
-        <mj-text mj-class='text-body'>
-            <mj-raw>{% if summary.shantytowns_total == 0 %}</mj-raw>
-            <span aria-label="Taux faible : 0 pour cent" class="rate-span rate-bad" title="Taux faible : 0 pour cent">0%</span>
-            <mj-raw>{% elseif summary.updated_shantytowns_6_months_percentage <= 30 %}</mj-raw>
-            <span aria-label="Taux faible : {{ summary.updated_shantytowns_6_months_percentage }} pour cent" class="rate-span rate-bad" title="Taux faible : {{ summary.updated_shantytowns_6_months_percentage }} pour cent">{{ summary.updated_shantytowns_6_months_percentage }}%</span>
-            <mj-raw>{% elseif summary.updated_shantytowns_6_months_percentage <= 60 %}</mj-raw>
-            <span aria-label="Taux moyen : {{ summary.updated_shantytowns_6_months_percentage }} pour cent" class="rate-span rate-medium" title="Taux moyen : {{ summary.updated_shantytowns_6_months_percentage }} pour cent">{{ summary.updated_shantytowns_6_months_percentage }}%</span>
-            <mj-raw>{% else %}</mj-raw>
-            <span aria-label="Très bon taux : {{ summary.updated_shantytowns_6_months_percentage }} pour cent" class="rate-span rate-good" title="Très bon taux : {{ summary.updated_shantytowns_6_months_percentage }} pour cent">{{ summary.updated_shantytowns_6_months_percentage }}%</span>
-            <mj-raw>{% endif %}</mj-raw>
-             de sites (soit
-                <mj-raw>{% if summary.shantytowns_total == 0 %}</mj-raw>
-                un taux faible)
-                <mj-raw>{% elseif summary.updated_shantytowns_6_months_percentage <= 30 %}</mj-raw>
-                un taux faible)
-                <mj-raw>{% elseif summary.updated_shantytowns_6_months_percentage <= 60 %}</mj-raw>
-                un taux moyen)
-                <mj-raw>{% else %}</mj-raw>
-                un très bon taux)
-                <mj-raw>{% endif %}</mj-raw>
-             ont été mis à jour au cours des 6 derniers mois
-        </mj-text>
-        <mj-text><span aria-label="{{ summary.population_total }} habitants" class="rate-span rate-none" title="{{ summary.population_total }}">{{ summary.population_total }}</span> habitants en bidonvilles ou squats</mj-text>
-        <mj-raw>{% if var:showDetails %}</mj-raw>
-            <mj-include path="summary_full_activities.mjml" />
-        <mj-raw>{% elseif summary.has_activity %}</mj-raw>
-            <mj-include path="summary_full_activities.mjml" />
-        <mj-raw>{% else %}</mj-raw>
-            <mj-text mj-class='pt-2 font-bold'>Aucune activité</mj-text>
-            <mj-include path="summary_footer.mjml" />
-        <mj-raw>{% endif %}</mj-raw>
-    </mj-column>
+  <mj-column>
+    <mj-text mj-class="text-display font-bold">
+      {{ summary.code }} – {{ summary.name }}
+    </mj-text>
+    <mj-text mj-class="text-body">
+      <mj-raw>{% if summary.shantytowns_total == 0 %}</mj-raw>
+      <span
+        aria-label="Taux faible : 0 pour cent"
+        class="rate-span rate-bad"
+        title="Taux faible : 0 pour cent"
+        >0%</span
+      >
+      <mj-raw
+        >{% elseif summary.updated_population_3_months_percentage < 80
+        %}</mj-raw
+      >
+      <span
+        aria-label="Taux faible : {{ summary.updated_population_3_months_percentage }} pour cent"
+        class="rate-span rate-bad"
+        title="Taux faible : {{ summary.updated_population_3_months_percentage }} pour cent"
+        >{{ summary.updated_population_3_months_percentage }}%</span
+      >
+      <mj-raw
+        >{% elseif summary.updated_population_3_months_percentage < 95
+        %}</mj-raw
+      >
+      <span
+        aria-label="Taux moyen : {{ summary.updated_population_3_months_percentage }} pour cent"
+        class="rate-span rate-medium"
+        title="Taux moyen : {{ summary.updated_population_3_months_percentage }} pour cent"
+        >{{ summary.updated_population_3_months_percentage }}%</span
+      >
+      <mj-raw>{% else %}</mj-raw>
+      <span
+        aria-label="Très bon taux : {{ summary.updated_population_3_months_percentage }} pour cent"
+        class="rate-span rate-good"
+        title="Très bon taux : {{ summary.updated_population_3_months_percentage }} pour cent"
+        >{{ summary.updated_population_3_months_percentage }}%</span
+      >
+      <mj-raw>{% endif %}</mj-raw>
+      de sites (soit
+      <mj-raw>{% if summary.shantytowns_total == 0 %}</mj-raw>
+      un taux faible)
+      <mj-raw
+        >{% elseif summary.updated_population_3_months_percentage < 80
+        %}</mj-raw
+      >
+      un taux faible)
+      <mj-raw
+        >{% elseif summary.updated_population_3_months_percentage < 95
+        %}</mj-raw
+      >
+      un taux moyen)
+      <mj-raw>{% else %}</mj-raw>
+      un très bon taux)
+      <mj-raw>{% endif %}</mj-raw>
+      ont fait l'objet d'une mise à jour du nombre d'habitants dans les 3
+      derniers mois
+    </mj-text>
+    <mj-text mj-class="text-body">
+      <mj-raw>{% if summary.shantytowns_total == 0 %}</mj-raw>
+      <span
+        aria-label="Taux faible : 0 pour cent"
+        class="rate-span rate-bad"
+        title="Taux faible : 0 pour cent"
+        >0%</span
+      >
+      <mj-raw
+        >{% elseif summary.updated_shantytowns_6_months_percentage <= 30
+        %}</mj-raw
+      >
+      <span
+        aria-label="Taux faible : {{ summary.updated_shantytowns_6_months_percentage }} pour cent"
+        class="rate-span rate-bad"
+        title="Taux faible : {{ summary.updated_shantytowns_6_months_percentage }} pour cent"
+        >{{ summary.updated_shantytowns_6_months_percentage }}%</span
+      >
+      <mj-raw
+        >{% elseif summary.updated_shantytowns_6_months_percentage <= 60
+        %}</mj-raw
+      >
+      <span
+        aria-label="Taux moyen : {{ summary.updated_shantytowns_6_months_percentage }} pour cent"
+        class="rate-span rate-medium"
+        title="Taux moyen : {{ summary.updated_shantytowns_6_months_percentage }} pour cent"
+        >{{ summary.updated_shantytowns_6_months_percentage }}%</span
+      >
+      <mj-raw>{% else %}</mj-raw>
+      <span
+        aria-label="Très bon taux : {{ summary.updated_shantytowns_6_months_percentage }} pour cent"
+        class="rate-span rate-good"
+        title="Très bon taux : {{ summary.updated_shantytowns_6_months_percentage }} pour cent"
+        >{{ summary.updated_shantytowns_6_months_percentage }}%</span
+      >
+      <mj-raw>{% endif %}</mj-raw>
+      de sites (soit
+      <mj-raw>{% if summary.shantytowns_total == 0 %}</mj-raw>
+      un taux faible)
+      <mj-raw
+        >{% elseif summary.updated_shantytowns_6_months_percentage <= 30
+        %}</mj-raw
+      >
+      un taux faible)
+      <mj-raw
+        >{% elseif summary.updated_shantytowns_6_months_percentage <= 60
+        %}</mj-raw
+      >
+      un taux moyen)
+      <mj-raw>{% else %}</mj-raw>
+      un très bon taux)
+      <mj-raw>{% endif %}</mj-raw>
+      ont été mis à jour au cours des 6 derniers mois
+    </mj-text>
+    <mj-text
+      ><span
+        aria-label="{{ summary.population_total }} habitants"
+        class="rate-span rate-none"
+        title="{{ summary.population_total }}"
+        >{{ summary.population_total }}</span
+      >
+      habitants dans
+      <span
+        aria-label="{{ summary.shantytowns_total }} sites"
+        class="rate-span rate-none"
+        title="{{ summary.shantytowns_total }}"
+        style="font-size: 1rem; font-weight: bold"
+        >{{ summary.shantytowns_total }}</span
+      >
+      bidonvilles ou squats</mj-text
+    >
+    <mj-raw>{% if var:showDetails %}</mj-raw>
+    <mj-include path="summary_full_activities.mjml" />
+    <mj-raw>{% elseif summary.has_activity %}</mj-raw>
+    <mj-include path="summary_full_activities.mjml" />
+    <mj-raw>{% else %}</mj-raw>
+    <mj-text mj-class="pt-2 font-bold">Aucune activité</mj-text>
+    <mj-include path="summary_footer.mjml" />
+    <mj-raw>{% endif %}</mj-raw>
+  </mj-column>
 </mj-section>

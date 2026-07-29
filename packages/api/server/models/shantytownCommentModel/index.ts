@@ -1,9 +1,11 @@
-import create from './create';
-import findAll from './findAll';
-import findByShantytown from './findByShantytown';
-import findOne from './findOne';
-import getHistory from './getHistory';
-import deleteComment from './deleteComment';
+import create from '#server/models/shantytownCommentModel/create';
+import findAll from '#server/models/shantytownCommentModel/findAll';
+import findByShantytown from '#server/models/shantytownCommentModel/findByShantytown';
+import findOne from '#server/models/shantytownCommentModel/findOne';
+import getHistory from '#server/models/shantytownCommentModel/getHistory';
+import deleteComment from '#server/models/shantytownCommentModel/deleteComment';
+import serializeComment from '#server/models/shantytownCommentModel/serializeComment';
+import update from '#server/models/shantytownCommentModel/update';
 
 export default {
     create,
@@ -12,4 +14,6 @@ export default {
     findOne,
     getHistory,
     deleteComment,
+    serializeComment,
+    update,
 };

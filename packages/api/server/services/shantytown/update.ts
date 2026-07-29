@@ -5,8 +5,10 @@ import attachmentService from '#server/services/attachment';
 import shantytownParcelOwnerService from '#server/services/shantytownParcelOwner';
 import ServiceError from '#server/errors/ServiceError';
 import { triggerReinstallationAlert } from '#server/utils/mattermost';
+import checkPopulationUpdate from '#server/services/shantytown/_common/populationStatus';
+import { AuthUser } from '#server/middlewares/authMiddleware';
 import find from './find';
-import { Shantytown } from '#root/types/resources/Shantytown.d';
+import { Shantytown, ShantytownWithEnrichedComments, ShantytownWithJustice } from '#root/types/resources/Shantytown.d';
 
 type DecreeAttachments = {
     filesDatas: {
@@ -18,35 +20,6 @@ type DecreeAttachments = {
     },
     files: Express.Multer.File[],
 };
-
-const POPULATION_FIELDS: Array<[string, string]> = [
-    ['populationTotal', 'population_total'],
-    ['populationTotalFemales', 'population_total_females'],
-    ['populationCouples', 'population_couples'],
-    ['populationMinors', 'population_minors'],
-    ['populationMinorsGirls', 'population_minors_girls'],
-    ['populationMinors0To3', 'population_minors_0_3'],
-    ['populationMinors3To6', 'population_minors_3_6'],
-    ['populationMinors6To12', 'population_minors_6_12'],
-    ['populationMinors12To16', 'population_minors_12_16'],
-    ['populationMinors16To18', 'population_minors_16_18'],
-    ['minorsInSchool', 'minors_in_school'],
-];
-
-function checkPopulationUpdate(originalShantytown, shantytown): Date | undefined {
-    const hasChanged = POPULATION_FIELDS.some(
-        ([oldKey, newKey]) => originalShantytown[oldKey] !== shantytown[newKey],
-    );
-
-    let hasNoChangesButHadData = false;
-    if (shantytown.updated_without_any_change && !hasChanged) {
-        hasNoChangesButHadData = POPULATION_FIELDS.some(
-            ([oldKey]) => originalShantytown[oldKey] !== null && originalShantytown[oldKey] !== undefined,
-        );
-    }
-
-    return hasChanged || hasNoChangesButHadData ? new Date() : undefined;
-}
 
 function buildLivingConditionsV2Payload(shantytown) {
     return {
@@ -184,7 +157,7 @@ function buildUpdatePayload(shantytown, originalShantytown) {
     };
 }
 
-function checkReinstallationChanged(originalShantytown: Shantytown, updatedShantytown: Shantytown): boolean {
+function checkReinstallationChanged(originalShantytown: ShantytownWithEnrichedComments, updatedShantytown: ShantytownWithEnrichedComments): boolean {
     return originalShantytown.isReinstallation !== updatedShantytown.isReinstallation
         || originalShantytown.reinstallationComments !== updatedShantytown.reinstallationComments
         || JSON.stringify(originalShantytown.reinstallationIncomingTowns.map(t => t.id))
@@ -255,7 +228,7 @@ async function updatePreparatoryPhases(user, shantytown, transaction) {
     }
 }
 
-async function fetchUpdatedShantytown(user, shantytownId: number): Promise<Shantytown> {
+async function fetchUpdatedShantytown(user: AuthUser, shantytownId: number): Promise<ShantytownWithEnrichedComments> {
     try {
         const updatedShantytown = await find(user, shantytownId);
 
@@ -269,7 +242,7 @@ async function fetchUpdatedShantytown(user, shantytownId: number): Promise<Shant
     }
 }
 
-async function sendReinstallationNotification(originalShantytown: Shantytown, updatedShantytown: Shantytown, user) {
+async function sendReinstallationNotification(originalShantytown: ShantytownWithEnrichedComments, updatedShantytown: ShantytownWithEnrichedComments, user: AuthUser) {
     if (!updatedShantytown.isReinstallation || !checkReinstallationChanged(originalShantytown, updatedShantytown)) {
         return;
     }
@@ -282,7 +255,7 @@ async function sendReinstallationNotification(originalShantytown: Shantytown, up
     }
 }
 
-export default async function update(shantytown, user, decreeAttachments: DecreeAttachments): Promise<Shantytown> {
+export default async function update(shantytown: Shantytown, user: AuthUser, decreeAttachments: DecreeAttachments): Promise<ShantytownWithEnrichedComments> {
     const originalShantytown = await find(user, shantytown.id);
     if (!originalShantytown) {
         throw new ServiceError('fetch_failed', new Error('Impossible de retrouver le site en base de données'));
@@ -292,7 +265,7 @@ export default async function update(shantytown, user, decreeAttachments: Decree
 
     try {
         await updateShantytownData(user, shantytown.id, buildUpdatePayload(shantytown, originalShantytown), transaction);
-        await uploadDecreeAttachments(decreeAttachments, shantytown.id, user.id, transaction, shantytown.attachments);
+        await uploadDecreeAttachments(decreeAttachments, shantytown.id, user.id, transaction, (shantytown as ShantytownWithJustice).attachments);
         await updateParcelOwners(user, shantytown, transaction);
         await updatePreparatoryPhases(user, shantytown, transaction);
 

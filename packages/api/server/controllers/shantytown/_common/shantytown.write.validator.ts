@@ -13,7 +13,7 @@ import socialOriginModel from '#server/models/socialOriginModel';
 import preparatoryPhasesTowardResorptionModel from '#server/models/preparatoryPhasesTowardResorptionModel';
 // types
 import { SocialOrigin } from '#root/types/resources/SocialOrigin.d';
-import { Shantytown } from '#root/types/resources/Shantytown.d';
+import { ShantytownWithEnrichedComments } from '#root/types/resources/Shantytown.d';
 import { SerializedOwner } from '#root/types/resources/ParcelOwner.d';
 import { OwnerType } from '#root/types/resources/OwnerType.d';
 import { PreparatoryPhaseTowardResorption } from '#root/types/resources/PreparatoryPhaseTowardResorption.d';
@@ -117,7 +117,7 @@ export default mode => ([
     param('id')
         .if(() => mode === 'update')
         .custom(async (value, { req }) => {
-            let town: Shantytown;
+            let town: ShantytownWithEnrichedComments;
             try {
                 town = await shantytownService.find(req.user, value);
             } catch (error) {

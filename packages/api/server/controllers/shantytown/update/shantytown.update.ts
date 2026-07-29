@@ -1,8 +1,9 @@
 import shantytownService from '#server/services/shantytown';
 import can from '#server/utils/permission/can';
-import { Shantytown } from '#root/types/resources/Shantytown.d';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
+import { ShantytownWithEnrichedComments } from '#root/types/resources/Shantytown.d';
 
-const ERROR_RESPONSES = {
+const ERROR_RESPONSES: ControllerErrors = {
     insert_failed: { code: 500, message: 'La mise à jour de site n\'a pas pu être enregistrée.' },
     update_failed: { code: 500, message: 'La mise à jour de site n\'a pas pu être enregistrée.' },
     upload_failed: { code: 500, message: 'L\'enregistrement des pièces jointes a échoué.' },
@@ -27,7 +28,7 @@ export default async (req, res, next) => {
         });
     }
 
-    let updatedTown: Shantytown;
+    let updatedTown: ShantytownWithEnrichedComments;
     try {
         updatedTown = await shantytownService.update(
             { ...req.body, id: req.params.id },
