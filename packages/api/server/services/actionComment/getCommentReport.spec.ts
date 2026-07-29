@@ -35,7 +35,7 @@ rewiremock.enable();
 import getCommentReport from './getCommentReport';
 rewiremock.disable();
 
-describe('services/action.getActionReport()', () => {
+describe('services/actionComment.getCommentReport()', () => {
     const user: AuthUser = fakeUser();
     const actionCommentRow: ActionRowComment = fakeActionCommentRow();
 

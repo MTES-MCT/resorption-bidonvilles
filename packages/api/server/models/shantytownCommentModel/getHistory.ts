@@ -5,13 +5,13 @@ import geoUtils from '#server/utils/geo';
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
+import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
 import getAddressSimpleOf from '#server/models/shantytownModel/_common/getAddressSimpleOf';
 import getUsenameOf from '#server/models/shantytownModel/_common/getUsenameOf';
-import serializeComment from '#server/models/shantytownModel/_common/serializeComment';
-import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
 import outremer from '#server/utils/permission/outremer';
 import { Location } from '#server/models/geoModel/Location.d';
-import { ShantytownCommentRow } from './ShantytownCommentRow.d';
+import serializeComment from '#server/models/shantytownCommentModel/serializeComment';
+import { ShantytownCommentRow } from '#server/models/shantytownCommentModel/ShantytownCommentRow.d';
 import { ShantytownCommentActivity } from '#root/types/resources/Activity.d';
 import { User } from '#root/types/resources/User.d';
 

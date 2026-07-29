@@ -9,7 +9,6 @@ import getHistory from './getHistory';
 import getHistoryAtGivenDate from './getHistoryAtGivenDate';
 import getUsenameOf from './_common/getUsenameOf';
 import update from './update';
-import serializeComment from './_common/serializeComment';
 import deleteShantytown from './delete';
 import fixClosedStatus from './fixClosedStatus';
 import setHeatwaveStatus from './setHeatwaveStatus';
@@ -28,7 +27,6 @@ export default {
     getHistory,
     getHistoryAtGivenDate,
     getUsenameOf,
-    serializeComment,
     setHeatwaveStatus,
     setResorptionTarget,
     update,

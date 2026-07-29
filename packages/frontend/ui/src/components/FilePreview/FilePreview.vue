@@ -12,19 +12,17 @@
                 </p>
             </div>
         </a>
-        <Button
-            :loading="file.loading === true"
-            class="align-right rounded hover:!bg-primary px-2"
+        <DsfrButton
+            :disabled="file.loading === true"
+            class="mt-2"
             :class="allowDeletion && (file.state === 'draft' || isHovered || file.loading === true) ? '' : 'hidden'"
             :title="`Supprimer la pièce jointe, ${file.name}`"
-            type="button"
-            icon="trash-alt"
-            iconPosition="left"
-            size="xs"
+            icon="fr-icon-delete-line"
+            size="small"
             @click.prevent="onDelete"
-            variant="primaryOutlineAlt">
-            Supprimer ce fichier
-        </Button>
+            tertiary
+            label="Supprimer ce fichier"
+        />
     </div>
 </template>
 
@@ -32,7 +30,6 @@
 import { ref, toRefs } from 'vue';
 import FilePreviewIcon from "./FilePreviewIcon.vue";
 import humanFileSize from '../../utils/humanFileSize';
-import Button from "../Button.vue";
 
 const props = defineProps({
     file: {

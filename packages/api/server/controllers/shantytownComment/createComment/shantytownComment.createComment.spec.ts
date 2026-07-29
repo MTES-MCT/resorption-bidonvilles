@@ -7,13 +7,13 @@ import { serialized as fakeUser } from '#test/utils/user';
 import shantytownCommentService from '#server/services/shantytownComment';
 import ServiceError from '#server/errors/ServiceError';
 import { NextFunction } from 'express';
-import ctlCreate from './shantytown.createComment';
+import ctlCreate from './shantytownComment.createComment';
 
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe.skip('controllers/shantytownComment', () => {
+describe('controllers/shantytownComment', () => {
     let createCommentService;
     beforeEach(() => {
         createCommentService = sinon.stub(shantytownCommentService, 'createComment');

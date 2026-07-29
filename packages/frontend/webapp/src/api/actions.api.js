@@ -17,6 +17,15 @@ export function addComment(actionId, comment, attachments) {
     });
 }
 
+export function updateComment(actionId, commentId, description) {
+    return axios.patch(
+        `/actions/${encodeURI(actionId)}/comments/${commentId}`,
+        {
+            description,
+        }
+    );
+}
+
 export function deleteComment(actionId, commentId, message) {
     return axios.delete(
         `/actions/${encodeURI(actionId)}/comments/${encodeURI(commentId)}`,

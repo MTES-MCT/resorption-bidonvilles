@@ -1,4 +1,4 @@
-import actionService from '#server/services/action/actionService';
+import actionCommentService from '#server/services/actionComment';
 import can from '#server/utils/permission/can';
 import { ControllerErrors } from '#server/errors/ControllerErrors';
 
@@ -13,7 +13,7 @@ const ERRORS: ControllerErrors = {
     unknown_request: { code: 500, message: 'Requête inconnue' },
 };
 
-export default async (req, res, next) => {
+export default async function createComment(req, res, next) {
     if (!can(req.user).do('create', 'action_comment').on(req.body.action)) {
         return res.status(403).send({
             user_message: 'Vous n\'avez pas les droits suffisants pour créer un commentaire sur cette action',
@@ -21,7 +21,7 @@ export default async (req, res, next) => {
     }
 
     try {
-        const response = await actionService.createComment(req.user.id, req.body.action, {
+        const response = await actionCommentService.createComment(req.user.id, req.body.action, {
             description: req.body.description,
             files: req.files,
         });
@@ -29,9 +29,9 @@ export default async (req, res, next) => {
     } catch (error) {
         const { code, nativeError } = error;
 
-        res.status(typeof code === 'string' ? parseInt(code, 10) : code).send({
+        res.status(typeof code === 'string' ? Number.parseInt(code, 10) : code).send({
             user_message: ERRORS[nativeError].message ?? ERRORS.undefined.message,
         });
         return next(error.nativeError ?? error);
     }
-};
+}
