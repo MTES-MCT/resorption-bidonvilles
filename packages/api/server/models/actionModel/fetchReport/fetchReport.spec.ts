@@ -75,4 +75,13 @@ describe('models/actionModel/fetchReport/fetchReport()', () => {
         expect(sql).to.include('finance_dedie');
         expect(sql).to.include('depense_finance_etatique');
     });
+
+    // ── Test 5 : financee_dihal présent dans la requête SQL (BOOL_OR) ────────
+    it('génère une requête SQL qui calcule financee_dihal avec BOOL_OR', async () => {
+        await fetchReport(YEAR);
+
+        const sql: string = queryStub.firstCall.args[0];
+        expect(sql).to.include('financee_dihal');
+        expect(sql).to.include('BOOL_OR(af.fk_action_finance_type = \'dedie\')');
+    });
 });
