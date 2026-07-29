@@ -8,6 +8,7 @@
             v-else
             class="text-lg font-bold"
             :population="shantytown.populationTotal"
+            :minors="shantytown.populationMinors"
         />
         <div>
             <div v-if="!socialOrigins.length" class="text-G700">

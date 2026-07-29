@@ -14,6 +14,9 @@
                     représentant {{ formatStat(populationTotal) }} personne{{
                         isPlural(populationTotal) ? "s" : ""
                     }}
+                    dont {{ formatStat(minorTotal) }} mineur{{
+                        isPlural(minorTotal) ? "s" : ""
+                    }}
                 </p>
                 <p>
                     {{ updatedPopulationInTheLastThreeMonths }} sites<template
@@ -97,6 +100,12 @@ const title = computed(() => {
 const populationTotal = computed(() => {
     return townsStore.filteredTowns.reduce(
         (total, { populationTotal }) => total + (populationTotal || 0),
+        0
+    );
+});
+const minorTotal = computed(() => {
+    return townsStore.filteredTowns.reduce(
+        (total, { populationMinors }) => total + (populationMinors || 0),
         0
     );
 });
