@@ -1,6 +1,6 @@
 <template>
     <span class="sr-only">Liste des intervenants</span>
-    <div class="flex">
+    <div class="flex z-10">
         <div
             v-bind:class="{
                 'text-G700': shantytown.actors.length === 0,

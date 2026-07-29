@@ -11,6 +11,8 @@
         } ${shantytown.city.name}`"
         @mouseenter="isHover = true"
         @mouseleave="isHover = false"
+        @focusin="isHover = true"
+        @focusout="isHover = false"
     >
         <div class="-mt-1 print:mt-0">
             <CarteSiteDetailleeHeader
