@@ -1,14 +1,26 @@
 <template>
     <div class="text-md px-6">
         <div class="text-primary text-display-md font-bold">
-            <span v-if="shantytown.name" class="font-bold">
-                « {{ shantytown.name }} » - {{ shantytown.addressSimple }}
-                {{ shantytown.city.name }} ({{ shantytown.departement.code }})
-            </span>
-            <span v-else class="font-bold">
-                {{ shantytown.addressSimple }}
-                {{ shantytown.city.name }} ({{ shantytown.departement.code }})
-            </span>
+            <RouterLink
+                :to="`/site/${shantytown.id}`"
+                class="focus:outline-none after:absolute after:inset-0"
+                :aria-label="`Fiche site ${shantytown.addressSimple} ${
+                    shantytown.name ? shantytown.name : ''
+                } ${shantytown.city.name}`"
+            >
+                <span v-if="shantytown.name" class="font-bold">
+                    « {{ shantytown.name }} » - {{ shantytown.addressSimple }}
+                    {{ shantytown.city.name }} ({{
+                        shantytown.departement.code
+                    }})
+                </span>
+                <span v-else class="font-bold">
+                    {{ shantytown.addressSimple }}
+                    {{ shantytown.city.name }} ({{
+                        shantytown.departement.code
+                    }})
+                </span>
+            </RouterLink>
         </div>
     </div>
     <div class="px-6" v-if="isClosed(shantytown)">

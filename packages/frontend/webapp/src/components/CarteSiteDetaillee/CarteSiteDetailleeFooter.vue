@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex flex-wrap justify-end md:h-10 items-end m-4 gap-3 print:hidden sm:flex-row"
+        class="flex flex-wrap justify-end md:h-10 items-end m-4 gap-3 print:hidden sm:flex-row relative z-50"
     >
         <BoutonFavori :townId="shantytown.id" />
         <DsfrButton
@@ -206,9 +206,3 @@ async function handleNoChangeModalIfNeeded() {
     return false;
 }
 </script>
-
-<style scoped>
-button {
-    border: inherit;
-}
-</style>
