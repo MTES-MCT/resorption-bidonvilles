@@ -5,6 +5,7 @@ import attachmentService from '#server/services/attachment';
 import shantytownParcelOwnerService from '#server/services/shantytownParcelOwner';
 import ServiceError from '#server/errors/ServiceError';
 import { triggerReinstallationAlert } from '#server/utils/mattermost';
+import checkPopulationUpdate from '#server/services/shantytown/_common/populationStatus';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import find from './find';
 import { Shantytown, ShantytownWithEnrichedComments, ShantytownWithJustice } from '#root/types/resources/Shantytown.d';
@@ -19,35 +20,6 @@ type DecreeAttachments = {
     },
     files: Express.Multer.File[],
 };
-
-const POPULATION_FIELDS: Array<[string, string]> = [
-    ['populationTotal', 'population_total'],
-    ['populationTotalFemales', 'population_total_females'],
-    ['populationCouples', 'population_couples'],
-    ['populationMinors', 'population_minors'],
-    ['populationMinorsGirls', 'population_minors_girls'],
-    ['populationMinors0To3', 'population_minors_0_3'],
-    ['populationMinors3To6', 'population_minors_3_6'],
-    ['populationMinors6To12', 'population_minors_6_12'],
-    ['populationMinors12To16', 'population_minors_12_16'],
-    ['populationMinors16To18', 'population_minors_16_18'],
-    ['minorsInSchool', 'minors_in_school'],
-];
-
-function checkPopulationUpdate(originalShantytown, shantytown): Date | undefined {
-    const hasChanged = POPULATION_FIELDS.some(
-        ([oldKey, newKey]) => originalShantytown[oldKey] !== shantytown[newKey],
-    );
-
-    let hasNoChangesButHadData = false;
-    if (shantytown.updated_without_any_change && !hasChanged) {
-        hasNoChangesButHadData = POPULATION_FIELDS.some(
-            ([oldKey]) => originalShantytown[oldKey] !== null && originalShantytown[oldKey] !== undefined,
-        );
-    }
-
-    return hasChanged || hasNoChangesButHadData ? new Date() : undefined;
-}
 
 function buildLivingConditionsV2Payload(shantytown) {
     return {

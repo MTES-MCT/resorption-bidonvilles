@@ -26,6 +26,7 @@ const stubs = {
     sendUserShantytownDeclared: sandbox.stub(),
     socialOriginCreate: sandbox.stub(),
     incomingTownsCreate: sandbox.stub(),
+    checkPopulationUpdate: sandbox.stub(),
     sequelize: {
         transaction: sandbox.stub(),
     },
@@ -49,6 +50,7 @@ rewiremock('#server/models/incomingTownsModel/create').with(stubs.incomingTownsC
 rewiremock('#server/models/userModel/getLocationWatchers').with(stubs.getLocationWatchers);
 rewiremock('#server/mails/mails').with({ sendUserShantytownDeclared: stubs.sendUserShantytownDeclared });
 rewiremock('#server/services/shantytown/_common/baseShantytown').callThrough();
+rewiremock('#server/services/shantytown/_common/populationStatus').with(stubs.checkPopulationUpdate);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
