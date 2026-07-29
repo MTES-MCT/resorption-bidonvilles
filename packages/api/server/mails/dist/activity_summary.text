@@ -47,7 +47,8 @@ summary.updated_shantytowns_6_months_percentage <= 30 %} un taux faible) {%
 elseif summary.updated_shantytowns_6_months_percentage <= 60 %} un taux moyen)
 {% else %} un très bon taux) {% endif %} ont été mis à jour au cours des 6
 derniers mois
-{{ summary.population_total }} habitants en bidonvilles ou squats
+{{ summary.population_total }} habitants dans {{ summary.shantytowns_total }}
+bidonvilles ou squats
 {% if var:showDetails %}{% if summary.new_shantytowns_length > 1 %}
 {{ summary.new_shantytowns_length }} nouveaux sites
 {% else %}
