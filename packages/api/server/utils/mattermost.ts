@@ -5,7 +5,7 @@ import { getActionFullName } from '#server/utils/formatActionFullName';
 import Action from '#root/types/resources/Action.d';
 import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 import { CommentAuthor } from '#root/types/resources/CommentAuthor.d';
-import { Shantytown } from '#root/types/resources/Shantytown.d';
+import { Shantytown, ShantytownWithEnrichedComments } from '#root/types/resources/Shantytown.d';
 import { User } from '#root/types/resources/User.d';
 
 type MattermostMsg = {
@@ -20,7 +20,7 @@ type MattermostMsg = {
 };
 
 const { mattermost, webappUrl } = config;
-const formatAddress = (town: Shantytown): string => {
+const formatAddress = (town: Pick<Shantytown, 'name' | 'address'>): string => {
     const nameSection = town.name ? `« ${town.name} » ` : '';
     return `${town.address} ${nameSection}`;
 };
@@ -573,7 +573,7 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
     await shantytownCloseAlert.send(mattermostMessage);
 }
 
-export async function triggerReinstallationAlert(town: Shantytown, user: User): Promise<void> {
+export async function triggerReinstallationAlert(town: Shantytown | ShantytownWithEnrichedComments, user: User): Promise<void> {
     if (!mattermost) {
         return;
     }

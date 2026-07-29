@@ -5,7 +5,6 @@ import { useUserStore } from "@/stores/user.store";
 import { useConfigStore } from "@/stores/config.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useActivitiesStore } from "./activities.store";
-import { useDashboardActivitiesStore } from "./dashboard.activities.store";
 import {
     create,
     edit,
@@ -13,6 +12,7 @@ import {
     fetchOne,
     addComment,
     deleteComment,
+    updateComment,
     requestPilot,
 } from "@/api/actions.api";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
@@ -312,7 +312,6 @@ export const useActionsStore = defineStore("actions", () => {
         },
         async deleteComment(actionId, commentId, reason = "") {
             const activitiesStore = useActivitiesStore();
-            const dashboardActivitiesStore = useDashboardActivitiesStore();
 
             const { comments } = await deleteComment(
                 actionId,
@@ -327,7 +326,28 @@ export const useActionsStore = defineStore("actions", () => {
                 ].comments.filter((comment) => comment.id !== commentId);
             }
             activitiesStore.removeComment(commentId);
-            dashboardActivitiesStore.removeComment(commentId);
+        },
+        async updateComment(actionId, commentId, description) {
+            const notificationStore = useNotificationStore();
+            const activitiesStore = useActivitiesStore();
+            const { comment } = await updateComment(
+                actionId,
+                commentId,
+                description
+            );
+            if (hash.value[actionId]) {
+                const commentIndex = hash.value[actionId].comments.findIndex(
+                    ({ id }) => id === commentId
+                );
+                if (commentIndex !== -1) {
+                    hash.value[actionId].comments[commentIndex] = comment;
+                }
+            }
+            activitiesStore.updateComment(commentId, comment.description);
+            notificationStore.success(
+                "Modification du message",
+                "Votre message a bien été modifié"
+            );
         },
         async deleteCommentAttachment(file, { actionId, commentId }) {
             await deleteAttachment(file.id);

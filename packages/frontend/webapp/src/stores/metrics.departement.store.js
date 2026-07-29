@@ -22,7 +22,7 @@ export const useDepartementMetricsStore = defineStore(
             justice: { id: "city_name", order: "asc" },
         });
         const metrics = ref({});
-        const currentFormat = ref("summary");
+        const currentFormat = ref("table");
         const evolution = {
             from: ref(new Date()),
             to: ref(new Date()),
@@ -74,7 +74,7 @@ export const useDepartementMetricsStore = defineStore(
         function reset() {
             departement.value = null;
             activeTab.value = "summary";
-            currentFormat.value = "summary";
+            currentFormat.value = "table";
             error.value = null;
             sort.value = {
                 summary: { id: "city_name", order: "asc" },

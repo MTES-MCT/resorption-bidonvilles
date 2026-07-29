@@ -4,7 +4,6 @@ import { useEventBus } from "@common/helpers/event-bus";
 import { trackEvent } from "@/helpers/matomo";
 import { useUserStore } from "@/stores/user.store";
 import { useActivitiesStore } from "./activities.store";
-import { useDashboardActivitiesStore } from "./dashboard.activities.store";
 import { useNotificationStore } from "./notification.store";
 import { useConfigStore } from "./config.store";
 import getDefaultLocationFilter from "@/utils/getDefaultLocationFilter";
@@ -25,6 +24,7 @@ import {
     setHeatwaveStatus,
     setResorptionTarget,
     updateActorThemes,
+    updateComment,
     startResorption,
 } from "@/api/towns.api";
 import enrichShantytown from "@/utils/enrichShantytown";
@@ -351,7 +351,6 @@ export const useTownsStore = defineStore("towns", () => {
         },
         async deleteComment(shantytownId, commentId, reason = "") {
             const activitiesStore = useActivitiesStore();
-            const dashboardActivitiesStore = useDashboardActivitiesStore();
             const { comments } = await deleteComment(
                 shantytownId,
                 commentId,
@@ -373,11 +372,31 @@ export const useTownsStore = defineStore("towns", () => {
                     : hash.value[shantytownId].updatedAt
             );
             activitiesStore.removeComment(commentId);
-            dashboardActivitiesStore.removeComment(commentId);
+        },
+        async updateComment(shantytownId, commentId, description) {
+            const notificationStore = useNotificationStore();
+            const activitiesStore = useActivitiesStore();
+            const { comments } = await updateComment(
+                shantytownId,
+                commentId,
+                description
+            );
+            updateShantytownComments(shantytownId, comments);
+            setTowns(shantytownId);
+            const updatedComment = comments.find(({ id }) => id === commentId);
+            if (updatedComment) {
+                activitiesStore.updateComment(
+                    commentId,
+                    updatedComment.description
+                );
+            }
+            notificationStore.success(
+                "Modification du message",
+                "Votre message a bien été modifié"
+            );
         },
         async deleteDecree(shantytownId, commentId, reason = "") {
             const activitiesStore = useActivitiesStore();
-            const dashboardActivitiesStore = useDashboardActivitiesStore();
             const { comments } = await deleteComment(
                 shantytownId,
                 commentId,
@@ -386,7 +405,6 @@ export const useTownsStore = defineStore("towns", () => {
 
             updateShantytownComments(shantytownId, comments);
             activitiesStore.removeComment(commentId);
-            dashboardActivitiesStore.removeComment(commentId);
         },
         heatwaveStatuses,
         async setHeatwaveStatus(id, status) {

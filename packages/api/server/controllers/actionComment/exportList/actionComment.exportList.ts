@@ -1,6 +1,7 @@
-import actionService from '#server/services/action/actionService';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
+import actionCommentService from '#server/services/actionComment';
 
-const ERROR_RESPONSES = {
+const ERROR_RESPONSES: ControllerErrors = {
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
     permission_denied: { code: 403, message: 'Vous n\'avez pas les droits suffisants pour exporter les commentaires' },
     no_data: { code: 400, message: 'Aucune donnée à exporter' },
@@ -10,7 +11,7 @@ const ERROR_RESPONSES = {
 export default async (req, res, next) => {
     try {
         res.status(200).send({
-            csv: await actionService.getCommentReport(req.user),
+            csv: await actionCommentService.getCommentReport(req.user),
         });
     } catch (error) {
         const { code, message } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;

@@ -40,7 +40,8 @@ export default function fetchReport(
                 NULL::numeric as "depense_finance_collectivite",
                 NULL::numeric as "depense_finance_europeen",
                 NULL::numeric as "depense_finance_prive",
-                NULL::numeric as "depense_finance_autre"
+                NULL::numeric as "depense_finance_autre",
+                NULL::boolean as "financee_dihal"
             WHERE FALSE
         )`;
     } else {
@@ -65,8 +66,9 @@ export default function fetchReport(
             NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'collectivite' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_collectivite",
             NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'europeen' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_europeen",
             NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'prive' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_prive",
-            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'autre' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_autre"
-        FROM 
+            NULLIF(SUM(CASE WHEN af.fk_action_finance_type = 'autre' THEN af.real_amount ELSE 0 END), 0) as "depense_finance_autre",
+            BOOL_OR(af.fk_action_finance_type = 'dedie') as "financee_dihal"
+        FROM
             action_finances af
         LEFT JOIN actions ON af.fk_action = actions.action_id
         LEFT JOIN departements ON actions.fk_departement = departements.code
@@ -286,6 +288,7 @@ export default function fetchReport(
         sm.scolaire_mineur_scolarise_dans_annee,
         fi.finance_etatique,
         fi.finance_dedie,
+        fi.financee_dihal,
         fi.finance_collectivite,
         fi.finance_europeen,
         fi.finance_prive,

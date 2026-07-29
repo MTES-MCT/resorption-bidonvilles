@@ -48,14 +48,14 @@ rewiremock('#server/mails/mails').with(stubs.mails);
 rewiremock('#server/utils/permission').with({ can: stubs.can });
 rewiremock('validator').with(stubs.validator);
 rewiremock('#server/utils/date').with(stubs.dateUtils);
-rewiremock('./_common/enrichCommentsAttachments').with(stubs.enrichCommentsAttachments);
+rewiremock('./enrichCommentsAttachments').with(stubs.enrichCommentsAttachments);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
 import deleteCommentService from './deleteComment';
 rewiremock.disable();
 
-describe('services/shantytown', () => {
+describe('services/shantytownComment', () => {
     describe('deleteComment()', () => {
         let user: AuthUser;
         const author = fakeUser({ id: 1 });

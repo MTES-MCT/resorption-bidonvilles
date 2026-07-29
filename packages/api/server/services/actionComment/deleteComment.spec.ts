@@ -50,7 +50,7 @@ rewiremock.enable();
 import deleteActionComment from './deleteComment';
 rewiremock.disable();
 
-describe('services/action.deleteComment()', () => {
+describe('services/actionComment.deleteComment()', () => {
     let user: AuthUser;
     const deletionMessage = 'Test supression message action';
 

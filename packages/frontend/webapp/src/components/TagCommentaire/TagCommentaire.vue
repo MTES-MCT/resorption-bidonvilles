@@ -1,14 +1,10 @@
 <template>
-    <Tag variant="withoutBackground" :class="tagClass">
-        {{ tag.label }}
-    </Tag>
+    <DsfrTag small :class="tagClass" :label="tag.label" />
 </template>
 
 <script setup>
 import { defineProps, toRefs, computed } from "vue";
 import specialTags from "@/utils/special_tags";
-
-import { Tag } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     tag: {
