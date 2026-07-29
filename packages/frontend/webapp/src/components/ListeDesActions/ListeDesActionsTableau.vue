@@ -10,7 +10,6 @@
                 :key="action.id"
                 class="cursor-pointer hover:bg-blue-france-925-125"
             >
-                <!-- @click="navigateToAction(action.id)" -->
                 <td class="relative z-10">
                     <DsfrTagCopy
                         :label="action.displayId"
