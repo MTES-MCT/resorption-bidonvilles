@@ -51,7 +51,7 @@ export default [
             }
 
             if (req.body.targets.mode === 'pref_et_ddets' && req.body.action) {
-                return organizationModel.findPrefAndDdets(req.body.action.location?.departement?.code);
+                return organizationModel.findPrefAndDdets(req.body.action.location);
             }
 
             return value;
