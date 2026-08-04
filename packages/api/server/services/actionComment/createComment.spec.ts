@@ -75,6 +75,26 @@ describe('services/actionComment.createComment()', () => {
         }, stubs.transaction);
     });
 
+    it('transmet les targets au modèle si fournis', async () => {
+        stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
+        const fakeTargets: any = { mode: 'custom', organizations: [{ id: 4 }], users: [] };
+        await createComment(
+            1,
+            fakeAction(),
+            {
+                description: 'description',
+                targets: fakeTargets,
+                files: [],
+            },
+        );
+
+        expect(stubs.createCommentModel).to.have.been.calledOnceWith(1, {
+            description: 'description',
+            created_by: 1,
+            targets: fakeTargets,
+        }, stubs.transaction);
+    });
+
     it('en cas d\'échec d\'insertion du commentaire, rollback la transaction', async () => {
         stubs.createCommentModel.rejects(new Error('fake error'));
 
