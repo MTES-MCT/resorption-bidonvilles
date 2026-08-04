@@ -2,6 +2,8 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
 type ActionObserver = {
+    user_id: number;
+    organization_id: number;
     email: string;
     first_name: string;
     last_name: string;
@@ -20,6 +22,8 @@ export default async (actionId: number): Promise<ActionObserver[]> => sequelize.
     )
 
     SELECT
+        u.user_id,
+        u.fk_organization AS organization_id,
         u.email,
         u.first_name,
         u.last_name

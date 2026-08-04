@@ -23,6 +23,7 @@ export default async function createComment(req, res, next) {
     try {
         const response = await actionCommentService.createComment(req.user.id, req.body.action, {
             description: req.body.description,
+            targets: req.body.targets,
             files: req.files,
         });
         return res.status(201).send(response);

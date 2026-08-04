@@ -1,7 +1,7 @@
 import ServiceError from '#server/errors/ServiceError';
 import { sequelize } from '#db/sequelize';
 import { Transaction } from 'sequelize';
-import createCommentInModel from '#server/models/actionModel/createComment/createComment';
+import createCommentInModel, { ActionCommentTargets } from '#server/models/actionModel/createComment/createComment';
 import fetchComments from '#server/models/actionModel/fetchComments/fetchComments';
 import serializeComment from '#server/models/actionModel/fetchComments/serializeComment';
 import uploadAttachments from '#server/services/attachment/upload';
@@ -16,6 +16,7 @@ import { ActionEnrichedComment } from '#root/types/resources/ActionCommentEnrich
 
 type ActionCommentInput = {
     description: string,
+    targets?: ActionCommentTargets,
     files: any[]
 };
 
@@ -29,6 +30,7 @@ export default async function createComment(authorId: number, action: Action, co
         commentId = await createCommentInModel(action.id, {
             description: commentInput.description,
             created_by: authorId,
+            ...(commentInput.targets ? { targets: commentInput.targets } : {}),
         }, transaction);
     } catch (error) {
         await transaction.rollback();
@@ -75,7 +77,7 @@ export default async function createComment(authorId: number, action: Action, co
     // on tente d'envoyer un mail aux acteurs concernés
     let numberOfObservers: number = 0;
     try {
-        numberOfObservers = await sendMailNotifications(action, comment);
+        numberOfObservers = await sendMailNotifications(action, comment, commentInput.targets);
     } catch {
         // DO NOTHING
     }
