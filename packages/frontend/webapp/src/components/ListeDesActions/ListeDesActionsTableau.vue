@@ -8,14 +8,21 @@
             <tr
                 v-for="action in actionsStore.currentPage.content"
                 :key="action.id"
-                class="cursor-pointer hover:bg-blue-france-925-125"
+                class="relative cursor-pointer hover:bg-blue-france-925-125"
             >
-                <td class="relative z-10">
-                    <DsfrTagCopy
-                        :label="action.displayId"
-                        dataType="Identifiant de l'action"
-                        title="Cliquer pour copier l'identifiant"
+                <td>
+                    <RouterLink
+                        :to="`/action/${action.id}`"
+                        class="absolute inset-0 z-10 focus:outline-none"
+                        :aria-label="`Voir l'action ${action.displayId}`"
                     />
+                    <div class="relative z-20" @click.stop>
+                        <DsfrTagCopy
+                            :label="action.displayId"
+                            dataType="Identifiant de l'action"
+                            title="Cliquer pour copier l'identifiant"
+                        />
+                    </div>
                     <div
                         class="text-sm text-gray-600 mt-1"
                         v-if="action.started_at"
@@ -28,12 +35,7 @@
                 </td>
                 <td>
                     <div class="font-bold">
-                        <RouterLink
-                            :to="`/action/${action.id}`"
-                            class="focus:outline-none after:absolute after:inset-0"
-                        >
-                            {{ formatProjectName(action) }}
-                        </RouterLink>
+                        {{ formatProjectName(action) }}
                     </div>
                 </td>
                 <td>
