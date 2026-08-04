@@ -67,6 +67,7 @@ export default {
                 },
             },
             legend: {
+                top: "top",
                 textStyle: {
                     color: "#000",
                 },
@@ -149,6 +150,7 @@ export default {
                 },
             ]),
             legend: {
+                top: "top",
                 selected: {
                     KD: false,
                 },

@@ -70,6 +70,7 @@ const options = computed(() => {
                 },
             },
             legend: {
+                top: "top",
                 data: [
                     {
                         name: "Nombre d'utilisateurs inscrits",
