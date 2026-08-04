@@ -3,52 +3,56 @@
         <h3 class="font-bold text-lg">Partager une info</h3>
 
         <DragZone class="bg-white py-6 px-2" @drop="attachmentsInput?.addFiles">
-            <div class="px-4">
-                <FormNouveauMessageInputMessage
-                    :rows="rows"
-                    ref="messageInput"
-                    @paste="onPaste"
-                />
-            </div>
-            <div
-                class="transition-height h-0 overflow-y-hidden px-4"
-                ref="formContainer"
-            >
-                <FormNouveauMessageInputAttachments ref="attachmentsInput" />
-                <FormNouveauMessageInputTags />
-                <FormNouveauMessageInputMode @click="onModeChange" />
-                <FormNouveauMessageInputTarget
-                    v-show="values.mode === 'custom'"
-                    :departement="town.departement.code"
-                />
-                <p class="text-sm mb-4">
-                    (*) Quelle que soit l'option retenue, les administrateurs
-                    locaux et nationaux auront accès au message à des fins de
-                    modération
-                </p>
-                <ErrorSummary v-if="error" :message="error" class="mt-2" />
-                <p class="text-right space-x-2">
-                    <DsfrButton
-                        icon="fr-icon-arrow-go-back-fill"
-                        :disabled="isLoading"
-                        secondary
-                        @click="resetForm"
-                        >Annuler</DsfrButton
-                    >
-                    <DsfrButton
-                        :disabled="isLoading"
-                        :icon="
-                            isLoading
-                                ? {
-                                      name: 'fa-solid:spinner',
-                                      animation: 'spin',
-                                  }
-                                : 'fr-icon-send-plane-fill'
-                        "
-                        @click="submit"
-                        >Publier le message</DsfrButton
-                    >
-                </p>
+            <div ref="interactionRoot">
+                <div class="px-4">
+                    <FormNouveauMessageInputMessage
+                        :rows="rows"
+                        ref="messageInput"
+                        @paste="onPaste"
+                    />
+                </div>
+                <div
+                    class="transition-height h-0 overflow-y-hidden px-4"
+                    ref="formContainer"
+                >
+                    <FormNouveauMessageInputAttachments
+                        ref="attachmentsInput"
+                    />
+                    <FormNouveauMessageInputTags />
+                    <FormNouveauMessageInputMode @click="onModeChange" />
+                    <FormNouveauMessageInputTarget
+                        v-show="values.mode === 'custom'"
+                        :departement="town.departement.code"
+                    />
+                    <p class="text-sm mb-4">
+                        (*) Quelle que soit l'option retenue, les
+                        administrateurs locaux et nationaux auront accès au
+                        message à des fins de modération
+                    </p>
+                    <ErrorSummary v-if="error" :message="error" class="mt-2" />
+                    <p class="text-right space-x-2">
+                        <DsfrButton
+                            icon="fr-icon-arrow-go-back-fill"
+                            :disabled="isLoading"
+                            secondary
+                            @click="closeForm"
+                            >Annuler</DsfrButton
+                        >
+                        <DsfrButton
+                            :disabled="isLoading"
+                            :icon="
+                                isLoading
+                                    ? {
+                                          name: 'fa-solid:spinner',
+                                          animation: 'spin',
+                                      }
+                                    : 'fr-icon-send-plane-fill'
+                            "
+                            @click="submit"
+                            >Publier le message</DsfrButton
+                        >
+                    </p>
+                </div>
             </div>
         </DragZone>
     </form>
@@ -63,14 +67,13 @@
 </style>
 
 <script setup>
-import { defineProps, defineExpose, toRefs, ref, computed, watch } from "vue";
-import { useForm, useFieldValue } from "vee-validate";
+import { toRefs, ref } from "vue";
+import { useForm } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
 import schema from "./FicheSiteJournalFormNouveauMessage.schema";
 import router from "@/helpers/router";
-import getHiddenHeight from "@/utils/getHiddenHeight";
-import isDeepEqual from "@/utils/isDeepEqual";
 import getFileFromPasteEvent from "@/utils/getFileFromPasteEvent";
+import useJournalMessageFormDropdown from "@/composables/useJournalMessageFormDropdown";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import DragZone from "@/components/DragZone/DragZone.vue";
@@ -102,49 +105,23 @@ const { handleSubmit, setErrors, resetForm, values } = useForm({
 
 const isLoading = ref(false);
 const error = ref(null);
+const interactionRoot = ref(null);
 const formContainer = ref(null);
 const messageInput = ref(null);
 const attachmentsInput = ref(null);
-const rows = ref(2);
-const isFocused = computed(
-    () => messageInput.value?.isFocused || attachmentsInput.value?.isFocused
-);
-let timeout;
-const RESET_FORM = true;
-
-watch(isFocused, () => {
-    if (isFocused.value === true) {
-        clearTimeout(timeout);
-        openForm();
-    } else {
-        timeout = setTimeout(onBlur, 300);
-    }
-});
-
-function openForm() {
-    rows.value = 5;
-    formContainer.value.style.height = `${getHiddenHeight(
-        formContainer.value
-    )}px`;
-}
-
-function closeForm(reset = true) {
-    rows.value = 2;
-    formContainer.value.style.height = `0px`;
-
-    if (reset === true) {
-        resetForm();
-    }
-}
-
-function onBlur() {
-    if (isDeepEqual(values, initialValues)) {
-        closeForm();
-    }
-}
+const { rows, isFocused, closeForm, setAutoHeight } =
+    useJournalMessageFormDropdown({
+        values,
+        initialValues,
+        resetForm,
+        messageInput,
+        attachmentsInput,
+        formContainer,
+        interactionRoot,
+    });
 
 function onModeChange() {
-    formContainer.value.style.height = `auto`;
+    setAutoHeight();
 }
 
 function onPaste(event) {
@@ -153,20 +130,6 @@ function onPaste(event) {
         attachmentsInput.value.addFiles([file]);
     }
 }
-
-watch(useFieldValue("attachments"), () => {
-    if (values.attachments.length > 0) {
-        formContainer.value.style.height = `auto`;
-    }
-});
-
-watch(values, () => {
-    if (!isFocused.value && isDeepEqual(values, initialValues)) {
-        closeForm(!RESET_FORM);
-    } else {
-        clearTimeout(timeout);
-    }
-});
 
 const submit = handleSubmit(async (values) => {
     error.value = null;
