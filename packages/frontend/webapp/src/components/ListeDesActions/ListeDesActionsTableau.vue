@@ -8,7 +8,7 @@
             <tr
                 v-for="action in actionsStore.currentPage.content"
                 :key="action.id"
-                class="relative cursor-pointer hover:bg-blue-france-925-125"
+                class="actions-row relative cursor-pointer"
             >
                 <td>
                     <RouterLink
@@ -163,6 +163,24 @@ const getMetricsStatusClass = (action) => {
 </script>
 
 <style scoped>
+.actions-row:hover > td {
+    background-color: var(--blue-france-975-75, #f5f5fe);
+}
+
+.actions-row:focus-within > td {
+    background-color: var(--blue-france-975-75, #f5f5fe);
+    border-top: 2px solid var(--blue-france-sun-113-625, #000091);
+    border-bottom: 2px solid var(--blue-france-sun-113-625, #000091);
+}
+
+.actions-row:focus-within > td:first-child {
+    border-left: 2px solid var(--blue-france-sun-113-625, #000091);
+}
+
+.actions-row:focus-within > td:last-child {
+    border-right: 2px solid var(--blue-france-sun-113-625, #000091);
+}
+
 :deep(.status-warning) {
     background-color: var(--warning-950-100);
     color: var(--warning-425-625);
