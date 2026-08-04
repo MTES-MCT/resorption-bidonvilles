@@ -165,6 +165,7 @@ const options = computed(() => {
                 },
             ],
             legend: {
+                top: "top",
                 data: [
                     { name: "Habitants intra UE", icon: "roundRect" },
                     { name: "Habitants toutes origines", icon: "roundRect" },
