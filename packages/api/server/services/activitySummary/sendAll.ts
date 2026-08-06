@@ -1,6 +1,5 @@
 import activityModel from '#server/models/activityModel';
 import userModel from '#server/models/userModel';
-import { QuestionSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
 import { ActivityNationalSummary } from '#server/models/activityModel/types/ActivityNationalSummary';
 import { User } from '#root/types/resources/User.d';
 import sendSummary from './sendSummary';
@@ -29,16 +28,14 @@ export default async (day: number, month: number, year: number): Promise<void> =
 
     // compute the activity summaries
     const promises: [
-        Promise<QuestionSummary[]>,
         Promise<ActivityNationalSummary>,
         Promise<User[]>,
     ] = [
-        activityModel.getQuestions(monday, sunday),
         activityModel.get(monday, sunday),
         userModel.findDepartementSummarySubscribers(),
     ];
-    const [questions, summary, subscribers] = await Promise.all(promises);
+    const [summary, subscribers] = await Promise.all(promises);
 
     // send the summaries
-    await sendSummary(monday, sunday, questions, summary, subscribers);
+    await sendSummary(monday, sunday, summary, subscribers);
 };

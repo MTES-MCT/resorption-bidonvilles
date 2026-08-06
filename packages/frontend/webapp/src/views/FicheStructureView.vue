@@ -1,5 +1,5 @@
 <template>
-    <LayoutCommunaute :paddingTop="organization !== null">
+    <Layout :paddingTop="organization !== null">
         <Loading v-if="isLoading !== false" class="mt-16" />
         <ViewError v-else-if="error !== null || organization === null">
             <template v-slot:title>Fiche de structure inaccessible</template>
@@ -30,7 +30,7 @@
             </ContentWrapper>
             <FicheStructure :organization="organization" />
         </template>
-    </LayoutCommunaute>
+    </Layout>
 </template>
 
 <script setup>
@@ -44,7 +44,7 @@ import ViewError from "@/components/ViewError/ViewError.vue";
 import Loading from "@/components/Loading/Loading.vue";
 import FicheStructure from "@/components/FicheStructure/FicheStructure.vue";
 import ButtonContact from "@/components/ButtonContact/ButtonContact.vue";
-import LayoutCommunaute from "@/components/LayoutCommunaute/LayoutCommunaute.vue";
+import Layout from "@/components/Layout/Layout.vue";
 
 const directoryStore = useDirectoryStore();
 const organizationId = computed(() => {
@@ -55,7 +55,6 @@ const error = ref(null);
 const organization = ref(null);
 const ariane = computed(() => [
     { label: "Accueil", to: "/" },
-    { label: "Entraide", to: "/communaute" },
     { label: "Annuaire", to: "/annuaire" },
     { label: organization.value?.name || "..." },
 ]);

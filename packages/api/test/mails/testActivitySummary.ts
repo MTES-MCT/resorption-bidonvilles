@@ -31,13 +31,11 @@ async function testActivitySummary() {
     try {
         // Récupérer les données d'activité
         console.log('Récupération des données d\'activité...');
-        const [questions, summary, subscribers] = await Promise.all([
-            activityModel.getQuestions(monday, sunday),
+        const [summary, subscribers] = await Promise.all([
             activityModel.get(monday, sunday),
             userModel.findDepartementSummarySubscribers(),
         ]);
 
-        console.log(`${questions.length} questions trouvées`);
         console.log(`Données d'activité récupérées pour ${Object.keys(summary).length} régions`);
         console.log(`${subscribers.length} abonnés trouvés`);
 
@@ -96,7 +94,6 @@ async function testActivitySummary() {
                 campaign: `${from.format('DD-MM-YYYY')}`,
                 from: from.format('DD'),
                 to: to.format('DD MMMM YYYY'),
-                questionSummary: questions,
                 summaries: subscribedSummaries,
                 showDetails: true,
             },

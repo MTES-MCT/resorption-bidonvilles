@@ -42,9 +42,6 @@ const fieldTypeModel = {
 const ownerTypeModel = {
     findAll: sandbox.stub(),
 };
-const questionTagModel = {
-    findAll: sandbox.stub(),
-};
 const regionModel = {
     findAll: sandbox.stub(),
 };
@@ -83,7 +80,6 @@ rewiremock('#server/models/electricityTypeModel/index').with(electricityTypeMode
 rewiremock('#server/models/expertiseTopicsModel/index').with(expertiseTopicModel);
 rewiremock('#server/models/fieldTypeModel/index').with(fieldTypeModel);
 rewiremock('#server/models/ownerTypeModel/index').with(ownerTypeModel);
-rewiremock('#server/models/questionTagModel/index').with(questionTagModel);
 rewiremock('#server/models/regionModel/index').with(regionModel);
 rewiremock('#server/models/socialOriginModel/index').with(socialOriginModel);
 rewiremock('#server/models/topicModel/index').with(topicModel);
@@ -179,12 +175,6 @@ describe('configService.fetch()', () => {
         ownerTypeModel.findAll.resolves(['A', 'B']);
         const result = await fetch(fakeUser());
         expect(result.owner_types).to.be.eql(['A', 'B']);
-    });
-
-    it('retourne la liste des tags de questions', async () => {
-        questionTagModel.findAll.resolves(['A', 'B']);
-        const result = await fetch(fakeUser());
-        expect(result.question_tags).to.be.eql(['A', 'B']);
     });
 
     it('retourne la liste des régions', async () => {

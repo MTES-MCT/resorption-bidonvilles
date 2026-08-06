@@ -38,16 +38,6 @@ const sections = [
         track_id: "nouveaux utilisateurs",
     },
     {
-        id: "question_creation",
-        label: "Nouvelles questions",
-        track_id: "nouvelles questions",
-    },
-    {
-        id: "answer_creation",
-        label: "Nouvelles réponses",
-        track_id: "nouvelles réponses",
-    },
-    {
         id: "all",
         label: "Toutes les activités",
         track_id: "toutes les activités",

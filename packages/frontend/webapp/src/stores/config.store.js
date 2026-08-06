@@ -34,12 +34,5 @@ export const useConfigStore = defineStore("config", {
 
             this.config.user.permissions = permissions;
         },
-        setQuestionSubscription(questionId, status) {
-            if (!this.config?.user) {
-                return;
-            }
-
-            this.config.user.question_subscriptions[questionId] = status;
-        },
     },
 });

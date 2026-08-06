@@ -141,7 +141,6 @@ export function serialized(override: Partial<User> = {}): AuthUser {
         },
         admin_comments: null,
         email_subscriptions: [],
-        question_subscriptions: {},
         permission_options: [],
         last_access: Date.now() / 1000,
         last_version: '0.0.0',

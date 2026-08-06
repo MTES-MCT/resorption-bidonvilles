@@ -2,7 +2,6 @@ import { Diff } from '#server/models/shantytownModel/_common/getDiff';
 import { LocationDetails, CityLocationDetails } from '#server/models/locationModel/LocationDetails.d';
 import { InterventionArea } from '#server/models/geoModel/Location.d';
 import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
-import { QuestionTag } from '#root/types/resources/QuestionGeneric.d';
 
 // local types
 type ActivityShantytown = {
@@ -101,34 +100,4 @@ export type ActionCommentActivity = {
         name: string,
     }
     comment: ActionComment
-};
-
-export type QuestionActivity = {
-    entity: 'question',
-    action : 'creation',
-    date: number,
-    author: ActivityAuthor,
-    question: {
-        id: number,
-        question: string,
-        people_affected: number,
-        tags: QuestionTag[],
-    }
-
-};
-
-export type AnswerActivity = {
-    entity: 'answer',
-    action: 'creation',
-    date: number,
-    question_author: ActivityAuthor,
-    answer_author: ActivityAuthor,
-    answer: {
-        id: number,
-        description: string,
-    }
-    question: {
-        id: number,
-        question: string,
-    }
 };

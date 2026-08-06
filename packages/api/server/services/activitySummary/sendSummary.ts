@@ -2,14 +2,13 @@ import { ActivityNationalSummary } from '#server/models/activityModel/types/Acti
 import mailsUtils from '#server/mails/mails';
 import moment from 'moment';
 import PromisePool from '@supercharge/promise-pool';
-import { QuestionSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
 import { User } from '#root/types/resources/User.d';
 
 moment.locale('fr');
 
 const { sendActivitySummary } = mailsUtils;
 
-export default async (argFrom: Date, argTo: Date, questionSummary: QuestionSummary[], summaries: ActivityNationalSummary, subscribers: Array<User>): Promise<any> => {
+export default async function sendSummary(argFrom: Date, argTo: Date, summaries: ActivityNationalSummary, subscribers: Array<User>): Promise<any> {
     const from = moment(argFrom);
     const to = moment(argTo);
 
@@ -40,10 +39,9 @@ export default async (argFrom: Date, argTo: Date, questionSummary: QuestionSumma
                     campaign: `${from.format('DD-MM-YYYY')}`,
                     from: from.format('DD'),
                     to: to.format('DD MMMM YYYY'),
-                    questionSummary,
                     summaries: subScribedsummaries,
                     showDetails: true,
                 },
             });
         });
-};
+}
