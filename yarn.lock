@@ -6512,7 +6512,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.59.7
     "@typescript-eslint/parser": ^5.59.7
     agenda: ^3.1.0
-    axios: ^1.13.0
+    axios: ^1.13.5
     body-parser: ^1.20.2
     chai: ^4.3.7
     chai-as-promised: ^7.1.1
@@ -6563,7 +6563,7 @@ __metadata:
     rewiremock: ^3.13.9
     rimraf: ^3.0.2
     semver: ^7.7.4
-    sequelize: ^6.37.8
+    sequelize: ^6.29.0
     sequelize-cli: ^6.5.0
     sequelize-mock: ^0.10.2
     sequelize-temporal: ^1.0.6
@@ -13096,7 +13096,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.13.0":
+"axios@npm:^1.13.5":
   version: 1.19.0
   resolution: "axios@npm:1.19.0"
   dependencies:
@@ -33220,7 +33220,6 @@ __metadata:
     "@webassemblyjs/wasm-parser": ^1.14.1
     acorn: ^8.16.0
     acorn-import-phases: ^1.0.3
-    browserslist: ^4.28.1
     browserslist: ^4.28.1
     chrome-trace-event: ^1.0.2
     enhanced-resolve: ^5.20.0
