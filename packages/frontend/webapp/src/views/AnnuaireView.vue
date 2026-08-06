@@ -1,7 +1,7 @@
 <template>
     <Layout>
         <ContentWrapper>
-            <FilArianne :items="ariane" class="my-8" />
+            <FilArianne :items="ariane" class="mb-8" />
             <Annuaire />
         </ContentWrapper>
     </Layout>
