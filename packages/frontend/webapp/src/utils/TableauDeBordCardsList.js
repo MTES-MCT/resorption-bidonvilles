@@ -1,7 +1,6 @@
 import svgSearch from "@/assets/img/dsfr/search.svg";
 import svgUpdate from "@/assets/img/dsfr/update.svg";
 import svgAction from "@/assets/img/dsfr/human-cooperation.svg";
-import svgCommunity from "@/assets/img/dsfr/community.svg";
 import svgListSites from "@/assets/img/dsfr/location-france.svg";
 import svgSiteAdd from "@/assets/img/dsfr/site-add.svg";
 import svgAllActions from "@/assets/img/dsfr/all-actions.svg";
@@ -85,21 +84,6 @@ export default [
                     "Je recherche une structure ou une personne inscrite sur la plateforme.",
                 icon: svgSearch,
                 to: "/annuaire",
-                permission: null,
-            },
-        ],
-    },
-    {
-        name: "Entraide",
-        icon: "comments",
-        permission: null,
-        options: { half: true },
-        actions: [
-            {
-                label: "J'ai besoin d'aide",
-                description: "Je souhaite poser une question à la communauté.",
-                icon: svgCommunity,
-                to: "/communaute/nouvelle-question",
                 permission: null,
             },
         ],

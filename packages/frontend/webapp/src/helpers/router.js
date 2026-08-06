@@ -190,48 +190,8 @@ const router = createRouter({
             component: () => import("@/views/AnnuaireView.vue"),
             meta: {
                 title: "Consulter l'annuaire",
-                navTab: "communaute",
-                communauteTab: "annuaire",
+                navTab: "annuaire",
                 displayOrderOnSiteMap: 12,
-            },
-        },
-        {
-            path: "/communaute",
-            component: () => import("@/views/CommunauteView.vue"),
-            meta: {
-                title: "Demander de l'aide à la communauté",
-                navTab: "communaute",
-                communauteTab: "communaute",
-                displayOrderOnSiteMap: 10,
-            },
-        },
-        {
-            path: "/communaute/modifier-une-question/:id",
-            component: () => import("@/views/MiseAJourDeQuestionView.vue"),
-            meta: {
-                title: "Modifier une question",
-                navTab: "communaute",
-                displayOrderOnSiteMap: 0,
-            },
-        },
-        {
-            path: "/communaute/nouvelle-question",
-            component: () =>
-                import("@/views/NouvelleQuestionCommunauteView.vue"),
-            meta: {
-                title: "Poser une question à la communauté",
-                navTab: "communaute",
-                displayOrderOnSiteMap: 11,
-            },
-        },
-        {
-            path: "/question/:id",
-            component: () => import("@/views/FicheQuestionView.vue"),
-            meta: {
-                title: "Consulter, répondre à une question posée à la communauté",
-                navTab: "communaute",
-                communauteTab: "communaute",
-                displayOrderOnSiteMap: 0,
             },
         },
         {
@@ -359,8 +319,7 @@ const router = createRouter({
             component: () => import("@/views/FicheStructureView.vue"),
             meta: {
                 title: "Consulter la fiche d'une structure",
-                navTab: "communaute",
-                communauteTab: "annuaire",
+                navTab: "annuaire",
                 displayOrderOnSiteMap: 0,
             },
         },

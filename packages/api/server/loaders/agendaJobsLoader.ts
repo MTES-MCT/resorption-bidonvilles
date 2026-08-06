@@ -13,7 +13,6 @@ import signinLogService from '#server/services/signinLog';
 
 const {
     sendUserDemoInvitation,
-    sendUserEntraideInvitation,
     sendUserFeatures,
     sendUserShare,
     sendUserReview,
@@ -113,14 +112,6 @@ export default (agenda) => {
         (job) => {
             const { user } = job.attrs.data;
             sendUserDemoInvitation(user);
-        },
-    );
-
-    agenda.define(
-        'entraide_invitation',
-        (job) => {
-            const { user } = job.attrs.data;
-            sendUserEntraideInvitation(user);
         },
     );
 

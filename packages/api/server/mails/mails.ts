@@ -3,7 +3,6 @@ import userModel from '#server/models/userModel';
 import mailService from '#server/services/mailService';
 import config from '#server/config';
 
-import { QuestionSummary } from '#server/models/activityModel/types/QuestionNationalSummary';
 import formatTimestamp from '#server/utils/formatTimestamp';
 import generateTrackingUTM from './generateTrackingUTM';
 
@@ -26,7 +25,6 @@ const REQUESTER_CAMPAIGN = 'demandeur-email';
 const USER_CAMPAIGN = 'utilisateur-email';
 const INVITE_CAMPAIGN = 'invite-email';
 const SUMMARY_CAMPAIGN = 'recap-activite-email';
-const COMMUNITY_CAMPAIGN = 'community-email';
 
 type MailOptions = {
     preserveRecipient?: boolean,
@@ -256,84 +254,6 @@ export default {
         });
     },
 
-    sendAnswerDeletionNotification(recipient, options: MailOptions = {}) {
-        const { variables, preserveRecipient = false } = options;
-        const utm = generateTrackingUTM(COMMUNITY_CAMPAIGN, 'reponse-moderee');
-
-        return mailService.send('answer_deletion_notification', {
-            recipient,
-            variables: {
-                message: variables.message,
-                created_at: variables.created_at,
-                question: variables.question,
-                reason: variables.reason,
-                utm,
-                webappUrl,
-                backUrl,
-                blogUrl,
-            },
-            preserveRecipient,
-        });
-    },
-
-    sendCommunityNewAnswerForAuthor: (recipient, options: MailOptions = {}) => {
-        const { variables, preserveRecipient = false } = options;
-        const utm = generateTrackingUTM(COMMUNITY_CAMPAIGN, 'nouvelle-reponse');
-
-        return mailService.send('community_new_answer_for_author', {
-            recipient,
-            variables: {
-                questionId: variables.questionId,
-                authorName: formatName(variables.author),
-                authorOrganization: variables.author.organization.id,
-                webappUrl,
-                utm,
-                backUrl,
-                blogUrl,
-            },
-            preserveRecipient,
-        });
-    },
-
-    sendCommunityNewAnswerForObservers: (recipient, options: MailOptions = {}) => {
-        const { variables, preserveRecipient = false } = options;
-        const utm = generateTrackingUTM(COMMUNITY_CAMPAIGN, 'nouvelle-reponse');
-
-        return mailService.send('community_new_answer_for_observers', {
-            recipient,
-            variables: {
-                questionId: variables.questionId,
-                authorName: formatName(variables.author),
-                authorOrganization: variables.author.organization.id,
-                question: variables.question,
-                webappUrl,
-                utm,
-                backUrl,
-                blogUrl,
-            },
-            preserveRecipient,
-        });
-    },
-
-    sendCommunityNewQuestion: (recipient, options: MailOptions = {}) => {
-        const { variables, preserveRecipient } = options;
-
-        const utm = generateTrackingUTM(COMMUNITY_CAMPAIGN, 'nouvelle-question');
-
-        return mailService.send('community_new_question', {
-            recipient,
-            variables: {
-                backUrl,
-                blogUrl,
-                webappUrl,
-                utm,
-                created_by: `${formatName(variables.question.createdBy)} (${variables.question.createdBy.organization.name})`,
-                question: variables.question.question,
-                questionId: variables.question.id,
-            },
-            preserveRecipient,
-        });
-    },
 
     sendInactiveUserAlert: (recipient, options: MailOptions = {}) => {
         const { preserveRecipient = false } = options;
@@ -734,24 +654,6 @@ export default {
         });
     },
 
-    sendUserEntraideInvitation: (recipient, options: MailOptions = {}) => {
-        const { preserveRecipient } = options;
-
-        const utm = generateTrackingUTM(USER_CAMPAIGN, '3S-entraide');
-
-        return mailService.send('user_entraide_invitation', {
-            recipient,
-            variables: {
-                recipientName: formatName(recipient),
-                entraideUrl: `${webappUrl}?${utm}`,
-                backUrl,
-                blogUrl,
-                webappUrl: `${webappUrl}?${utm}`,
-            },
-            preserveRecipient,
-        });
-    },
-
     /**
      * @param {User} recipient  Recipient of the email (must includes first_name, last_name, email)
      * @param {Object} options
@@ -974,23 +876,6 @@ export default {
 
     sendActivitySummary(recipient, options: MailOptions = {}) {
         const { variables, preserveRecipient = false } = options;
-        interface SortedQuestions {
-            questions_without_answers: QuestionSummary[],
-            questions_with_answers: QuestionSummary[],
-        }
-
-        const sortedQuestions: SortedQuestions = (variables?.questionSummary ?? []).reduce((acc, question: QuestionSummary) => {
-            if (question.number_of_recent_answers > 0) {
-                acc.questions_with_answers.push(question);
-            } else {
-                acc.questions_without_answers.push(question);
-            }
-
-            return acc;
-        }, {
-            questions_without_answers: [],
-            questions_with_answers: [],
-        } as SortedQuestions);
 
         const utm = generateTrackingUTM(SUMMARY_CAMPAIGN, variables.campaign);
         return mailService.send('activity_summary', {
@@ -1002,11 +887,6 @@ export default {
                 connexionUrl: `${connexionUrl}?${utm}`,
                 showDetails: variables.showDetails ?? false,
                 summaries: variables.summaries,
-                show_question_summary: sortedQuestions.questions_with_answers.length > 0 || sortedQuestions.questions_without_answers.length > 0,
-                questions_with_answers_length: sortedQuestions.questions_with_answers.length,
-                questions_with_answers: sortedQuestions.questions_with_answers,
-                questions_without_answers_length: sortedQuestions.questions_without_answers.length,
-                questions_without_answers: sortedQuestions.questions_without_answers,
                 backUrl,
                 wwwUrl,
                 webappUrl,

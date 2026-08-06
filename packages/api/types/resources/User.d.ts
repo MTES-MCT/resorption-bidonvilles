@@ -3,10 +3,6 @@ import { Permissions } from '#server/models/permissionModel/types/Permissions.d'
 import { InterventionArea } from '#server/models/geoModel/Location.d';
 import { ExpertiseTopic } from '#root/types/resources/ExpertiseTopic.d';
 
-export type UserQuestionSubscriptions = {
-    [key: number]: boolean
-};
-
 export type UserStatus = 'new' | 'active' | 'inactive';
 
 export type UserAccess = {
@@ -67,7 +63,6 @@ export type User = {
     },
     charte_engagement_a_jour: boolean,
     email_subscriptions: string[],
-    question_subscriptions: UserQuestionSubscriptions,
     last_access: number | null,
     admin_comments: string | null,
     is_admin: boolean,

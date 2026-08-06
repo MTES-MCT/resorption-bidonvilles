@@ -8,7 +8,6 @@ export type UserQueryFilters = {
 };
 
 export type RawExpertiseTopic = `${string},${string},${UserExpertiseTopicType}`;
-export type RawEmailSubscription = `${string},${boolean}`;
 
 export type RawUserAccess = {
     fk_user: number,
@@ -46,7 +45,6 @@ export type RawUser = {
     expertise_comment: string | null,
     topics: RawExpertiseTopic[],
     email_unsubscriptions: string[],
-    question_subscriptions: RawEmailSubscription[],
     last_access: Date | null,
     admin_comments: string | null,
     is_national: boolean,
