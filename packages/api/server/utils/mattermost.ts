@@ -1,4 +1,4 @@
-import IncomingWebhook from 'node-mattermost';
+import * as Sentry from '@sentry/node';
 import config from '#server/config';
 import statusDetails from '#server/utils/statusDetails';
 import { getActionFullName } from '#server/utils/formatActionFullName';
@@ -9,7 +9,7 @@ import { Shantytown, ShantytownWithEnrichedComments } from '#root/types/resource
 import { User } from '#root/types/resources/User.d';
 
 type MattermostMsg = {
-    channel: string | null;
+    channel?: string | null;
     username: string;
     icon_emoji: string;
     text: string;
@@ -20,17 +20,55 @@ type MattermostMsg = {
 };
 
 const { mattermost, webappUrl } = config;
+
+/**
+ * Envoie un message au Webhook Mattermost via `fetch` natif.
+ */
+const sendMessage = async (message: MattermostMsg): Promise<void> => {
+    // On s'assure que mattermost est bien une chaîne de caractères (URL valide)
+    if (typeof mattermost !== 'string') {
+        return;
+    }
+
+    try {
+        const payload: Record<string, unknown> = { ...message };
+
+        if (!payload.channel) {
+            delete payload.channel;
+        }
+
+        const response = await fetch(mattermost, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            Sentry.captureMessage(`[Mattermost] Échec d'envoi (${response.status} ${response.statusText})`, {
+                level: 'warning',
+                extra: { channel: message.channel },
+            });
+        }
+    } catch (error) {
+        Sentry.captureException(error, {
+            extra: { messagePayload: message },
+        });
+    }
+};
+
 const formatAddress = (town: Pick<Shantytown, 'name' | 'address'>): string => {
     const nameSection = town.name ? `« ${town.name} » ` : '';
     return `${town.address} ${nameSection}`;
 };
 const formatUsername = (user: { id: number, first_name: string, last_name: string }): string => `[${user.first_name} ${user.last_name}](${webappUrl}/nouvel-utilisateur/${user.id}) `;
-const formatUsernameWithEmailLink = (user: { first_name: string, last_name: string, email: string, }): string => `[${user.first_name} ${user.last_name}](mailto:${user.email}) `;
+const formatUsernameWithEmailLink = (user: { first_name: string, last_name: string, email: string }): string => `[${user.first_name} ${user.last_name}](mailto:${user.email}) `;
 const formatTownLink = (townID: number, text: string): string => `[${text}](${webappUrl}/site/${townID})`;
 const formatActionLink = (actionID: number, text: string): string => `[${text}](${webappUrl}/action/${actionID})`;
 
 const checkLocation: (user: User) => string = (user) => {
-    let locationText: string = 'Inconnu';
+    let locationText = 'Inconnu';
     if (user.intervention_areas.is_national) {
         locationText = 'National';
     } else {
@@ -42,19 +80,24 @@ const checkLocation: (user: User) => string = (user) => {
     return locationText;
 };
 
-const formatDate = ((dateToFormat: Date): string => {
+const formatDate = (dateToFormat: Date): string => {
     const day = String(dateToFormat.getUTCDate()).padStart(2, '0');
     const month = String(dateToFormat.getUTCMonth() + 1).padStart(2, '0');
     const year = dateToFormat.getUTCFullYear();
     return `${day}/${month}/${year}`;
-});
+};
 
 const formatTownStatus = (status: string): string => {
     const statusMapping: { [key: string]: string } = statusDetails;
     return statusMapping[status] || status;
 };
 
-const buildMattermostMessage = (channel: string, text: string, color: string, fields: { short: boolean, value: string }[]): MattermostMsg => ({
+const buildMattermostMessage = (
+    channel: string | null,
+    text: string,
+    color: string,
+    fields: { short: boolean, value: string }[],
+): MattermostMsg => ({
     channel,
     username: 'Alerte Résorption Bidonvilles',
     icon_emoji: ':robot:',
@@ -72,9 +115,7 @@ async function triggerActorInvitedAlert(town: Shantytown, host: User, invited: s
         return;
     }
 
-    const actorInvitedAlert = new IncomingWebhook(mattermost);
     const townLink = formatTownLink(town.id, town.usename);
-
     const username = formatUsername(host);
     const usernameLink = `<${webappUrl}/nouvel-utilisateur/${host.id}|${username}>`;
 
@@ -90,15 +131,13 @@ async function triggerActorInvitedAlert(town: Shantytown, host: User, invited: s
         ],
     );
 
-    await actorInvitedAlert.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 export async function triggerAttachmentArchiveCleanup(deleteRequestsCount: number, errorsCount: number): Promise<void> {
     if (!mattermost) {
         return;
     }
-
-    const webhook = new IncomingWebhook(mattermost);
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
         '#notif-nettoyage-piecesjointes',
@@ -107,15 +146,13 @@ export async function triggerAttachmentArchiveCleanup(deleteRequestsCount: numbe
         [],
     );
 
-    await webhook.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 export async function triggerAttachmentArchiveCleanupError(): Promise<void> {
     if (!mattermost) {
         return;
     }
-
-    const webhook = new IncomingWebhook(mattermost);
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
         '#notif-nettoyage-piecesjointes',
@@ -124,15 +161,13 @@ export async function triggerAttachmentArchiveCleanupError(): Promise<void> {
         [],
     );
 
-    await webhook.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 async function triggerDeclaredActor(town: Shantytown, user: User): Promise<void> {
     if (!mattermost) {
         return;
     }
-
-    const declaredActor = new IncomingWebhook(mattermost);
 
     const address = formatAddress(town);
     const username = formatUsername(user);
@@ -145,15 +180,13 @@ async function triggerDeclaredActor(town: Shantytown, user: User): Promise<void>
         [],
     );
 
-    await declaredActor.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 const triggerHeatwaveStatusChange = async (user: User, town: Shantytown, heatwaveStatus: boolean): Promise<void> => {
     if (!mattermost) {
         return;
     }
-
-    const webhook = new IncomingWebhook(mattermost);
 
     const username = formatUsername(user);
     const usernameLink = `<${webappUrl}/acces/${user.id}|${username}>`;
@@ -187,15 +220,13 @@ const triggerHeatwaveStatusChange = async (user: User, town: Shantytown, heatwav
         ],
     );
 
-    await webhook.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 };
 
 async function triggerInvitedActor(town: Shantytown, host: User, guest: User): Promise<void> {
     if (!mattermost) {
         return;
     }
-
-    const invitedActor = new IncomingWebhook(mattermost);
 
     const address = formatAddress(town);
     const hostUsername = formatUsername(host);
@@ -209,7 +240,7 @@ async function triggerInvitedActor(town: Shantytown, host: User, guest: User): P
         [],
     );
 
-    await invitedActor.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 async function triggerLandRegistryRequest(user: User, parcel: string, dataYear: string): Promise<void> {
@@ -217,11 +248,8 @@ async function triggerLandRegistryRequest(user: User, parcel: string, dataYear: 
         return;
     }
 
-    const newLandRegistryEnquiryAlert = new IncomingWebhook(mattermost);
-
     const username = formatUsername(user);
     const usernameLink = `<${webappUrl}/acces/${user.id}|${username}>`;
-
     const locationText = checkLocation(user);
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
@@ -252,7 +280,7 @@ async function triggerLandRegistryRequest(user: User, parcel: string, dataYear: 
         ],
     );
 
-    await newLandRegistryEnquiryAlert.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 async function triggerNewActionComment(comment: string, action: Action, author: CommentAuthor): Promise<void> {
@@ -260,10 +288,8 @@ async function triggerNewActionComment(comment: string, action: Action, author: 
         return;
     }
 
-    const newCommentAlert = new IncomingWebhook(mattermost);
-
     const username = formatUsername(author);
-    const actionFullName = await getActionFullName(action.id) ?? action.name;
+    const actionFullName = (await getActionFullName(action.id)) ?? action.name;
     const actionLink = formatActionLink(action.id, actionFullName);
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
@@ -278,7 +304,7 @@ async function triggerNewActionComment(comment: string, action: Action, author: 
         ],
     );
 
-    await newCommentAlert.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 async function triggerNewComment(commentDescription: string, tagLabels: string[], town: Shantytown, author: User): Promise<void> {
@@ -286,16 +312,16 @@ async function triggerNewComment(commentDescription: string, tagLabels: string[]
         return;
     }
 
-    const newCommentAlert = new IncomingWebhook(mattermost);
-
     const address = formatAddress(town);
     const username = formatUsername(author);
     const townLink = formatTownLink(town.id, address);
 
-    const fields = [{
-        short: false,
-        value: `*Commentaire*: ${commentDescription}`,
-    }];
+    const fields = [
+        {
+            short: false,
+            value: `*Commentaire*: ${commentDescription}`,
+        },
+    ];
 
     if (tagLabels.length > 0) {
         fields.push({
@@ -311,7 +337,7 @@ async function triggerNewComment(commentDescription: string, tagLabels: string[]
         fields,
     );
 
-    await newCommentAlert.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 async function triggerNewUserAlert(user: User): Promise<void> {
@@ -319,11 +345,8 @@ async function triggerNewUserAlert(user: User): Promise<void> {
         return;
     }
 
-    const newUserAlert = new IncomingWebhook(mattermost);
-
     const username = formatUsername(user);
     const usernameLink = `<${webappUrl}/nouvel-utilisateur/${user.id}|${username}>`;
-
     const locationText = checkLocation(user);
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
@@ -346,7 +369,7 @@ async function triggerNewUserAlert(user: User): Promise<void> {
         ],
     );
 
-    await newUserAlert.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 async function triggerNotifyNewUserFromRectorat(user: User): Promise<void> {
@@ -354,7 +377,6 @@ async function triggerNotifyNewUserFromRectorat(user: User): Promise<void> {
         return;
     }
 
-    const webhook = new IncomingWebhook(mattermost);
     const username = formatUsername(user);
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
@@ -364,7 +386,7 @@ async function triggerNotifyNewUserFromRectorat(user: User): Promise<void> {
         [],
     );
 
-    await webhook.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 async function triggerNotifyNewUserSelfDeactivation(user: User): Promise<void> {
@@ -372,7 +394,6 @@ async function triggerNotifyNewUserSelfDeactivation(user: User): Promise<void> {
         return;
     }
 
-    const webhook = new IncomingWebhook(mattermost);
     const username = formatUsername(user);
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
@@ -382,15 +403,13 @@ async function triggerNotifyNewUserSelfDeactivation(user: User): Promise<void> {
         [],
     );
 
-    await webhook.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 async function triggerNotifyOwnersAnonymization(shantytownLines: number, shantytownHistoryLines: number): Promise<void> {
     if (!mattermost) {
         return;
     }
-
-    const webhook = new IncomingWebhook(mattermost);
 
     const createLinesMessage = (count: number): string => {
         if (count <= 0) {
@@ -418,15 +437,13 @@ async function triggerNotifyOwnersAnonymization(shantytownLines: number, shantyt
         ],
     );
 
-    await webhook.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 export async function triggerNotifyOwnersAnonymizationError(message: string): Promise<void> {
     if (!mattermost) {
         return;
     }
-
-    const webhook = new IncomingWebhook(mattermost);
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
         '#notif-anonymisation',
@@ -440,15 +457,13 @@ export async function triggerNotifyOwnersAnonymizationError(message: string): Pr
         ],
     );
 
-    await webhook.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 async function triggerPeopleInvitedAlert(guest: User, greeter: User, msg: string): Promise<void> {
     if (!mattermost) {
         return;
     }
-
-    const peopleInvitedAlert = new IncomingWebhook(mattermost);
 
     const guestName = formatUsernameWithEmailLink(guest);
 
@@ -471,15 +486,13 @@ async function triggerPeopleInvitedAlert(guest: User, greeter: User, msg: string
         ],
     );
 
-    await peopleInvitedAlert.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 async function triggerRemoveDeclaredActor(town: Shantytown, user: User): Promise<void> {
     if (!mattermost) {
         return;
     }
-
-    const removeDeclaredActor = new IncomingWebhook(mattermost);
 
     const address = formatAddress(town);
     const username = formatUsername(user);
@@ -492,16 +505,15 @@ async function triggerRemoveDeclaredActor(town: Shantytown, user: User): Promise
         [],
     );
 
-    await removeDeclaredActor.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 async function triggerRequestActionPilot(action: EnrichedAction, user: User): Promise<boolean> {
     if (!mattermost) {
         return false;
     }
-    const notifChannel: string = config.environnement === 'development' ? '#notif-dev-test' : '#notif-absence-pilote-action';
-    const requestActionPilot = new IncomingWebhook(mattermost);
 
+    const notifChannel: string = config.environnement === 'development' ? '#notif-dev-test' : '#notif-absence-pilote-action';
     const username = formatUsername(user);
     const actionLink = formatActionLink(action.id, action.name);
 
@@ -511,7 +523,8 @@ async function triggerRequestActionPilot(action: EnrichedAction, user: User): Pr
         '#f2c744',
         [],
     );
-    await requestActionPilot.send(mattermostMessage);
+
+    await sendMessage(mattermostMessage);
     return true;
 }
 
@@ -519,8 +532,6 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
     if (!mattermost) {
         return;
     }
-
-    const shantytownCloseAlert = new IncomingWebhook(mattermost);
 
     const address = formatAddress(town);
     const userfullname = formatUsername(user);
@@ -531,7 +542,6 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
     const closedAtStr = formatDate(new Date(town.closedAt * 1000));
 
     const townStatus = formatTownStatus(town.status);
-
     const resorptionTarget = town.resorptionTarget ? town.resorptionTarget : 'non';
 
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
@@ -570,15 +580,13 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
         ],
     );
 
-    await shantytownCloseAlert.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 export async function triggerReinstallationAlert(town: Shantytown | ShantytownWithEnrichedComments, user: User): Promise<void> {
     if (!mattermost) {
         return;
     }
-
-    const webhook = new IncomingWebhook(mattermost);
 
     const address = formatAddress(town);
     const username = formatUsername(user);
@@ -619,15 +627,13 @@ export async function triggerReinstallationAlert(town: Shantytown | ShantytownWi
         fields,
     );
 
-    await webhook.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 export async function triggerShantytownCreationAlert(town: Shantytown, user: User): Promise<void> {
     if (!mattermost) {
         return;
     }
-
-    const shantytownCreationAlert = new IncomingWebhook(mattermost);
 
     const address = formatAddress(town);
     const username = formatUsername(user);
@@ -636,7 +642,7 @@ export async function triggerShantytownCreationAlert(town: Shantytown, user: Use
     let incomingTownsMessage = 'Aucun site n\'a été désigné comme origine de la réinstallation';
     if (town.reinstallationIncomingTowns.length > 0) {
         incomingTownsMessage = [
-            'Le(s) site(s) suivant(s) ont été désigné(s) comme origine de la réinstallation :',
+            'Le(s) site(s) suivant(s) ont été désigné(s) comme origine(s) de la réinstallation :',
             '\n\n- ',
             town.reinstallationIncomingTowns.map(({ id, usename }) => formatTownLink(id, usename)).join('\n- '),
         ].join('');
@@ -666,7 +672,7 @@ export async function triggerShantytownCreationAlert(town: Shantytown, user: Use
         ],
     );
 
-    await shantytownCreationAlert.send(mattermostMessage);
+    await sendMessage(mattermostMessage);
 }
 
 export default {
