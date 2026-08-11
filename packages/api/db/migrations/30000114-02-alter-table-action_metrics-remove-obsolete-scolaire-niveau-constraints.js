@@ -6,84 +6,28 @@
 const runWithinTransaction = require('./common/helpers/transaction');
 const { lessOrEqualColumnOrNull } = require('./common/helpers/constraints');
 
+const SCHOOL_LEVELS = ['maternelle', 'elementaire', 'college', 'lycee', 'autre'];
+
 module.exports = {
     async up(queryInterface) {
         await runWithinTransaction(queryInterface, async (transaction) => {
-            // Supprimer les 5 contraintes qui comparent les niveaux scolaires à nombre_mineurs
-            await queryInterface.removeConstraint(
+            await Promise.all(SCHOOL_LEVELS.map(level => queryInterface.removeConstraint(
                 'action_metrics',
-                'check__scolaire_nombre_maternelle_lte_nombre_mineurs',
+                `check__scolaire_nombre_${level}_lte_nombre_mineurs`,
                 { transaction },
-            );
-
-            await queryInterface.removeConstraint(
-                'action_metrics',
-                'check__scolaire_nombre_elementaire_lte_nombre_mineurs',
-                { transaction },
-            );
-
-            await queryInterface.removeConstraint(
-                'action_metrics',
-                'check__scolaire_nombre_college_lte_nombre_mineurs',
-                { transaction },
-            );
-
-            await queryInterface.removeConstraint(
-                'action_metrics',
-                'check__scolaire_nombre_lycee_lte_nombre_mineurs',
-                { transaction },
-            );
-
-            await queryInterface.removeConstraint(
-                'action_metrics',
-                'check__scolaire_nombre_autre_lte_nombre_mineurs',
-                { transaction },
-            );
+            )));
         });
     },
 
     async down(queryInterface) {
         await runWithinTransaction(queryInterface, async (transaction) => {
-            // Recréer les contraintes supprimées (pour rollback)
-            await queryInterface.addConstraint('action_metrics', {
-                fields: ['scolaire_nombre_maternelle', 'nombre_mineurs'],
+            await Promise.all(SCHOOL_LEVELS.map(level => queryInterface.addConstraint('action_metrics', {
+                fields: [`scolaire_nombre_${level}`, 'nombre_mineurs'],
                 type: 'check',
-                name: 'check__scolaire_nombre_maternelle_lte_nombre_mineurs',
-                where: lessOrEqualColumnOrNull('scolaire_nombre_maternelle', 'nombre_mineurs'),
+                name: `check__scolaire_nombre_${level}_lte_nombre_mineurs`,
+                where: lessOrEqualColumnOrNull(`scolaire_nombre_${level}`, 'nombre_mineurs'),
                 transaction,
-            });
-
-            await queryInterface.addConstraint('action_metrics', {
-                fields: ['scolaire_nombre_elementaire', 'nombre_mineurs'],
-                type: 'check',
-                name: 'check__scolaire_nombre_elementaire_lte_nombre_mineurs',
-                where: lessOrEqualColumnOrNull('scolaire_nombre_elementaire', 'nombre_mineurs'),
-                transaction,
-            });
-
-            await queryInterface.addConstraint('action_metrics', {
-                fields: ['scolaire_nombre_college', 'nombre_mineurs'],
-                type: 'check',
-                name: 'check__scolaire_nombre_college_lte_nombre_mineurs',
-                where: lessOrEqualColumnOrNull('scolaire_nombre_college', 'nombre_mineurs'),
-                transaction,
-            });
-
-            await queryInterface.addConstraint('action_metrics', {
-                fields: ['scolaire_nombre_lycee', 'nombre_mineurs'],
-                type: 'check',
-                name: 'check__scolaire_nombre_lycee_lte_nombre_mineurs',
-                where: lessOrEqualColumnOrNull('scolaire_nombre_lycee', 'nombre_mineurs'),
-                transaction,
-            });
-
-            await queryInterface.addConstraint('action_metrics', {
-                fields: ['scolaire_nombre_autre', 'nombre_mineurs'],
-                type: 'check',
-                name: 'check__scolaire_nombre_autre_lte_nombre_mineurs',
-                where: lessOrEqualColumnOrNull('scolaire_nombre_autre', 'nombre_mineurs'),
-                transaction,
-            });
+            })));
         });
     },
 };
