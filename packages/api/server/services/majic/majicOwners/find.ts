@@ -32,7 +32,8 @@ export default async function findMajicOwners(parcelId: string, departementId: s
     // Enregistrer la demande dans la table de logs
     try {
         await majicLogsService.insert(user.id, user.organization.id, parcelId);
-    } catch {
+    } catch (error) {
+        console.error('Erreur lors de l\'enregistrement de la demande dans la table de logs :', error);
         throw new ServiceError('log_insert_failed', new Error('Une erreur est survenue lors de l\'enregistrement de la demande.'));
     }
 
@@ -40,10 +41,12 @@ export default async function findMajicOwners(parcelId: string, departementId: s
     let parcel: RawParcel;
     try {
         parcel = await majicModel.findParcel(parcelId, dept, schema, shortParcelTableName, parcelTableName);
-    } catch {
+    } catch (error) {
+        console.error('Erreur lors de la recherche de la parcelle :', error);
         throw new ServiceError('parcel_fetch_error', new Error(`Une erreur s'est produite lors de la recherche de la parcelle ${parcelId}.`));
     }
     if (!parcel) {
+        console.error(`Parcelle ${parcelId} introuvable.`);
         throw new ServiceError('parcel_fetch_failed', new Error(`Parcelle ${parcelId} introuvable.`));
     }
 
@@ -51,11 +54,13 @@ export default async function findMajicOwners(parcelId: string, departementId: s
     let owners: RawOwner[];
     try {
         owners = await majicModel.findOwners(parcel.idcom, parcel.dnupro, dept, schema, shortOwnerTableName, ownerTableName);
-    } catch {
+    } catch (error) {
+        console.error('Erreur lors de la recherche des propriétaires :', error);
         throw new ServiceError('owners_fetch_error', new Error(`Une erreur s'est produite lors de la recherche des propriétaires de la parcelle ${parcelId}.`));
     }
 
     if (!owners) {
+        console.error(`Propriétaire de la parcelle ${parcelId} introuvable.`);
         throw new ServiceError('owners_fetch_failed', new Error(`Propriétaire de la parcelle ${parcelId} introuvable.`));
     }
 
