@@ -248,7 +248,7 @@ const INDICATOR_CONFIGS: IndicatorConfig[] = [
     {
         fieldName: 'indicateurs.*.nombre_menages',
         displayName: 'Nombre de ménages',
-        options: { minValue: 1, maxComparisons: simpleMax('ménages', 'nombre_personnes', 'personnes') },
+        options: { maxComparisons: simpleMax('ménages', 'nombre_personnes', 'personnes') },
     },
     {
         fieldName: 'indicateurs.*.nombre_femmes',
