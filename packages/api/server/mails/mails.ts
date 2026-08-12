@@ -942,9 +942,11 @@ export default {
         console.log('owners:', variables.owners);
         console.log('owners_length:', variables.owners.length);
         console.log('majicYear:', variables.majicYear);
-        console.log('webappUrl:', variables.webappUrl);
-        console.log('backUrl:', variables.backUrl);
-        console.log('blogUrl:', variables.blogUrl);
+        console.log(`webappUrl:, ${webappUrl}`);
+        console.log(`backUrl:, ${backUrl}`);
+        console.log(`blogUrl:, ${blogUrl}`);
+        console.log(`preserveRecipient:, ${preserveRecipient}`);
+
         return mailService.send('parcel_owner', {
             recipient,
             variables: {

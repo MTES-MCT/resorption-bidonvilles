@@ -27,6 +27,7 @@ export default async (req: MajicParcelGetRequest, res: Response, next: NextFunct
     try {
         await majicService.find(parcelid as string, departmentid as string, user);
     } catch (error) {
+        console.log('Erreur dans le contrôleur de récupération des propriétaires :', error);
         const { code } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
 
         res.status(code).send({

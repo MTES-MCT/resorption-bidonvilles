@@ -79,7 +79,8 @@ export default async function findMajicOwners(parcelId: string, departementId: s
                 },
             },
         );
-    } catch {
+    } catch (error) {
+        console.error('Erreur lors de l\'envoi du courriel :', error);
         throw new ServiceError('mail_send_failed', new Error('Une erreur est survenue lors de l\'envoi du courriel.'));
     }
 
