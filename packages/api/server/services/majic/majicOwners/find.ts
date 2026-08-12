@@ -53,6 +53,7 @@ export default async function findMajicOwners(parcelId: string, departementId: s
     // Récupérer la liste des propriétaires de la parcelle
     let owners: RawOwner[];
     try {
+        console.log(`Recherche des propriétaires de la parcelle ${parcelId} dans le département ${dept} pour l'année ${majicYear}.`);
         owners = await majicModel.findOwners(parcel.idcom, parcel.dnupro, dept, schema, shortOwnerTableName, ownerTableName);
     } catch (error) {
         console.error('Erreur lors de la recherche des propriétaires :', error);
