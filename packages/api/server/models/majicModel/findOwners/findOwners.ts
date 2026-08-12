@@ -5,13 +5,14 @@ import getOwnersTableName from '../common/getFullTableName';
 
 export default async (idcom: string, dnupro: string, dept: string, schema: string, shortTableName: string, tableName: string): Promise<RawOwner[] | null> => {
     const baseTableName = getOwnersTableName(dept, schema, shortTableName, tableName);
+    console.log(`Nom de la table des propriétaires pour le département ${dept}: ${baseTableName}`);
 
     if (!baseTableName) {
         throw new Error(`Impossible de construire le nom de la table des propriétaires pour le département ${dept}`);
     }
 
     const fullTableName = `${baseTableName}_encrypted`;
-
+    console.log(`Nom complet de la table des propriétaires pour le département ${dept}: ${fullTableName}`);
 
     let owners: RawOwner[];
     try {
