@@ -935,6 +935,16 @@ export default {
     },
     sendParcelOwner(recipient, options: MailOptions = {}) {
         const { preserveRecipient = false, variables } = options;
+        console.log('recipient:', recipient);
+        console.log('formatName(recipient):', formatName(recipient));
+        console.log('variables:', variables);
+        console.log('parcel:', variables.parcel);
+        console.log('owners:', variables.owners);
+        console.log('owners_length:', variables.owners.length);
+        console.log('majicYear:', variables.majicYear);
+        console.log('webappUrl:', variables.webappUrl);
+        console.log('backUrl:', variables.backUrl);
+        console.log('blogUrl:', variables.blogUrl);
         return mailService.send('parcel_owner', {
             recipient,
             variables: {
