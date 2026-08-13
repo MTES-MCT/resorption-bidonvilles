@@ -39,6 +39,16 @@
                 >Valider</DsfrButton
             >
         </div>
+
+        <DsfrAlert
+            v-if="datesAreNotLoaded && values.from && values.to"
+            type="warning"
+            small
+            class="mt-3"
+        >
+            Les dates ont été modifiées. Cliquez sur "Valider" pour actualiser
+            les données.
+        </DsfrAlert>
     </div>
 </template>
 

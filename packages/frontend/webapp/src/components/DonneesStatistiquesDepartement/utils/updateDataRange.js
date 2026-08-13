@@ -4,8 +4,17 @@ import { trackEvent } from "@/helpers/matomo";
 const departementMetricsStore = useDepartementMetricsStore();
 
 export default (dateRange = null, from = null, to = null) => {
+    const previousActiveTab = departementMetricsStore.activeTab;
+
+    if (dateRange === "situation-a-date") {
+        departementMetricsStore.currentFormat = "table";
+        departementMetricsStore.activeTab = "summary";
+        return;
+    }
+
     departementMetricsStore.currentFormat = "summary";
-    departementMetricsStore.activeTab = "summary";
+    departementMetricsStore.activeTab = previousActiveTab;
+
     if (dateRange) {
         if (dateRange === "2-annees-ecoulees") {
             from = new Date(
@@ -26,10 +35,6 @@ export default (dateRange = null, from = null, to = null) => {
         if (dateRange === "7-derniers-jours") {
             from = new Date(new Date().setDate(new Date().getDate() - 7));
             to = new Date(new Date().setDate(new Date().getDate() - 1));
-        }
-        if (dateRange === "situation-a-date") {
-            departementMetricsStore.currentFormat = "table";
-            return;
         }
     }
 
