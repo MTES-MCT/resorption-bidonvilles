@@ -2,8 +2,10 @@
     <Title class="mt-6">{{ departement.name }} ({{ departement.code }})</Title>
     <DonneesStatistiquesDepartementBigFigures :metrics="metrics" />
     <FiltrageTemporel class="mt-5" v-model="dateRange" />
-    <PeriodePersonnalisee v-if="dateRange === 'periode-personnalisee'" />
-
+    <PeriodePersonnalisee 
+        v-if="dateRange === 'periode-personnalisee'"
+        :dateRange="dateRange"
+    />
     <main class="mt-2">
         <Onglets
             :tabs="userTabs"
