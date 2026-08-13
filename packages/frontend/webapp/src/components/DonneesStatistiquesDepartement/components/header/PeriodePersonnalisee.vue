@@ -41,7 +41,12 @@
         </div>
 
         <DsfrAlert
-            v-if="datesAreNotLoaded && values.from && values.to"
+            v-if="
+                !departementMetricsStore.evolution.isLoading &&
+                datesAreNotLoaded &&
+                values.from &&
+                values.to
+            "
             type="warning"
             small
             class="mt-3"
