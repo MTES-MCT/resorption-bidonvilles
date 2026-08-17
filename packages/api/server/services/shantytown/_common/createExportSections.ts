@@ -1,5 +1,6 @@
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { Location } from '#server/models/geoModel/Location.d';
+import geoModel from '#server/models/geoModel';
 import organizationModel from '#server/models/organizationModel';
 import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
 import { ExportedSitesStatus } from '#root/types/resources/exportedSitesStatus.d';
@@ -203,15 +204,26 @@ export default async (
     // et si l'export inclut un département concerné par l'expérimentation (département 44)
     if (options.includes('resorption_phases')) {
         const isResorptionOrResorbedSites = ['open', 'inProgress', 'resorbed'].includes(exportedSitesStatus);
-        const includesResorptionDepartement = locations.some((l) => {
-            // Si l'export est limité à un ou plusieurs départements spécifiques
-            if (l.type === 'departement') {
-                return departementsInResorptionPhases.includes(Number.parseInt(l.departement.code, 10));
+
+        const isDepartementConcerned = (code: string): boolean => departementsInResorptionPhases.includes(Number.parseInt(code, 10));
+
+        const locationIncludesResorptionDepartement = async (l: Location): Promise<boolean> => {
+            // Une ville ou un département n'appartient qu'à un seul département
+            if (l.type === 'departement' || l.type === 'city') {
+                return isDepartementConcerned(l.departement.code);
             }
-            // Si l'export concerne une zone plus large (région, nation, etc.), on affiche la colonne
-            // car elle peut contenir des départements concernés
-            return ['region', 'epci', 'nation', 'metropole', 'outremer'].includes(l.type);
-        });
+            // Un EPCI peut chevaucher plusieurs départements : il faut tous les vérifier
+            if (l.type === 'epci') {
+                const epciDepartements = await geoModel.getDepartementsForEpci(l.epci.code);
+                return epciDepartements.some(isDepartementConcerned);
+            }
+            // Zone plus large (région, nation, etc.) : on affiche la colonne car elle peut contenir des départements concernés
+            return ['region', 'nation', 'metropole', 'outremer'].includes(l.type);
+        };
+
+        const resorptionDepartementFlags = await Promise.all(locations.map(locationIncludesResorptionDepartement));
+        const includesResorptionDepartement = resorptionDepartementFlags.some(Boolean);
+
         if (isResorptionOrResorbedSites && includesResorptionDepartement && (user.is_superuser || user.isAllowedTo('export', 'shantytown_resorption'))) {
             sections.push({
                 title: 'Phases de résorption',
