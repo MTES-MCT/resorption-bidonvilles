@@ -39,8 +39,7 @@ export default async (
         localizationSection.properties.push(properties.addressDetails);
     }
 
-    localizationSection.properties.push(properties.latitude);
-    localizationSection.properties.push(properties.longitude);
+    localizationSection.properties.push(properties.latitude, properties.longitude);
 
 
     let section = {
@@ -58,10 +57,7 @@ export default async (
     };
 
     if (closedTowns) {
-        section.properties.push(properties.closedAt);
-        section.properties.push(properties.closedWithSolutions);
-        section.properties.push(properties.status);
-        section.properties.push(properties.closingContext);
+        section.properties.push(properties.closedAt, properties.closedWithSolutions, properties.status, properties.closingContext);
     }
 
     if (options.includes('owner') && user.isAllowedTo('access', 'shantytown_owner')) {
@@ -182,7 +178,7 @@ export default async (
     }
 
     if (options.includes('actors')) {
-        const allOrganizations = (await organizationModel.findByName(user.organization.name)).map(organization => organization.id);
+        const allOrganizations = new Set((await organizationModel.findByName(user.organization.name)).map(organization => organization.id));
 
         sections.push({
             title: 'Intervenants',
@@ -190,7 +186,7 @@ export default async (
                 properties.actors,
                 {
                     title: 'Intervenant de ma structure',
-                    data: ({ actors }) => (actors.some(actor => allOrganizations.includes(actor.organization.id)) ? 'Oui' : 'Non'),
+                    data: ({ actors }) => (actors.some(actor => allOrganizations.has(actor.organization.id)) ? 'Oui' : 'Non'),
                     width: 20,
                     sum: true,
                 },
