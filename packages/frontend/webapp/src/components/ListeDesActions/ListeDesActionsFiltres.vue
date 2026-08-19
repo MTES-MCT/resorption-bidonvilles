@@ -6,13 +6,12 @@
             <div>
                 <p>Filtrer par</p>
                 <div class="flex flex-col xs:flex-row gap-2 flex-wrap shrink-0">
-                    <Filter
+                    <DsfrFiltre
                         v-for="filter in filters"
                         :key="filter.id"
                         :title="filter.label"
                         :options="filter.options"
                         v-model="actionsStore.filters.properties[filter.id]"
-                        class="!border !border-primary rounded hover:bg-blue200"
                     />
                 </div>
             </div>
@@ -27,12 +26,10 @@
         </article>
 
         <article class="shrink-0">
-            <p>Trier par</p>
-            <Sort
+            <DsfrSort
                 v-model="actionsStore.sort"
                 name="actions_list_sort"
                 :options="sortOptions"
-                class="border-1 !border-primary rounded hover:bg-blue200"
             />
         </article>
     </section>
@@ -44,7 +41,7 @@ import { useActionsStore } from "@/stores/actions.store";
 import { useUserStore } from "@/stores/user.store";
 import staticFilters from "./ListeDesActions.filtres";
 import sorts from "./ListeDesActions.tris";
-import { Filter, Sort } from "@resorptionbidonvilles/ui";
+import { DsfrSort, DsfrFiltre } from "@resorptionbidonvilles/ui";
 
 const actionsStore = useActionsStore();
 const userStore = useUserStore();
