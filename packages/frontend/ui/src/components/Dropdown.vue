@@ -5,7 +5,7 @@
         </div>
         <div
             :class="[
-                'absolute z-10 mt-2 rounded-md shadow-md transform transition ease-in-out duration-200 border-G300 border',
+                'absolute z-30 mt-2 rounded-md shadow-md transform transition ease-in-out duration-200 border-G300 border',
                 right ? 'origin-top-right-10 right-0' : 'origin-top-left-10 left-0',
                 isOpen ? 'opacity-100' : 'opacity-0 hidden'
             ]"
