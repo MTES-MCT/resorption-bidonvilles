@@ -2,9 +2,9 @@
     <section
         class="flex flex-col sm:flex-row sm:items-end sm:space-x-8 space-y-4 sm:space-y-0 border-t border-b border-france-blue-925-100 py-4"
     >
-        <article class="flex items-center space-x-2 h-10">
-            <p class="whitespace-nowrap">Filtrer par:</p>
-            <Filter
+        <article class="flex items-center h-10">
+            <p class="whitespace-nowrap mr-4">Filtrer par:</p>
+            <DsfrFiltre
                 v-model="statusFilter"
                 title="Statut du compte"
                 :options="statusOptions"
@@ -23,7 +23,7 @@
 <script setup>
 import { computed } from "vue";
 import { useAccesStore } from "@/stores/acces.store";
-import { Filter } from "@resorptionbidonvilles/ui";
+import { DsfrFiltre } from "@resorptionbidonvilles/ui";
 
 const accesStore = useAccesStore();
 

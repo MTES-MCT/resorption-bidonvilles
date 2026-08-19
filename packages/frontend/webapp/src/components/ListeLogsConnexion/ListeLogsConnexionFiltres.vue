@@ -4,7 +4,7 @@
     >
         <article class="flex items-center space-x-2 h-10">
             <p class="whitespace-nowrap">Filtrer par:</p>
-            <Filter
+            <DsfrFiltre
                 v-model="statusFilter"
                 title="Statut"
                 :options="[
@@ -42,7 +42,7 @@
 import { computed, watch, toRef } from "vue";
 import { useForm } from "vee-validate";
 import { useSigninLogsStore } from "@/stores/signinLogs.store";
-import { Filter } from "@resorptionbidonvilles/ui";
+import { DsfrFiltre } from "@resorptionbidonvilles/ui";
 
 const logsStore = useSigninLogsStore();
 
