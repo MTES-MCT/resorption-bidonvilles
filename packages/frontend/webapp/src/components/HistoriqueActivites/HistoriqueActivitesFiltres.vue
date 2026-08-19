@@ -3,11 +3,10 @@
         <article>
             <p>Filtrer par</p>
             <div class="flex space-x-2">
-                <Filter
+                <DsfrFiltre
                     v-for="filter in filterOptions"
                     :key="filter.id"
                     :title="filter.label"
-                    class="border-1 !border-primary rounded hover:bg-blue200"
                     :options="filter.options"
                     v-model="activitiesStore.filters.properties[filter.id]"
                 />
@@ -20,7 +19,7 @@
 import { useActivitiesStore } from "@/stores/activities.store";
 import filterOptions from "./HistoriqueActivites.filtres";
 
-import { Filter } from "@resorptionbidonvilles/ui";
+import { DsfrFiltre } from "@resorptionbidonvilles/ui";
 
 const activitiesStore = useActivitiesStore();
 </script>

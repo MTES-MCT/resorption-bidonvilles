@@ -2,11 +2,10 @@
     <PanneauLateral icon="history" ref="panneauLateral">
         <template v-slot:header>Historique des modifications</template>
 
-        <Filter
+        <DsfrFiltre
             v-model="actionCategoryFilter"
             title="Filtrer par rubrique"
             :options="filters.categories"
-            class="border-1 !border-primary rounded hover:bg-blue200"
         />
 
         <p
@@ -51,7 +50,7 @@ import { toRefs, ref, computed } from "vue";
 import filters from "../FicheAction.filter";
 import { getActionHistory } from "@/api/actions.api";
 
-import { Filter, PanneauLateral } from "@resorptionbidonvilles/ui";
+import { DsfrFiltre, PanneauLateral } from "@resorptionbidonvilles/ui";
 import FicheActionHistoriqueItem from "./FicheActionHistoriqueItem/FicheActionHistoriqueItem.vue";
 
 const props = defineProps({

@@ -6,10 +6,9 @@
                 <div
                     class="flex flex-col flex-wrap sm:flex-row gap-2 items-start"
                 >
-                    <Filter
+                    <DsfrFiltre
                         v-model="organizationTypesFilter"
                         title="Type de structure"
-                        class="border-1 !border-primary rounded hover:bg-blue200"
                         :options="[
                             {
                                 value: 'public_establishment',
@@ -26,12 +25,11 @@
                             { value: 'association', label: 'Association' },
                         ]"
                     />
-                    <Filter
+                    <DsfrFiltre
                         v-model="expertiseTopicsFilter"
                         v-if="expertiseTopicsItems.length > 0"
                         title="Expertises ou sujets d'intérêts"
                         :options="expertiseTopicsItems"
-                        class="border-1 !border-primary rounded hover:bg-blue200"
                     />
                 </div>
             </article>
@@ -45,7 +43,7 @@
 <script setup>
 import { computed } from "vue";
 import { useDirectoryStore } from "@/stores/directory.store";
-import { Filter } from "@resorptionbidonvilles/ui";
+import { DsfrFiltre } from "@resorptionbidonvilles/ui";
 import AnnuairePagination from "./AnnuairePagination.vue";
 import { useConfigStore } from "@/stores/config.store";
 
