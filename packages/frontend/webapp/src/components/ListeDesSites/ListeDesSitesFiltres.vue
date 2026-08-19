@@ -8,35 +8,20 @@
                 <div
                     class="flex flex-col flex-wrap sm:flex-row gap-2 items-start"
                 >
-                    <Filter
+                    <DsfrFiltre
                         v-if="isFavoritesTab"
                         title="Mes sites"
                         :options="myTownsFilterOptions"
                         v-model="favoritesStore.myTownsFilter"
-                        class="border-1 !border-primary rounded hover:bg-blue200 text-sm"
                     />
-                    <Filter
+                    <DsfrFiltre
                         v-for="filter in currentFilters.default"
                         :key="filter.id"
                         :title="filter.label"
                         :options="filter.options"
                         v-model="townsStore.filters.properties[filter.id]"
                         @checkedItem="trackFilter(filter.label, $event)"
-                        class="border-1 !border-primary rounded hover:bg-blue200 text-sm"
-                    >
-                        <template
-                            v-if="filter.id === 'conditions'"
-                            v-slot:default="{ label }"
-                        >
-                            <div class="text-red flex items-center">
-                                <div class="mr-2">
-                                    <Icon icon="times" />/
-                                    <Icon icon="question" class="text-xs" />
-                                </div>
-                                {{ label }}
-                            </div>
-                        </template>
-                    </Filter>
+                    />
 
                     <Link
                         class="sm:self-end"
@@ -60,7 +45,7 @@
                                 @checkedItem="trackFilter(filter.label, $event)"
                                 class="border-1 !border-primary rounded hover:bg-blue200"
                             />
-                            <Filter
+                            <DsfrFiltre
                                 v-else
                                 :title="filter.label"
                                 :options="filter.options"
@@ -68,7 +53,6 @@
                                     townsStore.filters.properties[filter.id]
                                 "
                                 @checkedItem="trackFilter(filter.label, $event)"
-                                class="border-1 !border-primary rounded hover:bg-blue200"
                             />
                         </template>
                     </template>
@@ -87,12 +71,10 @@
         </article>
 
         <article v-if="!isFavoritesTab" class="shrink-0">
-            <p>Trier par</p>
-            <Sort
+            <DsfrSort
                 v-model="townsStore.sort"
                 name="towns_list_sort"
                 :options="groupedSorts[townsStore.filters.status]"
-                class="border-1 !border-primary rounded hover:bg-blue200"
             />
         </article>
     </section>
@@ -110,7 +92,7 @@ import FilterClosureYear from "./FilterClosureYear.vue";
 
 import { useFavoritesStore } from "@/stores/favorites.store";
 
-import { Filter, Icon, Link, Sort } from "@resorptionbidonvilles/ui";
+import { DsfrSort, DsfrFiltre, Link } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     // Active le contexte de l'onglet « Mes sites » : ajoute le filtre « Mes sites »
