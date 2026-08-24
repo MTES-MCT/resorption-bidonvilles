@@ -1,5 +1,5 @@
 import shantytownModel from '#server/models/shantytownModel';
-import mattermostUtils from '#server/utils/mattermost';
+import tchapUtils from '#server/utils/tchap';
 
 export default async function anonymizeOwners(): Promise<{ shantytownLines: number, shantytownHistoryLines: number }> | null {
     let result = {
@@ -12,10 +12,10 @@ export default async function anonymizeOwners(): Promise<{ shantytownLines: numb
         result = await shantytownModel.anonymizeOwners();
         anonymizationSuccessful = true;
     } catch (error) {
-        await mattermostUtils.triggerNotifyOwnersAnonymizationError(error.message);
+        await tchapUtils.triggerNotifyOwnersAnonymizationError(error.message);
     }
     if (anonymizationSuccessful) {
-        await mattermostUtils.triggerNotifyOwnersAnonymization(result.shantytownLines, result.shantytownHistoryLines);
+        await tchapUtils.triggerNotifyOwnersAnonymization(result.shantytownLines, result.shantytownHistoryLines);
         return result;
     }
     return null;
