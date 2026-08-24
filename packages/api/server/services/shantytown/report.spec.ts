@@ -83,7 +83,7 @@ describe('shantytownService.report()', () => {
         let responseError;
         try {
             await reportService(townData, fakeUser());
-            expect.fail('should have thrown an error');
+            expect.fail('une erreur aurait dû être levée');
         } catch (error) {
             responseError = error;
         }
@@ -98,7 +98,7 @@ describe('shantytownService.report()', () => {
         let responseError;
         try {
             await reportService(townData, fakeUser());
-            expect.fail('should have thrown an error');
+            expect.fail('une erreur aurait dû être levée');
         } catch (error) {
             responseError = error;
         }

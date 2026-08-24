@@ -82,6 +82,6 @@ describe('userService.deactivateExpiredUsers()', () => {
             return;
         }
 
-        expect.fail('should have thrown an error');
+        expect.fail('une erreur aurait dû être levée');
     });
 });

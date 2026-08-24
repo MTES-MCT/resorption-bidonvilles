@@ -83,7 +83,7 @@ describe('userService.setExpertiseTopics()', () => {
             return;
         }
 
-        expect.fail('should have thrown an error');
+        expect.fail('une erreur aurait dû être levée');
     });
 
     it('en cas d\'erreur de la mise à jour de l\'utilisateur, rollback la transaction', async () => {
@@ -97,7 +97,7 @@ describe('userService.setExpertiseTopics()', () => {
             return;
         }
 
-        expect.fail('should have thrown an error');
+        expect.fail('une erreur aurait dû être levée');
     });
 
     it('en cas d\'erreur dans l\'enregistrement des topics, lance une ServiceError', async () => {
@@ -113,7 +113,7 @@ describe('userService.setExpertiseTopics()', () => {
             return;
         }
 
-        expect.fail('should have thrown an error');
+        expect.fail('une erreur aurait dû être levée');
     });
 
     it('en cas d\'erreur dans l\'enregistrement des topics, rollback la transaction', async () => {
@@ -127,7 +127,7 @@ describe('userService.setExpertiseTopics()', () => {
             return;
         }
 
-        expect.fail('should have thrown an error');
+        expect.fail('une erreur aurait dû être levée');
     });
 
     it('en cas d\'erreur dans la recherche de l\'utilisateur, lance une ServiceError', async () => {
@@ -143,7 +143,7 @@ describe('userService.setExpertiseTopics()', () => {
             return;
         }
 
-        expect.fail('should have thrown an error');
+        expect.fail('une erreur aurait dû être levée');
     });
 
     it('en cas d\'erreur dans la recherche de l\'utilisateur, rollback la transaction', async () => {
@@ -157,7 +157,7 @@ describe('userService.setExpertiseTopics()', () => {
             return;
         }
 
-        expect.fail('should have thrown an error');
+        expect.fail('une erreur aurait dû être levée');
     });
 
     it('en cas d\'erreur dans la transaction, lance une ServiceError', async () => {
@@ -173,7 +173,7 @@ describe('userService.setExpertiseTopics()', () => {
             return;
         }
 
-        expect.fail('should have thrown an error');
+        expect.fail('une erreur aurait dû être levée');
     });
 
     it('en cas d\'erreur dans la transaction, rollback', async () => {
@@ -187,6 +187,6 @@ describe('userService.setExpertiseTopics()', () => {
             return;
         }
 
-        expect.fail('should have thrown an error');
+        expect.fail('une erreur aurait dû être levée');
     });
 });
