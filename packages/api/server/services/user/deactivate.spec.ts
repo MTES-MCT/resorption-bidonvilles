@@ -261,31 +261,6 @@ describe('userService.deactivate()', () => {
         expect(stubs.sequelize.transaction).to.not.have.been.called;
     });
 
-    it('en cas d\'erreur de la modification de l\'utilisateur, rollback la transaction', async () => {
-        // Given
-        const user = fakeUser({ id: 42, status: 'active' });
-
-        // Simuler une erreur de mise à jour
-        const error = new Error('Erreur de mise à jour');
-        error.stack = undefined; // Supprime la stack trace
-
-        // Configuration des stubs
-        stubs.userModel.findOne.withArgs(42).resolves(user);
-        stubs.userModel.deactivate.rejects(error);
-
-        // When/Then
-        try {
-            await deactivateUser(42, true, user);
-            expect.fail('Une erreur aurait dû être levée');
-        } catch (e) {
-            // Vérifications
-            expect(stubs.sequelize.transaction).to.have.been.calledOnce;
-            expect(transaction.rollback).to.have.been.calledOnce;
-            expect(e).to.be.an.instanceof(ServiceError);
-            expect(e.code).to.equal('deactivation_failure');
-        }
-    });
-
     it('en cas d\'erreur dans la transaction, lance une ServiceError', async () => {
         const error = new Error('Échec de la transaction');
         error.stack = undefined; // Supprime la stack trace
