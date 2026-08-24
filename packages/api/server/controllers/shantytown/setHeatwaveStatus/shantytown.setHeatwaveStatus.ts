@@ -1,7 +1,7 @@
 import shantytownService from '#server/services/shantytown';
-import mattermostUtils from '#server/utils/mattermost';
+import tchapUtils from '#server/utils/tchap';
 
-const { triggerHeatwaveStatusChange } = mattermostUtils;
+const { triggerHeatwaveStatusChange } = tchapUtils;
 
 const ERROR_RESPONSES = {
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },

@@ -1,11 +1,11 @@
 import { sequelize } from '#db/sequelize';
 
 import shantytownActorModel from '#server/models/shantytownActorModel';
-import mattermostUtils from '#server/utils/mattermost';
+import tchapUtils from '#server/utils/tchap';
 import mailsUtils from '#server/mails/mails';
 import userModel from '#server/models/userModel';
 
-const { triggerDeclaredActor, triggerInvitedActor } = mattermostUtils;
+const { triggerDeclaredActor, triggerActorInvitedAlert } = tchapUtils;
 const { sendUserShantytownActorNotification } = mailsUtils;
 
 export default async (req, res, next) => {
@@ -62,7 +62,7 @@ export default async (req, res, next) => {
     }
 
     try {
-        await triggerInvitedActor(req.shantytown, req.user, req.body.user);
+        await triggerActorInvitedAlert(req.shantytown, req.user, req.body.user);
     } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
