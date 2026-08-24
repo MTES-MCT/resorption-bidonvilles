@@ -241,7 +241,7 @@ describe('userService.deactivate()', () => {
         stubs.userModel.findOne.withArgs(42).resolves(user);
         try {
             await deactivateUser(42, true, user);
-            expect.fail('should have thrown an error');
+            expect.fail('une erreur aurait dû être levée');
         } catch (e) {
             expect(e).to.be.an.instanceof(ServiceError);
             expect(e.code).to.be.equal('deactivation_failure');
@@ -258,7 +258,7 @@ describe('userService.deactivate()', () => {
 
         try {
             await deactivateUser(42, true, user);
-            expect.fail('should have thrown an error');
+            expect.fail('une erreur aurait dû être levée');
         } catch {
             expect(transaction.rollback).to.have.been.called;
         }
@@ -315,7 +315,7 @@ describe('userService.deactivate()', () => {
 
         try {
             await deactivateUser(42, true, user);
-            expect.fail('should have thrown an error');
+            expect.fail('une erreur aurait dû être levée');
         } catch (e) {
             expect(e).to.be.an.instanceof(ServiceError);
             expect(e.code).to.equal('transaction_failure');
