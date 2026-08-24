@@ -57,7 +57,7 @@ async function sendTchapNotifications(guests: { first_name: string; last_name: s
         id: greeterUser ? greeterUser.id : null,
     };
 
-    const users: Partial<User>[] = guests.map((guest) => ({
+    const users: Partial<User>[] = guests.map(guest => ({
         first_name: guest.first_name,
         last_name: guest.last_name,
         email: guest.email,
