@@ -190,8 +190,10 @@ describe('userService.deactivate()', () => {
         error.stack = undefined; // Supprime la stack trace
         stubs.mails.sendUserDeactivationConfirmation.rejects(error);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
+        const expectedUser = { ...user, status: 'inactive' };
 
-        await deactivateUser(42, true, user);
+        const response = await deactivateUser(42, true, user);
+        expect(response).to.be.eql(expectedUser);
     });
 
     it('ignore les erreurs de l\'envoi de la notification Tchap', async () => {
@@ -201,8 +203,10 @@ describe('userService.deactivate()', () => {
         error.stack = undefined; // Supprime la stack trace
         stubs.tchap.triggerNotifyNewUserSelfDeactivation.rejects(error);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
+        const expectedUser = { ...user, status: 'inactive' };
 
-        await deactivateUser(42, true, user);
+        const response = await deactivateUser(42, true, user);
+        expect(response).to.be.eql(expectedUser);
     });
 
     it('ignore les erreurs de l\'envoi du mail d\'alerte', async () => {
@@ -212,8 +216,10 @@ describe('userService.deactivate()', () => {
         error.stack = undefined; // Supprime la stack trace
         stubs.mails.sendUserDeactivationByAdminAlert.rejects(error);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
+        const expectedUser = { ...user, status: 'inactive' };
 
-        await deactivateUser(42, false, user);
+        const response = await deactivateUser(42, false, user);
+        expect(response).to.be.eql(expectedUser);
     });
 
     it('en cas d\'erreur de la modification de l\'utilisateur, lance une ServiceError', async () => {
