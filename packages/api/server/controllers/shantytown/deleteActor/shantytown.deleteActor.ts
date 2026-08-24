@@ -1,9 +1,9 @@
 import { sequelize } from '#db/sequelize';
 
 import shantytownActorModel from '#server/models/shantytownActorModel';
-import mattermostUtils from '#server/utils/mattermost';
+import tchapUtils from '#server/utils/tchap';
 
-const { triggerRemoveDeclaredActor } = mattermostUtils;
+const { triggerRemoveDeclaredActor } = tchapUtils;
 
 export default async (req, res, next) => {
     let actors;
