@@ -6,7 +6,7 @@ import scanAttachmentErrors from '#server/services/attachment/scanAttachmentErro
 import userModel from '#server/models/userModel';
 
 
-import mattermostUtils from '#server/utils/mattermost';
+import tchapUtils from '#server/utils/tchap';
 import mails from '#server/mails/mails';
 import ServiceError from '#server/errors/ServiceError';
 import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
@@ -62,9 +62,9 @@ export default async function createComment(comment, shantytown, author): Promis
         throw new ServiceError('commit_failed', error);
     }
 
-    // on tente d'envoyer une notification Mattermost
+    // on tente d'envoyer une notification
     try {
-        await mattermostUtils.triggerNewComment(comment.description, comment.tags.map(tag => tag.label), shantytown, author);
+        await tchapUtils.triggerNewComment(comment.description, comment.tags.map(tag => tag.label), shantytown, author);
     } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
