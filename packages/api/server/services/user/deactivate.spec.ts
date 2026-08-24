@@ -198,11 +198,11 @@ describe('userService.deactivate()', () => {
         error.stack = undefined; // Supprime la stack trace
         stubs.mails.sendUserDeactivationConfirmation.rejects(error);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
+        const expectedUser = { ...user, status: 'inactive' };
 
         const response = await deactivateUser(42, true, user);
-
         expect(stubs.mails.sendUserDeactivationConfirmation).to.have.been.calledOnce;
-        expect(response.status).to.equal('inactive');
+        expect(response).to.be.eql(expectedUser);
     });
 
     it(' ignore les erreurs de l\'envoi de la notification Tchap', async () => {
@@ -212,11 +212,11 @@ describe('userService.deactivate()', () => {
         error.stack = undefined; // Supprime la stack trace
         stubs.tchap.triggerNotifyNewUserSelfDeactivation.rejects(error);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
+        const expectedUser = { ...user, status: 'inactive' };
 
         const response = await deactivateUser(42, true, user);
-
         expect(stubs.tchap.triggerNotifyNewUserSelfDeactivation).to.have.been.calledOnce;
-        expect(response.status).to.equal('inactive');
+        expect(response).to.be.eql(expectedUser);
     });
 
     it(' ignore les erreurs de l\'envoi du mail d\'alerte', async () => {
@@ -226,11 +226,10 @@ describe('userService.deactivate()', () => {
         error.stack = undefined; // Supprime la stack trace
         stubs.mails.sendUserDeactivationByAdminAlert.rejects(error);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
-
+        const expectedUser = { ...user, status: 'inactive' };
         const response = await deactivateUser(42, false, user);
-
         expect(stubs.mails.sendUserDeactivationByAdminAlert).to.have.been.calledOnce;
-        expect(response.status).to.equal('inactive');
+        expect(response).to.be.eql(expectedUser);
     });
 
     it(' en cas d\'erreur de la modification de l\'utilisateur, lance une ServiceError', async () => {
@@ -249,7 +248,7 @@ describe('userService.deactivate()', () => {
         }
     });
 
-    it(' en cas d\'erreur de la modification de l\'utilisateur, rollback la transaction', async () => {
+    it(' en cas d\'erreur de la désactivation de l\'utilisateur, rollback la transaction', async () => {
         const error = new Error('Erreur lors de la désactivation de l\'utilisateur');
         error.stack = undefined; // Supprime la stack trace
         const user = fakeAuthorizedUser({ id: 42, status: 'active' });
