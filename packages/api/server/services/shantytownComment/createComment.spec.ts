@@ -33,7 +33,7 @@ const stubs = {
         upload: sandbox.stub(),
         serializeAttachment: sandbox.stub(),
     },
-    mattermostUtils: {
+    tchapUtils: {
         triggerNewComment: sandbox.stub(),
     },
     mails: {
@@ -53,7 +53,7 @@ rewiremock('#server/models/shantytownCommentModel').with(stubs.shantytownComment
 rewiremock('#server/models/shantytownCommentTagModel').with(stubs.shantytownCommentTagModel);
 rewiremock('#server/models/userModel').with(stubs.userModel);
 rewiremock('#server/services/attachment').with(stubs.attachment);
-rewiremock('#server/utils/mattermost').with(stubs.mattermostUtils);
+rewiremock('#server/utils/tchap').with(stubs.tchapUtils);
 rewiremock('#server/mails/mails').with(stubs.mails);
 rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
 rewiremock('./enrichCommentsAttachments').with(stubs.enrichCommentsAttachments);
@@ -223,8 +223,8 @@ describe('services/shantytownComment.create', () => {
                 ], sinon.match.same(stubs.transaction));
             });
 
-            it('envoie une notification mattermost', () => {
-                expect(stubs.mattermostUtils.triggerNewComment).to.have.been.calledOnceWith(
+            it('envoie une notification Tchap', () => {
+                expect(stubs.tchapUtils.triggerNewComment).to.have.been.calledOnceWith(
                     'Un commentaire',
                     ['Conditions de vie', 'Passage sur site'],
                     input.shantytown,
@@ -325,7 +325,7 @@ describe('services/shantytownComment.create', () => {
             });
         });
 
-        describe('si la notification mattermost échoue', () => {
+        describe('si la notification Tchap échoue', () => {
             const comment = {
                 description: 'description',
                 targets: {
