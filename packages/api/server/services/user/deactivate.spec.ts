@@ -21,7 +21,7 @@ const stubs = {
         sendUserDeactivationConfirmation: sandbox.stub().resolves(),
         sendUserDeactivationByAdminAlert: sandbox.stub().resolves(),
     },
-    mattermost: {
+    tchap: {
         triggerNotifyNewUserSelfDeactivation: sandbox.stub(),
     },
     agenda: {
@@ -49,7 +49,7 @@ const stubs = {
 rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
 rewiremock('#server/models/userModel/index').with(stubs.userModel);
 rewiremock('#server/mails/mails').with(stubs.mails);
-rewiremock('#server/utils/mattermost').with(stubs.mattermost);
+rewiremock('#server/utils/tchap').with(stubs.tchap);
 rewiremock('#server/loaders/agendaLoader').with(() => stubs.agenda);
 
 rewiremock.enable();
@@ -124,15 +124,15 @@ describe('userService.deactivate()', () => {
         expect(stubs.mails.sendUserDeactivationByAdminAlert).to.not.have.been.called;
     });
 
-    it('s\'il s\'agit d\'une auto-désactivation, envoie une notification mattermost', async () => {
+    it('s\'il s\'agit d\'une auto-désactivation, envoie une notification Tchap', async () => {
         const user = fakeUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
         const expectedUser = { ...user, status: 'inactive' };
 
         await deactivateUser(42, true, user);
-        expect(stubs.mattermost.triggerNotifyNewUserSelfDeactivation).to.have.been.calledOnce;
-        expect(stubs.mattermost.triggerNotifyNewUserSelfDeactivation).to.have.been.calledWith(expectedUser);
+        expect(stubs.tchap.triggerNotifyNewUserSelfDeactivation).to.have.been.calledOnce;
+        expect(stubs.tchap.triggerNotifyNewUserSelfDeactivation).to.have.been.calledWith(expectedUser);
     });
 
     it('s\'il ne s\'agit PAS d\'une auto-désactivation, envoie un mail avec la raison de la désactivation', async () => {
@@ -174,13 +174,13 @@ describe('userService.deactivate()', () => {
         expect(stubs.mails.sendUserDeactivationConfirmation).to.not.have.been.called;
     });
 
-    it('s\'il ne s\'agit PAS d\'une auto-désactivation, n\'envoie pas de notification mattermost', async () => {
+    it('s\'il ne s\'agit PAS d\'une auto-désactivation, n\'envoie pas de notification Tchap', async () => {
         const user = fakeUser();
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
         await deactivateUser(42, false, user);
-        expect(stubs.mattermost.triggerNotifyNewUserSelfDeactivation).to.not.have.been.called;
+        expect(stubs.tchap.triggerNotifyNewUserSelfDeactivation).to.not.have.been.called;
     });
 
     it('ignore les erreurs de l\'envoi du mail de confirmation', async () => {
@@ -194,12 +194,12 @@ describe('userService.deactivate()', () => {
         await deactivateUser(42, true, user);
     });
 
-    it('ignore les erreurs de l\'envoi de la notification mattermost', async () => {
+    it('ignore les erreurs de l\'envoi de la notification Tchap', async () => {
         const user = fakeUser();
         stubs.userModel.findOne.withArgs(42).resolves(user);
-        const error = new Error('Échec d\'envoi de la notification Mattermost');
+        const error = new Error('Échec d\'envoi de la notification Tchap');
         error.stack = undefined; // Supprime la stack trace
-        stubs.mattermost.triggerNotifyNewUserSelfDeactivation.rejects(error);
+        stubs.tchap.triggerNotifyNewUserSelfDeactivation.rejects(error);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
         await deactivateUser(42, true, user);
