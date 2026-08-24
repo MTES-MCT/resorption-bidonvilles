@@ -11,7 +11,7 @@ chai.use(sinonChai);
 const sandbox = sinon.createSandbox();
 const getArchivedAttachments = sandbox.stub();
 const deleteArchivedAttachments = sandbox.stub();
-const mattermost = {
+const tchap = {
     triggerAttachmentArchiveCleanup: sandbox.stub(),
     triggerAttachmentArchiveCleanupError: sandbox.stub(),
 };
@@ -31,7 +31,7 @@ const SUCCESSFUL_DELETE_RESPONSE = {
 
 rewiremock('#server/models/attachmentModel/getArchives').with(getArchivedAttachments);
 rewiremock('#server/models/attachmentModel/deleteArchives').with(deleteArchivedAttachments);
-rewiremock('#server/utils/mattermost').with(mattermost);
+rewiremock('#server/utils/tchap').with(tchap);
 rewiremock('#server/utils/s3').with({ S3 });
 rewiremock.passBy('@aws-sdk/client-s3');
 
@@ -103,7 +103,7 @@ describe('services/attachment/cleanArchives', () => {
         expect(deleteArchivedAttachments).to.not.have.been.called;
     });
 
-    it('génère une notification mattermost avec le nombre de fichiers supprimés et le nombre d\'erreurs rencontrées', async () => {
+    it('génère une notification Tchap avec le nombre de fichiers supprimés et le nombre d\'erreurs rencontrées', async () => {
         getArchivedAttachments.resolves([
             { id: 1, key: 'key1', previewKey: 'previewKey1' },
             { id: 2, key: 'key2', previewKey: null },
@@ -116,14 +116,14 @@ describe('services/attachment/cleanArchives', () => {
 
         await cleanArchives();
 
-        expect(mattermost.triggerAttachmentArchiveCleanup).to.have.been.calledOnce;
-        expect(mattermost.triggerAttachmentArchiveCleanup).to.have.been.calledWithExactly(
+        expect(tchap.triggerAttachmentArchiveCleanup).to.have.been.calledOnce;
+        expect(tchap.triggerAttachmentArchiveCleanup).to.have.been.calledWithExactly(
             3, // nombre d'attachments à supprimer
             2, // nombre d'attachments qui n'ont pas pu être supprimés
         );
     });
 
-    it('génère une notification mattermost si la suppression dans la table d\'archive a échoué', async () => {
+    it('génère une notification Tchap si la suppression dans la table d\'archive a échoué', async () => {
         getArchivedAttachments.resolves([
             { id: 1, key: 'key1', previewKey: 'previewKey1' },
         ]);
@@ -132,6 +132,6 @@ describe('services/attachment/cleanArchives', () => {
 
         await cleanArchives();
 
-        expect(mattermost.triggerAttachmentArchiveCleanupError).to.have.been.calledOnce;
+        expect(tchap.triggerAttachmentArchiveCleanupError).to.have.been.calledOnce;
     });
 });

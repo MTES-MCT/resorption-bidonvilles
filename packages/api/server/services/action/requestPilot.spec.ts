@@ -16,12 +16,12 @@ chai.use(chaiSubset);
 const sandbox = sinon.createSandbox();
 const stubs = {
     fetch: sandbox.stub(),
-    mattermost: {
+    tchap: {
         triggerRequestActionPilot: sandbox.stub(),
     },
 };
 
-rewiremock('#server/utils/mattermost').with(stubs.mattermost);
+rewiremock('#server/utils/tchap').with(stubs.tchap);
 rewiremock('./fetch').with(stubs.fetch);
 
 rewiremock.enable();
@@ -47,29 +47,29 @@ describe('services/action.requestPilot()', () => {
         sandbox.restore();
     });
 
-    it('déclenche une notification Mattermost de demande de pilote', async () => {
+    it('déclenche une notification Tchap de demande de pilote', async () => {
         await requestPilot(action.id, user);
 
-        expect(stubs.mattermost.triggerRequestActionPilot).to.have.been.calledOnce;
-        expect(stubs.mattermost.triggerRequestActionPilot).to.have.been.calledOnceWithExactly(action, user);
+        expect(stubs.tchap.triggerRequestActionPilot).to.have.been.calledOnce;
+        expect(stubs.tchap.triggerRequestActionPilot).to.have.been.calledOnceWithExactly(action, user);
     });
 
-    it('renvoi \'true\' si la demande est bien transmise par message Mattermost', async () => {
-        stubs.mattermost.triggerRequestActionPilot.returns(true);
+    it('renvoi \'true\' si la demande est bien transmise par message Tchap', async () => {
+        stubs.tchap.triggerRequestActionPilot.returns(true);
         const result = await requestPilot(action.id, user);
 
-        expect(stubs.mattermost.triggerRequestActionPilot).to.have.been.calledOnce;
-        expect(stubs.mattermost.triggerRequestActionPilot).to.have.been.calledOnceWithExactly(action, user);
+        expect(stubs.tchap.triggerRequestActionPilot).to.have.been.calledOnce;
+        expect(stubs.tchap.triggerRequestActionPilot).to.have.been.calledOnceWithExactly(action, user);
         expect(result).to.be.true;
     });
 
-    it('renvoi \'false\' si la notification Mattermost échoue', async () => {
-        stubs.mattermost.triggerRequestActionPilot.returns(false);
+    it('renvoi \'false\' si la notification Tchap échoue', async () => {
+        stubs.tchap.triggerRequestActionPilot.returns(false);
 
         const result = await requestPilot(action.id, user);
 
-        expect(stubs.mattermost.triggerRequestActionPilot).to.have.been.calledOnce;
-        expect(stubs.mattermost.triggerRequestActionPilot).to.have.been.calledOnceWithExactly(action, user);
+        expect(stubs.tchap.triggerRequestActionPilot).to.have.been.calledOnce;
+        expect(stubs.tchap.triggerRequestActionPilot).to.have.been.calledOnceWithExactly(action, user);
         expect(result).to.be.false;
     });
 
