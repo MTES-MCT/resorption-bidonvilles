@@ -1,12 +1,10 @@
 import mailsUtils from '#server/mails/mails';
-import mattermostUtils from '#server/utils/mattermost';
-import config from '#server/config';
+import tchapUtils from '#server/utils/tchap';
 import userModel from '#server/models/userModel';
 import { User } from '#root/types/resources/User.d';
 
 const { sendUserPlatformInvitation } = mailsUtils;
-const { triggerPeopleInvitedAlert } = mattermostUtils;
-const { mattermost } = config;
+const { triggerPeopleInvitedAlert } = tchapUtils;
 const { formatName } = userModel;
 
 type Greeter = {
@@ -36,10 +34,7 @@ async function sendEmailsInvitations(guests: { first_name: string; last_name: st
     });
 }
 
-async function sendMattermostNotifications(guests: { first_name: string; last_name: string; email: string }[], greeter: Greeter, invite_from: string) {
-    if (!mattermost) {
-        return;
-    }
+async function sendTchapNotifications(guests: { first_name: string; last_name: string; email: string }[], greeter: Greeter, invite_from: string) {
     let from = null;
     // invite_from is initialized in pages/Contact/index.vue or in api/server/amils/mails.js (see sendUserShare)
     if (invite_from === 'access_request') {
@@ -62,20 +57,18 @@ async function sendMattermostNotifications(guests: { first_name: string; last_na
         id: greeterUser ? greeterUser.id : null,
     };
 
-    guests.forEach(async (guest) => {
-        const user: Partial<User> = {
-            first_name: guest.first_name,
-            last_name: guest.last_name,
-            email: guest.email,
-        };
+    const users: Partial<User>[] = guests.map((guest) => ({
+        first_name: guest.first_name,
+        last_name: guest.last_name,
+        email: guest.email,
+    }));
 
-        try {
-            await triggerPeopleInvitedAlert(user as User, greeterWithId as User, from);
-        } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error(err.message);
-        }
-    });
+    try {
+        await triggerPeopleInvitedAlert(users as User[], greeterWithId as User, from);
+    } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err.message);
+    }
 }
 
 export default async (req, res, next) => {
@@ -91,9 +84,9 @@ export default async (req, res, next) => {
         return next(err);
     }
 
-    // Send a mattermost alert for each guest
+    // Send a Tchap alert for each guest
     try {
-        await sendMattermostNotifications(guests, greeter, invite_from);
+        await sendTchapNotifications(guests, greeter, invite_from);
     } catch (err) {
     // eslint-disable-next-line no-console
         console.error(err);
