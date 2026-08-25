@@ -1,9 +1,5 @@
 <template>
     <div class="text-center">
-        <Spinner class="text-3xl text-primary" />
+        <VIcon name="ri:loader-4-line" class="spin text-3xl text-primary" />
     </div>
 </template>
-
-<script setup>
-import { Spinner } from "@resorptionbidonvilles/ui";
-</script>
