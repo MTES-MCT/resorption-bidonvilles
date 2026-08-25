@@ -1,48 +1,67 @@
-import Mailjet from 'node-mailjet';
+import { BrevoClient, Brevo } from '@getbrevo/brevo';
 import config from '#server/config';
 
-const { mail: mailConfig } = config;
-const mailjet = mailConfig.publicKey
-    ? new Mailjet({
-        apiKey: mailConfig.publicKey,
-        apiSecret: mailConfig.privateKey,
-    })
+type Recipient = {
+    email: string,
+    first_name?: string,
+    last_name?: string,
+};
+
+type MailContent = {
+    HTMLPart: string,
+    TextPart: string,
+    Subject: string,
+};
+
+const { mail: mailConfig, environnement } = config;
+const brevo = mailConfig.apiKey
+    ? new BrevoClient({ apiKey: mailConfig.apiKey })
     : null;
+const expeditorAddress: string | undefined = environnement === 'development'
+    ? (mailConfig.expeditorDevAddress || mailConfig.expeditorAddress)
+    : mailConfig.expeditorAddress;
 
 export default {
-    send(user, mailContent, replyTo = null, bcc = []) {
-        if (mailjet === null) {
+    send(
+        user: Recipient,
+        mailContent: MailContent,
+        replyTo: Recipient | null = null,
+        bcc: Recipient[] = [],
+    ): Promise<Brevo.SendTransacEmailResponse> | null {
+        if (brevo === null) {
             return null;
         }
 
-        return mailjet
-            .post('send', { version: 'v3.1' })
-            .request({
-                Messages: [
-                    {
-                        From: {
-                            Email: 'contact-resorption-bidonvilles@dihal.gouv.fr',
-                            Name: 'Résorption Bidonvilles',
-                        },
-                        ReplyTo: replyTo !== null ? {
-                            Email: replyTo.email,
-                            Name: `${replyTo.last_name.toUpperCase()} ${replyTo.first_name}`,
-                        } : undefined,
-                        To: [
-                            {
-                                Email: user.email,
-                                Name: user.first_name && user.last_name
-                                    ? `${user.first_name} ${user.last_name.toUpperCase()}`
-                                    : undefined,
-                            },
-                        ],
-                        Bcc: bcc?.length > 0 ? bcc.map(r => ({
-                            Email: r.email,
-                            Name: `${r.last_name.toUpperCase()} ${r.first_name}`,
-                        })) : undefined,
-                        ...mailContent,
-                    },
-                ],
-            });
+        const {
+            HTMLPart: htmlContent, TextPart: textContent, Subject: subject,
+        } = mailContent;
+
+        const request: Brevo.SendTransacEmailRequest = {
+            sender: {
+                email: expeditorAddress,
+                name: 'Résorption Bidonvilles',
+            },
+            replyTo: replyTo !== null ? {
+                email: replyTo.email,
+                name: `${replyTo.last_name.toUpperCase()} ${replyTo.first_name}`,
+            } : undefined,
+            to: [
+                {
+                    email: user.email,
+                    name: user.first_name && user.last_name
+                        ? `${user.first_name} ${user.last_name.toUpperCase()}`
+                        : undefined,
+                },
+            ],
+            bcc: bcc.length > 0 ? bcc.map(r => ({
+                email: r.email,
+                name: `${r.last_name.toUpperCase()} ${r.first_name}`,
+            })) : undefined,
+            subject,
+            htmlContent,
+            textContent,
+        };
+
+        return brevo.transactionalEmails.sendTransacEmail(request);
     },
 };

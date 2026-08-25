@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -18,8 +18,9 @@ export default {
     activationTokenExpiresIn: process.env.RB_API_ACTIVATION_TOKEN_EXPIRES_IN,
     passwordResetDuration: process.env.RB_API_PASSWORD_RESET_EXPIRES_IN,
     mail: {
-        publicKey: process.env.RB_API_MAILJET_PUBLIC_KEY,
-        privateKey: process.env.RB_API_MAILJET_PRIVATE_KEY,
+        apiKey: process.env.RB_API_BREVO_API_KEY,
+        expeditorAddress: process.env.RB_API_BREVO_EXP_ADDRESS,
+        expeditorDevAddress: process.env.RB_API_BREVO_EXP_DEV_ADDRESS,
     },
     agenda: {
         mongo_address: `mongodb://${process.env.RB_API_MONGO_USERNAME}:${process.env.RB_API_MONGO_PASSWORD}@${process.env.RB_API_MONGO_HOST}`,
