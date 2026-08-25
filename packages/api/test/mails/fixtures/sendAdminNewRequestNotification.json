@@ -1,0 +1,16 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "userName": "Jean Dupont",
+            "userEmail": "jean.dupont@exemple.fr",
+            "orgName": "Association Le Toit Partagé",
+            "adminUrl": "https://app.resorption-bidonvilles.fr/admin"
+        }
+    }
+}

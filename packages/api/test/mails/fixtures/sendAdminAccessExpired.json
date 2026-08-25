@@ -1,0 +1,15 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "userName": "Jean Dupont",
+            "activationUrlSentDate": "18/08/2026",
+            "adminUrl": "https://app.resorption-bidonvilles.fr/admin"
+        }
+    }
+}

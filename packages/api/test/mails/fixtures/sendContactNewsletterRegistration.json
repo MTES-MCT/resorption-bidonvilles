@@ -1,0 +1,18 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "email": "jean.dupont@exemple.fr"
+        },
+        "replyTo": {
+            "email": "jean.dupont@exemple.fr",
+            "first_name": "Jean",
+            "last_name": "Dupont"
+        }
+    }
+}
