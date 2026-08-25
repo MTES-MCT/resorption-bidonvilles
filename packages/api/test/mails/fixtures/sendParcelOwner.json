@@ -1,0 +1,32 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "parcel": {
+                "idpar": "44109000AB0123",
+                "dnuvoi": "12",
+                "cconvo": "RUE",
+                "dvoilib": "DES FAUVETTES",
+                "idcomtxt": "44000 NANTES"
+            },
+            "majicYear": "2025",
+            "owners": [
+                {
+                    "dqualp": "M.",
+                    "dnomus": "DUPONT",
+                    "dprnus": "Jean",
+                    "catpro2txt": "",
+                    "dlign3": "",
+                    "dlign4": "12 RUE DES FAUVETTES",
+                    "dlign5": "",
+                    "dlign6": "44000 NANTES"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "departement": { "code": "44", "name": "Loire-Atlantique" },
+            "shantytown": {
+                "id": 42,
+                "usename": "Site des Fauvettes",
+                "city": { "name": "Nantes" },
+                "departement": { "code": "44" },
+                "createdAt": 1787217300,
+                "address": "12 rue des Fauvettes, 44000 Nantes"
+            },
+            "creator": {
+                "first_name": "Alix",
+                "last_name": "Dubois"
+            }
+        }
+    }
+}

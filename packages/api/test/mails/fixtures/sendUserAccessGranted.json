@@ -1,0 +1,15 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "adminName": "Alix Dubois",
+            "activationUrl": "https://app.resorption-bidonvilles.fr/activation/abc123",
+            "activationUrlExpDate": "01/09/2026"
+        }
+    }
+}

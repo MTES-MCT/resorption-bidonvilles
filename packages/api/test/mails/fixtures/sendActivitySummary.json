@@ -1,0 +1,30 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "campaign": "18-08-2026",
+            "from": "18",
+            "to": "24 août 2026",
+            "showDetails": true,
+            "summaries": [
+                {
+                    "code": "44",
+                    "name": "Loire-Atlantique",
+                    "shantytowns_total": 12,
+                    "updated_population_3_months_percentage": 85
+                },
+                {
+                    "code": "69",
+                    "name": "Rhône",
+                    "shantytowns_total": 0,
+                    "updated_population_3_months_percentage": 0
+                }
+            ]
+        }
+    }
+}

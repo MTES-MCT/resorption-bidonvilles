@@ -1,0 +1,22 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "action": { "id": 12 },
+            "comment": {
+                "description": "L'accompagnement s'est bien déroulé ce trimestre.",
+                "createdBy": {
+                    "first_name": "Alix",
+                    "last_name": "Dubois",
+                    "organization": "DDETS 44",
+                    "organization_id": 7
+                }
+            }
+        }
+    }
+}
