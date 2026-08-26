@@ -5,7 +5,8 @@ import path from 'node:path';
 import mails from '#server/mails/mails';
 import config from '#server/config';
 
-const DELAY_BETWEEN_SENDS_MS = 2000;
+// Hedwige applique un rate limit qui provoque des 429 avec un délai plus court.
+const DELAY_BETWEEN_SENDS_MS = 5000;
 
 // Ajouter une entrée ici pour couvrir un nouveau mail.
 const MAILS_TO_TEST: string[] = [
