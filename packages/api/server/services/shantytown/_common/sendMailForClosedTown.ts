@@ -1,5 +1,6 @@
 import userModel from '#server/models/userModel';
 import mails from '#server/mails/mails';
+import sendMailsWithConcurrencyLimit from '#server/utils/sendMailsWithConcurrencyLimit';
 
 export default async (shantytown, updatedTown, user) => {
     const {
@@ -12,16 +13,15 @@ export default async (shantytown, updatedTown, user) => {
         epci,
         city,
     }, 'shantytown_closure');
-    watchers
-        .filter(({ user_id }: any) => user_id !== user.id) // do not send an email to the user who closed the town
-        .forEach((watcher) => {
-            mails.sendUserShantytownClosed(watcher, {
-                variables: {
-                    departement,
-                    shantytown: updatedTown,
-                    editor: user,
-                },
-                preserveRecipient: false,
-            });
-        });
+    const recipients = watchers
+        .filter(({ user_id }: any) => user_id !== user.id); // do not send an email to the user who closed the town
+
+    sendMailsWithConcurrencyLimit(recipients, watcher => mails.sendUserShantytownClosed(watcher, {
+        variables: {
+            departement,
+            shantytown: updatedTown,
+            editor: user,
+        },
+        preserveRecipient: false,
+    }));
 };
