@@ -3538,13 +3538,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@getbrevo/brevo@npm:^6.0.3":
-  version: 6.0.3
-  resolution: "@getbrevo/brevo@npm:6.0.3"
-  checksum: 4fe4b07c694ea2378af70bf233ee2414e1f2862bb14c2fe7e451ec2ee58e0bd5e3608549d9497d0f2442b4afc223021c0da02dd2f50d91846e0e6def55e995ae
-  languageName: node
-  linkType: hard
-
 "@gouvfr/dsfr@npm:1.14.3":
   version: 1.14.3
   resolution: "@gouvfr/dsfr@npm:1.14.3"
@@ -6502,7 +6495,6 @@ __metadata:
   dependencies:
     "@aws-sdk/client-s3": ^3.32.0
     "@aws-sdk/s3-request-presigner": ^3.598.0
-    "@getbrevo/brevo": ^6.0.3
     "@intlify/core-base": latest
     "@intlify/shared": latest
     "@sentry/node": ^7.54.0

@@ -12,7 +12,6 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.32.0",
     "@aws-sdk/s3-request-presigner": "^3.598.0",
-    "@getbrevo/brevo": "^6.0.3",
     "@intlify/core-base": "latest",
     "@intlify/shared": "latest",
     "@sentry/node": "^7.54.0",
@@ -146,6 +145,7 @@
     "emails:build": "ts-node server/mails/build.ts",
     "emails:preview": "ts-node server/mails/preview.ts",
     "test:activity-summary": "ts-node test/mails/testActivitySummary.ts",
-    "test:all-mails": "ts-node test/mails/testAllMails.ts"
+    "test:all-mails": "ts-node test/mails/testAllMails.ts",
+    "test:hedwige": "ts-node test/mails/testHedwige.ts"
   }
 }
