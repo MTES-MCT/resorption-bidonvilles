@@ -17,13 +17,10 @@ type HedwigeSendResponse = {
     status: number,
 };
 
-const TOKEN_EXPIRATION_MARGIN_MS = 60 * 1000;
-const MAX_RATE_LIMIT_RETRIES = 3;
-const DEFAULT_RATE_LIMIT_RETRY_DELAY_MS = 60 * 1000;
-
 const { mail: mailConfig, environnement } = config;
 const {
     hedwigeBaseUrl, hedwigeTokenManagerUrl, hedwigeConsumerKey, hedwigeConsumerSecret,
+    tokenExpirationMarginMs, maxRateLimitRetries, defaultRateLimitRetryDelayMs,
 } = mailConfig;
 const expeditorAddress: string | undefined = environnement === 'development'
     ? (mailConfig.expeditorDevAddress || mailConfig.expeditorAddress)
@@ -47,7 +44,7 @@ const fetchHedwigeToken = async (): Promise<string> => {
     );
 
     cachedToken = data.access_token;
-    cachedTokenExpiresAt = Date.now() + (data.expires_in * 1000) - TOKEN_EXPIRATION_MARGIN_MS;
+    cachedTokenExpiresAt = Date.now() + (data.expires_in * 1000) - tokenExpirationMarginMs;
 
     return cachedToken;
 };
@@ -64,12 +61,12 @@ const wait = (ms: number): Promise<void> => new Promise(resolve => setTimeout(re
 
 const getRateLimitRetryDelay = (retryAfterHeader: string | undefined): number => {
     if (!retryAfterHeader) {
-        return DEFAULT_RATE_LIMIT_RETRY_DELAY_MS;
+        return defaultRateLimitRetryDelayMs;
     }
 
     const retryAfterMs = new Date(retryAfterHeader).getTime() - Date.now();
 
-    return retryAfterMs > 0 ? retryAfterMs : DEFAULT_RATE_LIMIT_RETRY_DELAY_MS;
+    return retryAfterMs > 0 ? retryAfterMs : defaultRateLimitRetryDelayMs;
 };
 
 const sendHedwigeEmailWithRetry = async (
@@ -87,7 +84,7 @@ const sendHedwigeEmailWithRetry = async (
 
         return { status };
     } catch (error) {
-        if (error.response?.status !== 429 || attempt >= MAX_RATE_LIMIT_RETRIES) {
+        if (error.response?.status !== 429 || attempt >= maxRateLimitRetries) {
             throw error;
         }
 
