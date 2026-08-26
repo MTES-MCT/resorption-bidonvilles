@@ -340,6 +340,25 @@ const checkLocation = (user: User): string => {
     return locationText;
 };
 
+/**
+ * Construit les champs de notification communs décrivant un utilisateur : son territoire
+ * de rattachement, son organisation et sa fonction.
+ */
+const buildUserLocationFields = (user: User): NotificationField[] => [
+    {
+        label: 'Territoire de rattachement',
+        text: escapeHtml(checkLocation(user)),
+    },
+    {
+        label: 'Organisation',
+        text: escapeHtml(user.organization.name),
+    },
+    {
+        label: 'Fonction',
+        text: escapeHtml(user.position),
+    },
+];
+
 const formatDate = (dateToFormat: Date): string => {
     const day = String(dateToFormat.getUTCDate()).padStart(2, '0');
     const month = String(dateToFormat.getUTCMonth() + 1).padStart(2, '0');
@@ -543,23 +562,11 @@ async function triggerLandRegistryRequest(user: User, parcel: string, dataYear: 
 
     const userFullName = `${escapeHtml(user.first_name)} ${escapeHtml(user.last_name)}`;
     const userProfileUrl = `${webappUrl}/acces/${user.id}`;
-    const locationText = checkLocation(user);
 
     const text = `Demande d'information cadastre de: <a href="${userProfileUrl}">${userFullName}</a> ${user.email}`;
 
     const fields: NotificationField[] = [
-        {
-            label: 'Territoire de rattachement',
-            text: escapeHtml(locationText),
-        },
-        {
-            label: 'Organisation',
-            text: escapeHtml(user.organization.name),
-        },
-        {
-            label: 'Fonction',
-            text: escapeHtml(user.position),
-        },
+        ...buildUserLocationFields(user),
         {
             label: 'Parcelle concernée',
             text: escapeHtml(parcel),
@@ -676,26 +683,12 @@ async function triggerNewUserAlert(user: User): Promise<void> {
 
     const userFullName = `${escapeHtml(user.first_name)} ${escapeHtml(user.last_name)}`;
     const userProfileUrl = `${webappUrl}/acces/${user.id}`;
-    const locationText = checkLocation(user);
 
     // Texte principal de la notification
     const text = `Nouvel utilisateur: <a href="${userProfileUrl}">${userFullName}</a> ${user.email}`;
 
     // Construction des champs de notification
-    const fields: NotificationField[] = [
-        {
-            label: 'Territoire de rattachement',
-            text: escapeHtml(locationText),
-        },
-        {
-            label: 'Organisation',
-            text: escapeHtml(user.organization.name),
-        },
-        {
-            label: 'Fonction',
-            text: escapeHtml(user.position),
-        },
-    ];
+    const fields: NotificationField[] = buildUserLocationFields(user);
 
     // Construction de l'objet notification complet
     const notification: TchapNotification = {
