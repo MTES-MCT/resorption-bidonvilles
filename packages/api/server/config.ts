@@ -25,6 +25,9 @@ export default {
         expeditorAddress: process.env.RB_API_HEDWIGE_EXP_ADDRESS,
         expeditorDevAddress: process.env.RB_API_HEDWIGE_EXP_DEV_ADDRESS,
         sendConcurrency: Number.parseInt(process.env.RB_API_HEDWIGE_SEND_CONCURRENCY, 10) || 10,
+        tokenExpirationMarginMs: Number.parseInt(process.env.RB_API_HEDWIGE_TOKEN_EXPIRATION_MARGIN_MS, 10) || 60 * 1000,
+        maxRateLimitRetries: Number.parseInt(process.env.RB_API_HEDWIGE_MAX_RATE_LIMIT_RETRIES, 10) || 3,
+        defaultRateLimitRetryDelayMs: Number.parseInt(process.env.RB_API_HEDWIGE_DEFAULT_RATE_LIMIT_RETRY_DELAY_MS, 10) || 60 * 1000,
     },
     agenda: {
         mongo_address: `mongodb://${process.env.RB_API_MONGO_USERNAME}:${process.env.RB_API_MONGO_PASSWORD}@${process.env.RB_API_MONGO_HOST}`,
