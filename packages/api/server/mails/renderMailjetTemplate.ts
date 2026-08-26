@@ -1,3 +1,5 @@
+/* Reproduit la syntaxe propriétaire de templating Mailjet (var:x, elseif)
+   en local via LiquidJS */
 import { Liquid } from 'liquidjs';
 
 const engine = new Liquid({
