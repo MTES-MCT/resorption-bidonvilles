@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { Brevo } from '@getbrevo/brevo';
 import config from '#server/config';
 import mailsUtils from '#server/utils/mail';
 import renderMailjetTemplate from '../mails/renderMailjetTemplate';
@@ -34,7 +33,7 @@ export default {
      * @param {Object}  options Name of the email template (may be a path, without trailing .js)
      * @returns {Promise}
      */
-    async send(templateName: string, options: SendOptions): Promise<Brevo.SendTransacEmailResponse> | null {
+    async send(templateName: string, options: SendOptions): Promise<{ status: number }> | null {
         const {
             recipient, preserveRecipient = true, variables = {}, replyTo = null, bcc = [],
         } = options;
