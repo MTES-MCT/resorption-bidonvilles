@@ -1,7 +1,7 @@
 import { ActivityNationalSummary } from '#server/models/activityModel/types/ActivityNationalSummary';
 import mailsUtils from '#server/mails/mails';
 import moment from 'moment';
-import PromisePool from '@supercharge/promise-pool';
+import sendMailsWithConcurrencyLimit from '#server/utils/sendMailsWithConcurrencyLimit';
 import { User } from '#root/types/resources/User.d';
 
 moment.locale('fr');
@@ -12,11 +12,9 @@ export default async function sendSummary(argFrom: Date, argTo: Date, summaries:
     const from = moment(argFrom);
     const to = moment(argTo);
 
-    return PromisePool
-        .for(subscribers)
-        .withConcurrency(10)
-        .handleError(() => { }) // catch the error to avoid blocking other emails
-        .process((subscriber) => {
+    return sendMailsWithConcurrencyLimit(
+        subscribers,
+        (subscriber) => {
             let subScribedsummaries = [];
             if (subscriber.intervention_areas.is_national) {
                 subScribedsummaries = Object.values(summaries).reduce((acc, departements) => {
@@ -43,5 +41,7 @@ export default async function sendSummary(argFrom: Date, argTo: Date, summaries:
                     showDetails: true,
                 },
             });
-        });
+        },
+        () => {}, // catch the error to avoid blocking other emails
+    );
 }

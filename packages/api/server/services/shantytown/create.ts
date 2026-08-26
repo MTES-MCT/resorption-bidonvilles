@@ -12,6 +12,7 @@ import baseShantytown from '#server/services/shantytown/_common/baseShantytown';
 import checkPopulationUpdate from '#server/services/shantytown/_common/populationStatus';
 import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
+import sendMailsWithConcurrencyLimit from '#server/utils/sendMailsWithConcurrencyLimit';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { TownInput } from './_common/serializeReport';
 
@@ -116,26 +117,20 @@ export default async function create(townData: TownInput, user: AuthUser) {
     // Send a notification to all users of the related departement (asynchronously, don't wait)
     getLocationWatchers(townData.city, 'shantytown_creation')
         .then((watchers) => {
-            const emailPromises = watchers
-                .filter(({ user_id }: any) => user_id !== user.id) // do not send an email to the user who created the town
-                .map(watcher => mails.sendUserShantytownDeclared(watcher, {
-                    variables: {
-                        departement: townData.city.departement,
-                        shantytown: town,
-                        creator: user,
-                    },
-                    preserveRecipient: false,
-                }));
+            const recipients = watchers
+                .filter(({ user_id }: any) => user_id !== user.id); // do not send an email to the user who created the town
 
-            return Promise.allSettled(emailPromises);
-        })
-        .then((results) => {
-            results.forEach((result, index) => {
-                if (result.status === 'rejected') {
-                    // eslint-disable-next-line no-console
-                    console.error(`Error sending shantytown creation email ${index}: ${result.reason}`);
-                }
-            });
+            return sendMailsWithConcurrencyLimit(recipients, watcher => mails.sendUserShantytownDeclared(watcher, {
+                variables: {
+                    departement: townData.city.departement,
+                    shantytown: town,
+                    creator: user,
+                },
+                preserveRecipient: false,
+            }).catch((error) => {
+                // eslint-disable-next-line no-console
+                console.error(`Error sending shantytown creation email to ${watcher.email}: ${error.message}`);
+            }));
         })
         .catch((error) => {
             // eslint-disable-next-line no-console
