@@ -1,6 +1,5 @@
 import PromisePool from '@supercharge/promise-pool';
-
-const MAIL_SEND_CONCURRENCY = 10;
+import config from '#server/config';
 
 const sendMailsWithConcurrencyLimit = async <T>(
     items: T[],
@@ -9,7 +8,7 @@ const sendMailsWithConcurrencyLimit = async <T>(
 ): Promise<void> => {
     let pool = PromisePool
         .for(items)
-        .withConcurrency(MAIL_SEND_CONCURRENCY);
+        .withConcurrency(config.mail.sendConcurrency);
 
     if (onError !== null) {
         pool = pool.handleError(onError);
