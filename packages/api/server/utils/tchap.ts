@@ -115,6 +115,21 @@ const formatDateTime = (dateToFormat: Date): string => {
 };
 
 /**
+ * Construit le HTML listant les sites d'origine d'une réinstallation (ou un message
+ * par défaut si aucun site d'origine n'a été désigné).
+ */
+const buildIncomingTownsHtml = (town: Shantytown | ShantytownWithEnrichedComments): string => {
+    if (town.reinstallationIncomingTowns.length === 0) {
+        return 'Aucun site n\'a été désigné comme origine de la réinstallation';
+    }
+
+    const townLinks = town.reinstallationIncomingTowns
+        .map(({ id, usename }) => `<a href="${webappUrl}/site/${id}">${escapeHtml(usename)}</a>`)
+        .join('<br/>');
+    return `Le(s) site(s) suivant(s) ont été désigné(s) comme origine(s) de la réinstallation:<br/>${townLinks}`;
+};
+
+/**
  * Résout la clé logique d'un salon vers son room ID Matrix réel, en basculant
  * systématiquement vers le salon de test en environnement de développement
  * (pour éviter de polluer les vrais salons de notification pendant les tests locaux).
@@ -1005,17 +1020,6 @@ export async function triggerReinstallationAlert(town: Shantytown | ShantytownWi
 
     const text = `Réinstallation signalée sur le site "<a href="${townUrl}">${townName}</a>" par <a href="${userProfileUrl}">${userFullName}</a>`;
 
-    // Construction du message des sites d'origine (liste HTML)
-    let incomingTownsHtml: string;
-    if (town.reinstallationIncomingTowns.length > 0) {
-        const townLinks = town.reinstallationIncomingTowns
-            .map(({ id, usename }) => `<a href="${webappUrl}/site/${id}">${escapeHtml(usename)}</a>`)
-            .join('<br/>');
-        incomingTownsHtml = `Le(s) site(s) suivant(s) ont été désigné(s) comme origine(s) de la réinstallation:<br/>${townLinks}`;
-    } else {
-        incomingTownsHtml = 'Aucun site n\'a été désigné comme origine de la réinstallation';
-    }
-
     const fields: NotificationField[] = [
         {
             label: 'Nombre d\'habitants',
@@ -1023,7 +1027,7 @@ export async function triggerReinstallationAlert(town: Shantytown | ShantytownWi
         },
         {
             label: 'Sites d\'origine',
-            text: incomingTownsHtml,
+            text: buildIncomingTownsHtml(town),
         },
     ];
 
@@ -1061,17 +1065,6 @@ export async function triggerShantytownCreationAlert(town: Shantytown, user: Use
 
     const text = `Site ouvert "<a href="${townUrl}">${townName}</a>" par <a href="${userProfileUrl}">${userFullName}</a>`;
 
-    // Construction du message des sites d'origine (liste HTML)
-    let incomingTownsHtml: string;
-    if (town.reinstallationIncomingTowns.length > 0) {
-        const townLinks = town.reinstallationIncomingTowns
-            .map(({ id, usename }) => `<a href="${webappUrl}/site/${id}">${escapeHtml(usename)}</a>`)
-            .join('<br/>');
-        incomingTownsHtml = `Le(s) site(s) suivant(s) ont été désigné(s) comme origine(s) de la réinstallation:<br/>${townLinks}`;
-    } else {
-        incomingTownsHtml = 'Aucun site n\'a été désigné comme origine de la réinstallation';
-    }
-
     const builtAtStr = formatDate(new Date(town.builtAt * 1000));
     const declaredAtStr = formatDate(new Date(town.declaredAt * 1000));
 
@@ -1090,7 +1083,7 @@ export async function triggerShantytownCreationAlert(town: Shantytown, user: Use
         },
         {
             label: 'Sites d\'origine',
-            text: incomingTownsHtml,
+            text: buildIncomingTownsHtml(town),
         },
     ];
 
