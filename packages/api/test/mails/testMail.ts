@@ -15,10 +15,10 @@ mailsUtils.send(
     {
         email: testEmail,
         first_name: 'Test',
-        last_name: 'Brevo',
+        last_name: 'Hedwige',
     },
     {
-        Subject: 'Test migration Brevo',
+        Subject: 'Test migration Hedwige',
         HTMLPart: '<p>Ceci est un test.</p>',
         TextPart: 'Ceci est un test.',
     },
