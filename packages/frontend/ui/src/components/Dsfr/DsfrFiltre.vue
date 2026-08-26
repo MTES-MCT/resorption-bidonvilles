@@ -21,12 +21,11 @@
             </span>
         </button>
 
-        <div
+        <section
             v-show="isOpen"
             :id="collapseId"
             ref="collapseRef"
             class="fr-filtre__collapse"
-            role="region"
             :aria-labelledby="buttonId"
         >
             <p :id="hintId" class="fr-sr-only">
@@ -93,12 +92,12 @@
                     Effacer
                 </button>
             </div>
-        </div>
+        </section>
     </div>
 </template>
 
 <script setup>
-import { computed, ref, toRefs, watch, onBeforeUnmount } from "vue";
+import { computed, ref, toRefs, useId, watch, onBeforeUnmount } from "vue";
 
 const props = defineProps({
     name: {
@@ -132,7 +131,7 @@ const { name, title, options, modelValue, disabled } = toRefs(props);
 
 const isOpen = ref(false);
 const collapseRef = ref(null);
-const uniqueId = `dsfr-filtre-${Math.random().toString(36).slice(2)}`;
+const uniqueId = `dsfr-filtre-${useId()}`;
 
 const buttonId = computed(() => name.value || uniqueId);
 const collapseId = computed(() => `${buttonId.value}-collapse`);
