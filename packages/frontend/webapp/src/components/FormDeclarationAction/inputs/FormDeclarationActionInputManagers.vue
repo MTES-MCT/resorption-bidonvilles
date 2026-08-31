@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { toRefs, defineProps } from "vue";
+import { toRefs } from "vue";
 import InputUsers from "@/components/InputUsers/InputUsers.vue";
 import { Warning } from "@resorptionbidonvilles/ui";
 import labels from "../FormDeclarationAction.labels";

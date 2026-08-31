@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import formatBool from "@/utils/formatBool";
 
 import { Link, Icon } from "@resorptionbidonvilles/ui";

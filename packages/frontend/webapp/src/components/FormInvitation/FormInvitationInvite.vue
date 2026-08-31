@@ -22,7 +22,7 @@
 
 <script setup>
 import avatarImg from "@/assets/img/illustrations/avatar.svg";
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 const props = defineProps({
     first_name: String,

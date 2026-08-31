@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import FicheAccesBodySection from "./FicheAccesBodySection.vue";
 
 const props = defineProps({

@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import departementsImg from "@/assets/img/departements/export.js";
 import regionsImg from "@/assets/img/regions/export.js";
 

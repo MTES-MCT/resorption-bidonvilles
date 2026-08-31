@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, watch, ref } from "vue";
+import { toRefs, computed, watch, ref } from "vue";
 import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";
 import { useTownsStore } from "@/stores/towns.store";

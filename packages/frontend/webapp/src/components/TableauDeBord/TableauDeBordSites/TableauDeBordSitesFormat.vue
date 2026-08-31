@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { TabList } from "@resorptionbidonvilles/ui";
 import { useDashboardStore } from "@/stores/dashboard.store";
 import { trackEvent } from "@/helpers/matomo";

@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, toRefs, defineEmits, computed, watch } from "vue";
+import { ref, toRefs, computed, watch } from "vue";
 import { Pagination } from "@resorptionbidonvilles/ui";
 
 import TableauLigne from "./TableauLigne.vue";

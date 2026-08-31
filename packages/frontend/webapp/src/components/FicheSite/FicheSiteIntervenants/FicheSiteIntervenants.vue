@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs, watch, onMounted } from "vue";
+import { computed, toRefs, watch, onMounted } from "vue";
 import router from "@/helpers/router";
 import { useEventBus } from "@common/helpers/event-bus";
 import { useUserStore } from "@/stores/user.store";

@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, ref } from "vue";
+import { toRefs, computed, ref } from "vue";
 import formatMoney from "@/utils/formatMoney";
 
 import Tableau from "@/components/Tableau/TableauRb.vue";

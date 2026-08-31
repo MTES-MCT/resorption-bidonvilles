@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import ButtonInviteActor from "./FicheSiteIntervenantsButtonInvite.vue";
 
 const props = defineProps({

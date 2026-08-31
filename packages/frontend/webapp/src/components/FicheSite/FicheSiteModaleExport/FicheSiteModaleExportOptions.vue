@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import options from "./FicheSiteModaleExport.options";
 import departementsInResorptionPhases from "@/utils/departements_in_resorption_phases";

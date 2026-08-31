@@ -102,7 +102,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, toRefs, computed, watch } from "vue";
+import { ref, toRefs, computed, watch } from "vue";
 import formatInt from "@/utils/formatInt";
 import formatDate from "@common/utils/formatDate.js";
 

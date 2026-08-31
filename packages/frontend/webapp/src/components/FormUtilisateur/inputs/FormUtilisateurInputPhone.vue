@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, watch } from "vue";
+import { toRefs, watch } from "vue";
 import { useField, useIsSubmitting } from "vee-validate";
 
 const props = defineProps({

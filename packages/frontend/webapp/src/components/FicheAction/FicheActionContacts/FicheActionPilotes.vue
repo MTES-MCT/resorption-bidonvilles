@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, ref } from "vue";
+import { toRefs, computed, ref } from "vue";
 
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 import CarteUtilisateur from "@/components/CarteUtilisateur/CarteUtilisateur.vue";

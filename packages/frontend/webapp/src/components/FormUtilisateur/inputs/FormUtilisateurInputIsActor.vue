@@ -12,7 +12,7 @@
 
 <script setup>
 import { CheckableGroup, Radio } from "@resorptionbidonvilles/ui";
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 const props = defineProps({
     label: String,

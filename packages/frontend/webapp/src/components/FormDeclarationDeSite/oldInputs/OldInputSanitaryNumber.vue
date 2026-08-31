@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { useFieldValue } from "vee-validate";
 import { SubQuestionWrapper, TextInput } from "@resorptionbidonvilles/ui";
 

@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs, ref } from "vue";
+import { computed, toRefs, ref } from "vue";
 
 import { Button } from "@resorptionbidonvilles/ui";
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
