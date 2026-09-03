@@ -18,6 +18,8 @@ import { ClosingSolution } from '#root/types/resources/ClosingSolution.d';
 import { ShantytownExportListProperty } from '#root/types/resources/ShantytownExportTypes.d';
 import { SerializedOwner } from '#root/types/resources/ParcelOwner.d';
 import departementsInResorptionPhases from './departements_in_resorption_phases';
+import formatPreparatoryPhase from './formatPreparatoryPhase';
+import sortPreparatoryPhases from './sortPreparatoryPhases';
 
 const { fromTsToFormat: tsToString } = dateUtils;
 const { webappUrl } = config;
@@ -1263,32 +1265,13 @@ export default (closingSolutions: ClosingSolution[]) => {
                     phase => !STARTING_PHASE_UIDS.has(phase.preparatoryPhaseId),
                 );
 
-                // Fonction de tri : phases complétées en premier (date décroissante), puis phases en cours (date de création décroissante)
-                const sortPhases = phases => [...phases].sort((a, b) => {
-                    if (a.completedAt !== null && b.completedAt !== null) {
-                        return b.completedAt - a.completedAt;
-                    }
-                    if (a.completedAt !== null && b.completedAt === null) {
-                        return -1;
-                    }
-                    if (a.completedAt === null && b.completedAt !== null) {
-                        return 1;
-                    }
-                    return b.createdAt - a.createdAt;
-                });
-
-                const formatPhase = (phase) => {
-                    const completedStatus = phase.completedAt
-                        ? `${phase.preparatoryPhaseDateLabel.toLowerCase()} ${tsToString(phase.completedAt, 'd/m/Y')}`
-                        : 'en cours';
-                    return `- ${phase.preparatoryPhaseName} : ${completedStatus}`;
-                };
+                const formatPhase = phase => `- ${formatPreparatoryPhase(phase)}`;
 
                 const result = [];
 
                 // Section des phases initiales
                 if (startingPhases.length > 0) {
-                    const sortedStartingPhases = sortPhases(startingPhases);
+                    const sortedStartingPhases = sortPreparatoryPhases(startingPhases);
                     result.push('Phases initiales', ...sortedStartingPhases.map(formatPhase));
                 }
 
@@ -1299,7 +1282,7 @@ export default (closingSolutions: ClosingSolution[]) => {
 
                 // Section des autres phases
                 if (otherPhases.length > 0) {
-                    const sortedOtherPhases = sortPhases(otherPhases);
+                    const sortedOtherPhases = sortPreparatoryPhases(otherPhases);
                     result.push(...sortedOtherPhases.map(formatPhase));
                 }
 
