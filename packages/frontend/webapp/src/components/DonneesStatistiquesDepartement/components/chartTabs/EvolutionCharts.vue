@@ -24,6 +24,7 @@
 <script setup>
 import { computed } from "vue";
 
+import { Spinner } from "@resorptionbidonvilles/ui";
 import ViewErrorInline from "@/components/ViewErrorInline/ViewErrorInline.vue";
 import EvolutionChartTabSummary from "./EvolutionChartTabSummary.vue";
 import EvolutionChartTabInhabitants from "./EvolutionChartTabInhabitants.vue";

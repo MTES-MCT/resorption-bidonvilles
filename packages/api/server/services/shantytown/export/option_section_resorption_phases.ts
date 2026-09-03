@@ -4,7 +4,8 @@ import {
 
 import STARTING_PHASE_UIDS from '#server/config/preparatory_phases_toward_resorption';
 import heading from './heading';
-import formatDate from '../_common/formatDate';
+import formatPreparatoryPhase from '../_common/formatPreparatoryPhase';
+import sortPreparatoryPhases from '../_common/sortPreparatoryPhases';
 
 const buildResorptionPhasesSection = shantytown => ({
     properties: {
@@ -36,14 +37,8 @@ const buildResorptionPhasesSection = shantytown => ({
             const startingPhases = phases.filter(phase => STARTING_PHASE_UIDS.has(phase.preparatoryPhaseId));
             const otherPhases = phases.filter(phase => !STARTING_PHASE_UIDS.has(phase.preparatoryPhaseId));
 
-            const sortPhases = phaseList => phaseList.sort((a, b) => {
-                const aDate = a.completedAt || a.createdAt;
-                const bDate = b.completedAt || b.createdAt;
-                return bDate - aDate;
-            });
-
-            const sortedStartingPhases = sortPhases([...startingPhases]);
-            const sortedOtherPhases = sortPhases([...otherPhases]);
+            const sortedStartingPhases = sortPreparatoryPhases(startingPhases);
+            const sortedOtherPhases = sortPreparatoryPhases(otherPhases);
 
             const paragraphDescriptors: {
                 text: string,
@@ -64,13 +59,9 @@ const buildResorptionPhasesSection = shantytown => ({
                     spacingBefore: paragraphDescriptors.length === 0 ? 300 : 200,
                 });
 
-                phaseList.forEach(({ preparatoryPhaseName, preparatoryPhaseDateLabel, completedAt }) => {
-                    const status = completedAt
-                        ? `${preparatoryPhaseDateLabel.toLowerCase()} ${formatDate(new Date(completedAt).getTime() / 1000, 'DD/MM/YYYY')}`
-                        : 'en cours';
-
+                phaseList.forEach((phase) => {
                     paragraphDescriptors.push({
-                        text: `    -    ${preparatoryPhaseName} : ${status}`,
+                        text: `    -    ${formatPreparatoryPhase(phase)}`,
                     });
                 });
             };
