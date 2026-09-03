@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed } from "vue";
+import { toRefs, ref, computed } from "vue";
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 
 // actions

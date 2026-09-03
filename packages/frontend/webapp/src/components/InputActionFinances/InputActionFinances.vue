@@ -101,7 +101,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed, watch } from "vue";
+import { toRefs, ref, computed, watch } from "vue";
 import { useField } from "vee-validate";
 import { useConfigStore } from "@/stores/config.store";
 

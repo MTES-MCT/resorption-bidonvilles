@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import CartePhaseResorption from "@/components/CartePhaseResorption/CartePhaseResorption.vue";
 
 const props = defineProps({

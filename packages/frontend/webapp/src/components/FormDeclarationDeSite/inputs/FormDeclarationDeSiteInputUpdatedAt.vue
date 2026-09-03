@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { useFormValues } from "vee-validate";
 import { DatepickerInput } from "@resorptionbidonvilles/ui";
 import labels from "@/components/Common/FormEtFicheSite.labels";

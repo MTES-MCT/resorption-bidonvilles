@@ -115,7 +115,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs, ref, nextTick } from "vue";
+import { computed, toRefs, ref, nextTick } from "vue";
 import { RouterLink } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
 import BoutonFavori from "@/components/BoutonFavori/BoutonFavori.vue";

@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { useDirectoryStore } from "@/stores/directory.store";
 import computeLocationSearchTitle from "@/utils/computeLocationSearchTitle";
 import MiniCarte from "@/components/MiniCarte/MiniCarte.vue";

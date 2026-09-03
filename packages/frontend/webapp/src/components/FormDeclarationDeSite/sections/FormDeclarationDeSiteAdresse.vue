@@ -86,7 +86,7 @@
 <script setup>
 import { findNearby } from "@/api/towns.api";
 import { useFieldValue, useFormValues, useIsSubmitting } from "vee-validate";
-import { defineProps, ref, toRefs, watch } from "vue";
+import { ref, toRefs, watch } from "vue";
 
 import FormSection from "@/components/FormSection/FormSection.vue";
 import ButtonGPS from "@/components/ButtonGPS/ButtonGPS.vue";

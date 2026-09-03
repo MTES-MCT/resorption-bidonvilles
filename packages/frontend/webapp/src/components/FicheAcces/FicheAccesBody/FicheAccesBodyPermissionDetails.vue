@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 
 const TYPES_TO_ICONS = {

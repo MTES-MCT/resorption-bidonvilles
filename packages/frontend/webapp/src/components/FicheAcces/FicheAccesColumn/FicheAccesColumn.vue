@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import FicheAccesColumnUserDetails from "./FicheAccesColumnUserDetails.vue";
 import FicheAccesColumnAccessDetails from "./FicheAccesColumnAccessDetails.vue";
 

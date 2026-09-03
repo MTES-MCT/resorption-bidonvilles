@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { useFormValues } from "vee-validate";
 import { Icon, FormParagraph } from "@resorptionbidonvilles/ui";
 

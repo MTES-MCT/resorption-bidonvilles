@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, watch } from "vue";
+import { toRefs, ref, watch } from "vue";
 import { useField } from "vee-validate";
 import { Autocomplete } from "@resorptionbidonvilles/ui";
 import { findRelations } from "@/api/towns.api.js";
