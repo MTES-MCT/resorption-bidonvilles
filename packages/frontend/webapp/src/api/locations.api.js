@@ -44,3 +44,7 @@ export function get(type, code) {
         `/locations/${encodeURI(type)}${code ? `/${encodeURI(code)}` : ""}`
     );
 }
+
+export function getEpciDepartements(code) {
+    return axios.get(`/locations/epci/${encodeURI(code)}/departements`);
+}
