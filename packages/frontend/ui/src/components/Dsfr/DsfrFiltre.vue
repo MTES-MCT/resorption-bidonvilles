@@ -67,6 +67,10 @@
                             :value="option.value"
                             :disabled="disabled"
                             small
+                            @keydown.down="handleFocusNextCheckbox"
+                            @keydown.right="handleFocusNextCheckbox"
+                            @keydown.up="handleFocusPreviousCheckbox"
+                            @keydown.left="handleFocusPreviousCheckbox"
                         >
                             <template #label>
                                 <span
@@ -159,6 +163,35 @@ const clear = () => {
     checkedValues.value = [];
 };
 
+const getAllCheckboxes = () => {
+    if (!collapseRef.value) {
+        return [];
+    }
+    return Array.from(collapseRef.value.querySelectorAll('input[type="checkbox"]'));
+};
+
+const handleFocusNextCheckbox = (event) => {
+    event.preventDefault();
+    const checkboxes = getAllCheckboxes();
+    const currentIndex = checkboxes.indexOf(document.activeElement);
+
+    if (currentIndex !== -1) {
+        const nextIndex = (currentIndex + 1) % checkboxes.length;
+        checkboxes[nextIndex]?.focus();
+    }
+};
+
+const handleFocusPreviousCheckbox = (event) => {
+    event.preventDefault();
+    const checkboxes = getAllCheckboxes();
+    const currentIndex = checkboxes.indexOf(document.activeElement);
+
+    if (currentIndex !== -1) {
+        const previousIndex = (currentIndex - 1 + checkboxes.length) % checkboxes.length;
+        checkboxes[previousIndex]?.focus();
+    }
+};
+
 const handleClickOutside = (event) => {
     if (!isOpen.value) {
         return;
@@ -223,12 +256,12 @@ onBeforeUnmount(() => {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     border-radius: 0.25rem 0.25rem 0 0;
-    box-shadow: inset 0 -2px 0 0 var(--blue-france-sun-113-625);
+    background-color: var(--background-contrast-grey);
 }
 
-.fr-filtre__button:focus-visible {
-    outline: 2px solid var(--blue-france-sun-113-625);
-    outline-offset: 2px;
+.fr-select-group.dsfr-filtre .fr-filtre__button:hover,
+.dsfr-filtre .fr-filtre__button:hover {
+    background-color: var(--background-contrast-grey-hover);
 }
 
 .fr-filtre__button-content {
@@ -261,11 +294,9 @@ onBeforeUnmount(() => {
     max-height: 24rem;
     overflow-y: auto;
     padding: 1rem 1rem 0 1rem;
-    background-color: var(--background-contrast-grey);
+    background-color: var(--background-overlap-grey);
     border-radius: 0.25rem 0.25rem 0 0;
-    border-left: 1px solid var(--blue-france-sun-113-625);
-    border-right: 1px solid var(--blue-france-sun-113-625);
-    box-shadow: inset 0 -1px 0 0 var(--blue-france-sun-113-625), 0 4px 8px 0 rgba(0, 0, 0, 0.08);
+    filter: drop-shadow(var(--overlap-shadow));
     box-sizing: border-box;
 }
 
@@ -324,11 +355,5 @@ onBeforeUnmount(() => {
 .fr-filtre__clear:hover {
     background-color: var(--hover-tint);
     text-decoration: underline;
-}
-
-:deep(.fr-select:focus),
-:deep(.fr-select:focus-visible) {
-    outline: 2px solid var(--blue-france-sun-113-625);
-    outline-offset: 2px;
 }
 </style>
