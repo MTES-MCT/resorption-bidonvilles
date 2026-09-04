@@ -1,5 +1,6 @@
 import mails from '#server/mails/mails';
 import userModel from '#server/models/userModel/index';
+import sendMailsWithConcurrencyLimit from '#server/utils/sendMailsWithConcurrencyLimit';
 
 export default async (): Promise<void> => {
     const users = (await userModel.findUsersToBeDeactivated());
@@ -8,7 +9,5 @@ export default async (): Promise<void> => {
     }
 
     await userModel.deactivate(users.map(({ id }) => id), 'auto');
-    await Promise.all(
-        users.map(user => mails.sendInactiveUserDeactivationAlert(user)),
-    );
+    await sendMailsWithConcurrencyLimit(users, user => mails.sendInactiveUserDeactivationAlert(user));
 };

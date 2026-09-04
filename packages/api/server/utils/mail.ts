@@ -1,48 +1,127 @@
-import Mailjet from 'node-mailjet';
+import axios from 'axios';
 import config from '#server/config';
 
-const { mail: mailConfig } = config;
-const mailjet = mailConfig.publicKey
-    ? new Mailjet({
-        apiKey: mailConfig.publicKey,
-        apiSecret: mailConfig.privateKey,
-    })
-    : null;
+type Recipient = {
+    email: string,
+    first_name?: string,
+    last_name?: string,
+};
+
+type MailContent = {
+    HTMLPart: string,
+    TextPart: string,
+    Subject: string,
+};
+
+type HedwigeSendResponse = {
+    status: number,
+};
+
+const { mail: mailConfig, environnement } = config;
+const {
+    hedwigeBaseUrl, hedwigeTokenManagerUrl, hedwigeConsumerKey, hedwigeConsumerSecret,
+    tokenExpirationMarginMs, maxRateLimitRetries, defaultRateLimitRetryDelayMs,
+} = mailConfig;
+const expeditorAddress: string | undefined = environnement === 'development'
+    ? (mailConfig.expeditorDevAddress || mailConfig.expeditorAddress)
+    : mailConfig.expeditorAddress;
+
+let cachedToken: string | null = null;
+let cachedTokenExpiresAt = 0;
+
+const fetchHedwigeToken = async (): Promise<string> => {
+    const credentials = Buffer.from(`${hedwigeConsumerKey}:${hedwigeConsumerSecret}`).toString('base64');
+
+    const { data } = await axios.post(
+        `${hedwigeTokenManagerUrl}/token`,
+        'grant_type=client_credentials',
+        {
+            headers: {
+                Authorization: `Basic ${credentials}`,
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        },
+    );
+
+    cachedToken = data.access_token;
+    cachedTokenExpiresAt = Date.now() + (data.expires_in * 1000) - tokenExpirationMarginMs;
+
+    return cachedToken;
+};
+
+const getValidHedwigeToken = (): Promise<string> => {
+    if (cachedToken !== null && Date.now() < cachedTokenExpiresAt) {
+        return Promise.resolve(cachedToken);
+    }
+
+    return fetchHedwigeToken();
+};
+
+const wait = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
+
+const getRateLimitRetryDelay = (retryAfterHeader: string | undefined): number => {
+    if (!retryAfterHeader) {
+        return defaultRateLimitRetryDelayMs;
+    }
+
+    const retryAfterMs = new Date(retryAfterHeader).getTime() - Date.now();
+
+    return retryAfterMs > 0 ? retryAfterMs : defaultRateLimitRetryDelayMs;
+};
+
+const sendHedwigeEmailWithRetry = async (
+    request: object,
+    token: string,
+    attempt: number = 1,
+): Promise<HedwigeSendResponse> => {
+    try {
+        const { status } = await axios.post(`${hedwigeBaseUrl}/email`, request, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        return { status };
+    } catch (error) {
+        if (error.response?.status !== 429 || attempt >= maxRateLimitRetries) {
+            throw error;
+        }
+
+        await wait(getRateLimitRetryDelay(error.response.headers['retry-after']));
+
+        return sendHedwigeEmailWithRetry(request, token, attempt + 1);
+    }
+};
 
 export default {
-    send(user, mailContent, replyTo = null, bcc = []) {
-        if (mailjet === null) {
+    async send(
+        user: Recipient,
+        mailContent: MailContent,
+        replyTo: Recipient | null = null,
+        bcc: Recipient[] = [],
+    ): Promise<HedwigeSendResponse> | null {
+        if (!hedwigeBaseUrl) {
             return null;
         }
 
-        return mailjet
-            .post('send', { version: 'v3.1' })
-            .request({
-                Messages: [
-                    {
-                        From: {
-                            Email: 'contact-resorption-bidonvilles@dihal.gouv.fr',
-                            Name: 'Résorption Bidonvilles',
-                        },
-                        ReplyTo: replyTo !== null ? {
-                            Email: replyTo.email,
-                            Name: `${replyTo.last_name.toUpperCase()} ${replyTo.first_name}`,
-                        } : undefined,
-                        To: [
-                            {
-                                Email: user.email,
-                                Name: user.first_name && user.last_name
-                                    ? `${user.first_name} ${user.last_name.toUpperCase()}`
-                                    : undefined,
-                            },
-                        ],
-                        Bcc: bcc?.length > 0 ? bcc.map(r => ({
-                            Email: r.email,
-                            Name: `${r.last_name.toUpperCase()} ${r.first_name}`,
-                        })) : undefined,
-                        ...mailContent,
-                    },
-                ],
-            });
+        const {
+            HTMLPart: html, TextPart: text, Subject: subject,
+        } = mailContent;
+
+        const token = await getValidHedwigeToken();
+
+        return sendHedwigeEmailWithRetry(
+            {
+                from: expeditorAddress,
+                to: [user.email],
+                replyTo: replyTo !== null ? replyTo.email : undefined,
+                bcc: bcc.length > 0 ? bcc.map(({ email }) => email) : undefined,
+                subject,
+                html,
+                text,
+            },
+            token,
+        );
     },
 };

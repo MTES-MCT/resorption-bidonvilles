@@ -1,0 +1,22 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "departement": { "code": "44", "name": "Loire-Atlantique" },
+            "shantytown": {
+                "id": 42,
+                "closedAt": "2026-08-20T09:15:00.000Z",
+                "address": "12 rue des Fauvettes, 44000 Nantes"
+            },
+            "editor": {
+                "first_name": "Alix",
+                "last_name": "Dubois"
+            }
+        }
+    }
+}

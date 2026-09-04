@@ -1,0 +1,29 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "message": {
+                "created_at": "25/08/2026 14:32",
+                "objet": "Question sur la création d'un compte",
+                "last_name": "Dupont",
+                "first_name": "Jean",
+                "email": "jean.dupont@exemple.fr",
+                "phone": "06 12 34 56 78",
+                "access_request_message": "Bonjour, je souhaiterais obtenir un accès à la plateforme pour mon association.",
+                "is_organization_other": true,
+                "organization_other": "Association Le Toit Partagé",
+                "organization_other_localisation": "Lyon (69)"
+            }
+        },
+        "replyTo": {
+            "email": "jean.dupont@exemple.fr",
+            "first_name": "Jean",
+            "last_name": "Dupont"
+        }
+    }
+}
