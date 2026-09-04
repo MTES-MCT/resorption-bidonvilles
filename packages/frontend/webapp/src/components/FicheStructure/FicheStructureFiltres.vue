@@ -1,12 +1,11 @@
 <template>
     <section>
         <p>Filtrer par</p>
-        <RbFilter
-            v-model="expertiseTopicsFilter"
+        <DsfrFiltre
             v-if="expertiseTopicsItems.length > 0"
+            v-model="expertiseTopicsFilter"
             title="Expertises ou sujets d'intérêts"
             :options="expertiseTopicsItems"
-            class="border-1 !border-primary rounded hover:bg-blue200"
         />
     </section>
 </template>
@@ -14,7 +13,7 @@
 <script setup>
 import { computed, toRefs } from "vue";
 import { useConfigStore } from "@/stores/config.store";
-import { Filter as RbFilter } from "@resorptionbidonvilles/ui";
+import { DsfrFiltre } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     modelValue: {

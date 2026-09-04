@@ -2,7 +2,7 @@
     <LayoutLoading v-if="data === null" />
     <Layout v-else>
         <ContentWrapper>
-            <Filter
+            <DsfrFiltre
                 title="Statut"
                 :options="[
                     { label: 'Actif', value: 'active' },
@@ -10,12 +10,12 @@
                 ]"
                 v-model="statusFilter"
             />
-            <Filter
+            <DsfrFiltre
                 title="Feature"
                 :options="featureFilterOptions"
                 v-model="featureFilter"
             />
-            <Filter
+            <DsfrFiltre
                 title="Type d'extension"
                 :options="[
                     { label: 'Région', value: 'regions' },
@@ -26,7 +26,7 @@
                 ]"
                 v-model="attachmentFilter"
             />
-            <Filter
+            <DsfrFiltre
                 title="Extension ou interdiction"
                 :options="[
                     { label: 'Extension', value: 'true' },
@@ -250,7 +250,12 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { listWithPrivilege } from "@/api/users.api";
 
-import { ContentWrapper, Filter, Icon, Link } from "@resorptionbidonvilles/ui";
+import {
+    ContentWrapper,
+    DsfrFiltre,
+    Icon,
+    Link,
+} from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
 
