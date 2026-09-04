@@ -63,3 +63,17 @@ p {
 input[type=search] {
     background-color: white;
 }
+
+/* Anime une icône DSFR/Iconify utilisée comme indicateur de chargement */
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
