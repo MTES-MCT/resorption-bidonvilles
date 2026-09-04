@@ -1,12 +1,28 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
+import { Brevo } from '@getbrevo/brevo';
 import config from '#server/config';
 import mailsUtils from '#server/utils/mail';
+import renderMailjetTemplate from '../mails/renderMailjetTemplate';
 
 const { send: sendMail } = mailsUtils;
 const {
     wwwUrl, webappUrl, backUrl, testEmail,
 } = config;
+
+type Recipient = {
+    email: string,
+    first_name: string,
+    last_name: string,
+};
+
+type SendOptions = {
+    recipient: Recipient,
+    preserveRecipient?: boolean,
+    variables?: { [key: string]: any },
+    replyTo?: Recipient | null,
+    bcc?: Recipient[],
+};
 
 export default {
     PRESERVE_RECIPIENT: true,
@@ -18,9 +34,9 @@ export default {
      * @param {Object}  options Name of the email template (may be a path, without trailing .js)
      * @returns {Promise}
      */
-    send(templateName, options) {
+    async send(templateName: string, options: SendOptions): Promise<Brevo.SendTransacEmailResponse> | null {
         const {
-            recipient, preserveRecipient = true, variables, replyTo = null, bcc = [],
+            recipient, preserveRecipient = true, variables = {}, replyTo = null, bcc = [],
         } = options;
 
         let finalRecipient = recipient;
@@ -33,24 +49,30 @@ export default {
             bcc.splice(0, bcc.length);
         }
 
-        const htmlContent = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.html`));
-        const textContent = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.text`));
-        const subject = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.subject.text`));
+        const htmlContent = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.html`)).toString();
+        const textContent = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.text`)).toString();
+        const subject = fs.readFileSync(path.join(__dirname, '../mails/dist', `${templateName}.subject.text`)).toString();
+
+        const templateVariables = {
+            wwwUrl,
+            webappUrl,
+            backUrl,
+            recipientName: `${recipient.first_name} ${recipient.last_name}`,
+            ...variables,
+        };
+
+        const [renderedHtml, renderedText, renderedSubject] = await Promise.all([
+            renderMailjetTemplate(htmlContent, templateVariables),
+            renderMailjetTemplate(textContent, templateVariables),
+            renderMailjetTemplate(subject, templateVariables),
+        ]);
 
         return sendMail(
             finalRecipient,
             {
-                HTMLPart: htmlContent.toString(),
-                TextPart: textContent.toString(),
-                Subject: subject.toString(),
-                TemplateLanguage: true,
-                Variables: {
-                    wwwUrl,
-                    webappUrl,
-                    backUrl,
-                    recipientName: `${recipient.first_name} ${recipient.last_name}`,
-                    ...variables,
-                },
+                HTMLPart: renderedHtml,
+                TextPart: renderedText,
+                Subject: renderedSubject,
             },
             replyTo,
             bcc,
