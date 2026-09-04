@@ -65,7 +65,7 @@ import createComment from './createComment';
 rewiremock.disable();
 
 
-describe.skip('services/shantytownComment.create', () => {
+describe('services/shantytownComment.create', () => {
     let fakeEnrichedComment: () => ShantytownEnrichedComment;
     let fakeAuthor: () => ShantytownCommentAuthor;
 
@@ -112,7 +112,7 @@ describe.skip('services/shantytownComment.create', () => {
         sandbox.reset();
     });
 
-    describe.skip('createComment()', () => {
+    describe('createComment()', () => {
         describe('', () => {
             let input;
             let output;
@@ -183,8 +183,8 @@ describe.skip('services/shantytownComment.create', () => {
 
                 // getComments() retourne une liste de commentaires
                 stubs.shantytownCommentModel.findByShantytown
-                    .withArgs(input.user, { shantytown: [input.shantytown.id] })
-                    .resolves(fakeCommentInput);
+                    .withArgs(input.user, [input.shantytown.id])
+                    .resolves(output.returnedComment);
 
                 // findOneComment() retourne un commentaire
                 stubs.shantytownCommentModel.findOne
@@ -192,13 +192,15 @@ describe.skip('services/shantytownComment.create', () => {
                     .resolves(output.comment);
 
                 // getShantytownWatchers() retourne une liste d'utilisateurs
+                // Le service appelle getShantytownWatchers avec l'ID du commentaire créé, pas l'ID du site
                 stubs.userModel.getShantytownWatchers
-                    .withArgs(input.shantytown.id)
+                    .withArgs(1)
                     .resolves(output.watchers);
 
-                stubs.sequelize.transaction
-                    .withArgs([[{ shantytown_comment_id: output.comment.id }]])
-                    .resolves(stubs.transaction);
+                // enrichCommentsAttachments() transforme chaque commentaire brut en commentaire enrichi
+                stubs.enrichCommentsAttachments
+                    .resolves(output.commentList[0]);
+
                 response = await createComment(input.comment, input.shantytown, input.user);
             });
 
@@ -206,19 +208,19 @@ describe.skip('services/shantytownComment.create', () => {
                 expect(stubs.shantytownCommentModel.create).to.have.been.calledOnceWith({
                     description: 'Un commentaire',
                     targets: {
-                        users: [],
+                        users: [{ id: 2 }],
                         organizations: [],
                     },
                     fk_shantytown: 1,
                     created_by: 2,
-                });
+                }, sinon.match.same(stubs.transaction));
             });
 
             it('insère les tags du commentaire en base de données via le modèle shantytownCommentTag/create', () => {
                 expect(stubs.shantytownCommentTagModel.create).to.have.been.calledOnceWith(1, [
                     'conditions_de_vie',
                     'passage_sur_site',
-                ]);
+                ], sinon.match.same(stubs.transaction));
             });
 
             it('envoie une notification mattermost', () => {
@@ -268,6 +270,7 @@ describe.skip('services/shantytownComment.create', () => {
             });
             stubs.userModel.getShantytownWatchers.resolves([]);
             stubs.shantytownCommentModel.create.resolves(1);
+            stubs.enrichCommentsAttachments.resolves(fakeEnrichedComment());
             await createComment(fakeCommentInput({
                 files,
             }), fakeShantytown(), fakeUser({ id: 2 }));

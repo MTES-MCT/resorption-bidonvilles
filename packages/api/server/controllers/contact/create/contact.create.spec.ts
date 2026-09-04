@@ -26,18 +26,20 @@ rewiremock.enable();
 import contactController from './contact.create';
 rewiremock.disable();
 
-describe.skip('contactController.create()', () => {
+describe('contactController.create()', () => {
     afterEach(() => {
-        sandbox.restore();
+        sandbox.reset();
     });
 
     // demande de contact
     it('envoie la notification d\'une demande de contact', async () => {
         const body = {
-            request_type: ['help'],
+            request_type: 'help',
         };
         const req = mockReq({ body });
         const res = mockRes();
+
+        contactService.notifyContact.resolves();
 
         await contactController(req, res, () => {});
         expect(contactService.notifyContact).to.have.been.calledOnce;
@@ -48,10 +50,12 @@ describe.skip('contactController.create()', () => {
     });
     it('répond avec un code 200 et un body vide', async () => {
         const body = {
-            request_type: ['help'],
+            request_type: 'help',
         };
         const req = mockReq({ body });
         const res = mockRes();
+
+        contactService.notifyContact.resolves();
 
         await contactController(req, res, () => {});
         expect(res.status).to.have.been.calledOnceWith(200);
@@ -59,7 +63,7 @@ describe.skip('contactController.create()', () => {
     });
     it('en cas d\'erreur de traitement d\'une demande de contact, répond avec un code 500 et un détail de l\'erreur', async () => {
         const body = {
-            request_type: ['help'],
+            request_type: 'help',
         };
         const req = mockReq({ body });
         const res = mockRes();
@@ -79,53 +83,61 @@ describe.skip('contactController.create()', () => {
     // demande d'accès
     it('si la demande n\'est pas une demande d\'accès, n\'enregistre pas de nouvel utilisateur en base', async () => {
         const body = {
-            request_type: ['help'],
+            request_type: 'help',
         };
         const req = mockReq({ body });
         const res = mockRes();
+
+        contactService.notifyContact.resolves();
 
         await contactController(req, res, () => {});
         expect(userService.register).to.not.have.been.called;
     });
     it('si la demande est une demande d\'accès, n\'envoie pas de notification de contact', async () => {
         const body = {
-            request_type: ['access-request'],
+            request_type: 'access-request',
             is_actor: true,
             organization_category: 'public_establishment',
         };
         const req = mockReq({ body });
         const res = mockRes();
+
+        userService.register.resolves({ id: 123 });
 
         await contactController(req, res, () => {});
         expect(contactService.notifyContact).to.not.have.been.called;
     });
     it('si la demande est une demande d\'accès, enregistre l\'utilisateur en base', async () => {
         const body = {
-            request_type: ['access-request'],
+            request_type: 'access-request',
             is_actor: true,
             organization_category: 'public_establishment',
         };
         const req = mockReq({ body });
         const res = mockRes();
+
+        userService.register.resolves({ id: 123 });
 
         await contactController(req, res, () => {});
         expect(userService.register).to.have.been.calledOnceWith(body);
     });
     it('si la demande est une demande d\'accès, répond avec un code 201', async () => {
         const body = {
-            request_type: ['access-request'],
+            request_type: 'access-request',
             is_actor: true,
             organization_category: 'public_establishment',
         };
         const req = mockReq({ body });
         const res = mockRes();
 
+        userService.register.resolves({ id: 123 });
+
         await contactController(req, res, () => {});
         expect(res.status).to.have.been.calledWith(201);
     });
     it('si la demande est une demande d\'accès, répond avec l\'utilisateur créé', async () => {
         const body = {
-            request_type: ['access-request'],
+            request_type: 'access-request',
             is_actor: true,
             organization_category: 'public_establishment',
         };
@@ -142,32 +154,38 @@ describe.skip('contactController.create()', () => {
     // enregistrement newsletter
     it('si le contact n\'inclue pas d\'enregistrement à la newsletter, n\'envoie pas la notification spécifique', async () => {
         const body = {
-            request_type: ['help'],
+            request_type: 'help',
         };
         const req = mockReq({ body });
         const res = mockRes();
+
+        contactService.notifyContact.resolves();
 
         await contactController(req, res, () => {});
         expect(contactService.notifyNewsletterRegistration).to.not.have.been.called;
     });
     it('si le contact inclue un enregistrement à la newsletter, envoie une notification spécifique', async () => {
         const body = {
-            request_type: ['register-newsletter'],
+            request_type: 'register-newsletter',
         };
         const req = mockReq({ body });
         const res = mockRes();
+
+        contactService.notifyNewsletterRegistration.resolves();
+        contactService.notifyContact.resolves();
 
         await contactController(req, res, () => {});
         expect(contactService.notifyNewsletterRegistration).to.have.been.calledOnceWith(body);
     });
     it('ignore les erreurs de notification de newsletter', async () => {
         const body = {
-            request_type: ['register-newsletter'],
+            request_type: 'register-newsletter',
         };
         const req = mockReq({ body });
         const res = mockRes();
 
         contactService.notifyNewsletterRegistration.rejects();
+        contactService.notifyContact.resolves();
 
         await contactController(req, res, () => {});
         expect(res.status).to.have.been.calledWith(200);
@@ -176,23 +194,28 @@ describe.skip('contactController.create()', () => {
     // referral
     it('si le contact n\'inclue pas un referral, ne tente pas d\'enregistrement referral en base', async () => {
         const body = {
-            request_type: ['help'],
+            request_type: 'help',
             referral: null,
         };
         const req = mockReq({ body });
         const res = mockRes();
+
+        contactService.notifyContact.resolves();
 
         await contactController(req, res, () => {});
         expect(contactService.registerReferral).to.not.have.been.called;
     });
     it('si le contact inclue un referral, enregistre le referral en base', async () => {
         const body = {
-            request_type: ['help'],
+            request_type: 'help',
             referral: 'other',
             referral_other: 'a colleague',
         };
         const req = mockReq({ body });
         const res = mockRes();
+
+        contactService.notifyContact.resolves();
+        contactService.registerReferral.resolves();
 
         await contactController(req, res, () => {});
         expect(contactService.registerReferral).to.have.been.calledOnceWith({
@@ -202,7 +225,7 @@ describe.skip('contactController.create()', () => {
     });
     it('si le contact inclue un referral, enregistre le referral en base avec l\'id de l\'utilisateur créé', async () => {
         const body = {
-            request_type: ['access-request'],
+            request_type: 'access-request',
             is_actor: true,
             organization_category: 'public_establishment',
             referral: 'other',
@@ -212,21 +235,29 @@ describe.skip('contactController.create()', () => {
         const res = mockRes();
 
         userService.register.resolves({ id: 123 });
+        contactService.registerReferral.resolves();
 
         await contactController(req, res, () => {});
-        expect(contactService.registerReferral).to.have.been.calledOnceWith({
-            ...body,
+
+        const expectedCall = {
+            request_type: 'access-request',
+            is_actor: true,
+            organization_category: 'public_establishment',
+            referral: 'other',
+            referral_other: 'a colleague',
             user_id: 123,
-        });
+        };
+        expect(contactService.registerReferral).to.have.been.calledOnceWith(expectedCall);
     });
     it('ignore les erreurs d\'enregistrement de referral', async () => {
         const body = {
-            request_type: ['help'],
+            request_type: 'help',
             referral: 'dihal_event',
         };
         const req = mockReq({ body });
         const res = mockRes();
 
+        contactService.notifyContact.resolves();
         contactService.registerReferral.rejects();
 
         await contactController(req, res, () => {});

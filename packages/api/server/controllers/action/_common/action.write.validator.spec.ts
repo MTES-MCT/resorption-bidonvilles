@@ -3,10 +3,9 @@ import { sumSchoolLevels, validateScolariseDansAnnee } from './action.write.vali
 
 const { expect } = chai;
 
-// Indicateur de base valide : nombre_mineurs renseigné et niveaux suffisants.
+// Indicateur de base valide : mineurs identifiés sur site et niveaux suffisants.
 // Chaque test surcharge les champs pertinents.
 const baseIndicateur = () => ({
-    nombre_mineurs: 100,
     scolaire_mineurs_moins_de_trois_ans: 3,
     scolaire_mineurs_trois_ans_et_plus: 11,
     scolaire_nombre_maternelle: 5,
@@ -58,15 +57,20 @@ describe('controllers/action/_common/action.write.validator', () => {
             expect(validateScolariseDansAnnee(undefined, baseIndicateur())).to.equal(true);
         });
 
-        it.skip('lève une TypeError si nombre_mineurs n\'est pas renseigné', () => {
-            const indicateur = { ...baseIndicateur(), nombre_mineurs: null };
+        it('règle 1 : lève une TypeError si aucun mineur n\'est identifié sur site', () => {
+            const indicateur = {
+                ...baseIndicateur(),
+                scolaire_mineurs_moins_de_trois_ans: null,
+                scolaire_mineurs_trois_ans_et_plus: null,
+            };
             expect(() => validateScolariseDansAnnee(1, indicateur)).to.throw(TypeError);
         });
 
-        it.skip('lève une erreur si la valeur dépasse le nombre total de mineurs', () => {
-            const indicateur = { ...baseIndicateur(), nombre_mineurs: 3 };
-            expect(() => validateScolariseDansAnnee(4, indicateur))
-                .to.throw('Le nombre de mineurs scolarisés dans l\'année ne peut être renseigné que si au moins un des champs "Mineurs identifiés sur site" est renseigné');
+        it('règle 2 : lève une erreur si la valeur dépasse le total des mineurs identifiés sur site', () => {
+            // total identifiés sur site = 3 + 11 = 14 (cf. baseIndicateur)
+            const indicateur = baseIndicateur();
+            expect(() => validateScolariseDansAnnee(15, indicateur))
+                .to.throw('Le nombre de mineurs scolarisés dans l\'année ne peut pas dépasser le nombre total de mineurs identifiés sur site');
         });
 
         it('règle 3 : lève une erreur si la valeur dépasse la somme des niveaux (hors autre)', () => {

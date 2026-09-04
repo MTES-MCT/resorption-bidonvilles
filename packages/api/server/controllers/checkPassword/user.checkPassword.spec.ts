@@ -31,9 +31,33 @@ const { hashPassword: hashPasswordStub } = authUtilsMock;
 
 rewiremock.disable();
 
-describe.skip('vérification du mot de passe actuel', () => {
+describe('vérification du mot de passe actuel', () => {
     afterEach(() => {
-        sandbox.restore();
+        sandbox.reset();
+    });
+
+    it('retourne une erreur 400 si le password n\'est pas une chaîne de caractères', async () => {
+        const req = mockReq({
+            params: {
+                id: 2,
+            },
+            body: {
+                password: 123456,
+            },
+        });
+
+        const res = mockRes();
+
+        await controller(req, res, () => {});
+
+        expect(res.status).to.have.been.calledWith(400);
+        expect(res.send).to.have.been.calledWith({
+            user_message: 'Ces identifiants sont incorrects',
+            fields: {
+                password: ['Le mot de passe est invalide'],
+            },
+        });
+        expect(userModel.findOne).to.not.have.been.called;
     });
 
     it('mot de passe valide', async () => {
@@ -49,14 +73,19 @@ describe.skip('vérification du mot de passe actuel', () => {
         const res = mockRes();
         const user = fakeUser();
 
+        userModel.findOne.withArgs(2, { auth: true }).resolves(user);
         hashPasswordStub.callsFake(hashPassword);
-        const result = hashPasswordStub(req.body.password, user.salt);
 
         await controller(req, res, () => {});
-        expect(req.params.id).to.equal(user.id);
+
+        expect(userModel.findOne).to.have.been.calledOnce;
+        expect(userModel.findOne).to.have.been.calledWith(2, { auth: true });
         expect(hashPasswordStub).to.have.been.calledOnce;
-        expect(hashPasswordStub).to.have.been.calledWith(req.body.password);
-        expect(result).to.equal(user.password);
+        expect(hashPasswordStub).to.have.been.calledWith(req.body.password, user.salt);
+        expect(res.status).to.have.been.calledWith(200);
+        expect(res.send).to.have.been.calledWith({
+            checkActualPassword: true,
+        });
     });
 
     it('mot de passe invalide', async () => {
@@ -72,14 +101,19 @@ describe.skip('vérification du mot de passe actuel', () => {
         const res = mockRes();
         const user = fakeUser();
 
+        userModel.findOne.withArgs(2, { auth: true }).resolves(user);
         hashPasswordStub.callsFake(hashPassword);
-        const result = hashPasswordStub(req.body.password, user.salt);
 
         await controller(req, res, () => {});
-        expect(req.params.id).to.equal(user.id);
+
+        expect(userModel.findOne).to.have.been.calledOnce;
+        expect(userModel.findOne).to.have.been.calledWith(2, { auth: true });
         expect(hashPasswordStub).to.have.been.calledOnce;
         expect(hashPasswordStub).to.have.been.calledWith(req.body.password, user.salt);
-        expect(result).to.not.equal(user.password);
+        expect(res.status).to.have.been.calledWith(200);
+        expect(res.send).to.have.been.calledWith({
+            checkActualPassword: false,
+        });
     });
 
     it('utilisateur invalide', async () => {
@@ -93,9 +127,15 @@ describe.skip('vérification du mot de passe actuel', () => {
         });
 
         const res = mockRes();
-        const user = fakeUser();
+        const next = sinon.spy();
 
-        await controller(req, res, () => {});
-        expect(req.params.id).to.not.equal(user.id);
+        userModel.findOne.withArgs(42, { auth: true }).resolves(null);
+
+        await controller(req, res, next);
+
+        expect(userModel.findOne).to.have.been.calledOnce;
+        expect(userModel.findOne).to.have.been.calledWith(42, { auth: true });
+        expect(res.status).to.have.been.calledWith(500);
+        expect(next).to.have.been.calledOnce;
     });
 });
