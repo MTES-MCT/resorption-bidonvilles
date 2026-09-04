@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import userModel from '#server/models/userModel';
 import organizationTypeModel from '#server/models/organizationTypeModel';
 import authUtils from '#server/utils/auth';
-import mattermostUtils from '#server/utils/mattermost';
+import tchapUtils from '#server/utils/tchap';
 import ServiceError from '#server/errors/ServiceError';
 import { User } from '#root/types/resources/User.d';
 
@@ -11,7 +11,7 @@ const { generateSalt } = authUtils;
 export default async (data, createdBy: number = null): Promise<User> => {
     try {
         const userId = await sequelize.transaction(async (t) => {
-            const fk_role_regular = await organizationTypeModel.findRoleByOrganizationId(parseInt(data.organization, 10), t);
+            const fk_role_regular = await organizationTypeModel.findRoleByOrganizationId(Number.parseInt(data.organization, 10), t);
             Object.assign(data, { fk_role_regular });
 
             return userModel.create(Object.assign(data, {
@@ -23,7 +23,7 @@ export default async (data, createdBy: number = null): Promise<User> => {
         const user = await userModel.findOne(userId);
         if (user.organization.type.uid === 'rectorat') {
             try {
-                await mattermostUtils.triggerNotifyNewUserFromRectorat(user);
+                await tchapUtils.triggerNotifyNewUserFromRectorat(user);
             } catch {
                 // DO NOTHING
             }

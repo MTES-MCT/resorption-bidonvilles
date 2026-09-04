@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -24,7 +24,14 @@ export default {
     agenda: {
         mongo_address: `mongodb://${process.env.RB_API_MONGO_USERNAME}:${process.env.RB_API_MONGO_PASSWORD}@${process.env.RB_API_MONGO_HOST}`,
     },
-    mattermost: process.env.RB_API_MATTERMOST_WEBHOOK ?? false,
+    tchap: {
+        username: process.env.RB_API_TCHAP_USER_NAME,
+        password: process.env.RB_API_TCHAP_USER_PASSWORD,
+        token: process.env.RB_API_TCHAP_TOKEN,
+        baseUrl: process.env.RB_API_TCHAP_BASE_URL,
+        domain: process.env.RB_API_TCHAP_DOMAIN,
+        privateSpace: process.env.RB_API_TCHAP_PRIVATE_SPACE,
+    },
     sentry: {
         dsn: process.env.RB_API_SENTRY_DSN || '',
     },

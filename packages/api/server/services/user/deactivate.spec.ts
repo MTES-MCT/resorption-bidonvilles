@@ -21,7 +21,7 @@ const stubs = {
         sendUserDeactivationConfirmation: sandbox.stub().resolves(),
         sendUserDeactivationByAdminAlert: sandbox.stub().resolves(),
     },
-    mattermost: {
+    tchap: {
         triggerNotifyNewUserSelfDeactivation: sandbox.stub(),
     },
     agenda: {
@@ -49,7 +49,7 @@ const stubs = {
 rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
 rewiremock('#server/models/userModel/index').with(stubs.userModel);
 rewiremock('#server/mails/mails').with(stubs.mails);
-rewiremock('#server/utils/mattermost').with(stubs.mattermost);
+rewiremock('#server/utils/tchap').with(stubs.tchap);
 rewiremock('#server/loaders/agendaLoader').with(() => stubs.agenda);
 
 rewiremock.enable();
@@ -124,15 +124,15 @@ describe('userService.deactivate()', () => {
         expect(stubs.mails.sendUserDeactivationByAdminAlert).to.not.have.been.called;
     });
 
-    it('s\'il s\'agit d\'une auto-désactivation, envoie une notification mattermost', async () => {
+    it('s\'il s\'agit d\'une auto-désactivation, envoie une notification Tchap', async () => {
         const user = fakeUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
         const expectedUser = { ...user, status: 'inactive' };
 
         await deactivateUser(42, true, user);
-        expect(stubs.mattermost.triggerNotifyNewUserSelfDeactivation).to.have.been.calledOnce;
-        expect(stubs.mattermost.triggerNotifyNewUserSelfDeactivation).to.have.been.calledWith(expectedUser);
+        expect(stubs.tchap.triggerNotifyNewUserSelfDeactivation).to.have.been.calledOnce;
+        expect(stubs.tchap.triggerNotifyNewUserSelfDeactivation).to.have.been.calledWith(expectedUser);
     });
 
     it('s\'il ne s\'agit PAS d\'une auto-désactivation, envoie un mail avec la raison de la désactivation', async () => {
@@ -174,13 +174,13 @@ describe('userService.deactivate()', () => {
         expect(stubs.mails.sendUserDeactivationConfirmation).to.not.have.been.called;
     });
 
-    it('s\'il ne s\'agit PAS d\'une auto-désactivation, n\'envoie pas de notification mattermost', async () => {
+    it('s\'il ne s\'agit PAS d\'une auto-désactivation, n\'envoie pas de notification Tchap', async () => {
         const user = fakeUser();
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
         await deactivateUser(42, false, user);
-        expect(stubs.mattermost.triggerNotifyNewUserSelfDeactivation).to.not.have.been.called;
+        expect(stubs.tchap.triggerNotifyNewUserSelfDeactivation).to.not.have.been.called;
     });
 
     it('ignore les erreurs de l\'envoi du mail de confirmation', async () => {
@@ -190,19 +190,23 @@ describe('userService.deactivate()', () => {
         error.stack = undefined; // Supprime la stack trace
         stubs.mails.sendUserDeactivationConfirmation.rejects(error);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
+        const expectedUser = { ...user, status: 'inactive' };
 
-        await deactivateUser(42, true, user);
+        const response = await deactivateUser(42, true, user);
+        expect(response).to.be.eql(expectedUser);
     });
 
-    it('ignore les erreurs de l\'envoi de la notification mattermost', async () => {
+    it('ignore les erreurs de l\'envoi de la notification Tchap', async () => {
         const user = fakeUser();
         stubs.userModel.findOne.withArgs(42).resolves(user);
-        const error = new Error('Échec d\'envoi de la notification Mattermost');
+        const error = new Error('Échec d\'envoi de la notification Tchap');
         error.stack = undefined; // Supprime la stack trace
-        stubs.mattermost.triggerNotifyNewUserSelfDeactivation.rejects(error);
+        stubs.tchap.triggerNotifyNewUserSelfDeactivation.rejects(error);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
+        const expectedUser = { ...user, status: 'inactive' };
 
-        await deactivateUser(42, true, user);
+        const response = await deactivateUser(42, true, user);
+        expect(response).to.be.eql(expectedUser);
     });
 
     it('ignore les erreurs de l\'envoi du mail d\'alerte', async () => {
@@ -212,8 +216,10 @@ describe('userService.deactivate()', () => {
         error.stack = undefined; // Supprime la stack trace
         stubs.mails.sendUserDeactivationByAdminAlert.rejects(error);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
+        const expectedUser = { ...user, status: 'inactive' };
 
-        await deactivateUser(42, false, user);
+        const response = await deactivateUser(42, false, user);
+        expect(response).to.be.eql(expectedUser);
     });
 
     it('en cas d\'erreur de la modification de l\'utilisateur, lance une ServiceError', async () => {
@@ -224,7 +230,7 @@ describe('userService.deactivate()', () => {
         stubs.userModel.findOne.withArgs(42).resolves(user);
         try {
             await deactivateUser(42, true, user);
-            expect.fail('should have thrown an error');
+            expect.fail('une erreur aurait dû être levée');
         } catch (e) {
             expect(e).to.be.an.instanceof(ServiceError);
             expect(e.code).to.be.equal('deactivation_failure');
@@ -241,7 +247,7 @@ describe('userService.deactivate()', () => {
 
         try {
             await deactivateUser(42, true, user);
-            expect.fail('should have thrown an error');
+            expect.fail('une erreur aurait dû être levée');
         } catch {
             expect(transaction.rollback).to.have.been.called;
         }
@@ -261,31 +267,6 @@ describe('userService.deactivate()', () => {
         expect(stubs.sequelize.transaction).to.not.have.been.called;
     });
 
-    it('en cas d\'erreur de la modification de l\'utilisateur, rollback la transaction', async () => {
-        // Given
-        const user = fakeUser({ id: 42, status: 'active' });
-
-        // Simuler une erreur de mise à jour
-        const error = new Error('Erreur de mise à jour');
-        error.stack = undefined; // Supprime la stack trace
-
-        // Configuration des stubs
-        stubs.userModel.findOne.withArgs(42).resolves(user);
-        stubs.userModel.deactivate.rejects(error);
-
-        // When/Then
-        try {
-            await deactivateUser(42, true, user);
-            expect.fail('Une erreur aurait dû être levée');
-        } catch (e) {
-            // Vérifications
-            expect(stubs.sequelize.transaction).to.have.been.calledOnce;
-            expect(transaction.rollback).to.have.been.calledOnce;
-            expect(e).to.be.an.instanceof(ServiceError);
-            expect(e.code).to.equal('deactivation_failure');
-        }
-    });
-
     it('en cas d\'erreur dans la transaction, lance une ServiceError', async () => {
         const error = new Error('Échec de la transaction');
         error.stack = undefined; // Supprime la stack trace
@@ -298,7 +279,7 @@ describe('userService.deactivate()', () => {
 
         try {
             await deactivateUser(42, true, user);
-            expect.fail('should have thrown an error');
+            expect.fail('une erreur aurait dû être levée');
         } catch (e) {
             expect(e).to.be.an.instanceof(ServiceError);
             expect(e.code).to.equal('transaction_failure');

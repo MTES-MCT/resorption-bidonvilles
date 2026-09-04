@@ -28,7 +28,7 @@ const stubs = {
     fetchCommentsModel: sandbox.stub(),
     uploadAttachments: sandbox.stub(),
     serializeComment: sandbox.stub(),
-    sendMattermostNotification: sandbox.stub(),
+    sendNotification: sandbox.stub(),
     sendMailNotifications: sandbox.stub(),
     enrichCommentsAttachments: sandbox.stub(),
 };
@@ -38,7 +38,7 @@ rewiremock('#server/models/actionModel/createComment/createComment').with(stubs.
 rewiremock('#server/models/actionModel/fetchComments/fetchComments').with(stubs.fetchCommentsModel);
 rewiremock('#server/models/actionModel/fetchComments/serializeComment').with(stubs.serializeComment);
 rewiremock('#server/services/attachment/upload').with(stubs.uploadAttachments);
-rewiremock('./createComment.sendMattermostNotification').with(stubs.sendMattermostNotification);
+rewiremock('./createComment.sendNotification').with(stubs.sendNotification);
 rewiremock('./createComment.sendMailNotifications').with(stubs.sendMailNotifications);
 rewiremock('./enrichCommentsAttachments').with(stubs.enrichCommentsAttachments);
 rewiremock('#server/services/attachment/scanAttachmentErrors').with(scanAttachmentErrors);
@@ -137,7 +137,7 @@ describe('services/actionComment.createComment()', () => {
             caughtError = error;
         }
 
-        expect(caughtError).to.be.eql(undefined);
+        expect(caughtError).to.be.undefined;
         expect(stubs.uploadAttachments).to.not.have.been.called;
     });
 
@@ -242,7 +242,7 @@ describe('services/actionComment.createComment()', () => {
         expect(caughtError.nativeError).to.be.eql(nativeError);
     });
 
-    it('envoie une notification mattermost', async () => {
+    it('envoie une notification Tchap', async () => {
         const action = fakeAction();
         const comment = fakeActionComment();
         stubs.serializeComment.returns(comment);
@@ -257,16 +257,16 @@ describe('services/actionComment.createComment()', () => {
             },
         );
 
-        expect(stubs.sendMattermostNotification).to.have.been.calledOnce;
-        expect(stubs.sendMattermostNotification).to.have.been.calledOnceWith(
+        expect(stubs.sendNotification).to.have.been.calledOnce;
+        expect(stubs.sendNotification).to.have.been.calledOnceWith(
             action,
             comment,
         );
     });
 
-    it('ne lance pas d\'erreur en cas d\'échec d\'envoi de la notification mattermost', async () => {
+    it('ne lance pas d\'erreur en cas d\'échec d\'envoi de la notification Tchap', async () => {
         stubs.fetchCommentsModel.resolves([fakeActionCommentRow()]);
-        stubs.sendMattermostNotification.rejects(new Error('fake error'));
+        stubs.sendNotification.rejects(new Error('fake error'));
 
         let caughtError;
         try {
@@ -282,7 +282,7 @@ describe('services/actionComment.createComment()', () => {
             caughtError = error;
         }
 
-        expect(caughtError).to.be.eql(undefined);
+        expect(caughtError).to.be.undefined;
     });
 
     it('envoie une notification mail aux personnes concernées', async () => {
@@ -324,7 +324,7 @@ describe('services/actionComment.createComment()', () => {
             caughtError = error;
         }
 
-        expect(caughtError).to.be.eql(undefined);
+        expect(caughtError).to.be.undefined;
     });
 
     it('retourne le commentaire fraîchement créé', async () => {
