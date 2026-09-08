@@ -2,22 +2,23 @@ import { sequelize } from '#db/sequelize';
 import processThemes from './_common/processThemes';
 
 export default (shantytownId, userId, themes, updatedBy, transaction = undefined) => {
-    const replacements = {
-        ...processThemes(themes),
-        fk_shantytown: shantytownId,
-        fk_user: userId,
-        updated_by: updatedBy,
-    };
+    const processedThemes = processThemes(themes);
 
     return sequelize.query(
         `UPDATE shantytown_actors
             SET
-                themes = ARRAY[${replacements.themes.map(id => `'${id}'`).join(',')}]::enum_shantytown_actors_themes[],
-                autre = :autre,
-                updated_by = :updated_by
-            WHERE fk_shantytown = :fk_shantytown AND fk_user = :fk_user`,
+                themes = $themes::enum_shantytown_actors_themes[],
+                autre = $autre,
+                updated_by = $updatedBy
+            WHERE fk_shantytown = $shantytownId AND fk_user = $userId`,
         {
-            replacements,
+            bind: {
+                themes: processedThemes.themes,
+                autre: processedThemes.autre,
+                updatedBy,
+                shantytownId,
+                userId,
+            },
             transaction,
         },
     );
