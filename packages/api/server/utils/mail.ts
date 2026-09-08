@@ -1,7 +1,7 @@
 import axios from 'axios';
 import config from '#server/config';
 
-type Recipient = {
+export type Recipient = {
     email: string,
     first_name?: string,
     last_name?: string,

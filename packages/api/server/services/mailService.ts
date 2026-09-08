@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import config from '#server/config';
-import mailsUtils from '#server/utils/mail';
+import mailsUtils, { Recipient as BaseRecipient } from '#server/utils/mail';
 import renderMailjetTemplate from '../mails/renderMailjetTemplate';
 
 const { send: sendMail } = mailsUtils;
@@ -9,11 +9,7 @@ const {
     wwwUrl, webappUrl, backUrl, testEmail,
 } = config;
 
-type Recipient = {
-    email: string;
-    first_name: string;
-    last_name: string;
-};
+type Recipient = Required<Pick<BaseRecipient, 'first_name' | 'last_name'>> & Omit<BaseRecipient, 'first_name' | 'last_name'>;
 
 type SendOptions = {
     recipient: Recipient;
