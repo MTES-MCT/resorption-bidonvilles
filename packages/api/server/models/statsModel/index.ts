@@ -1,5 +1,3 @@
-import averageCompletionPercentage from './averageCompletionPercentage';
-import averageCompletionPercentageByDepartement from './averageCompletionPercentageByDepartement';
 import getStats from './getStats';
 import meanTimeBeforeClosingDeclaration from './meanTimeBeforeClosingDeclaration';
 import meanTimeBeforeCreationDeclaration from './meanTimeBeforeCreationDeclaration';
@@ -31,8 +29,6 @@ import populationTotal from './populationTotal';
 import wau from './wau';
 
 export default {
-    averageCompletionPercentage,
-    averageCompletionPercentageByDepartement,
     getStats,
     meanTimeBeforeClosingDeclaration,
     meanTimeBeforeCreationDeclaration,
