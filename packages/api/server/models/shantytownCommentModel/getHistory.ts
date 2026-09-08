@@ -39,8 +39,10 @@ export default async (user: User, location: Location, numberOfActivities: number
     const replacements: any = {
         maxDate,
     };
-    const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
-
+    const limit = numberOfActivities !== -1 ? 'LIMIT :numberOfActivities' : '';
+    if (numberOfActivities !== -1) {
+        replacements.numberOfActivities = numberOfActivities;
+    }
     const restrictedLocations = {
         public: restrict(location).for(user).askingTo('list', 'shantytown_comment'),
         private: restrict(location).for(user).askingTo('listPrivate', 'shantytown_comment'),
