@@ -8,10 +8,13 @@ export default async (departement) => {
         FROM shantytowns 
         LEFT JOIN cities AS city ON shantytowns.fk_city = city.code
         WHERE closed_at IS NULL
-        ${departement ? `AND fk_departement = '${departement}'` : ''}
+        ${departement ? 'AND fk_departement = :departement' : ''}
         `,
         {
             type: QueryTypes.SELECT,
+            replacements: {
+                departement,
+            },
         },
     );
 
