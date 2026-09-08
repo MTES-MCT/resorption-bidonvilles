@@ -10,10 +10,13 @@ export default async (departement, date = '2020-06-01') => {
             (shantytowns.created_at <= '${date}')
             AND 
             (shantytowns.closed_at >= '${date}' OR shantytowns.closed_at IS NULL)
-            ${departement ? `AND fk_departement = '${departement}'` : ''}
+            ${departement ? 'AND fk_departement = :departement' : ''}
             `,
         {
             type: QueryTypes.SELECT,
+            replacements: {
+                departement,
+            },
         },
     );
 

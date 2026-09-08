@@ -16,11 +16,14 @@ export default async (departement = null, startDateStr = '2019-06-01') => {
         FROM shantytowns LEFT JOIN cities AS city ON shantytowns.fk_city = city.code
         WHERE
             (shantytowns.created_at > '${startDateStr}' OR shantytowns.declared_at > '${startDateStr}')
-            ${departement ? `AND fk_departement = '${departement}'` : ''}
+            ${departement ? 'AND fk_departement = :departement' : ''}
         GROUP BY year, month
         ORDER BY year ASC, month ASC`,
         {
             type: QueryTypes.SELECT,
+            replacements: {
+                departement,
+            },
         },
     );
 

@@ -7,10 +7,11 @@ export default async (departement) => {
         SELECT COUNT(*) AS total 
         FROM actions
         WHERE ended_at IS NULL
-        ${departement ? `AND fk_departement = '${departement}'` : ''}
+        ${departement ? 'AND fk_departement = :departement' : ''}
         `,
         {
             type: QueryTypes.SELECT,
+            replacements: { departement },
         },
     );
 
