@@ -42,6 +42,5 @@ export default async function sendSummary(argFrom: Date, argTo: Date, summaries:
                 },
             });
         },
-        () => {}, // catch the error to avoid blocking other emails
     );
 }
