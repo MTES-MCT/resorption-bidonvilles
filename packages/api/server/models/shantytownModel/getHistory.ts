@@ -35,8 +35,12 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
     const replacements: any = {
         maxDate,
         userId: user.id,
+        lastDate,
     };
-    const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
+    if (numberOfActivities !== -1) {
+        replacements.numberOfActivities = numberOfActivities;
+    }
+    const limit = numberOfActivities !== -1 ? 'limit :numberOfActivities' : '';
 
     const restrictedLocations = restrict(location).for(user).askingTo('list', 'shantytown');
     if (restrictedLocations.length === 0) {
@@ -47,7 +51,7 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
 
     if (!restrictedLocations.some(l => l.type === 'nation')) {
         where.push(
-            restrictedLocations.map((l, index) => {
+            restrictedLocations.flatMap((l, index) => {
                 // On fait l'exclusion ou inclusion si c'est metropole ou outremer
                 if (restrictedLocationTypes.has(l.type)) {
                     if (!replacements.outreMerDepts) {
@@ -65,7 +69,7 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
                 }
 
                 return arr;
-            }).flat().join(' OR '),
+            }).join(' OR '),
         );
     }
 
@@ -115,7 +119,7 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
                     LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.hid
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE ((${where.join(') OR (')}))` : ''}
-                    ${where.length > 0 ? 'AND' : 'WHERE'} shantytowns.updated_at < '${lastDate}'
+                    ${where.length > 0 ? 'AND' : 'WHERE'} shantytowns.updated_at < :lastDate
                     ${resorbedFilter.includes('no') ? '' : 'AND shantytowns.closed_with_solutions = \'yes\''}
                     ${resorbedFilter.includes('yes') ? '' : 'AND shantytowns.closed_with_solutions != \'yes\''}
                     ${myTownsFilter.includes('no') ? '' : 'AND shantytown_actors.fk_user IS NOT NULL'}
@@ -165,7 +169,7 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
                     LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.shantytown_id
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE (${where.join(') OR (')})` : ''}
-                    ${where.length > 0 ? 'AND' : 'WHERE'} shantytowns.updated_at < '${lastDate}'
+                    ${where.length > 0 ? 'AND' : 'WHERE'} shantytowns.updated_at < :lastDate
                     ${resorbedFilter.includes('no') ? '' : 'AND shantytowns.closed_with_solutions = \'yes\''}
                     ${resorbedFilter.includes('yes') ? '' : 'AND shantytowns.closed_with_solutions != \'yes\''}
                     ${myTownsFilter.includes('no') ? '' : 'AND shantytown_actors.fk_user IS NOT NULL'}
@@ -178,7 +182,7 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
                     ${limit}
                 )) activities
             LEFT JOIN users author ON activities.authorId = author.user_id
-            WHERE activities."updatedAt" < '${lastDate}'
+            WHERE activities."updatedAt" < :lastDate
             ORDER BY activities."updatedAt" DESC
             ${limit}
             `,
@@ -195,7 +199,7 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
         if (!(listIdOldestVersions.includes(activity.id)) && (activity.updatedAt.valueOf() - activity.createdAt.valueOf() > 10)) {
             listIdOldestVersions.push(activity.id);
         }
-        listOldestVersions.push(`(${activity.id} , ${activity.hid})`);
+        listOldestVersions.push([activity.id, activity.hid]);
     });
     // on récupère les précédentes versions des éléments de listIdOldestVersions afin de pouvoir appliquer getDiff
     const queryPreviousVersions: ShantytownActivityRow[] = listIdOldestVersions.length === 0 ? [] : await sequelize.query(
@@ -275,15 +279,19 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
                     SELECT sho.shantytown_id, MAX(sho.updated_at)
                     FROM "ShantytownHistories" sho
                     WHERE
-                        sho.shantytown_id IN (${listIdOldestVersions})
-                        AND (sho.shantytown_id, sho.hid) NOT IN (${listOldestVersions})
-                        AND sho.updated_at < '${lastDate}'
+                        sho.shantytown_id IN (:listIdOldestVersions)
+                        AND (sho.shantytown_id, sho.hid) NOT IN (:listOldestVersions)
+                        AND sho.updated_at < :lastDate
                     GROUP BY shantytown_id
                )
             `,
         {
             type: QueryTypes.SELECT,
-            replacements,
+            replacements: {
+                ...replacements,
+                listIdOldestVersions,
+                listOldestVersions,
+            },
         },
     );
 
