@@ -24,7 +24,7 @@ type UserActivityRow = {
 };
 
 export default async (location: Location, numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<UserActivity[]> => {
-    const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
+    const limit = numberOfActivities !== -1 ? 'limit :numberOfActivities' : '';
     const outremerCondition = `(
                 EXISTS (
                     SELECT 1
@@ -77,6 +77,7 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
             replacements: {
                 maxDate,
                 lastDate,
+                numberOfActivities,
                 outreMerDepts: outremer.departements,
                 outreMerRegions: outremer.regions,
                 city: location.city?.code || null,
