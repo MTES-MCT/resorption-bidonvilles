@@ -1,5 +1,12 @@
 <template>
     <div class="text-center">
-        <VIcon name="ri:loader-4-line" class="spin text-3xl text-primary" />
+        <VIcon
+            name="ri:loader-4-line"
+            animation="spin"
+            color="primary"
+            label="Chargement"
+            title="Chargement"
+            scale="2"
+        />
     </div>
 </template>

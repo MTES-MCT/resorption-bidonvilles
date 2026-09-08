@@ -46,9 +46,14 @@
                 />
                 <div v-if="hasAccessToLandRegistryOwners">
                     <DsfrButton
-                        :class="['mt-12', isShowModalLoading && 'is-loading']"
+                        class="mt-12"
                         :icon="
-                            isShowModalLoading ? 'ri:loader-4-line' : undefined
+                            isShowModalLoading
+                                ? {
+                                      name: 'ri:loader-4-line',
+                                      animation: 'spin',
+                                  }
+                                : undefined
                         "
                         :disabled="isShowModalLoading"
                         @click="showModal"
@@ -232,9 +237,3 @@ watch(
     }
 );
 </script>
-
-<style scoped>
-.is-loading :deep(.iconify--ri) {
-    animation: spin 1s linear infinite;
-}
-</style>
