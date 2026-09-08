@@ -39,13 +39,35 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
     };
 
     const selection = {
-        ...(additionalSQL.selection ?? {}),
+        ...additionalSQL.selection,
         ...SQL.selection,
     };
     const joins = [
         ...(additionalSQL.joins ?? []),
         ...SQL.joins,
     ];
+
+    const identifierPattern = /^[a-zA-Z0-9_]+$/;
+    Object.keys(selection).forEach((key) => {
+        if (!identifierPattern.test(key.replace(/[.:()]/g, '')) && !/^[a-zA-Z0-9_.:()]+$/.test(key)) {
+            throw new Error('Invalid input');
+        }
+        if (typeof selection[key] === 'string' && !identifierPattern.test(selection[key])) {
+            throw new Error('Invalid input');
+        }
+    });
+    joins.forEach((join) => {
+        if (typeof join.table === 'string' && !identifierPattern.test(join.table.replace(/[" ]/g, '')) && !/^[a-zA-Z0-9_" ]+$/.test(join.table)) {
+            throw new Error('Invalid input');
+        }
+        if (typeof join.on === 'string' && !/^[a-zA-Z0-9_.:=() ]+$/.test(join.on)) {
+            throw new Error('Invalid input');
+        }
+    });
+    if (order !== null && typeof order === 'string' && !/^[a-zA-Z0-9_., "]+$/.test(order)) {
+        throw new Error('Invalid input');
+    }
+
 
     return `
         WITH
