@@ -74,7 +74,7 @@ async function testAllMails() {
         try {
             const { recipient, options } = loadFixture(mailName);
             console.log(`[${i + 1}/${MAILS_TO_TEST.length}] Envoi de "${mailName}"...`);
-            // Envoi volontairement séquentiel pour espacer les requêtes Brevo et faciliter la relecture des mails reçus.
+            // Envoi volontairement séquentiel pour espacer les requêtes et faciliter la relecture des mails reçus.
             // eslint-disable-next-line no-await-in-loop, import/namespace
             await mails[mailName](recipient, options);
             console.log(`[${i + 1}/${MAILS_TO_TEST.length}] "${mailName}" envoyé avec succès`);
