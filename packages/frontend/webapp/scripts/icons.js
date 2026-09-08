@@ -15,6 +15,7 @@ const riIconNames = [
     "follow-fill",
     "key-fill",
     "link-unlink",
+    "loader-4-line",
     "plane-fill",
     "prohibited-line",
     "pushpin-fill",

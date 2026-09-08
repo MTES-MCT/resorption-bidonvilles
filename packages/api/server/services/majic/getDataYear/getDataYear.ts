@@ -17,7 +17,7 @@ export default async function getDataYear(departementId: string, user: AuthUser)
     } catch (e) {
         // eslint-disable-next-line no-console
         console.log('Error while fetching majic year', e);
-        throw new ServiceError('fetch_error', new Error(`Une erreur est survenue lors de la récupération du millésime du registre foncier: ${e}`));
+        throw new ServiceError('fetch_error', new Error('Le service du registre foncier est actuellement indisponible. Merci de réessayer ultérieurement.'));
     }
     return majicYear;
 }

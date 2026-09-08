@@ -71,7 +71,7 @@ axios.interceptors.response.use(
         return response.data;
     },
     (originalError) => {
-        let error = originalError.response.data;
+        let error = originalError.response?.data;
         if (!error?.user_message) {
             error = {
                 user_message: "Une erreur inconnue est survenue",

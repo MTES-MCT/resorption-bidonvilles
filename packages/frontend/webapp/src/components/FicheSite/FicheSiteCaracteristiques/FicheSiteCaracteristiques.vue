@@ -45,9 +45,20 @@
                     @townclick="onTownClick"
                 />
                 <div v-if="hasAccessToLandRegistryOwners">
-                    <Button class="mt-12" @click="showModal">
-                        Connaître le propriétaire
-                    </Button>
+                    <DsfrButton
+                        class="mt-12"
+                        :icon="
+                            isShowModalLoading
+                                ? {
+                                      name: 'ri:loader-4-line',
+                                      animation: 'spin',
+                                  }
+                                : undefined
+                        "
+                        :disabled="isShowModalLoading"
+                        @click="showModal"
+                        >Connaître le propriétaire</DsfrButton
+                    >
                 </div>
             </div>
         </section>
@@ -61,7 +72,6 @@ import router from "@/helpers/router";
 import { useTownsStore } from "@/stores/towns.store";
 import generateSquare from "@/utils/generateSquare";
 import { computed, defineProps, onMounted, ref, toRefs, watch } from "vue";
-import { Button } from "@resorptionbidonvilles/ui";
 
 import CartoFicheSite from "@/components/CartoFicheSite/CartoFicheSite.vue";
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
@@ -86,6 +96,7 @@ const cadastre = ref(null);
 const cadastreIsLoading = ref(null);
 const mainParcel = ref(null);
 const hasAccessToLandRegistryOwners = ref(null);
+const isShowModalLoading = ref(false);
 const userStore = useUserStore();
 
 onMounted(() => {
@@ -191,6 +202,7 @@ async function showModal() {
     }
     const modaleStore = useModaleStore();
     const notificationStore = useNotificationStore();
+    isShowModalLoading.value = true;
     try {
         const dataYear = await getMajicYear(town.value.departement.code);
         modaleStore.open(ModaleConnaitreProprietaire, {
@@ -205,6 +217,8 @@ async function showModal() {
             error?.user_message ||
                 `Erreur lors de la recherche du millésime des donénes foncières.`
         );
+    } finally {
+        isShowModalLoading.value = false;
     }
 }
 
