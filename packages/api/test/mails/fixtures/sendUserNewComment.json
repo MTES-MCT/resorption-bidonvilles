@@ -1,0 +1,32 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "shantytown": {
+                "id": 42,
+                "usename": "Site des Fauvettes",
+                "addressSimple": "12 rue des Fauvettes",
+                "city": { "name": "Nantes" },
+                "departement": { "name": "Loire-Atlantique" }
+            },
+            "comment": {
+                "description": "La situation sanitaire s'est nettement améliorée depuis la dernière visite.",
+                "createdBy": {
+                    "first_name": "Alix",
+                    "last_name": "Dubois",
+                    "organization": "DDETS 44",
+                    "organization_id": 7
+                },
+                "tags": [
+                    { "label": "Accès à l'eau" },
+                    { "label": "Scolarisation" }
+                ]
+            }
+        }
+    }
+}

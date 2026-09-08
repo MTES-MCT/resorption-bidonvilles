@@ -1,0 +1,16 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "actions": [
+                { "id": 1, "name": "Accompagnement scolaire - Site des Fauvettes" },
+                { "id": 2, "name": "Médiation santé - Site du Vieux Moulin" }
+            ]
+        }
+    }
+}

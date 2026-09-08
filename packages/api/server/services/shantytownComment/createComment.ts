@@ -8,6 +8,7 @@ import userModel from '#server/models/userModel';
 
 import mattermostUtils from '#server/utils/mattermost';
 import mails from '#server/mails/mails';
+import sendMailsWithConcurrencyLimit from '#server/utils/sendMailsWithConcurrencyLimit';
 import ServiceError from '#server/errors/ServiceError';
 import { ShantytownRawComment } from '#root/types/resources/ShantytownCommentRaw.d';
 import { ShantytownEnrichedComment } from '#root/types/resources/ShantytownCommentEnriched.d';
@@ -77,17 +78,15 @@ export default async function createComment(comment, shantytown, author): Promis
 
         if (watchers.length > 0) {
             const serializedComment = await shantytownCommentModel.findOne(commentId);
-            await Promise.all(
-                watchers.map(user => mails.sendUserNewComment(
-                    user,
-                    {
-                        variables: {
-                            shantytown,
-                            comment: serializedComment,
-                        },
+            await sendMailsWithConcurrencyLimit(watchers, user => mails.sendUserNewComment(
+                user,
+                {
+                    variables: {
+                        shantytown,
+                        comment: serializedComment,
                     },
-                )),
-            );
+                },
+            ));
         }
     } catch (error) {
         // eslint-disable-next-line no-console

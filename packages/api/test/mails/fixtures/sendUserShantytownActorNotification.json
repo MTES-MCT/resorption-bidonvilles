@@ -1,0 +1,18 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "inviterName": "Alix Dubois",
+            "shantytown": {
+                "id": 42,
+                "addressSimple": "12 rue des Fauvettes",
+                "name": "Site des Fauvettes"
+            }
+        }
+    }
+}

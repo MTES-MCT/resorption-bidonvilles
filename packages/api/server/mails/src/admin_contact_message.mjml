@@ -5,6 +5,7 @@
         <mj-include path='common/styles.mjml' />
     </mj-head>
     <mj-body mj-class='bg-white'>
+        <mj-include path='common/hero.mjml' />
         <mj-section>
             <mj-column>
                 <mj-text mj-class='pb-4'>
