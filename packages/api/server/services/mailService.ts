@@ -10,17 +10,17 @@ const {
 } = config;
 
 type Recipient = {
-    email: string,
-    first_name: string,
-    last_name: string,
+    email: string;
+    first_name: string;
+    last_name: string;
 };
 
 type SendOptions = {
-    recipient: Recipient,
-    preserveRecipient?: boolean,
-    variables?: { [key: string]: any },
-    replyTo?: Recipient | null,
-    bcc?: Recipient[],
+    recipient: Recipient;
+    preserveRecipient?: boolean;
+    variables?: { [key: string]: any };
+    replyTo?: Recipient | null;
+    bcc?: Recipient[];
 };
 
 export default {
