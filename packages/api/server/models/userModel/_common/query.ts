@@ -3,8 +3,9 @@ import { QueryTypes, Transaction } from 'sequelize';
 import charteEngagementModel from '#server/models/charteEngagementModel';
 import permissionModel from '#server/models/permissionModel';
 import permissionUtils from '#server/utils/permission';
-import { Where } from '#server/models/_common/types/Where.d';
+import { Where, WhereClause, WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import { validateWhereClauseAgainstInjectionPatterns } from '#server/models/_common/validateSafeWhereClause';
+import { Permission } from '#server/models/permissionModel/types/Permission.d';
 import { PermissionHash } from '#server/models/permissionModel/find';
 import interventionAreaModel from '#server/models/interventionAreaModel/index';
 import serializeUser from './serializeUser';
@@ -15,7 +16,71 @@ import {
 
 const { getPermission } = permissionUtils;
 
-export default async function query(where: Where | string = [], filters: UserQueryFilters = {}, user: User = null, feature: string = undefined, transaction: Transaction = undefined): Promise<User[]> {
+const COLUMN_NAME_PATTERN = /^\w+$/;
+
+// Construit la clause de restriction territoriale à partir d'une permission non nationale.
+// Retourne null si l'utilisateur a un accès national (aucune restriction à ajouter).
+function buildTerritorialClauseGroup(permission: Permission): WhereClauseGroup | null {
+    if (permission.allowed_on_national === true) {
+        return null;
+    }
+
+    const clauseGroup: WhereClauseGroup = {};
+    (['regions', 'departements', 'epci', 'cities'] as const).forEach((column) => {
+        if (permission.allowed_on[column]?.length <= 0) {
+            return;
+        }
+
+        clauseGroup[column] = {
+            value: permission.allowed_on[column].map(l => l[l.type].code),
+            query: `v_user_areas.${column}::text[]`,
+            arrayOperator: true,
+            operator: '&&',
+        };
+    });
+
+    return clauseGroup;
+}
+
+// Construit le fragment SQL d'une clause individuelle (colonne + opérateur + placeholder),
+// ainsi que le replacement associé. Ne mute jamais son paramètre `clause`.
+function buildClauseFragment(column: string, clause: WhereClause, index: number): { fragment: string, replacements: Record<string, unknown> } {
+    if (!COLUMN_NAME_PATTERN.test(column)) {
+        throw new Error('Clause WHERE invalide: nom de colonne non autorisé');
+    }
+
+    const value = 'value' in clause ? clause.value : clause;
+    const defaultSelector = `users.${column}`;
+    const selector = clause.query || defaultSelector;
+    const placeholder = `${column}${index}`;
+    const notPrefix = clause.not === true ? 'NOT ' : '';
+
+    if (clause.anyOperator !== undefined) {
+        const anyClause = `(:${placeholder}) ${clause.anyOperator} ANY(${selector})`;
+        return {
+            fragment: clause.not === true ? `NOT(${anyClause})` : anyClause,
+            replacements: { [placeholder]: value },
+        };
+    }
+
+    if (value === null) {
+        return { fragment: `${selector} IS ${notPrefix}NULL`, replacements: {} };
+    }
+
+    const valuePlaceholder = clause.arrayOperator ? `ARRAY[:${placeholder}]` : `(:${placeholder})`;
+    return {
+        fragment: `${selector} ${notPrefix}${clause.operator || 'IN'} ${valuePlaceholder}`,
+        replacements: { [placeholder]: value },
+    };
+}
+
+export default async function query(
+    where: Where | string = [],
+    filters: UserQueryFilters = {},
+    user: User = null,
+    feature: string = undefined,
+    transaction: Transaction = undefined,
+): Promise<User[]> {
     const replacements = {};
 
     const strWhere = typeof where === 'string' ? where : '';
@@ -26,53 +91,21 @@ export default async function query(where: Where | string = [], filters: UserQue
             return [];
         }
 
-        if (permission.allowed_on_national !== true) {
-            const clauseGroup = {};
-            ['regions', 'departements', 'epci', 'cities'].forEach((column) => {
-                if (permission.allowed_on[column]?.length <= 0) {
-                    return;
-                }
-
-                clauseGroup[column] = {
-                    value: permission.allowed_on[column].map(l => l[l.type].code),
-                    query: `v_user_areas.${column}::text[]`,
-                    arrayOperator: true,
-                    operator: '&&',
-                };
-            });
-
-            if (Object.keys(clauseGroup).length === 0) {
+        const territorialClauseGroup = buildTerritorialClauseGroup(permission);
+        if (territorialClauseGroup !== null) {
+            if (Object.keys(territorialClauseGroup).length === 0) {
                 return [];
             }
 
-            arrWhere.push(clauseGroup);
+            arrWhere.push(territorialClauseGroup);
         }
     }
 
     const finalArrWhere = arrWhere.map((clauses, index) => {
         const clauseGroup = Object.keys(clauses).map((column) => {
-            const value = 'value' in clauses[column] ? clauses[column].value : clauses[column];
-            const defaultSelector = `users.${column}`;
-            const selector = clauses[column].query || defaultSelector;
-            const placeholder = `${column}${index}`;
-
-            if (clauses[column].anyOperator !== undefined) {
-                replacements[placeholder] = value;
-                const clause = `(:${placeholder}) ${clauses[column].anyOperator} ANY(${selector})`;
-                if (clauses[column].not === true) {
-                    return `NOT(${clause})`;
-                }
-
-                return clause;
-            }
-
-            if (value === null) {
-                return `${selector} IS ${clauses[column].not === true ? 'NOT ' : ''}NULL`;
-            }
-
-            replacements[placeholder] = value;
-            const valuePlaceholder = clauses[column].arrayOperator ? `ARRAY[:${placeholder}]` : `(:${placeholder})`;
-            return `${selector} ${clauses[column].not === true ? 'NOT ' : ''}${clauses[column].operator || 'IN'} ${valuePlaceholder}`;
+            const { fragment, replacements: fragmentReplacements } = buildClauseFragment(column, clauses[column], index);
+            Object.assign(replacements, fragmentReplacements);
+            return fragment;
         }).join(' OR ');
 
         return `(${clauseGroup})`;
