@@ -4,6 +4,7 @@ import charteEngagementModel from '#server/models/charteEngagementModel';
 import permissionModel from '#server/models/permissionModel';
 import permissionUtils from '#server/utils/permission';
 import { Where } from '#server/models/_common/types/Where.d';
+import { validateWhereClauseAgainstInjectionPatterns } from '#server/models/_common/validateSafeWhereClause';
 import { PermissionHash } from '#server/models/permissionModel/find';
 import interventionAreaModel from '#server/models/interventionAreaModel/index';
 import serializeUser from './serializeUser';
@@ -77,6 +78,7 @@ export default async function query(where: Where | string = [], filters: UserQue
     }
 
     const whereClause = finalArrWhere.join(' AND ');
+    validateWhereClauseAgainstInjectionPatterns(whereClause);
 
     const charte = await charteEngagementModel.getLatest();
     let latestCharte: number = null;
