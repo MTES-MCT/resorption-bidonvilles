@@ -7,7 +7,7 @@ type Row = {
     total: string;
 };
 
-type Result = {
+export type Result = {
     month: string;
     total: number;
 };

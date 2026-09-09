@@ -1,8 +1,8 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-export default async (departement) => {
-    const rows: any = await sequelize.query(
+export default async function numberOfResorbedShantytown(departement?: string): Promise<number> {
+    const rows: { total: number }[] = await sequelize.query(
         `
         SELECT COUNT(*) AS total
         FROM shantytowns 
@@ -21,4 +21,4 @@ export default async (departement) => {
     );
 
     return rows[0].total;
-};
+}

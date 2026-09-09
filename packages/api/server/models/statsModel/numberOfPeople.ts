@@ -1,8 +1,8 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-export default async (departement) => {
-    const rows: any = await sequelize.query(
+export default async function numberOfPeople(departement?: string): Promise<number | null> {
+    const rows: { total: number | null }[] = await sequelize.query(
         `
         SELECT SUM(population_total) AS total
         FROM shantytowns 
@@ -19,4 +19,4 @@ export default async (departement) => {
     );
 
     return rows[0].total;
-};
+}
