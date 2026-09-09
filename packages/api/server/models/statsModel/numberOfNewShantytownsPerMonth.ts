@@ -1,9 +1,12 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-import convertToDateMapping from './_common/convertToDateMapping';
+import convertToDateMapping, { Result } from './_common/convertToDateMapping';
 
-export default async function numberOfNewShantytownsPerMonth(departement = null, startDateStr = '2019-06-01') {
+export default async function numberOfNewShantytownsPerMonth(
+    departement?: string | null,
+    startDateStr: string = '2019-06-01',
+): Promise<Result[]> {
     const rows: {
         year: string;
         month: string;
@@ -15,7 +18,7 @@ export default async function numberOfNewShantytownsPerMonth(departement = null,
             COUNT(*) AS total
         FROM shantytowns LEFT JOIN cities AS city ON shantytowns.fk_city = city.code
         WHERE
-            (shantytowns.created_at > '${startDateStr}' OR shantytowns.declared_at > '${startDateStr}')
+            (shantytowns.created_at > :startDateStr OR shantytowns.declared_at > :startDateStr)
             ${departement ? 'AND fk_departement = :departement' : ''}
         GROUP BY year, month
         ORDER BY year ASC, month ASC`,
@@ -23,6 +26,7 @@ export default async function numberOfNewShantytownsPerMonth(departement = null,
             type: QueryTypes.SELECT,
             replacements: {
                 departement,
+                startDateStr,
             },
         },
     );
