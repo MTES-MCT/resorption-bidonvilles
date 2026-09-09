@@ -11,7 +11,7 @@
     </div>
 </template>
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import ColonneDateHistorique from "./ColonneDateHistorique.vue";
 import ColonneCartesHistorique from "./ColonneCartesHistorique.vue";
 

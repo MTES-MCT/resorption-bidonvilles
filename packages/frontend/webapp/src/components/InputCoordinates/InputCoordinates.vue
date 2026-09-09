@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, watch, ref, onMounted } from "vue";
+import { toRefs, computed, watch, ref, onMounted } from "vue";
 import { useField, useIsSubmitting } from "vee-validate";
 import Carto from "@/components/Carto/Carto.vue";
 import L from "leaflet";

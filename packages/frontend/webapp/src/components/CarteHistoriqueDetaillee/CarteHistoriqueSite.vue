@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed } from "vue";
+import { toRefs, ref, computed } from "vue";
 import { Button } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({

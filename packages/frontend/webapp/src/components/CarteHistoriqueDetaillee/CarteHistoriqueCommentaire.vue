@@ -40,7 +40,7 @@
 import { Icon } from "@resorptionbidonvilles/ui";
 import TagCommentaire from "@/components/TagCommentaire/TagCommentaire.vue";
 
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 
 const props = defineProps({
     activity: {

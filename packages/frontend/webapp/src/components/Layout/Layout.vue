@@ -59,7 +59,7 @@
 
 <script setup>
 import ENV from "@/helpers/env.js";
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { useUserStore } from "@/stores/user.store.js";
 
 import NavBar from "@/components/NavBar/NavBar.vue";

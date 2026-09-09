@@ -44,13 +44,10 @@
 <script setup>
 import useFocusTrap from "../composables/useFocusTrap";
 import {
-    defineProps,
     ref,
     toRefs,
     onMounted,
     onBeforeUnmount,
-    defineEmits,
-    defineExpose,
     watch
 } from "vue";
 import Button from "./Button.vue";

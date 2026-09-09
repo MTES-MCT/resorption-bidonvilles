@@ -97,7 +97,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import icons from "@/utils/action_metrics_icons";
 
 import IndicateursRow from "@/components/IndicateursTable/IndicateursRow.vue";

@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";

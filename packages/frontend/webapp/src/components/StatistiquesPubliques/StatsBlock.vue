@@ -11,31 +11,25 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { Icon } from "@resorptionbidonvilles/ui";
 
-export default {
-    props: {
-        title: {
-            type: [String, Number],
-            required: true,
-        },
-        subtitle: {
-            type: String,
-            required: true,
-        },
-        info: {
-            type: String,
-            required: false,
-        },
-        icon: {
-            type: String,
-            required: false,
-        },
+defineProps({
+    title: {
+        type: [String, Number],
+        required: true,
     },
-
-    components: {
-        Icon,
+    subtitle: {
+        type: String,
+        required: true,
     },
-};
+    info: {
+        type: String,
+        required: false,
+    },
+    icon: {
+        type: String,
+        required: false,
+    },
+});
 </script>

@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import formatHistoryDate from "@/utils/formatHistoryDate";
 
 import { Tag } from "@resorptionbidonvilles/ui";

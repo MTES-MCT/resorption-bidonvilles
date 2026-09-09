@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import avatarImg from "@/assets/img/illustrations/avatar.svg";
 import { Icon, Link, LinkOrganization } from "@resorptionbidonvilles/ui";

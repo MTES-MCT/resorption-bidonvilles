@@ -60,7 +60,7 @@ import { getMajicYear } from "@/api/majic.api";
 import router from "@/helpers/router";
 import { useTownsStore } from "@/stores/towns.store";
 import generateSquare from "@/utils/generateSquare";
-import { computed, defineProps, onMounted, ref, toRefs, watch } from "vue";
+import { computed, onMounted, ref, toRefs, watch } from "vue";
 import { Button } from "@resorptionbidonvilles/ui";
 
 import CartoFicheSite from "@/components/CartoFicheSite/CartoFicheSite.vue";

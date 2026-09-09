@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { computed, toRefs, defineProps } from "vue";
+import { computed, toRefs } from "vue";
 import labels from "../FormDeclarationAction.labels";
 import { useUserStore } from "@/stores/user.store";
 

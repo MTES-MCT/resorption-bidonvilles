@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, ref, toRefs, watchEffect } from "vue";
+import { computed, ref, toRefs, watchEffect } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { useUserStore } from "@/stores/user.store";
 import { useConfigStore } from "@/stores/config.store";

@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref, defineExpose, computed } from "vue";
+import { ref, computed } from "vue";
 import { useForm, useFieldValue } from "vee-validate";
 import schema from "./FormCreerStructure.schema";
 import labels from "./FormCreerStructure.labels";

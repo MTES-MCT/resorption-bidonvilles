@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import InputUsers from "@/components/InputUsers/InputUsers.vue";
 import labels from "../FicheSiteJournalFormNouveauMessage.labels";
 

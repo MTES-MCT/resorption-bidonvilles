@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import CarteCommentaireAction from "@/components/CarteCommentaire/CarteCommentaireAction.vue";
 
 const props = defineProps({

@@ -16,7 +16,7 @@
 
 <script setup>
 import { useDashboardStore } from "@/stores/dashboard.store";
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { trackEvent } from "@/helpers/matomo";
 import focusClasses from "@common/utils/focus_classes";
 

@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import FicheSiteJournalAsideRubrique from "./FicheSiteJournalAsideRubrique.vue";
 
 const props = defineProps({
