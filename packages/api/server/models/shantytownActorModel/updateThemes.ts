@@ -1,7 +1,9 @@
 import { sequelize } from '#db/sequelize';
+import { Transaction } from 'sequelize';
+import { ActorTheme } from '#root/types/resources/ShantytownActor.d';
 import processThemes from './_common/processThemes';
 
-export default (shantytownId, userId, themes, updatedBy, transaction = undefined) => {
+export default function updateThemes(shantytownId: number, userId: number, themes: ActorTheme[], updatedBy: number, transaction: Transaction | undefined = undefined) {
     const processedThemes = processThemes(themes);
 
     return sequelize.query(
@@ -22,4 +24,4 @@ export default (shantytownId, userId, themes, updatedBy, transaction = undefined
             transaction,
         },
     );
-};
+}
