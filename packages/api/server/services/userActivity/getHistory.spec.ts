@@ -55,7 +55,7 @@ describe('services/userActivity.getHistory()', () => {
     it('le service appelle les modèles correspondant au filtre', async () => {
         activityTypeFilter = ['shantytownCreation', 'actionComment'];
 
-        await getHistory(user, location, activityTypeFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate);
+        await getHistory(user, location, { activityTypeFilter, resorbedFilter, myTownsFilter }, numberOfActivities, lastDate, maxDate);
         expect(shantytownModel.getHistory).to.have.been.calledOnce;
         expect(actionModel.getCommentHistory).to.have.been.calledOnce;
         expect(userModel.getHistory).to.not.have.been.called;
@@ -69,7 +69,7 @@ describe('services/userActivity.getHistory()', () => {
         shantytownCommentModel.getHistory.resolves([fakeActivity({ entity: 'shantytownComment', date: 20 })]);
 
         activityTypeFilter = ['shantytownCreation', 'actionComment', 'shantytownComment', 'user'];
-        const response = await getHistory(user, location, activityTypeFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate);
+        const response = await getHistory(user, location, { activityTypeFilter, resorbedFilter, myTownsFilter }, numberOfActivities, lastDate, maxDate);
         expect(response).to.deep.equal([
             { entity: 'shantytownComment', date: 20 },
             { entity: 'actionComment', date: 12 },
@@ -88,7 +88,7 @@ describe('services/userActivity.getHistory()', () => {
         numberOfActivities = 3;
 
         activityTypeFilter = ['shantytownCreation', 'actionComment', 'shantytownComment', 'user'];
-        const response = await getHistory(user, location, activityTypeFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate);
+        const response = await getHistory(user, location, { activityTypeFilter, resorbedFilter, myTownsFilter }, numberOfActivities, lastDate, maxDate);
         expect(response).to.deep.equal([
             { entity: 'shantytownComment', date: 20 },
             { entity: 'actionComment', date: 12 },
@@ -98,7 +98,7 @@ describe('services/userActivity.getHistory()', () => {
     it('renvoie une exception ServiceError \'fetch_failed\'  si l\'un des modèles échoue', async () => {
         shantytownModel.getHistory.rejects(new Error('Une erreur'));
         try {
-            await getHistory(user, location, activityTypeFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate);
+            await getHistory(user, location, { activityTypeFilter, resorbedFilter, myTownsFilter }, numberOfActivities, lastDate, maxDate);
         } catch (error) {
             expect(error).to.be.instanceOf(ServiceError);
             expect(error.code).to.be.equal('fetch_failed');
