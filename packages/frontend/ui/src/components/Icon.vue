@@ -2,40 +2,40 @@
     <span class="inline-block">
         <i :class="classes" :title="title" aria-hidden="true"></i>
     </span>
-    
 </template>
 
-<script>
-export default {
+<script setup>
+import { toRefs, computed } from "vue"
+
+defineOptions({
     name: "RbIcon",
-
-    props: {
-        icon: {
-            type: [String, Array],
-            required: true
-        },
-        spin: {
-            type: Boolean
-        },
-        title: {
-            type: String,
-            required: false
-        }
+})
+const props = defineProps({
+    icon: {
+        type: [String, Array],
+        required: true
     },
+    spin: {
+        type: Boolean
+    },
+    title: {
+        type: String,
+        required: false
+    }
+})
+const { icon, spin, title } = toRefs(props);
 
-    computed: {
-        iconFull() {
-            if (Array.isArray(this.icon)) {
-                return this.icon.join(" ");
-            }
-            if (!this.icon || typeof this.icon !== 'string') {
-                return "fa-solid fa-question";
-            }
-            return this.icon.includes("fa-") ? this.icon : `fa-solid fa-${this.icon}`;
-        },
-        classes() {
-            return this.iconFull + (this.spin ? " fa-spin" : "");
-        }
-    } 
-};
+const iconFull = computed(() => {
+    if (Array.isArray(icon.value)) {
+        return icon.value.join(" ");
+    }
+    if (!icon.value || typeof icon.value !== 'string') {
+        return "fa-solid fa-question";
+    }
+    return icon.value.includes("fa-") ? icon.value : `fa-solid fa-${icon.value}`;
+})
+
+const classes = computed(() => {
+    return iconFull.value + (spin.value ? " fa-spin" : "");
+})
 </script>
