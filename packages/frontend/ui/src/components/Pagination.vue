@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, defineEmits, nextTick } from "vue";
+import { toRefs, nextTick } from "vue";
 import Button from "./Button.vue";
 
 const props = defineProps({

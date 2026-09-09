@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import Link from "./Link.vue";
 import Icon from "./Icon.vue";
 

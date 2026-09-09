@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, toRefs, defineEmits, computed } from "vue";
+import { toRefs, computed } from "vue";
 import Button from './Button.vue';
 import Dropdown from './Dropdown.vue';
 import Menu from './Menu/Menu.vue';
