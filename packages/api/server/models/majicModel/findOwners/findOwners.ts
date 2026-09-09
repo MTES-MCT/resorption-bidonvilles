@@ -19,7 +19,7 @@ export default async function findOwners(
     }
 
     const fullTableName = `${baseTableName}_encrypted`;
-    validateFullTableName(fullTableName, dept);
+    validateFullTableName(fullTableName, dept, shortTableName);
 
     let owners: RawOwner[];
     try {
