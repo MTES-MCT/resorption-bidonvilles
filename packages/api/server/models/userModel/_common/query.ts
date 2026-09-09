@@ -52,10 +52,13 @@ export default async function query(where: Where | string = [], filters: UserQue
     const finalArrWhere = arrWhere.map((clauses, index) => {
         const clauseGroup = Object.keys(clauses).map((column) => {
             const value = 'value' in clauses[column] ? clauses[column].value : clauses[column];
+            const defaultSelector = `users.${column}`;
+            const selector = clauses[column].query || defaultSelector;
+            const placeholder = `${column}${index}`;
 
             if (clauses[column].anyOperator !== undefined) {
-                replacements[`${column}${index}`] = value;
-                const clause = `(:${column}${index}) ${clauses[column].anyOperator} ANY(${clauses[column].query || `users.${column}`})`;
+                replacements[placeholder] = value;
+                const clause = `(:${placeholder}) ${clauses[column].anyOperator} ANY(${selector})`;
                 if (clauses[column].not === true) {
                     return `NOT(${clause})`;
                 }
@@ -64,11 +67,12 @@ export default async function query(where: Where | string = [], filters: UserQue
             }
 
             if (value === null) {
-                return `${clauses[column].query || `users.${column}`} IS ${clauses[column].not === true ? 'NOT ' : ''}NULL`;
+                return `${selector} IS ${clauses[column].not === true ? 'NOT ' : ''}NULL`;
             }
 
-            replacements[`${column}${index}`] = value;
-            return `${clauses[column].query || `users.${column}`} ${clauses[column].not === true ? 'NOT ' : ''}${clauses[column].operator || 'IN'} ${clauses[column].arrayOperator ? `ARRAY[:${column}${index}]` : `(:${column}${index})`}`;
+            replacements[placeholder] = value;
+            const valuePlaceholder = clauses[column].arrayOperator ? `ARRAY[:${placeholder}]` : `(:${placeholder})`;
+            return `${selector} ${clauses[column].not === true ? 'NOT ' : ''}${clauses[column].operator || 'IN'} ${valuePlaceholder}`;
         }).join(' OR ');
 
         return `(${clauseGroup})`;
@@ -275,10 +279,15 @@ export default async function query(where: Where | string = [], filters: UserQue
 
     // fonction qui fusionne les zones d'intervention d'un utilisateur et de sa structure en faisant en sorte que
     // les éventuels doublons soient supprimés
+    function getAreaKey(area: RawInterventionArea): string {
+        const codeField = `${area.type}_code`;
+        return `${area.type}${area[codeField]}`;
+    }
+
     function mergeAreas(userAreas: RawInterventionArea[], organizationAreas: RawInterventionArea[]): RawInterventionArea[] {
         const arr = [];
         [...userAreas, ...organizationAreas].forEach((area) => {
-            const duplicateArea = arr.find(a => `${a.type}${a[`${a.type}_code`]}` === `${area.type}${area[`${area.type}_code`]}`);
+            const duplicateArea = arr.find(a => getAreaKey(a) === getAreaKey(area));
             if (!duplicateArea) {
                 arr.push(area);
             } else if (area.is_main_area === true) {
