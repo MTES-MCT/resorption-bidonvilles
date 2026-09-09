@@ -3,7 +3,7 @@ import { QueryTypes } from 'sequelize';
 
 import convertToDateMapping from './_common/convertToDateMapping';
 
-export default async (departement = null, startDateStr = '2019-06-01') => {
+export default async function numberOfNewShantytownsPerMonth(departement = null, startDateStr = '2019-06-01') {
     const rows: {
         year: string;
         month: string;
@@ -28,4 +28,4 @@ export default async (departement = null, startDateStr = '2019-06-01') => {
     );
 
     return convertToDateMapping(rows, new Date(startDateStr));
-};
+}
