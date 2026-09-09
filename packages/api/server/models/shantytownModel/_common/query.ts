@@ -47,9 +47,9 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
         ...SQL.joins,
     ];
 
-    const identifierPattern = /^[a-zA-Z0-9_]+$/;
+    const identifierPattern = /^\w+$/;
     Object.keys(selection).forEach((key) => {
-        if (!identifierPattern.test(key.replace(/[.:()]/g, '')) && !/^[a-zA-Z0-9_.:()]+$/.test(key)) {
+        if (!identifierPattern.test(key.replace(/[.:()]/g, '')) && !/^[\w.:()]+$/.test(key)) {
             throw new Error('Invalid input');
         }
         if (typeof selection[key] === 'string' && !identifierPattern.test(selection[key])) {
@@ -57,14 +57,14 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
         }
     });
     joins.forEach((join) => {
-        if (typeof join.table === 'string' && !identifierPattern.test(join.table.replace(/[" ]/g, '')) && !/^[a-zA-Z0-9_" ]+$/.test(join.table)) {
+        if (typeof join.table === 'string' && !identifierPattern.test(join.table.replace(/[" ]/g, '')) && !/^[\w" ]+$/.test(join.table)) {
             throw new Error('Invalid input');
         }
-        if (typeof join.on === 'string' && !/^[a-zA-Z0-9_.:=() ]+$/.test(join.on)) {
+        if (typeof join.on === 'string' && !/^[\w.:=() ]+$/.test(join.on)) {
             throw new Error('Invalid input');
         }
     });
-    if (order !== null && typeof order === 'string' && !/^[a-zA-Z0-9_., "]+$/.test(order)) {
+    if (order !== null && typeof order === 'string' && !/^[\w., "]+$/.test(order)) {
         throw new Error('Invalid input');
     }
 
