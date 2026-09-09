@@ -40,7 +40,7 @@ const props = defineProps({
         required: true,
     },
     evolution: {
-        type: Number,
+        type: [Number, null],
         required: true,
     },
     invert: {

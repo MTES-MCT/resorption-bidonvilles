@@ -107,7 +107,7 @@ const legende = ref(null);
 const legendeStatus = ref(false);
 
 watch(carto, () => {
-    if (carto.value) {
+    if (carto.value?.map) {
         carto.value.map.addLayer(markersGroup.value);
         carto.value.map.on("move", onMove);
         carto.value.addControl("legende", createLegende());
@@ -160,6 +160,9 @@ displayedLegend.livingConditionsByTown = displayedLegend.summary;
 displayedLegend.livingConditionsByInhabitant = displayedLegend.summary;
 
 function onMove() {
+    if (!carto.value?.map) {
+        return;
+    }
     const { map } = carto.value;
     const { lat: latitude, lng: longitude } = map.getCenter();
     departementMetricsStore.lastMapView = {
@@ -213,7 +216,7 @@ defineExpose({
         }
 
         const bounds = L.geoJSON(geojson).getBounds();
-        if (!departementMetricsStore.lastMapView) {
+        if (!departementMetricsStore.lastMapView && carto.value?.map) {
             carto.value.map.fitBounds(bounds);
         }
     },

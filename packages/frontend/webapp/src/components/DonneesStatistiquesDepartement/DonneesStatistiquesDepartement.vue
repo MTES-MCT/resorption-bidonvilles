@@ -2,8 +2,10 @@
     <Title class="mt-6">{{ departement.name }} ({{ departement.code }})</Title>
     <DonneesStatistiquesDepartementBigFigures :metrics="metrics" />
     <FiltrageTemporel class="mt-5" v-model="dateRange" />
-    <PeriodePersonnalisee v-if="dateRange === 'periode-personnalisee'" />
-
+    <PeriodePersonnalisee
+        v-if="dateRange === 'periode-personnalisee'"
+        :dateRange="dateRange"
+    />
     <main class="mt-2">
         <Onglets
             :tabs="userTabs"
@@ -167,16 +169,14 @@ const currentTable = computed(() => {
 });
 
 const towns = computed(() => {
-    return metrics.value.cities
-        .map(({ city, towns }) =>
-            towns.map((t) => ({
-                ...t,
-                city,
-                departement: metrics.value.departement,
-                region: metrics.value.region,
-            }))
-        )
-        .flat();
+    return metrics.value.cities.flatMap(({ city, towns }) =>
+        towns.map((t) => ({
+            ...t,
+            city,
+            departement: metrics.value.departement,
+            region: metrics.value.region,
+        }))
+    );
 });
 
 async function loadGeojson() {

@@ -39,6 +39,21 @@
                 >Valider</DsfrButton
             >
         </div>
+
+        <DsfrAlert
+            v-if="
+                !departementMetricsStore.evolution.isLoading &&
+                datesAreNotLoaded &&
+                values.from &&
+                values.to
+            "
+            type="warning"
+            small
+            class="mt-3"
+        >
+            Les dates ont été modifiées. Cliquez sur "Valider" pour actualiser
+            les données.
+        </DsfrAlert>
     </div>
 </template>
 
@@ -65,18 +80,18 @@ const { values } = useForm({
 });
 
 const to = computed(() => {
-    const todayMinor1 = new Date().setDate(today.getDate() - 1);
-    const toMinor1 = new Date(departementMetricsStore.evolution.to).setDate(
-        new Date(departementMetricsStore.evolution.to).getDate() - 1
-    );
+    const todayMinor1 = new Date(today);
+    todayMinor1.setDate(todayMinor1.getDate() - 1);
+
+    const toMinor1 = new Date(departementMetricsStore.evolution.to);
+    toMinor1.setDate(toMinor1.getDate() - 1);
 
     return todayMinor1 < toMinor1 ? todayMinor1 : toMinor1;
 });
 
 const from = computed(() => {
-    const fromPlus1 = new Date(departementMetricsStore.evolution.from).setDate(
-        new Date(departementMetricsStore.evolution.from).getDate() + 1
-    );
+    const fromPlus1 = new Date(departementMetricsStore.evolution.from);
+    fromPlus1.setDate(fromPlus1.getDate() + 1);
 
     return today < fromPlus1 ? today : fromPlus1;
 });
@@ -109,7 +124,11 @@ const update = () => {
     updateDataRange(null, values.from, values.to);
 };
 
-watch(dateRange, () => {
-    update();
-});
+watch(
+    dateRange,
+    () => {
+        update();
+    },
+    { immediate: true }
+);
 </script>
