@@ -3,6 +3,7 @@ import { QueryTypes } from 'sequelize';
 import { Location } from '#server/models/geoModel/Location.d';
 import geoUtils from '#server/utils/geo';
 import { buildWhere, type WhereObjClause } from '#server/utils/sql';
+import { validateWhereClauseAgainstInjectionPatterns } from '#server/models/_common/validateSafeWhereClause';
 import { User } from '#root/types/resources/User.d';
 
 const { fromGeoLevelToTableName } = geoUtils;
@@ -30,7 +31,11 @@ type ShantytownCommentRow = {
     grouped_attachments: string[],
 };
 
-export default (user: User, geoFilter: Location[] = null, privateFilter: Location[] = null): Promise<ShantytownCommentRow[]> => {
+export default function findAll(
+    user: User,
+    geoFilter: Location[] = null,
+    privateFilter: Location[] = null,
+): Promise<ShantytownCommentRow[]> {
     // si la liste des territoires autorisés est spécifiée mais qu'elle est vide
     // autant s'arrêter là et ne pas faire de requête
     if (geoFilter?.length === 0) {
@@ -98,6 +103,9 @@ export default (user: User, geoFilter: Location[] = null, privateFilter: Locatio
             },
         ],
     };
+
+    const whereClause = buildWhere(w);
+    validateWhereClauseAgainstInjectionPatterns(whereClause);
 
     return sequelize.query(
         `WITH organization_comment_access AS (
@@ -177,11 +185,11 @@ export default (user: User, geoFilter: Location[] = null, privateFilter: Locatio
         LEFT JOIN user_comment_access uca ON sc.shantytown_comment_id = uca.shantytown_comment_id
         LEFT JOIN tags ON tags.fk_shantytown_comment = sc.shantytown_comment_id
         LEFT JOIN grouped_attachments ON grouped_attachments.fk_shantytown_comment = sc.shantytown_comment_id
-        WHERE ${buildWhere(w)}
+        WHERE ${whereClause}
         ORDER BY sc.created_at DESC`,
         {
             type: QueryTypes.SELECT,
             replacements,
         },
     );
-};
+}
