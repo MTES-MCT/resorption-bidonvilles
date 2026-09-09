@@ -15,9 +15,7 @@ export default async (req, res, next) => {
             await getHistory(
                 req.user,
                 req.body.location,
-                activityTypeFilter,
-                resorbedFilter,
-                myTownsFilter,
+                { activityTypeFilter, resorbedFilter, myTownsFilter },
                 numberOfActivities,
                 moment(lastActivityDate).format('YYYY-MM-DD HH:mm:ss ZZ'),
                 maxActivityDate ? moment(maxActivityDate).format('YYYY-MM-DD HH:mm:ss ZZ') : null,
