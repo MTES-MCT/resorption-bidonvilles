@@ -23,20 +23,64 @@ type ShantytownObject = {
     hash: { [key: number] : Shantytown },
     ordered: Shantytown[],
 };
-function getBaseSql(table, whereClause = null, order = null, additionalSQL: any = {}) {
-    const tables = {
-        shantytowns: table === 'regular' ? 'shantytowns' : 'ShantytownHistories',
-        shantytown_origins: table === 'regular' ? 'shantytown_origins' : 'ShantytownOriginHistories',
-        origin_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
-        shantytown_toilet_types: table === 'regular' ? 'shantytown_toilet_types' : 'shantytown_toilet_types_history',
-        toilet_types_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
-        electricity_access_types: table === 'regular' ? 'electricity_access_types' : 'electricity_access_types_history',
-        electricity_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
-        shantytown_resorption_phases: table === 'regular' ? 'shantytown_preparatory_phases_toward_resorption' : 'shantytown_resorption_phases_history',
-        resorption_phases_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
-        shantytown_parcel_owners: table === 'regular' ? 'shantytown_parcel_owners' : 'shantytown_parcel_owners_history',
-        parcel_owners_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
-    };
+
+type QueryTableMode = 'regular' | 'history';
+
+const TABLE_NAMES_BY_MODE: Record<QueryTableMode, Record<string, string>> = {
+    regular: {
+        shantytowns: 'shantytowns',
+        shantytown_origins: 'shantytown_origins',
+        origin_foreign_key: 'shantytown_id',
+        shantytown_toilet_types: 'shantytown_toilet_types',
+        toilet_types_foreign_key: 'shantytown_id',
+        electricity_access_types: 'electricity_access_types',
+        electricity_foreign_key: 'shantytown_id',
+        shantytown_resorption_phases: 'shantytown_preparatory_phases_toward_resorption',
+        resorption_phases_foreign_key: 'shantytown_id',
+        shantytown_parcel_owners: 'shantytown_parcel_owners',
+        parcel_owners_foreign_key: 'shantytown_id',
+    },
+    history: {
+        shantytowns: 'ShantytownHistories',
+        shantytown_origins: 'ShantytownOriginHistories',
+        origin_foreign_key: 'hid',
+        shantytown_toilet_types: 'shantytown_toilet_types_history',
+        toilet_types_foreign_key: 'hid',
+        electricity_access_types: 'electricity_access_types_history',
+        electricity_foreign_key: 'hid',
+        shantytown_resorption_phases: 'shantytown_resorption_phases_history',
+        resorption_phases_foreign_key: 'hid',
+        shantytown_parcel_owners: 'shantytown_parcel_owners_history',
+        parcel_owners_foreign_key: 'hid',
+    },
+};
+
+const IDENTIFIER_PATTERN = /^\w+$/;
+
+function validateDynamicSqlFragments(selection: Record<string, string>, joins: { table: string, on: string }[], order: string | null): void {
+    Object.keys(selection).forEach((key) => {
+        if (!IDENTIFIER_PATTERN.test(key.replace(/[.:()]/g, '')) && !/^[\w.:()]+$/.test(key)) {
+            throw new Error('Invalid input');
+        }
+        if (typeof selection[key] === 'string' && !IDENTIFIER_PATTERN.test(selection[key])) {
+            throw new Error('Invalid input');
+        }
+    });
+    joins.forEach((join) => {
+        if (typeof join.table === 'string' && !IDENTIFIER_PATTERN.test(join.table.replace(/[" ]/g, '')) && !/^[\w" ]+$/.test(join.table)) {
+            throw new Error('Invalid input');
+        }
+        if (typeof join.on === 'string' && !/^[\w.:=() ]+$/.test(join.on)) {
+            throw new Error('Invalid input');
+        }
+    });
+    if (order !== null && typeof order === 'string' && !/^[\w., "]+$/.test(order)) {
+        throw new Error('Invalid input');
+    }
+}
+
+function getBaseSql(table: QueryTableMode, whereClause = null, order = null, additionalSQL: any = {}) {
+    const tables = TABLE_NAMES_BY_MODE[table];
 
     const selection = {
         ...additionalSQL.selection,
@@ -47,27 +91,7 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
         ...SQL.joins,
     ];
 
-    const identifierPattern = /^\w+$/;
-    Object.keys(selection).forEach((key) => {
-        if (!identifierPattern.test(key.replace(/[.:()]/g, '')) && !/^[\w.:()]+$/.test(key)) {
-            throw new Error('Invalid input');
-        }
-        if (typeof selection[key] === 'string' && !identifierPattern.test(selection[key])) {
-            throw new Error('Invalid input');
-        }
-    });
-    joins.forEach((join) => {
-        if (typeof join.table === 'string' && !identifierPattern.test(join.table.replace(/[" ]/g, '')) && !/^[\w" ]+$/.test(join.table)) {
-            throw new Error('Invalid input');
-        }
-        if (typeof join.on === 'string' && !/^[\w.:=() ]+$/.test(join.on)) {
-            throw new Error('Invalid input');
-        }
-    });
-    if (order !== null && typeof order === 'string' && !/^[\w., "]+$/.test(order)) {
-        throw new Error('Invalid input');
-    }
-
+    validateDynamicSqlFragments(selection, joins, order);
 
     return `
         WITH
