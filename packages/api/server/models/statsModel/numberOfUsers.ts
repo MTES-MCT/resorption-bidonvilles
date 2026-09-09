@@ -1,7 +1,7 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-export default async (departement: string): Promise<number> => {
+export default async function numberOfUsers(departement: string): Promise<number> {
     const rows: { count: number }[] = await sequelize.query(
         `
         SELECT COUNT(*) AS count
@@ -32,4 +32,4 @@ export default async (departement: string): Promise<number> => {
     );
 
     return rows[0].count;
-};
+}
