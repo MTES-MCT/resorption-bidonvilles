@@ -1,16 +1,23 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
+import validateSafeWhereClause from '#server/models/_common/validateSafeWhereClause';
+import { Where } from '#server/models/_common/types/Where.d';
 
-export default (where = []) => {
+export default function findAllByLocation(where: Where = []) {
     const replacements = {};
     const whereClause = where.map((clauses, index) => {
         const clauseGroup = Object.keys(clauses).map((column) => {
-            replacements[`${column}${index}`] = clauses[column].value ?? clauses[column];
-            return `${clauses[column].query ?? `users.${column}`} ${clauses[column].operator ?? 'IN'} (:${column}${index})`;
+            const defaultSelector = `users.${column}`;
+            const selector = clauses[column].query ?? defaultSelector;
+            const placeholder = `${column}${index}`;
+            replacements[placeholder] = clauses[column].value ?? clauses[column];
+            return `${selector} ${clauses[column].operator ?? 'IN'} (:${placeholder})`;
         }).join(' OR ');
 
         return `(${clauseGroup})`;
     }).join(' AND ');
+
+    validateSafeWhereClause(whereClause);
 
     return sequelize.query(
         `SELECT
@@ -43,4 +50,4 @@ export default (where = []) => {
             replacements,
         },
     );
-};
+}

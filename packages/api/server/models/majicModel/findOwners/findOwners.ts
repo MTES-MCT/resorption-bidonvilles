@@ -2,8 +2,16 @@ import { sequelize } from '#db/majicSequelize';
 import { QueryTypes } from 'sequelize';
 import { RawOwner } from './RawOwner';
 import getOwnersTableName from '../common/getFullTableName';
+import validateFullTableName from '../common/validateFullTableName';
 
-export default async (idcom: string, dnupro: string, dept: string, schema: string, shortTableName: string, tableName: string): Promise<RawOwner[] | null> => {
+export default async function findOwners(
+    idcom: string,
+    dnupro: string,
+    dept: string,
+    schema: string,
+    shortTableName: string,
+    tableName: string,
+): Promise<RawOwner[] | null> {
     const baseTableName = getOwnersTableName(dept, schema, shortTableName, tableName);
 
     if (!baseTableName) {
@@ -11,7 +19,7 @@ export default async (idcom: string, dnupro: string, dept: string, schema: strin
     }
 
     const fullTableName = `${baseTableName}_encrypted`;
-
+    validateFullTableName(fullTableName, dept, shortTableName);
 
     let owners: RawOwner[];
     try {
@@ -58,4 +66,4 @@ export default async (idcom: string, dnupro: string, dept: string, schema: strin
     }
 
     return owners;
-};
+}

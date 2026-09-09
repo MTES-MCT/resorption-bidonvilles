@@ -2,13 +2,16 @@ import { sequelize } from '#db/majicSequelize';
 import { QueryTypes } from 'sequelize';
 import { RawParcel } from './RawParcel.d';
 import getParcelTableName from '../common/getFullTableName';
+import validateFullTableName from '../common/validateFullTableName';
 
-export default async (id: string, dept: string, schema: string, shortTableName: string, tableName: string): Promise<RawParcel> => {
+export default async function findParcel(id: string, dept: string, schema: string, shortTableName: string, tableName: string): Promise<RawParcel> {
     const fullTableName = getParcelTableName(dept, schema, shortTableName, tableName);
 
     if (!fullTableName) {
         throw new Error(`Impossible de construire le nom de la table des parcelles pour le département ${dept}`);
     }
+
+    validateFullTableName(fullTableName, dept, shortTableName);
 
     const parcelles: RawParcel[] = await sequelize.query(
         `SELECT idpar, idcom, dnupro, dnuvoi, cconvo, dvoilib, idcomtxt
@@ -27,4 +30,4 @@ export default async (id: string, dept: string, schema: string, shortTableName: 
     }
 
     return parcelles[0];
-};
+}

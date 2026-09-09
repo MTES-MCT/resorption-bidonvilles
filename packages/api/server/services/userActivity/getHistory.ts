@@ -3,11 +3,34 @@ import shantytownCommentModel from '#server/models/shantytownCommentModel';
 import userModel from '#server/models/userModel';
 import actionModel from '#server/models/actionModel';
 import ServiceError from '#server/errors/ServiceError';
+import { Location } from '#server/models/geoModel/Location.d';
 import { ServiceActivity } from '#root/types/services/ActivityService.d';
+import {
+    HistoryActivityTypeFilter,
+    HistoryResorbedFilter,
+    HistoryMyTownsFilter,
+    HistoryShantytownFilter,
+} from '#root/types/resources/Activity.d';
+import { User } from '#root/types/resources/User.d';
 
-export default async (user, location, activityTypeFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate) => {
+type UserActivityHistoryFilters = {
+    activityTypeFilter: HistoryActivityTypeFilter[],
+    resorbedFilter: HistoryResorbedFilter[],
+    myTownsFilter: HistoryMyTownsFilter[],
+};
+
+export default async function getHistory(
+    user: User,
+    location: Location,
+    filters: UserActivityHistoryFilters,
+    numberOfActivities: number,
+    lastDate: Date | string,
+    maxDate: Date | string | null,
+): Promise<ServiceActivity[]> {
+    const { activityTypeFilter, resorbedFilter, myTownsFilter } = filters;
+
     const promises = [];
-    const shantytownFilter = [];
+    const shantytownFilter: HistoryShantytownFilter[] = [];
 
     if (activityTypeFilter.includes('shantytownCreation')) {
         shantytownFilter.push('shantytownCreation');
@@ -19,7 +42,7 @@ export default async (user, location, activityTypeFilter, resorbedFilter, myTown
         shantytownFilter.push('shantytownClosing');
     }
     if (shantytownFilter.length > 0) {
-        promises.push(shantytownModel.getHistory(user, location, shantytownFilter, resorbedFilter, myTownsFilter, numberOfActivities, lastDate, maxDate));
+        promises.push(shantytownModel.getHistory(user, location, { shantytownFilter, resorbedFilter, myTownsFilter }, numberOfActivities, lastDate, maxDate));
     }
     if (activityTypeFilter.includes('shantytownComment')) {
         promises.push(shantytownCommentModel.getHistory(user, location, numberOfActivities, lastDate, maxDate));
@@ -44,4 +67,4 @@ export default async (user, location, activityTypeFilter, resorbedFilter, myTown
     }
 
     return sortedActivities;
-};
+}
