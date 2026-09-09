@@ -23,7 +23,12 @@ type UserActivityRow = {
     cities: string[],
 };
 
-export default async (location: Location, numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<UserActivity[]> => {
+export default async function getHistory(
+    location: Location,
+    numberOfActivities: number,
+    lastDate: Date | string,
+    maxDate: Date | string | null,
+):Promise<UserActivity[]> {
     const limit = numberOfActivities !== -1 ? 'limit :numberOfActivities' : '';
     const outremerCondition = `(
                 EXISTS (
@@ -126,4 +131,4 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
                 },
             },
         }));
-};
+}
