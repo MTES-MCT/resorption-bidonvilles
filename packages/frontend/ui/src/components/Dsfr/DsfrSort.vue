@@ -32,12 +32,12 @@ const selectOptions = computed(() =>
 
 <style scoped>
 :deep(.fr-select) {
+    margin-top: 0rem !important;
     font-size: 0.875rem;
     line-height: 1.25rem;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     border-radius: 0.25rem 0.25rem 0 0;
-    box-shadow: inset 0 -2px 0 0 var(--blue-france-sun-113-625);
 }
 
 :deep(.fr-select:focus),
