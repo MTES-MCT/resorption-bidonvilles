@@ -35,6 +35,7 @@ const selectOptions = computed(() =>
     margin-top: 0rem !important;
     font-size: 0.875rem;
     line-height: 1.25rem;
+    min-height:2.5rem;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     border-radius: 0.25rem 0.25rem 0 0;
