@@ -292,7 +292,7 @@ onBeforeUnmount(() => {
     left: 0;
     z-index: 30;
     min-width: 16rem;
-    max-width: 24rem;
+    max-width: 100%;
     max-height: 24rem;
     overflow-y: auto;
     padding: 1rem 1rem 0 1rem;
