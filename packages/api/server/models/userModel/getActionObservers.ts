@@ -22,17 +22,17 @@ export default async (actionId: number): Promise<ActionObserver[]> => sequelize.
     )
 
     SELECT
-        u.user_id,
-        u.fk_organization AS organization_id,
-        u.email,
-        u.first_name,
-        u.last_name
+        users.user_id,
+        users.fk_organization AS organization_id,
+        users.email,
+        users.first_name,
+        users.last_name
     FROM users
     LEFT JOIN constants ON TRUE
     LEFT JOIN v_user_areas ON v_user_areas.user_id = users.user_id AND v_user_areas.is_main_area IS TRUE
-    LEFT JOIN action_operators ON action_operators.fk_organization = users.fk_organization AND action_operators.fk_action = :actionId
-    LEFT JOIN action_managers ON action_managers.fk_organization = users.fk_organization AND action_managers.fk_action = :actionId
-    LEFT JOIN email_unsubscriptions ON email_unsubscriptions.fk_user = u.user_id
+    LEFT JOIN action_operators ON action_operators.fk_user = users.user_id AND action_operators.fk_action = :actionId
+    LEFT JOIN action_managers ON action_managers.fk_user = users.user_id AND action_managers.fk_action = :actionId
+    LEFT JOIN email_unsubscriptions ON email_unsubscriptions.fk_user = users.user_id
 
     WHERE 
         users.fk_status = 'active'
