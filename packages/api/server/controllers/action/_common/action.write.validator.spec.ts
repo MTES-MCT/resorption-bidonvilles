@@ -16,8 +16,8 @@ const baseIndicateur = () => ({
     scolaire_mineur_scolarise_dans_annee: 14,
 });
 
-describe('controllers/action/_common/action.write.validator', () => {
-    describe('sumSchoolLevels', () => {
+describe('controllers/action/_common/action.write.validator - Règles métier de validation des indicateurs', () => {
+    describe('sumSchoolLevels - Règles de calcul des mineurs scolarisés', () => {
         it('additionne maternelle, élémentaire, collège et lycée', () => {
             expect(sumSchoolLevels({
                 scolaire_nombre_maternelle: 1,
