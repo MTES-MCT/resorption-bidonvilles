@@ -183,12 +183,14 @@ describe('contactController.create()', () => {
         };
         const req = mockReq({ body });
         const res = mockRes();
+        const consoleError = sandbox.stub(console, 'error');
 
         contactService.notifyNewsletterRegistration.rejects();
         contactService.notifyContact.resolves();
 
         await contactController(req, res, () => {});
         expect(res.status).to.have.been.calledWith(200);
+        consoleError.restore();
     });
 
     // referral
@@ -256,11 +258,13 @@ describe('contactController.create()', () => {
         };
         const req = mockReq({ body });
         const res = mockRes();
+        const consoleError = sandbox.stub(console, 'error');
 
         contactService.notifyContact.resolves();
         contactService.registerReferral.rejects();
 
         await contactController(req, res, () => {});
         expect(res.status).to.have.been.calledWith(200);
+        consoleError.restore();
     });
 });
