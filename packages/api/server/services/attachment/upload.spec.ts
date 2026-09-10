@@ -4,7 +4,6 @@ import sinonChai from 'sinon-chai';
 import { rewiremock } from '#test/rewiremock';
 import fakeFile from '#test/utils/file';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
-import scanAttachmentErrors from './scanAttachmentErrors';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -26,12 +25,13 @@ const attachmentModel = {
 const uuid = {
     v4: sandbox.stub(),
 };
+const scanAttachment = sandbox.stub().resolves({ status: 200, message: 'no_infection_detected' });
 rewiremock('#server/config').withDefault(config);
 rewiremock('#server/utils/s3').with({ S3 });
 rewiremock('sharp').with(sharp);
 rewiremock('uuid').with(uuid);
 rewiremock('#server/models/attachmentModel').with(attachmentModel);
-rewiremock('#server/services/attachment/scanAttachment').with(scanAttachmentErrors);
+rewiremock('#server/services/attachment/scanAttachment').withDefault(scanAttachment);
 rewiremock.passBy('@aws-sdk/client-s3');
 
 rewiremock.enable();
@@ -39,7 +39,7 @@ rewiremock.enable();
 import upload from './upload';
 rewiremock.disable();
 
-describe.skip('services/attachment/upload', () => {
+describe('services/attachment/upload', () => {
     const sharpStubs = {
         resize: null,
         toBuffer: null,
@@ -48,6 +48,7 @@ describe.skip('services/attachment/upload', () => {
         sharpStubs.resize = sandbox.stub().returns(sharpStubs);
         sharpStubs.toBuffer = sandbox.stub();
         sharp.returns(sharpStubs);
+        scanAttachment.resolves({ status: 200, message: 'no_infection_detected' });
     });
     afterEach(() => {
         sandbox.reset();
@@ -89,7 +90,10 @@ describe.skip('services/attachment/upload', () => {
         await upload('shantytown_comment', 42, 35, [file]);
 
         const command = S3.send.getCall(0).args[0];
-        expect(command).to.be.an.instanceOf(PutObjectCommand);
+        // rewiremock recharge le module @aws-sdk/client-s3 séparément de cet import,
+        // ce qui produit deux classes PutObjectCommand distinctes : on vérifie donc
+        // le nom du constructeur plutôt que l'identité de classe (instanceof).
+        expect(command.constructor.name).to.be.eql(PutObjectCommand.name);
 
         expect(command.input.Bucket, 'Le nom du bucket est incorrect').to.be.eql('fake-bucket');
         expect(command.input.ACL, 'L\'ACL est incorrect').to.be.eql('public-read');
@@ -189,10 +193,14 @@ describe.skip('services/attachment/upload', () => {
     });
 
     it('si une transaction est passée en paramètre, elle est transférée au modèle', async () => {
-        await upload('shantytown_comment', 1, 1, [fakeFile()], null);
+        const fakeTransaction = {
+            commit: sandbox.stub(),
+            rollback: sandbox.stub(),
+        };
+        await upload('shantytown_comment', 1, 1, [fakeFile()], fakeTransaction as any);
 
         const { args } = attachmentModel.createLinkedAttachment.getCall(0);
-        expect(args[8], 'La transaction est manquante').to.be.eql('fake-transaction');
+        expect(args[8], 'La transaction est manquante').to.be.eql(fakeTransaction);
     });
 
     it('retourne une promesse globale pour l\'ensemble des requêtes', async () => {
@@ -203,5 +211,45 @@ describe.skip('services/attachment/upload', () => {
         expect(response, 'La promesse retournée n\'était pas un Promise.all').to.be.an('array');
         expect(response.length, 'Certaines promesses sont manquantes').to.be.eql(4);
         expect(response, 'La réponse des promesses n\'est pas correcte').to.be.eql([true, false, true, false]);
+    });
+
+    it('si attachmentType n\'est pas fourni, null est passé au modèle', async () => {
+        await upload('shantytown_comment', 1, 1, [fakeFile()]);
+
+        const { args } = attachmentModel.createLinkedAttachment.getCall(0);
+        expect(args[9], 'Le type d\'attachement devrait être null').to.be.null;
+    });
+
+    it('si attachmentType est fourni, il est transféré au modèle pour chaque fichier', async () => {
+        const attachmentTypes = [
+            {
+                file: 'decree_1.pdf',
+                size: 1024,
+                lastModified: 1638360000000,
+                decreeType: 'evacuation',
+            },
+            {
+                file: 'decree_2.pdf',
+                size: 2048,
+                lastModified: 1638360001000,
+                decreeType: 'periculum',
+            },
+        ];
+        await upload('shantytown_decree', 1, 1, [fakeFile(), fakeFile()], null, attachmentTypes);
+
+        const firstCallArgs = attachmentModel.createLinkedAttachment.getCall(0).args;
+        const secondCallArgs = attachmentModel.createLinkedAttachment.getCall(1).args;
+        expect(firstCallArgs[9], 'Le type d\'attachement du premier fichier est incorrect').to.deep.equal({
+            file: 'decree_1.pdf',
+            size: 1024,
+            lastModified: 1638360000000,
+            decreeType: 'evacuation',
+        });
+        expect(secondCallArgs[9], 'Le type d\'attachement du second fichier est incorrect').to.deep.equal({
+            file: 'decree_2.pdf',
+            size: 2048,
+            lastModified: 1638360001000,
+            decreeType: 'periculum',
+        });
     });
 });
