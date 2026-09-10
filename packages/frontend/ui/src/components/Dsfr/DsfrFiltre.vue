@@ -1,6 +1,6 @@
 <template>
     <div class="fr-select-group dsfr-filtre" :class="{ 'fr-filtre--active': selectedCount > 0 }">
-        <button
+        <DsfrButton
             :id="buttonId"
             type="button"
             class="fr-select fr-filtre__button"
@@ -19,7 +19,7 @@
                 </span>
                 <span class="fr-filtre__title">{{ title }}</span>
             </span>
-        </button>
+        </DsfrButton>
 
         <section
             v-show="isOpen"
@@ -88,13 +88,15 @@
             </fieldset>
 
             <div class="fr-filtre__actions">
-                <button
+                <DsfrButton
                     type="button"
                     class="fr-filtre__clear"
                     @click="clear"
+                    tertiary
+                    no-outline
                 >
                     Effacer
-                </button>
+                </DsfrButton>
             </div>
         </section>
     </div>
