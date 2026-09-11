@@ -1,15 +1,14 @@
 <template>
-    <section class="flex justify-between items-end">
+    <section
+        class="flex justify-between items-start sm:items-end flex-col sm:flex-row gap-4"
+    >
         <section class="flex items-end space-x-8">
             <article>
                 <p>Filtrer par</p>
-                <div
-                    class="flex flex-col flex-wrap sm:flex-row gap-2 items-start"
-                >
-                    <Filter
+                <div class="flex flex-col sm:flex-row gap-2 items-start">
+                    <DsfrFiltre
                         v-model="organizationTypesFilter"
                         title="Type de structure"
-                        class="border-1 !border-primary rounded hover:bg-blue200"
                         :options="[
                             {
                                 value: 'public_establishment',
@@ -26,18 +25,18 @@
                             { value: 'association', label: 'Association' },
                         ]"
                     />
-                    <Filter
+                    <DsfrFiltre
                         v-model="expertiseTopicsFilter"
                         v-if="expertiseTopicsItems.length > 0"
                         title="Expertises ou sujets d'intérêts"
                         :options="expertiseTopicsItems"
-                        class="border-1 !border-primary rounded hover:bg-blue200"
                     />
                 </div>
             </article>
         </section>
         <AnnuairePagination
             v-if="directoryStore.currentPage.content.length > 0"
+            class="w-full justify-center sm:justify-end"
         />
     </section>
 </template>
@@ -45,7 +44,7 @@
 <script setup>
 import { computed } from "vue";
 import { useDirectoryStore } from "@/stores/directory.store";
-import { Filter } from "@resorptionbidonvilles/ui";
+import { DsfrFiltre } from "@resorptionbidonvilles/ui";
 import AnnuairePagination from "./AnnuairePagination.vue";
 import { useConfigStore } from "@/stores/config.store";
 
