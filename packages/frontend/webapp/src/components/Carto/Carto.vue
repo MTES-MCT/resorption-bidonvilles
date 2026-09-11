@@ -164,6 +164,11 @@ const props = defineProps({
         required: false,
         default: false,
     },
+    enableScrollWheelZoom: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
     activeTab: {
         type: String,
         required: false,
@@ -233,7 +238,7 @@ function createMap() {
     // on crée la carte
     map.value = L.map(props.mapId, {
         layers: [mapLayers.value[defaultLayer.value || layers.value[0]]], // fond de carte à afficher
-        scrollWheelZoom: false, // interdire le zoom via la molette de la souris
+        scrollWheelZoom: props.enableScrollWheelZoom,
     });
     map.value.on("zoomend", onZoomEnd);
 

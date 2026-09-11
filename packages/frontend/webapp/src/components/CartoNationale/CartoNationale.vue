@@ -12,6 +12,7 @@
         }"
         :class="showAddresses ? 'rb-showAddresses' : 'rb-hideAddresses'"
         showPrinter
+        :enableScrollWheelZoom="enableScrollWheelZoom"
         @zoomend="onZoomEnd"
     >
         <div class="absolute top-3 left-4 right-28 z-[1001] text-md font-sans">
@@ -107,8 +108,14 @@ const props = defineProps({
             };
         },
     },
+    enableScrollWheelZoom: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
-const { mapId, pois, showAddresses, defaultView } = toRefs(props);
+const { mapId, pois, showAddresses, defaultView, enableScrollWheelZoom } =
+    toRefs(props);
 const emit = defineEmits([
     "poiclick",
     "viewchange",
