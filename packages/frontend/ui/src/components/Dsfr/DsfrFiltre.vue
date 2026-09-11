@@ -294,6 +294,7 @@ onBeforeUnmount(() => {
     min-width: 16rem;
     max-height: 24rem;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 1rem 1rem 0 1rem;
     background-color: var(--background-overlap-grey);
     border-radius: 0.25rem 0.25rem 0 0;
