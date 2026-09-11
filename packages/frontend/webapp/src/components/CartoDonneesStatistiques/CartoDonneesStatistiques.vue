@@ -1,7 +1,7 @@
 <template>
     <Carto
         ref="carto"
-        :layers="['Light']"
+        :layers="['Dessin']"
         :clusters="{
             7: 'departements',
             10: 'cities',
