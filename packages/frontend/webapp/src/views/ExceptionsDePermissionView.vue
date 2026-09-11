@@ -1,7 +1,7 @@
 <template>
     <LayoutLoading v-if="data === null" />
     <Layout v-else>
-        <ContentWrapper>
+        <ContentWrapper class="flex gap-4 flex-wrap">
             <DsfrFiltre
                 title="Statut"
                 :options="[
