@@ -1,6 +1,6 @@
 <template>
     <section
-        class="flex justify-between items-start sm:items-end flex-col sm:flex-row gap-4 md:flex-wrap"
+        class="flex justify-between items-start sm:items-end flex-col sm:flex-row gap-4"
     >
         <section class="flex items-end space-x-8">
             <article>
