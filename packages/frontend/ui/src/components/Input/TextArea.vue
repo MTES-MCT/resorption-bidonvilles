@@ -12,7 +12,7 @@
                     :data-cy-field="cypressName"
                     :disabled="isSubmitting || disabled"
                     class="h-40"
-                    :class="['bg-white', classes]"
+                    :class="[classes]"
                     :model-value="field.value"
                     @update:model-value="handleChange"
                     @blur="onBlur"
