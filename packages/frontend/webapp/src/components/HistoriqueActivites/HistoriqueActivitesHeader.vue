@@ -6,17 +6,16 @@
         >
         <template v-slot:actions>
             <p class="flex space-x-2">
-                <Button
+                <DsfrButton
                     v-if="userStore.hasPermission('data.moderate')"
-                    icon="info-circle"
+                    icon="fr-icon-info-line"
                     iconPosition="left"
-                    variant="secondaryOutline"
+                    secondary
                     @click="showModeration"
                     size="sm"
-                    class="!border-2 !border-secondary hover:!bg-secondary"
                 >
                     Voir les règles de modération
-                </Button>
+                </DsfrButton>
                 <DsfrButton
                     v-if="userStore.hasPermission('shantytown_comment.export')"
                     icon="ri:file-excel-fill"
@@ -37,7 +36,6 @@ import { exportList } from "@/api/shantytown_comments.api";
 import downloadCsv from "@/utils/downloadCsv";
 import formatDate from "@common/utils/formatDate";
 
-import { Button } from "@resorptionbidonvilles/ui";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import HistoriqueActivitesReglesModeration from "./HistoriqueActivitesReglesModeration.vue";
 import { useModaleStore } from "@/stores/modale.store";
@@ -69,9 +67,3 @@ function showModeration() {
     modaleStore.open(HistoriqueActivitesReglesModeration);
 }
 </script>
-
-<style scoped>
-button {
-    border: inherit;
-}
-</style>
