@@ -92,7 +92,7 @@ export default async function getHistory(
 ): Promise<ShantytownCommentActivity[]> {
     // apply geographic level restrictions
     const where: string[] = [];
-    const replacements: any = {
+    const replacements: Record<string, unknown> = {
         maxDate,
     };
     const limit = numberOfActivities !== -1 ? 'LIMIT :numberOfActivities' : '';

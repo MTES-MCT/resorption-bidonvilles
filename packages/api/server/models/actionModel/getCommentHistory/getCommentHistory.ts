@@ -26,7 +26,7 @@ type ActionCommentHistoryRow = {
 export default async (user: User, location: Location, numberOfActivities: number, lastDate: Date | string, maxDate: Date | string | null): Promise<ActionCommentActivity[]> => {
     // apply geographic level restrictions
     const where = [];
-    const replacements: any = {
+    const replacements: Record<string, unknown> = {
         maxDate,
     };
     const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';

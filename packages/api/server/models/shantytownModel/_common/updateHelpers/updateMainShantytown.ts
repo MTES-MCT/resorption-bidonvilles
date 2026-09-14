@@ -8,7 +8,7 @@ const COLUMN_NAME_PATTERN = /^\w+$/;
  */
 export default async function updateMainShantytown(
     shantytownId: number,
-    updatedTown: Record<string, any>,
+    updatedTown: Record<string, unknown>,
     transaction: Transaction,
 ): Promise<void> {
     const columns = Object.keys(updatedTown);
