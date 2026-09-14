@@ -24,7 +24,7 @@ type ActivityListQuery = {
     myTownsFilter: HistoryMyTownsFilter[],
 };
 
-export default async (req: ActivityListRequest, res: Response, next: NextFunction) => {
+export default async function activityList(req: ActivityListRequest, res: Response, next: NextFunction) {
     const {
         lastActivityDate, maxActivityDate, numberOfActivities, activityTypeFilter, resorbedFilter, myTownsFilter,
     } = req.query as unknown as ActivityListQuery;
@@ -46,4 +46,4 @@ export default async (req: ActivityListRequest, res: Response, next: NextFunctio
         });
         return next(error.nativeError ?? error);
     }
-};
+}
