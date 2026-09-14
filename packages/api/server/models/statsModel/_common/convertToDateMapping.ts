@@ -21,10 +21,10 @@ export default (rows: Row[], startDate: Date): Result[] => {
 
     for (let i = 1; i <= monthsDiff; i += 1) {
         const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        const row = rows.find(({ month, year }) => parseInt(month, 10) === date.getMonth() + 1 && parseInt(year, 10) === date.getFullYear());
+        const row = rows.find(({ month, year }) => Number.parseInt(month, 10) === date.getMonth() + 1 && Number.parseInt(year, 10) === date.getFullYear());
         result.unshift({
             month: toFormat(date, 'M Y'),
-            total: row !== undefined ? parseInt(row.total, 10) : 0,
+            total: row !== undefined ? Number.parseInt(row.total, 10) : 0,
         });
     }
 
