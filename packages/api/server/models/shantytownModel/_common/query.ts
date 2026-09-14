@@ -79,7 +79,12 @@ function validateDynamicSqlFragments(selection: Record<string, string>, joins: {
     }
 }
 
-function getBaseSql(table: QueryTableMode, whereClause = null, order = null, additionalSQL: any = {}) {
+type AdditionalSql = {
+    selection?: Record<string, string>,
+    joins?: { table: string, on: string }[],
+};
+
+function getBaseSql(table: QueryTableMode, whereClause = null, order = null, additionalSQL: AdditionalSql = {}) {
     const tables = TABLE_NAMES_BY_MODE[table];
 
     const selection = {
@@ -209,7 +214,7 @@ export default async function query(
     where: Where = [],
     order = ['departements.code ASC', 'cities.name ASC'],
     includeChangelog = false,
-    additionalSQL = {},
+    additionalSQL: AdditionalSql = {},
     argReplacements = {},
 ): Promise<Shantytown[]> {
     const permissionsClauseGroup = pWhere().can(user).do(feature, 'shantytown');

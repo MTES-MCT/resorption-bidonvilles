@@ -5,10 +5,12 @@ import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
 import { Location } from '#server/models/geoModel/Location.d';
 import outremer from '#server/utils/permission/outremer';
+import validateSafeWhereClause from '#server/models/_common/validateSafeWhereClause';
 import getUsenameOf from './_common/getUsenameOf';
 import serializeShantytown from './_common/serializeShantytown';
 import getDiff from './_common/getDiff';
 import SQL, { ShantytownRow } from './_common/SQL';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 
 import {
     BaseShantytownActivity,
@@ -78,7 +80,7 @@ function buildActivityFiltersSQL(filters: HistoryFilters, maxDate: Date | string
     ].join('\n');
 }
 
-function buildActivityFromRow(activity: ShantytownActivityRow, previousVersion: any, serializedShantytown: any): ShantytownActivity | null {
+function buildActivityFromRow(activity: ShantytownActivityRow, previousVersion: Shantytown | null, serializedShantytown: Shantytown): ShantytownActivity | null {
     const base: BaseShantytownActivity = {
         entity: 'shantytown',
         date: activity.updatedAt.getTime() / 1000,
@@ -141,7 +143,7 @@ export default async function getHistory(
     maxDate: Date | string | null,
 ): Promise<ShantytownActivity[]> {
     // apply geographic level restrictions
-    const replacements: any = {
+    const replacements: Record<string, unknown> = {
         maxDate,
         userId: user.id,
         lastDate,
@@ -158,7 +160,10 @@ export default async function getHistory(
 
     const { where, replacements: locationReplacements } = buildLocationRestrictionClauses(restrictedLocations);
     Object.assign(replacements, locationReplacements);
+    where.forEach(clause => validateSafeWhereClause(clause));
+
     const activityFiltersSQL = buildActivityFiltersSQL(filters, maxDate);
+    validateSafeWhereClause(activityFiltersSQL);
 
     const activities: ShantytownActivityRow[] = await sequelize.query(
         `
