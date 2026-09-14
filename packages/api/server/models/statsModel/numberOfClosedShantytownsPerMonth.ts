@@ -1,9 +1,9 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-import convertToDateMapping from './_common/convertToDateMapping';
+import convertToDateMapping, { Result } from './_common/convertToDateMapping';
 
-export default async function numberOfClosedShantytownsPerMonth(departement = null, startDateStr = '2019-06-01') {
+export default async function numberOfClosedShantytownsPerMonth(departement?: string | null, startDateStr: string = '2019-06-01'): Promise<Result[]> {
     const params: any = { startDateStr };
     if (departement) {
         params.departement = departement;
