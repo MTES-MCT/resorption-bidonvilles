@@ -18,6 +18,12 @@ export default defineConfig({
         },
         allowedHosts: ["host.docker.internal", "localhost"],
     },
+    preview: {
+        host: "0.0.0.0",
+        port: 8092,
+        strictPort: true,
+        allowedHosts: ["host.docker.internal", "localhost"],
+    },
     build: {
         sourcemap: true,
         rollupOptions: {
