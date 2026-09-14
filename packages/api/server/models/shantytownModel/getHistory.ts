@@ -68,6 +68,10 @@ function buildLocationRestrictionClauses(restrictedLocations: Location[]): { whe
 function buildActivityFiltersSQL(filters: HistoryFilters, maxDate: Date | string | null): string {
     const { shantytownFilter, resorbedFilter, myTownsFilter } = filters;
 
+    if (!Array.isArray(shantytownFilter) || !Array.isArray(resorbedFilter) || !Array.isArray(myTownsFilter)) {
+        throw new TypeError('Filtres d\'historique invalides : un tableau était attendu');
+    }
+
     return [
         resorbedFilter.includes('no') ? '' : 'AND shantytowns.closed_with_solutions = \'yes\'',
         resorbedFilter.includes('yes') ? '' : 'AND shantytowns.closed_with_solutions != \'yes\'',
