@@ -48,6 +48,11 @@ export type BaseShantytownActivity = {
 
 // exported types
 
+export type HistoryShantytownFilter = 'shantytownCreation' | 'shantytownClosing' | 'shantytownUpdate';
+export type HistoryResorbedFilter = 'yes' | 'no';
+export type HistoryMyTownsFilter = 'yes' | 'no';
+export type HistoryActivityTypeFilter = HistoryShantytownFilter | 'shantytownComment' | 'user' | 'actionComment';
+
 export type UserActivity = {
     entity: 'user',
     action : 'creation',

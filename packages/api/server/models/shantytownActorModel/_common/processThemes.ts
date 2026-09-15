@@ -1,11 +1,6 @@
-/**
- * Processes an array of themes to make it ready for database insertion
- *
- * @param {Array.<Object>} themes Each object has the property "id", and for the special case "autre" a property "value"
- *
- * @returns {Object} A key-value object with a key "themes" (array of theme ids) and a key "autre" (string or null)
- */
-export default themes => themes.reduce((acc, theme) => {
+import { ActorTheme, ProcessedActorThemes } from '#root/types/resources/ShantytownActor.d';
+
+const accumulateTheme = (acc: ProcessedActorThemes, theme: ActorTheme): ProcessedActorThemes => {
     if (theme.id === 'autre') {
         return {
             ...acc,
@@ -20,7 +15,11 @@ export default themes => themes.reduce((acc, theme) => {
             theme.id,
         ],
     };
-}, {
-    themes: [],
-    autre: null,
-});
+};
+
+export default function processThemes(themes: ActorTheme[]): ProcessedActorThemes {
+    return themes.reduce((acc, theme) => accumulateTheme(acc, theme), {
+        themes: [],
+        autre: null,
+    });
+}

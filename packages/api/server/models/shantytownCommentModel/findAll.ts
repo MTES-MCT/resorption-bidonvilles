@@ -3,34 +3,26 @@ import { QueryTypes } from 'sequelize';
 import { Location } from '#server/models/geoModel/Location.d';
 import geoUtils from '#server/utils/geo';
 import { buildWhere, type WhereObjClause } from '#server/utils/sql';
+import { validateWhereClauseAgainstInjectionPatterns } from '#server/models/_common/validateSafeWhereClause';
+import { ShantytownCommentRow } from '#server/models/shantytownCommentModel/ShantytownCommentRow.d';
 import { User } from '#root/types/resources/User.d';
 
 const { fromGeoLevelToTableName } = geoUtils;
 
-type ShantytownCommentRow = {
-    commentId: number,
-    commentDescription: string,
-    shantytownId: number,
-    commentCreatedAt: Date,
-    commentCreatedBy: number,
+type ShantytownCommentFullRow = ShantytownCommentRow & {
     userId: number,
-    userFirstName: string,
-    userLastName: string,
-    userPosition: string,
     userRole: string,
-    organizationAbbreviation: string,
-    organizationName: string,
-    organizationId: number,
     departementName: string,
     shantytownResorptionTarget: number,
     commentPrivate: boolean,
-    organization_target_names: string[],
-    user_target_names: string[],
     tags: string[],
-    grouped_attachments: string[],
 };
 
-export default (user: User, geoFilter: Location[] = null, privateFilter: Location[] = null): Promise<ShantytownCommentRow[]> => {
+export default function findAll(
+    user: User,
+    geoFilter: Location[] = null,
+    privateFilter: Location[] = null,
+): Promise<ShantytownCommentFullRow[]> {
     // si la liste des territoires autorisés est spécifiée mais qu'elle est vide
     // autant s'arrêter là et ne pas faire de requête
     if (geoFilter?.length === 0) {
@@ -46,7 +38,7 @@ export default (user: User, geoFilter: Location[] = null, privateFilter: Locatio
         isTarget: ':organizationId = ANY(oca.organization_target_ids) OR :userId = ANY(uca.user_target_ids)',
         isAuthor: 'sc.created_by = :userId',
     };
-    const replacements: any = {
+    const replacements: Record<string, unknown> = {
         userId: user.id,
         organizationId: user.organization.id,
     };
@@ -99,11 +91,14 @@ export default (user: User, geoFilter: Location[] = null, privateFilter: Locatio
         ],
     };
 
+    const whereClause = buildWhere(w);
+    validateWhereClauseAgainstInjectionPatterns(whereClause);
+
     return sequelize.query(
         `WITH organization_comment_access AS (
             SELECT 
                 scot.fk_comment AS shantytown_comment_id,
-                ARRAY_AGG(o.name) AS organization_target_names,
+                ARRAY_AGG(o.name) AS organization_target_name,
                 ARRAY_AGG(o.organization_id) AS organization_target_ids
             FROM shantytown_comment_organization_targets scot 
             LEFT JOIN organizations o ON o.organization_id = scot.fk_organization
@@ -112,7 +107,7 @@ export default (user: User, geoFilter: Location[] = null, privateFilter: Locatio
         user_comment_access AS (
             SELECT 
                 scut.fk_comment AS shantytown_comment_id,
-                ARRAY_AGG(CONCAT(users.first_name, ' ', users.last_name)) AS user_target_names,
+                ARRAY_AGG(CONCAT(users.first_name, ' ', users.last_name)) AS user_target_name,
                 ARRAY_AGG(users.user_id) AS user_target_ids
             FROM shantytown_comment_user_targets scut 
             LEFT JOIN users ON users.user_id = scut.fk_user
@@ -159,9 +154,9 @@ export default (user: User, geoFilter: Location[] = null, privateFilter: Locatio
             o.organization_id AS "organizationId",
             departements.name AS "departementName",
             s.resorption_target AS "shantytownResorptionTarget",
-            COALESCE(oca.organization_target_names, uca.user_target_names) IS NOT NULL AS "commentPrivate",
-            oca.organization_target_names,
-            uca.user_target_names,
+            COALESCE(oca.organization_target_name, uca.user_target_name) IS NOT NULL AS "commentPrivate",
+            oca.organization_target_name,
+            uca.user_target_name,
             tags.tags AS "tags",
             grouped_attachments.attachments AS "attachments"
         FROM shantytown_comments sc
@@ -177,11 +172,11 @@ export default (user: User, geoFilter: Location[] = null, privateFilter: Locatio
         LEFT JOIN user_comment_access uca ON sc.shantytown_comment_id = uca.shantytown_comment_id
         LEFT JOIN tags ON tags.fk_shantytown_comment = sc.shantytown_comment_id
         LEFT JOIN grouped_attachments ON grouped_attachments.fk_shantytown_comment = sc.shantytown_comment_id
-        WHERE ${buildWhere(w)}
+        WHERE ${whereClause}
         ORDER BY sc.created_at DESC`,
         {
             type: QueryTypes.SELECT,
             replacements,
         },
     );
-};
+}
