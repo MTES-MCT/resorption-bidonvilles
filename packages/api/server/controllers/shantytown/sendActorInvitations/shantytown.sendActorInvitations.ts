@@ -1,9 +1,9 @@
 
-import mattermostUtils from '#server/utils/mattermost';
+import tchapUtils from '#server/utils/tchap';
 import mailsUtils from '#server/mails/mails';
 import userModel from '#server/models/userModel';
 
-const { triggerActorInvitedAlert } = mattermostUtils;
+const { triggerActorInvitedAlert } = tchapUtils;
 const { sendUserShantytownActorInvitation } = mailsUtils;
 
 export default async (req, res, next) => {
@@ -23,9 +23,8 @@ export default async (req, res, next) => {
 
     try {
         await triggerActorInvitedAlert(req.shantytown, req.user, req.body.email);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
+        // Do nothing
     }
 
     return res.status(204).send({});

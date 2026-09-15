@@ -7,7 +7,7 @@ import insertElectricityAccessType from '#server/models/electricityAccessTypesMo
 import shantytownParcelOwnerService from '#server/services/shantytownParcelOwner';
 import insertIncomingTown from '#server/models/incomingTownsModel/create';
 import getLocationWatchers from '#server/models/userModel/getLocationWatchers';
-import { triggerShantytownCreationAlert, triggerReinstallationAlert } from '#server/utils/mattermost';
+import { triggerShantytownCreationAlert, triggerReinstallationAlert } from '#server/utils/tchap';
 import baseShantytown from '#server/services/shantytown/_common/baseShantytown';
 import checkPopulationUpdate from '#server/services/shantytown/_common/populationStatus';
 import ServiceError from '#server/errors/ServiceError';
@@ -95,21 +95,21 @@ export default async function create(townData: TownInput, user: AuthUser) {
 
     const town = await findOneShantytown(user, shantytown_id);
 
-    // Send a Mattermost alert, if it fails, do nothing
+    // Send a Tchap alert, if it fails, do nothing
     try {
         await triggerShantytownCreationAlert(town, user);
     } catch (err) {
         // eslint-disable-next-line no-console
-        console.error(`Error with shantytown creation Mattermost webhook : ${err.message}`);
+        console.error(`Error with shantytown creation Tchap webhook : ${err.message}`);
     }
 
-    // Send a Mattermost alert for reinstallation, if it fails, do nothing
+    // Send a Tchap alert for reinstallation, if it fails, do nothing
     if (town.isReinstallation === true) {
         try {
             await triggerReinstallationAlert(town, user);
         } catch (err) {
             // eslint-disable-next-line no-console
-            console.error(`Error with reinstallation Mattermost webhook : ${err.message}`);
+            console.error(`Error with reinstallation Tchap webhook : ${err.message}`);
         }
     }
 

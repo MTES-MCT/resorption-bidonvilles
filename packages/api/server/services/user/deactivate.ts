@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import userModel from '#server/models/userModel/index';
 import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
-import mattermost from '#server/utils/mattermost';
+import tchapUtils from '#server/utils/tchap';
 import can from '#server/utils/permission/can';
 import agendaFactory from '#server/loaders/agendaLoader';
 import { User } from '#root/types/resources/User.d';
@@ -61,7 +61,7 @@ async function sendNotifications(user: User, selfDeactivation: boolean, reason: 
         if (selfDeactivation) {
             await Promise.all([
                 mails.sendUserDeactivationConfirmation(user),
-                mattermost.triggerNotifyNewUserSelfDeactivation(user),
+                tchapUtils.triggerNotifyNewUserSelfDeactivation(user),
             ]);
         } else {
             await mails.sendUserDeactivationByAdminAlert(user, {
