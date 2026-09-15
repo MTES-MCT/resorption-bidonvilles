@@ -7,7 +7,10 @@
         />
     </div>
 
-    <AnnuairePagination class="mt-4 justify-end" autoScrollFix />
+    <AnnuairePagination
+        class="mt-4 w-full justify-center sm:justify-end"
+        autoScrollFix
+    />
 </template>
 
 <script setup>

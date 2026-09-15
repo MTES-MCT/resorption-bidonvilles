@@ -2,9 +2,9 @@
     <section
         class="flex flex-col sm:flex-row sm:items-end sm:space-x-8 space-y-4 sm:space-y-0 border-t border-b border-france-blue-925-100 py-4"
     >
-        <article class="flex items-center space-x-2 h-10">
+        <article class="flex sm:items-center gap-4 flex-col sm:flex-row">
             <p class="whitespace-nowrap">Filtrer par:</p>
-            <Filter
+            <DsfrFiltre
                 v-model="statusFilter"
                 title="Statut"
                 :options="[
@@ -42,7 +42,7 @@
 import { computed, watch, toRef } from "vue";
 import { useForm } from "vee-validate";
 import { useSigninLogsStore } from "@/stores/signinLogs.store";
-import { Filter } from "@resorptionbidonvilles/ui";
+import { DsfrFiltre } from "@resorptionbidonvilles/ui";
 
 const logsStore = useSigninLogsStore();
 
