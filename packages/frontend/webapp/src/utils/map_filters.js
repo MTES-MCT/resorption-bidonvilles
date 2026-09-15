@@ -117,11 +117,13 @@ export default computed(() => {
             icon: "users",
             label: "Type de propriétaire",
             options: [
-                ...(configStore.config?.owner_types || []).map((type) => ({
-                    value: type.id,
-                    label: type.label,
-                    checked: true,
-                })),
+                ...(configStore.config?.owner_types || [])
+                    .filter((type) => type.id !== 1)
+                    .map((type) => ({
+                        value: type.id,
+                        label: type.label,
+                        checked: true,
+                    })),
                 {
                     value: null,
                     label: "Inconnu",
