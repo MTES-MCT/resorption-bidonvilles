@@ -52,7 +52,7 @@
     "multer": "^2.0.1",
     "neat-csv": "^6.0.0",
     "node-fetch": "3",
-    "node-mailjet": "^6.0.5",
+    "node-mailjet": "^6.0.11",
     "nodemon": "^2.0.7",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.2",
