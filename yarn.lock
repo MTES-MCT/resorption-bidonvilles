@@ -3538,6 +3538,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@getbrevo/brevo@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "@getbrevo/brevo@npm:6.0.3"
+  checksum: 4fe4b07c694ea2378af70bf233ee2414e1f2862bb14c2fe7e451ec2ee58e0bd5e3608549d9497d0f2442b4afc223021c0da02dd2f50d91846e0e6def55e995ae
+  languageName: node
+  linkType: hard
+
 "@gouvfr/dsfr@npm:1.14.3":
   version: 1.14.3
   resolution: "@gouvfr/dsfr@npm:1.14.3"
@@ -6495,6 +6502,7 @@ __metadata:
   dependencies:
     "@aws-sdk/client-s3": ^3.32.0
     "@aws-sdk/s3-request-presigner": ^3.598.0
+    "@getbrevo/brevo": ^6.0.3
     "@intlify/core-base": latest
     "@intlify/shared": latest
     "@sentry/node": ^7.54.0
@@ -6552,7 +6560,6 @@ __metadata:
     multer: ^2.0.1
     neat-csv: ^6.0.0
     node-fetch: 3
-    node-mailjet: ^6.0.5
     node-mocks-http: ^1.12.1
     nodemon: ^2.0.7
     pg: ^8.7.3
@@ -13084,7 +13091,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.11.0, axios@npm:^1.8.1":
+"axios@npm:^1.11.0":
   version: 1.11.0
   resolution: "axios@npm:1.11.0"
   dependencies:
@@ -13303,13 +13310,6 @@ __metadata:
   version: 5.2.2
   resolution: "big.js@npm:5.2.2"
   checksum: b89b6e8419b097a8fb4ed2399a1931a68c612bce3cfd5ca8c214b2d017531191070f990598de2fc6f3f993d91c0f08aa82697717f6b3b8732c9731866d233c9e
-  languageName: node
-  linkType: hard
-
-"bignumber.js@npm:^9.0.0":
-  version: 9.3.1
-  resolution: "bignumber.js@npm:9.3.1"
-  checksum: 6ab100271a23a75bb8b99a4b1a34a1a94967ac0b9a52a198147607bd91064e72c6f356380d7a09cd687bf50d81ad2ed1a0a8edfaa90369c9003ed8bb2440d7f0
   languageName: node
   linkType: hard
 
@@ -21394,15 +21394,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-bigint@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "json-bigint@npm:1.0.0"
-  dependencies:
-    bignumber.js: ^9.0.0
-  checksum: c67bb93ccb3c291e60eb4b62931403e378906aab113ec1c2a8dd0f9a7f065ad6fd9713d627b732abefae2e244ac9ce1721c7a3142b2979532f12b258634ce6f6
-  languageName: node
-  linkType: hard
-
 "json-buffer@npm:3.0.1":
   version: 3.0.1
   resolution: "json-buffer@npm:3.0.1"
@@ -24176,17 +24167,6 @@ __metadata:
     util: ^0.11.0
     vm-browserify: ^1.0.1
   checksum: 41fa7927378edc0cb98a8cc784d3f4a47e43378d3b42ec57a23f81125baa7287c4b54d6d26d062072226160a3ce4d8b7a62e873d2fb637aceaddf71f5a26eca0
-  languageName: node
-  linkType: hard
-
-"node-mailjet@npm:^6.0.5":
-  version: 6.0.9
-  resolution: "node-mailjet@npm:6.0.9"
-  dependencies:
-    axios: ^1.8.1
-    json-bigint: ^1.0.0
-    url-join: ^4.0.0
-  checksum: b6387b3a1b988cce1ddfa8cf4a36a6792ee4340e85d3c1d9d7d778842984a70fcae4199b9bc508d35fb3641feb68fe8b3cde7bbea27b33a7269d14904f7a23de
   languageName: node
   linkType: hard
 
@@ -31860,13 +31840,6 @@ __metadata:
   version: 0.1.0
   resolution: "urix@npm:0.1.0"
   checksum: 4c076ecfbf3411e888547fe844e52378ab5ada2d2f27625139011eada79925e77f7fbf0e4016d45e6a9e9adb6b7e64981bd49b22700c7c401c5fc15f423303b3
-  languageName: node
-  linkType: hard
-
-"url-join@npm:^4.0.0":
-  version: 4.0.1
-  resolution: "url-join@npm:4.0.1"
-  checksum: f74e868bf25dbc8be6a8d7237d4c36bb5b6c62c72e594d5ab1347fe91d6af7ccd9eb5d621e30152e4da45c2e9a26bec21390e911ab54a62d4d82e76028374ee5
   languageName: node
   linkType: hard
 

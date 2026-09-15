@@ -1,0 +1,13 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "reason": "Compte inactif depuis plus de 12 mois."
+        }
+    }
+}

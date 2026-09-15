@@ -12,6 +12,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.32.0",
     "@aws-sdk/s3-request-presigner": "^3.598.0",
+    "@getbrevo/brevo": "^6.0.3",
     "@intlify/core-base": "latest",
     "@intlify/shared": "latest",
     "@sentry/node": "^7.54.0",
@@ -52,7 +53,6 @@
     "multer": "^2.0.1",
     "neat-csv": "^6.0.0",
     "node-fetch": "3",
-    "node-mailjet": "^6.0.5",
     "nodemon": "^2.0.7",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.2",
@@ -145,6 +145,7 @@
     "lint:all": "eslint --no-error-on-unmatched-pattern --max-warnings=0 --ext .ts server",
     "emails:build": "ts-node server/mails/build.ts",
     "emails:preview": "ts-node server/mails/preview.ts",
-    "test:activity-summary": "ts-node test/mails/testActivitySummary.ts"
+    "test:activity-summary": "ts-node test/mails/testActivitySummary.ts",
+    "test:all-mails": "ts-node test/mails/testAllMails.ts"
   }
 }

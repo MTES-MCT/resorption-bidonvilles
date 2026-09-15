@@ -1,0 +1,22 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "entity": {
+                "type": "le site",
+                "name": "Site des Fauvettes",
+                "location": { "name": "Nantes" }
+            },
+            "comment": {
+                "description": "La situation sanitaire s'est nettement améliorée depuis la dernière visite.",
+                "created_at": "20/08/2026"
+            },
+            "message": "Ce commentaire a été supprimé automatiquement car son auteur a été désactivé."
+        }
+    }
+}
