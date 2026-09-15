@@ -12,6 +12,7 @@ import baseShantytown from '#server/services/shantytown/_common/baseShantytown';
 import checkPopulationUpdate from '#server/services/shantytown/_common/populationStatus';
 import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
+import sendMailsWithConcurrencyLimit from '#server/utils/sendMailsWithConcurrencyLimit';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import { TownInput } from './_common/serializeReport';
 
@@ -95,7 +96,7 @@ export default async function create(townData: TownInput, user: AuthUser) {
 
     const town = await findOneShantytown(user, shantytown_id);
 
-    // Send a Mattermost alert, if it fails, do nothing
+    // Envoie une notification. Ne fait rien en cas d'échec
     try {
         await triggerShantytownCreationAlert(town, user);
     } catch (err) {
@@ -103,7 +104,7 @@ export default async function create(townData: TownInput, user: AuthUser) {
         console.error(`Error with shantytown creation Mattermost webhook : ${err.message}`);
     }
 
-    // Send a Mattermost alert for reinstallation, if it fails, do nothing
+    // Envoie une alerte de réinstallation. Ne fait rien en cas d'échec
     if (town.isReinstallation === true) {
         try {
             await triggerReinstallationAlert(town, user);
@@ -113,29 +114,27 @@ export default async function create(townData: TownInput, user: AuthUser) {
         }
     }
 
-    // Send a notification to all users of the related departement (asynchronously, don't wait)
+    // Envoie une notification à tous les utilisateurs du département (asynchronously, don't wait)
     getLocationWatchers(townData.city, 'shantytown_creation')
         .then((watchers) => {
-            const emailPromises = watchers
-                .filter(({ user_id }: any) => user_id !== user.id) // do not send an email to the user who created the town
-                .map(watcher => mails.sendUserShantytownDeclared(watcher, {
+            const recipients = watchers
+                .filter(({ user_id }: any) => user_id !== user.id); // n'envoit pas de courriel à l'utilisateur qui a créé le site
+
+            return sendMailsWithConcurrencyLimit(
+                recipients,
+                watcher => mails.sendUserShantytownDeclared(watcher, {
                     variables: {
                         departement: townData.city.departement,
                         shantytown: town,
                         creator: user,
                     },
                     preserveRecipient: false,
-                }));
-
-            return Promise.allSettled(emailPromises);
-        })
-        .then((results) => {
-            results.forEach((result, index) => {
-                if (result.status === 'rejected') {
+                }),
+                (error, watcher) => {
                     // eslint-disable-next-line no-console
-                    console.error(`Error sending shantytown creation email ${index}: ${result.reason}`);
-                }
-            });
+                    console.error(`Error sending shantytown creation email to ${watcher.email}: ${error.message}`);
+                },
+            );
         })
         .catch((error) => {
             // eslint-disable-next-line no-console

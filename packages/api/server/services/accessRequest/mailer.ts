@@ -2,6 +2,7 @@ import dateUtils from '#server/utils/date';
 import config from '#server/config';
 
 import mails from '#server/mails/mails';
+import sendMailsWithConcurrencyLimit from '#server/utils/sendMailsWithConcurrencyLimit';
 
 import userModel from '#server/models/userModel';
 
@@ -27,40 +28,34 @@ const { webappUrl } = config;
 export default {
     toAdmin: {
         newRequestNotification(admins, user) {
-            return Promise.all(
-                admins.map(admin => sendAdminNewRequestNotification(admin, {
-                    variables: {
-                        adminUrl: `${webappUrl}/nouvel-utilisateur/${user.id}`,
-                        userName: formatName(user),
-                        userEmail: user.email,
-                        orgName: user.organization.abbreviation ?? user.organization.name,
-                    },
-                })),
-            );
+            return sendMailsWithConcurrencyLimit(admins, admin => sendAdminNewRequestNotification(admin, {
+                variables: {
+                    adminUrl: `${webappUrl}/nouvel-utilisateur/${user.id}`,
+                    userName: formatName(user),
+                    userEmail: user.email,
+                    orgName: user.organization.abbreviation ?? user.organization.name,
+                },
+            }));
         },
 
         firstRequestPendingNotification(admins, user) {
-            return Promise.all(
-                admins.map(admin => sendAdminRequestPendingReminder1(admin, {
-                    variables: {
-                        adminUrl: `${webappUrl}/nouvel-utilisateur/${user.id}`,
-                        userName: formatName(user),
-                        orgName: user.organization.abbreviation ?? user.organization.name,
-                    },
-                })),
-            );
+            return sendMailsWithConcurrencyLimit(admins, admin => sendAdminRequestPendingReminder1(admin, {
+                variables: {
+                    adminUrl: `${webappUrl}/nouvel-utilisateur/${user.id}`,
+                    userName: formatName(user),
+                    orgName: user.organization.abbreviation ?? user.organization.name,
+                },
+            }));
         },
 
         secondRequestPendingNotification(admins, user) {
-            return Promise.all(
-                admins.map(admin => sendAdminRequestPendingReminder2(admin, {
-                    variables: {
-                        adminUrl: `${webappUrl}/nouvel-utilisateur/${user.id}`,
-                        userName: formatName(user),
-                        orgName: user.organization.abbreviation ?? user.organization.name,
-                    },
-                })),
-            );
+            return sendMailsWithConcurrencyLimit(admins, admin => sendAdminRequestPendingReminder2(admin, {
+                variables: {
+                    adminUrl: `${webappUrl}/nouvel-utilisateur/${user.id}`,
+                    userName: formatName(user),
+                    orgName: user.organization.abbreviation ?? user.organization.name,
+                },
+            }));
         },
 
         accessExpired(admin, user, submitDate) {
