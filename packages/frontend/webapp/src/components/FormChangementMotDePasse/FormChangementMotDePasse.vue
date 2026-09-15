@@ -23,7 +23,7 @@
 
 <script setup>
 // utils
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import router from "@/helpers/router";
 
 // components

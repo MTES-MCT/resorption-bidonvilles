@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import Layout from "@/components/Layout/Layout.vue";
 import { ContentWrapper } from "@resorptionbidonvilles/ui";
 

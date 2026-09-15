@@ -92,7 +92,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed } from "vue";
+import { toRefs, ref, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useModaleStore } from "@/stores/modale.store";
 import {

@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import { useField, useIsSubmitting } from "vee-validate";
 
 const props = defineProps({

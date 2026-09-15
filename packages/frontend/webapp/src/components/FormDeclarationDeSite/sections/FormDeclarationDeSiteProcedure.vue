@@ -67,11 +67,7 @@
                 { 'mb-12': values.evacuation_under_time_limit === 1 },
             ]"
         >
-            <InputCheckableGroup
-                name="evacuation_under_time_limit"
-                :items="yesNoItems"
-                model="values.evacuation_under_time_limit"
-            />
+            <InputEvacuationUnderTimeLimit />
             <div class="ml-12" v-if="values.evacuation_under_time_limit === 1">
                 <InputProcedureDatepicker
                     name="administrative_order_decision_at"
@@ -108,11 +104,7 @@
                 { 'mb-12': values.insalubrity_order === 1 },
             ]"
         >
-            <InputCheckableGroup
-                name="insalubrity_order"
-                :items="yesNoItems"
-                model="values.insalubrity_order"
-            />
+            <InputInsalubrityOrder />
             <div v-if="values.insalubrity_order === 1" class="ml-12">
                 <InputInsalubrityOrderDisplayed showMandatoryStar />
                 <InputInsalubrityOrderType />
@@ -140,11 +132,7 @@
 
         <template v-if="policeInformationRequested === true">
             <Fieldset :legend="labels.police_status" showMandatoryStar>
-                <InputCheckableGroup
-                    name="police_status"
-                    :items="policeItems"
-                    model="values.police_status"
-                />
+                <InputPoliceStatus />
                 <div class="ml-12 mb-12">
                     <InputProcedureDatepicker
                         v-if="policeRequested || policeRefused"
@@ -179,11 +167,12 @@ import FormSection from "@/components/FormSection/FormSection.vue";
 import { Button, Fieldset } from "@resorptionbidonvilles/ui";
 import labels from "@/components/Common/FormEtFicheSite.labels";
 
-import InputCheckableGroup from "../inputs/common/InputCheckableGroup.vue";
-
 import InputOwnerComplaint from "../inputs/FormDeclarationDeSiteInputOwnerComplaint.vue";
 
 import InputJusticeProcedure from "../inputs/FormDeclarationDeSiteInputJusticeProcedure.vue";
+import InputEvacuationUnderTimeLimit from "../inputs/FormDeclarationDeSiteInputEvacuationUnderTimeLimit.vue";
+import InputInsalubrityOrder from "../inputs/FormDeclarationDeSiteInputInsalubrityOrder.vue";
+import InputPoliceStatus from "../inputs/FormDeclarationDeSiteInputPoliceStatus.vue";
 import InputJusticeRendered from "../inputs/FormDeclarationDeSiteInputJusticeRendered.vue";
 import InputProcedureDatepicker from "../inputs/common/InputDeclarationDeSiteDatepickerInput.vue";
 import InputJusticeRenderedBy from "../inputs/FormDeclarationDeSiteInputJusticeRenderedBy.vue";
@@ -202,9 +191,6 @@ import InputInsalubrityParcels from "../inputs/FormDeclarationDeSiteInputInsalub
 
 import ModaleListeAccesPJ from "@/components/ModaleListeAccesPJ/ModaleListeAccesPJ.vue";
 import { useModaleStore } from "@/stores/modale.store";
-
-import policeItems from "@/utils/police_statuses";
-import yesNoItems from "@/utils/yesNoItems";
 
 const props = defineProps({
     location: Object,

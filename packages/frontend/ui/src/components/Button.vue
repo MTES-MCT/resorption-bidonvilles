@@ -30,75 +30,78 @@
     </component>
 </template>
 
-<script>
+<script setup>
+import { computed, toRefs } from "vue";
 import { useForm, useIsSubmitting } from "vee-validate";
 import Icon from "./Icon.vue";
 import focusClasses from "../../../common/utils/focus_classes";
 
-export default {
+defineOptions({
     name: "MyButton",
-    setup() {
-        const form = useForm();
-        const isSubmitting = form ? useIsSubmitting() : false;
-        return {
-            isSubmitting,
-            focusClasses,
-        }
-    },
-    props: {
-        variant: {
-            type: String,
-            default: "primary" // 'primary' or 'secondary'
-        },
-        type: String,
-        href: String,
-        size: {
-            type: String,
-            default: "md" // 'sm', 'md', 'lg'
-        },
-        icon: String,
-        iconPosition: {
-            type: String,
-            default: "right" // 'left' or 'right'
-        },
-        loading: {
-            type: Boolean,
-            default: false
-        },
-        disabled: {
-            type: Boolean,
-            default: false
-        },
-        padding: {
-            type: Boolean,
-            default: true
-        },
-        truncate: {
-            type: Boolean,
-            default: false
-        }
-    },
-    computed: {
-        iconPositionClasses() {
-            if (!this.icon) {
-                return "";
-            }
+})
 
-            return {
-                left: "ml-4 text-left",
-                right: "mr-2"
-            }[this.iconPosition];
-        },
-        sizeClasses() {
-            return {
-                xs: `text-xs ${this.padding === true ? "py-1 px-1" : ""}`,
-                sm: `text-sm ${this.padding === true ? "py-1 px-2" : ""}`,
-                md: `text-md ${this.padding === true ? "py-2 px-4" : ""}`,
-                lg: `text-lg ${this.padding === true ? "py-2 px-4" : ""}`
-            }[this.size];
-        },
-        variantClasses() {
-            return {
+const props = defineProps({
+    variant: {
+        type: String,
+        default: "primary" // 'primary' or 'secondary'
+    },
+    type: String,
+    href: String,
+    size: {
+        type: String,
+        default: "md" // 'sm', 'md', 'lg'
+    },
+    icon: String,
+    iconPosition: {
+        type: String,
+        default: "right" // 'left' or 'right'
+    },
+    loading: {
+        type: Boolean,
+        default: false
+    },
+    disabled: {
+        type: Boolean,
+        default: false
+    },
+    padding: {
+        type: Boolean,
+        default: true
+    },
+    truncate: {
+        type: Boolean,
+        default: false
+    }
+})
+
+const { variant, type, href, size, icon, iconPosition, loading, disabled, padding, truncate } = toRefs(props);
+
+const emit = defineEmits(["clicked"]);
+const form = useForm();
+const isSubmitting = form ? useIsSubmitting() : false;
+
+const iconPositionClasses = computed(() => {
+    if (!icon.value) {
+        return "";
+    }
+
+    return {
+        left: "ml-4 text-left",
+        right: "mr-2"
+    }[iconPosition.value];
+})
+
+const sizeClasses = computed(() => {
+    return {
+        xs: `text-xs ${padding.value === true ? "py-1 px-1" : ""}`,
+        sm: `text-sm ${padding.value === true ? "py-1 px-2" : ""}`,
+        md: `text-md ${padding.value === true ? "py-2 px-4" : ""}`,
+        lg: `text-lg ${padding.value === true ? "py-2 px-4" : ""}`
+    }[size.value];
+});
+
+const variantClasses = computed(() => {
+    return {
                 primary:
                     "border-2 border-primary bg-primary text-white hover:bg-primaryDark",
                 secondary:
@@ -124,28 +127,25 @@ export default {
                     "text-secondary hover:text-secondaryDark",
                 filter:
                     "rounded border-1 border-primary text-primary hover:bg-primary hover:text-white"
-            }[this.variant];
-        },
-        isLink() {
-            return this.href !== undefined;
-        },
-        isInternalLink() {
-            return this.isLink && this.href.slice(0, 1)[0] === "/";
-        },
-        isLoading() {
-            return this.loading || this.isSubmitting;
-        }
-    },
-    methods: {
-        onClick(e) {
-            if (this.disabled) {
-                e.preventDefault();
-            }
-            this.$emit("clicked", e);
-        }
-    },
-    components: {
-        Icon
+            }[variant.value];
+});
+
+const isLink = computed(() => {
+    return href.value !== undefined;
+});
+
+const isInternalLink = computed(() => {
+    return isLink.value && href.value.slice(0, 1)[0] === "/";
+});
+
+const isLoading = computed(() => {
+    return loading.value || isSubmitting.value;
+});
+
+function onClick(e) {
+    if (disabled.value) {
+        e.preventDefault();
     }
-};
+    emit("clicked", e);
+}
 </script>

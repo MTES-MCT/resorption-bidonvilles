@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { defineExpose, computed, ref } from "vue";
+import { computed, ref } from "vue";
 import { InputFiles } from "@resorptionbidonvilles/ui";
 
 import labels from "../FicheSiteJournalFormNouveauMessage.labels";

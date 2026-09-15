@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 import Layout from "@/components/Layout/Layout.vue";
 import ViewError from "@/components/ViewError/ViewError.vue";
 

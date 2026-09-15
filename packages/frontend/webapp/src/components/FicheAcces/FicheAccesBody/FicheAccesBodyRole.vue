@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, ref, watchEffect, toRaw } from "vue";
+import { toRefs, computed, ref, watchEffect, toRaw } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 import { useInputsStore } from "@/stores/inputs.store";
 import { Button } from "@resorptionbidonvilles/ui";

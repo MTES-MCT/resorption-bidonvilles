@@ -43,14 +43,7 @@
 </template>
 
 <script setup>
-import {
-    defineProps,
-    toRefs,
-    ref,
-    computed,
-    defineEmits,
-    onMounted,
-} from "vue";
+import { toRefs, ref, computed, onMounted } from "vue";
 import { trackEvent } from "@/helpers/matomo";
 
 import { Icon, Link, Button, PanneauLateral } from "@resorptionbidonvilles/ui";

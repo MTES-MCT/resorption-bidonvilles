@@ -29,11 +29,11 @@ body {
     --underline-img: none; 
 }
 
-input, textarea {
+input:not(.fr-input), textarea:not(.fr-input) {
     border: 2px solid #e5e7eb;
 }
 
-input[type=checkbox] {
+input[type=checkbox]:not(.fr-checkbox-group input) {
     display: none;
 }
 

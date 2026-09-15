@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import IndicateursTableRowInputs from "@/components/IndicateursTable/IndicateursTableRowInputs.vue";
 import IndicateursLabelLogement from "@/components/IndicateursLabel/IndicateursLabelLogement.vue";
 import sections from "./sections.list";

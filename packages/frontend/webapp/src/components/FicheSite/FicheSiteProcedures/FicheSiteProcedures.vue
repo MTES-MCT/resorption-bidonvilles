@@ -171,7 +171,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed, watch } from "vue";
+import { toRefs, computed, watch } from "vue";
 import formatBool from "@/utils/formatBool";
 import formatDate from "@common/utils/formatDate";
 import { useModaleStore } from "@/stores/modale.store";

@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 import ButtonGPS from "@/components/ButtonGPS/ButtonGPS.vue";
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
