@@ -63,7 +63,7 @@
 </style>
 
 <script setup>
-import { defineProps, defineExpose, toRefs, ref, computed, watch } from "vue";
+import { toRefs, ref, computed, watch } from "vue";
 import { useForm, useFieldValue } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
 import schema from "./FicheSiteJournalFormNouveauMessage.schema";

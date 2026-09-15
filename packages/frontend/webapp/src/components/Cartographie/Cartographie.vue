@@ -19,6 +19,7 @@
                 :defaultView="defaultView"
                 :towns="towns"
                 :pois="pois"
+                :enableScrollWheelZoom="true"
                 @townclick="onTownClick"
                 @poiclick="onPoiClick"
                 @viewchange="onViewChange"

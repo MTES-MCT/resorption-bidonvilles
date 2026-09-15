@@ -15,6 +15,7 @@ function getConfig(database) {
         database,
         dialect: 'postgres',
         dialectModule: pg,
+        dialectOptions: database === 'majic' ? { connectionTimeoutMillis: 5000 } : {},
         logging: false,
         define: {
             timestamps: true,

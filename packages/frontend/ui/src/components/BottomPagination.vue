@@ -13,7 +13,7 @@
     </div>
 </template>
 <script setup>
-import { defineProps, toRefs, defineEmits } from "vue";
+import { toRefs } from "vue";
 import Pagination from "./Pagination.vue";
 
 const props = defineProps({

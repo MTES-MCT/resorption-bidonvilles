@@ -1,9 +1,12 @@
 <template>
     <div class="text-center">
-        <Spinner class="text-3xl text-primary" />
+        <VIcon
+            name="ri:loader-4-line"
+            animation="spin"
+            color="primary"
+            label="Chargement"
+            title="Chargement"
+            scale="2"
+        />
     </div>
 </template>
-
-<script setup>
-import { Spinner } from "@resorptionbidonvilles/ui";
-</script>

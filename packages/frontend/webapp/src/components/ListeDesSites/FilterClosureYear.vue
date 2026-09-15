@@ -86,7 +86,7 @@
 </style>
 
 <script setup>
-import { defineProps, toRefs, computed, defineEmits, ref, watch } from "vue";
+import { toRefs, computed, ref, watch } from "vue";
 import focusClasses from "@common/utils/focus_classes";
 import { Button, Dropdown, Menu } from "@resorptionbidonvilles/ui";
 import Checkbox from "@resorptionbidonvilles/ui/src/components/Input/CheckboxUi.vue";

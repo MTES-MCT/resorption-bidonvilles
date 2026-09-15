@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import flagFR from "@/assets/img/flags/fr.png";
 import flagEU from "@/assets/img/flags/eu.png";
 import flagExtraCommunautaires from "@/assets/img/flags/extra-communautaires.png";

@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, ref, toRefs, watch } from "vue";
+import { computed, ref, toRefs, watch } from "vue";
 import CarteCommentaireSite from "@/components/CarteCommentaire/CarteCommentaireSite.vue";
 
 const props = defineProps({

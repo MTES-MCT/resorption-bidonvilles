@@ -2,11 +2,10 @@
     <PanneauLateral icon="history" ref="panneauLateral">
         <template v-slot:header>Historique des modifications</template>
 
-        <Filter
+        <DsfrFiltre
             v-model="townsStore.townCategoryFilter"
             title="Filtrer par rubrique"
             :options="filters.categories"
-            class="border-1 !border-primary rounded hover:bg-blue200"
         />
 
         <FicheSiteHistoriqueItem
@@ -49,12 +48,11 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, defineExpose, computed } from "vue";
+import { toRefs, ref, computed } from "vue";
 import filters from "../FicheSite.filter";
 import { useTownsStore } from "@/stores/towns.store";
 
-import { Filter } from "@resorptionbidonvilles/ui";
-import { PanneauLateral } from "@resorptionbidonvilles/ui";
+import { DsfrFiltre, PanneauLateral } from "@resorptionbidonvilles/ui";
 import FicheSiteHistoriqueItem from "./FicheSiteHistoriqueItem/FicheSiteHistoriqueItem.vue";
 
 const townsStore = useTownsStore();

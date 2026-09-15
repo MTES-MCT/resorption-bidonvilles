@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { BottomPagination } from "@resorptionbidonvilles/ui";
 import CarteSiteDetaillee from "@/components/CarteSiteDetaillee/CarteSiteDetaillee.vue";

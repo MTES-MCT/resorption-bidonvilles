@@ -31,7 +31,7 @@
 
 <script setup>
 // utils
-import { ref, defineProps, toRefs, computed } from "vue";
+import { ref, toRefs, computed } from "vue";
 import { useForm } from "vee-validate";
 import { useUserStore } from "@/stores/user.store";
 import { useAccesStore } from "@/stores/acces.store";

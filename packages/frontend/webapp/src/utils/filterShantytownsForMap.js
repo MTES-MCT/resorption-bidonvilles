@@ -78,7 +78,12 @@ const filterBy = {
             return checked.includes(null);
         }
 
-        return owners.some((owner) => checked.includes(owner?.type ?? null));
+        return owners.some((owner) => {
+            // Le type de propriétaire "Inconnu" (id 1) est traité comme équivalent
+            // à une absence de type, pour correspondre à l'option "Inconnu" unique du filtre.
+            const type = owner?.type === 1 ? null : owner?.type ?? null;
+            return checked.includes(type);
+        });
     },
 };
 

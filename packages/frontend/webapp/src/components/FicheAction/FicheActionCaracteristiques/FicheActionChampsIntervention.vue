@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 import { Tag } from "@resorptionbidonvilles/ui";
