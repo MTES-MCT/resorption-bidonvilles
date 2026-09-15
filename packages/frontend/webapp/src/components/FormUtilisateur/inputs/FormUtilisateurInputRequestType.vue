@@ -22,7 +22,7 @@
 
 <script setup>
 import items from "@/utils/access_request_types.js";
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { useField } from "vee-validate";
 
 const props = defineProps({

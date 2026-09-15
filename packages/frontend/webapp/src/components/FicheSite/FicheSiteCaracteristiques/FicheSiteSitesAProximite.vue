@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from "vue";
+import { toRefs } from "vue";
 
 import { Link } from "@resorptionbidonvilles/ui";
 import FicheGrille from "@/components/FicheRubrique/FicheGrille.vue";

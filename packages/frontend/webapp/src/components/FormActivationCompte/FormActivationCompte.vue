@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 import router from "@/helpers/router";
 import { trackEvent } from "@/helpers/matomo.js";
 import { useNotificationStore } from "@/stores/notification.store";

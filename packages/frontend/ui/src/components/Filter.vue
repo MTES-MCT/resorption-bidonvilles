@@ -68,7 +68,7 @@
 </style>
 
 <script setup>
-import { defineProps, toRefs, computed, defineEmits, ref, watch } from "vue";
+import { toRefs, computed, ref, watch } from "vue";
 import focusClasses from "../../../common/utils/focus_classes";
 import Button from "./Button.vue";
 import Checkbox from "./Input/CheckboxUi.vue";

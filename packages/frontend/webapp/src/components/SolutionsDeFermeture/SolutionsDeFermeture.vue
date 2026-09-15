@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { defineProps, computed } from "vue";
+import { computed } from "vue";
 import { useConfigStore } from "@/stores/config.store";
 import { Icon } from "@resorptionbidonvilles/ui";
 

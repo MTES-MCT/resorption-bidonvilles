@@ -116,7 +116,7 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref, computed, onMounted } from "vue";
+import { toRefs, ref, computed, onMounted } from "vue";
 import { Icon } from "@resorptionbidonvilles/ui";
 import formatStat from "@common/utils/formatStat";
 import TableauDeBordValeurStatistique from "./TableauDeBordValeurStatistique.vue";

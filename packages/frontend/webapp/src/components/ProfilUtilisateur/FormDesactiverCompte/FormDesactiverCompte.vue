@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, toRefs } from "vue";
+import { ref, toRefs } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { deactivateUser } from "@/api/users.api";

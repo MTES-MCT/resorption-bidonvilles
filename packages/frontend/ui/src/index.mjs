@@ -30,7 +30,6 @@ export { default as InputWrapper } from './components/Input/utils/InputWrapper.v
 export { default as LanguagePicker } from './components/LanguagePicker.vue'
 export { default as Link } from './components/Link.vue';
 export { default as LinkButton } from './components/LinkButton.vue';
-export { default as LinkBlock } from './components/LinkBlock.vue';
 export { default as LinkOrganization } from './components/LinkOrganization.vue';
 export { default as MandatoryStar } from './components/Input/utils/MandatoryStar.vue';
 export { default as Menu } from './components/Menu/Menu.vue';

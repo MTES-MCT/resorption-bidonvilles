@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { ref, defineExpose, toRefs } from "vue";
+import { ref, toRefs } from "vue";
 import { useForm } from "vee-validate";
 import schema from "./FormMiseAjourTerritoires.schema";
 import labels from "./FormMiseAjourTerritoires.labels";

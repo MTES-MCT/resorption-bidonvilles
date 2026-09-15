@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, ref, toRefs, onMounted } from "vue";
+import { computed, ref, toRefs, onMounted } from "vue";
 
 const props = defineProps({
     height: {
