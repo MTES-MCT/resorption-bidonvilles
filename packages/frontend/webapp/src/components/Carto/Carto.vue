@@ -222,7 +222,6 @@ function createMapLayers() {
     return {
         Satellite: L.tileLayer.provider("Esri.WorldImagery"),
         Dessin: L.tileLayer.provider("OpenStreetMap.Mapnik"),
-        Light: L.tileLayer.provider("CartoDB.Positron"),
     };
 }
 
