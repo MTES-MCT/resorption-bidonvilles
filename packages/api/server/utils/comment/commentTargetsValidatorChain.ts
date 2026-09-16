@@ -3,7 +3,12 @@ import { body } from 'express-validator';
 import organizationModel from '#server/models/organizationModel/index';
 import userModel from '#server/models/userModel/index';
 
-export const buildCommentTargetsValidatorChain = (getPrefEtDdetsLocation: (req: any) => any | undefined) => [
+type PrefEtDdetsLocation = {
+    region: { code: string },
+    departement: { code: string },
+};
+
+export const buildCommentTargetsValidatorChain = (getPrefEtDdetsLocation: (req: any) => PrefEtDdetsLocation | undefined) => [
     body('targets.mode')
         .customSanitizer((value) => {
             if (value === null || value === undefined) {
