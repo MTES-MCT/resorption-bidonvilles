@@ -20,7 +20,7 @@ export default defineConfig({
     },
     preview: {
         host: "0.0.0.0",
-        port: 8092,
+        port: 8093,
         strictPort: true,
         allowedHosts: ["host.docker.internal", "localhost"],
     },
