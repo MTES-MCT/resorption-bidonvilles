@@ -21,7 +21,7 @@
     "checkout": "./scripts/checkout.sh"
   },
   "dependencies": {
-    "echarts": "^5.5.0",
+    "echarts": "^6.1.0",
     "vue-echarts": "^6.7.3"
   },
   "resolutions": {
