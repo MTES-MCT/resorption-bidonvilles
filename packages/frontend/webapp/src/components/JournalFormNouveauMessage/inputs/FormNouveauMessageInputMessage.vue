@@ -5,6 +5,7 @@
         id="comment"
         :label="label"
         :placeholder="placeholder"
+        :aria-label="label || placeholder || 'Message'"
         @paste="onPaste"
     />
 </template>
