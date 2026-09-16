@@ -1,5 +1,6 @@
 import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
+import { AuthUser } from '#server/middlewares/authMiddleware';
 import enrichWhere from '../fetch/enrichWhere';
 import { ActionRowComment } from './ActionCommentRow.d';
 import { User } from '#root/types/resources/User.d';
@@ -29,7 +30,10 @@ export default function fetchComments(
 
     const whereClause = where.length > 0 ? `WHERE ${where.join(' AND ')}` : '';
     const visibilityOperator = where.length > 0 ? 'AND' : 'WHERE';
-    const visibilityClause = user !== undefined
+    // un utilisateur disposant de la permission `listPrivate` voit tous les commentaires, y compris
+    // ceux non ciblés vers lui (bypass total, réservé aux admins)
+    const filterPrivateComments = user !== undefined && !(user as unknown as AuthUser).isAllowedTo('listPrivate', 'action_comment');
+    const visibilityClause = filterPrivateComments
         ? `${visibilityOperator} (
             (
                 user_comment_access.user_target_id IS NULL

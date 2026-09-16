@@ -77,7 +77,7 @@ export default async function createComment(authorId: number, action: Action, co
     // on tente d'envoyer un mail aux acteurs concernés
     let numberOfObservers: number = 0;
     try {
-        numberOfObservers = await sendMailNotifications(action, comment, commentInput.targets);
+        numberOfObservers = await sendMailNotifications(action, comment);
     } catch {
         // DO NOTHING
     }
