@@ -1,5 +1,6 @@
 import actionActorModel from '#server/models/actionActorModel/index';
 import mails from '#server/mails/mails';
+import sendMailsWithConcurrencyLimit from '#server/utils/sendMailsWithConcurrencyLimit';
 
 type ActionAlertVariant = 'preshot' | 'postshot';
 const sender = {
@@ -14,14 +15,12 @@ export default async (variant: ActionAlertVariant): Promise<void> => {
     }
 
     const actors = await actionActorModel.findAll(year, true);
-    await Promise.all(
-        actors.map(actor => sender[variant](
-            { email: actor.email, first_name: actor.first_name, last_name: actor.last_name },
-            {
-                variables: {
-                    actions: actor.actions,
-                },
+    await sendMailsWithConcurrencyLimit(actors, actor => sender[variant](
+        { email: actor.email, first_name: actor.first_name, last_name: actor.last_name },
+        {
+            variables: {
+                actions: actor.actions,
             },
-        )),
-    );
+        },
+    ));
 };

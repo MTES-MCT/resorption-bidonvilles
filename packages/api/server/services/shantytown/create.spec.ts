@@ -189,6 +189,8 @@ describe('services/shantytown', () => {
             stubs.shantytownCreate.resolves(shantytownId);
             stubs.findOne.resolves({ ...town, city: { code: townData.citycode, departement: townData.departement } });
             await createService(townData, fakeUserData);
+            // les notifications sont envoyées de façon asynchrone (fire-and-forget), via un pool de concurrence
+            await new Promise(resolve => setImmediate(resolve));
             // eslint-disable-next-line no-unused-expressions
             expect(stubs.getLocationWatchers).to.have.been.calledOnce;
             expect(stubs.sendUserShantytownDeclared).to.have.callCount(watchers.length);
