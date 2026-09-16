@@ -7,6 +7,8 @@
                 <div class="px-4">
                     <FormNouveauMessageInputMessage
                         :rows="rows"
+                        :label="labels.comment"
+                        placeholder="Partagez votre passage sur le site, le contexte sanitaire, la situation des habitants, difficultés rencontrées lors de votre intervention…"
                         ref="messageInput"
                         @paste="onPaste"
                     />
@@ -71,13 +73,14 @@ import { toRefs, ref } from "vue";
 import { useForm } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
 import schema from "./FicheSiteJournalFormNouveauMessage.schema";
+import labels from "./FicheSiteJournalFormNouveauMessage.labels";
 import router from "@/helpers/router";
 import getFileFromPasteEvent from "@/utils/getFileFromPasteEvent";
 import useJournalMessageFormDropdown from "@/composables/useJournalMessageFormDropdown";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import DragZone from "@/components/DragZone/DragZone.vue";
-import FormNouveauMessageInputMessage from "./inputs/FormNouveauMessageInputMessage.vue";
+import FormNouveauMessageInputMessage from "@/components/JournalFormNouveauMessage/inputs/FormNouveauMessageInputMessage.vue";
 import FormNouveauMessageInputTags from "./inputs/FormNouveauMessageInputTags.vue";
 import FormNouveauMessageInputMode from "./inputs/FormNouveauMessageInputMode.vue";
 import FormNouveauMessageInputTarget from "./inputs/FormNouveauMessageInputTarget.vue";

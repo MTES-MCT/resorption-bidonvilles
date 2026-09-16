@@ -6,6 +6,8 @@
             <div ref="interactionRoot">
                 <FormNouveauMessageInputMessage
                     :rows="rows"
+                    :label="labels.comment"
+                    placeholder="Partagez vos informations concernant l'action"
                     ref="messageInput"
                     @paste="onPaste"
                 />
@@ -62,12 +64,13 @@ import { ref, toRefs } from "vue";
 import { useForm } from "vee-validate";
 import { useActionsStore } from "@/stores/actions.store";
 import schema from "./FicheActionJournalFormNouveauMessage.schema";
+import labels from "./FicheActionJournalFormNouveauMessage.labels";
 import getFileFromPasteEvent from "@/utils/getFileFromPasteEvent";
 import useJournalMessageFormDropdown from "@/composables/useJournalMessageFormDropdown";
 
 import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import DragZone from "@/components/DragZone/DragZone.vue";
-import FormNouveauMessageInputMessage from "./inputs/FormNouveauMessageInputMessage.vue";
+import FormNouveauMessageInputMessage from "@/components/JournalFormNouveauMessage/inputs/FormNouveauMessageInputMessage.vue";
 import FormNouveauMessageInputAttachments from "./inputs/FormNouveauMessageInputAttachments.vue";
 import FormNouveauMessageInputMode from "./inputs/FormNouveauMessageInputMode.vue";
 import FormNouveauMessageInputTarget from "./inputs/FormNouveauMessageInputTarget.vue";

@@ -3,21 +3,22 @@
         ref="textarea"
         :rows="rows"
         id="comment"
-        :label="labels.comment"
-        placeholder="Partagez vos informations concernant l'action"
+        :label="label"
+        :placeholder="placeholder"
         @paste="onPaste"
     />
 </template>
 
 <script setup>
 import { computed, ref, toRefs } from "vue";
-import labels from "../FicheActionJournalFormNouveauMessage.labels";
 import { TextArea } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     rows: Number,
+    label: String,
+    placeholder: String,
 });
-const { rows } = toRefs(props);
+const { rows, label, placeholder } = toRefs(props);
 const textarea = ref(null);
 
 const emit = defineEmits(["paste"]);
