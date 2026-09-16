@@ -1,0 +1,23 @@
+name: Renovate
+
+on:
+  # Lancement automatique du lundi au vendredi à 4h du matin
+  schedule:
+    - cron: '0 4 * * 1-5'
+  # Permet un déclenchement manuel depuis l'interface GitHub
+  workflow_dispatch:
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du dépôt
+        uses: actions/checkout@v4
+
+      - name: Exécution de Renovate
+        uses: renovatebot/github-action@v41.0.1
+        with:
+          configurationFile: renovate.json
+          token: ${{ secrets.RENOVATE_TOKEN }}
+        env:
+          LOG_LEVEL: info
