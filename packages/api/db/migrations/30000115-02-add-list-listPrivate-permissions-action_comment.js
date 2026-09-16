@@ -1,8 +1,8 @@
+const runWithinTransaction = require('./common/helpers/transaction');
+
 module.exports = {
     async up(queryInterface) {
-        const transaction = await queryInterface.sequelize.transaction();
-
-        try {
+        await runWithinTransaction(queryInterface, async (transaction) => {
             await queryInterface.sequelize.query(
                 `INSERT INTO features(name, fk_entity, is_writing)
                 VALUES
@@ -36,18 +36,11 @@ module.exports = {
                     transaction,
                 },
             );
-
-            await transaction.commit();
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+        });
     },
 
     async down(queryInterface) {
-        const transaction = await queryInterface.sequelize.transaction();
-
-        try {
+        await runWithinTransaction(queryInterface, async (transaction) => {
             await queryInterface.sequelize.query(
                 'DELETE FROM role_permissions WHERE fk_entity = \'action_comment\' AND fk_feature IN (\'list\', \'listPrivate\')',
                 {
@@ -61,11 +54,6 @@ module.exports = {
                     transaction,
                 },
             );
-
-            await transaction.commit();
-        } catch (error) {
-            await transaction.rollback();
-            throw error;
-        }
+        });
     },
 };
