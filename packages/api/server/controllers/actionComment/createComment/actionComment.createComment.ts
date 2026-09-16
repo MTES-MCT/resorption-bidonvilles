@@ -29,10 +29,11 @@ export default async function createComment(req, res, next) {
         return res.status(201).send(response);
     } catch (error) {
         const { code, nativeError } = error;
+        const errorResponse = ERRORS[code] ?? ERRORS.undefined;
 
-        res.status(typeof code === 'string' ? Number.parseInt(code, 10) : code).send({
-            user_message: ERRORS[nativeError].message ?? ERRORS.undefined.message,
+        res.status(errorResponse.code).send({
+            user_message: errorResponse.message,
         });
-        return next(error.nativeError ?? error);
+        return next(nativeError ?? error);
     }
 }
