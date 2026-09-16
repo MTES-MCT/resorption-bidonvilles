@@ -123,6 +123,9 @@ describe('models/userModel/getActionCommentWatchers()', () => {
     sqlAssertionCases.forEach(({ title, check }) => {
         it(title, async () => {
             const { sql } = await callAndGetQueryArgs();
+
+            expect(sql).to.be.a('string');
+            expect(sql).to.include('SELECT');
             check(sql);
         });
     });
