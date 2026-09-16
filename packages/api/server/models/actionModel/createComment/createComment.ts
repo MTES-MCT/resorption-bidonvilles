@@ -1,5 +1,6 @@
 import { type Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
+import { insertCommentTargets } from '#server/utils/comment/insertCommentTargets';
 
 type ActionCommentTarget = {
     id: number,
@@ -34,36 +35,16 @@ export default async function createComment(actionId: number, comment: ActionCom
 
     const { action_comment_id } = rows[0];
 
-    const promises = [];
-
-    if (comment.targets?.users && comment.targets.users.length > 0) {
-        promises.push(
-            sequelize.getQueryInterface().bulkInsert(
-                'action_comment_user_targets',
-                comment.targets.users.map(user => ({
-                    fk_user: user.id,
-                    fk_comment: action_comment_id,
-                })),
-                { transaction },
-            ),
+    if (comment.targets) {
+        await insertCommentTargets(
+            action_comment_id,
+            comment.targets,
+            {
+                userTargetsTable: 'action_comment_user_targets',
+                organizationTargetsTable: 'action_comment_organization_targets',
+            },
+            transaction,
         );
-    }
-
-    if (comment.targets?.organizations && comment.targets.organizations.length > 0) {
-        promises.push(
-            sequelize.getQueryInterface().bulkInsert(
-                'action_comment_organization_targets',
-                comment.targets.organizations.map(organization => ({
-                    fk_organization: organization.id,
-                    fk_comment: action_comment_id,
-                })),
-                { transaction },
-            ),
-        );
-    }
-
-    if (promises.length > 0) {
-        await Promise.all(promises);
     }
 
     return action_comment_id;
