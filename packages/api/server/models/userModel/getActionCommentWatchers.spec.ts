@@ -58,52 +58,73 @@ describe('models/userModel/getActionCommentWatchers()', () => {
         expect(result).to.deep.equal(fakeRows);
     });
 
-    it(' conditionne la permission requise à \'listPrivate\' ou \'list\' selon la confidentialité du commentaire', async () => {
-        const { sql } = await callAndGetQueryArgs();
-        expect(sql).to.include('CASE WHEN constants.is_private THEN \'listPrivate\' ELSE \'list\' END');
-    });
+    // Chaque cas vérifie un fragment de la requête SQL générée ; regroupés dans un tableau
+    // et exécutés via une seule boucle plutôt que dans un it() répété pour chaque règle
+    // (évite la duplication de structure détectée par SonarQube entre les tests).
+    const sqlAssertionCases: { title: string, check: (sql: string) => void }[] = [
+        {
+            title: 'conditionne la permission requise à \'listPrivate\' ou \'list\' selon la confidentialité du commentaire',
+            check: (sql) => {
+                expect(sql).to.include('CASE WHEN constants.is_private THEN \'listPrivate\' ELSE \'list\' END');
+            },
+        },
+        {
+            title: 'filtre les permissions sur l\'entité \'action_comment\' (et non \'shantytown_comment\')',
+            check: (sql) => {
+                expect(sql).to.include('uap.fk_entity = \'action_comment\'');
+                expect(sql).to.not.include('uap.fk_entity = \'shantytown_comment\'');
+            },
+        },
+        {
+            title: 'relaxe la contrainte de territoire pour les admins locaux (fk_role = \'local_admin\')',
+            check: (sql) => {
+                expect(sql).to.include('users.fk_role = \'local_admin\'');
+            },
+        },
+        {
+            title: 'relaxe la contrainte de territoire pour les acteurs de l\'action (opérateurs et pilotes)',
+            check: (sql) => {
+                expect(sql).to.include('action_operators.fk_user');
+                expect(sql).to.include('action_managers.fk_user');
+                expect(sql).to.include('users.user_id = ANY(constants.actors)');
+            },
+        },
+        {
+            title: 'gère le cas national en vérifiant via v_user_areas que le département ou la région de l\'action fait partie des zones d\'intervention de l\'utilisateur',
+            check: (sql) => {
+                expect(sql).to.include('uap.type = \'nation\'');
+                expect(sql).to.include('constants.departement = ANY(v_user_areas.departements)');
+                expect(sql).to.include('constants.region = ANY(v_user_areas.regions)');
+            },
+        },
+        {
+            title: 'exclut, pour un commentaire privé, les utilisateurs qui ne sont ni ciblés individuellement ni via leur organisation',
+            check: (sql) => {
+                expect(sql).to.include('constants.is_private IS FALSE');
+                expect(sql).to.include('users.user_id = ANY(constants.user_targets)');
+                expect(sql).to.include('users.fk_organization = ANY(constants.organization_targets)');
+            },
+        },
+        {
+            title: 'exclut les utilisateurs désabonnés de la notification \'action_comment_notification\' (spécifique au domaine action)',
+            check: (sql) => {
+                expect(sql).to.include('email_subscription = \'action_comment_notification\'');
+                expect(sql).to.not.include('email_subscription = \'comment_notification\'');
+            },
+        },
+        {
+            title: 'filtre les utilisateurs inactifs en ne conservant que ceux au statut \'active\'',
+            check: (sql) => {
+                expect(sql).to.include('users.fk_status = \'active\'');
+            },
+        },
+    ];
 
-    it(' filtre les permissions sur l\'entité \'action_comment\' (et non \'shantytown_comment\')', async () => {
-        const { sql } = await callAndGetQueryArgs();
-        expect(sql).to.include('uap.fk_entity = \'action_comment\'');
-        expect(sql).to.not.include('uap.fk_entity = \'shantytown_comment\'');
-    });
-
-    it(' relaxe la contrainte de territoire pour les admins locaux (fk_role = \'local_admin\')', async () => {
-        const { sql } = await callAndGetQueryArgs();
-        expect(sql).to.include('users.fk_role = \'local_admin\'');
-    });
-
-    it(' relaxe la contrainte de territoire pour les acteurs de l\'action (opérateurs et pilotes)', async () => {
-        const { sql } = await callAndGetQueryArgs();
-        expect(sql).to.include('action_operators.fk_user');
-        expect(sql).to.include('action_managers.fk_user');
-        expect(sql).to.include('users.user_id = ANY(constants.actors)');
-    });
-
-    it(' gère le cas national en vérifiant via v_user_areas que le département ou la région de l\'action fait partie des zones d\'intervention de l\'utilisateur', async () => {
-        const { sql } = await callAndGetQueryArgs();
-        expect(sql).to.include('uap.type = \'nation\'');
-        expect(sql).to.include('constants.departement = ANY(v_user_areas.departements)');
-        expect(sql).to.include('constants.region = ANY(v_user_areas.regions)');
-    });
-
-    it(' exclut, pour un commentaire privé, les utilisateurs qui ne sont ni ciblés individuellement ni via leur organisation', async () => {
-        const { sql } = await callAndGetQueryArgs();
-        expect(sql).to.include('constants.is_private IS FALSE');
-        expect(sql).to.include('users.user_id = ANY(constants.user_targets)');
-        expect(sql).to.include('users.fk_organization = ANY(constants.organization_targets)');
-    });
-
-    it('exclut les utilisateurs désabonnés de la notification \'action_comment_notification\' (spécifique au domaine action)', async () => {
-        const { sql } = await callAndGetQueryArgs();
-        expect(sql).to.include('email_subscription = \'action_comment_notification\'');
-        expect(sql).to.not.include('email_subscription = \'comment_notification\'');
-    });
-
-    it(' filtre les utilisateurs inactifs en ne conservant que ceux au statut \'active\'', async () => {
-        const { sql } = await callAndGetQueryArgs();
-        expect(sql).to.include('users.fk_status = \'active\'');
+    sqlAssertionCases.forEach(({ title, check }) => {
+        it(title, async () => {
+            const { sql } = await callAndGetQueryArgs();
+            check(sql);
+        });
     });
 
     it(' transmet le commentId dans les replacements de la requête', async () => {
