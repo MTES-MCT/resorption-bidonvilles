@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import mjml2html from 'mjml';
-import { Liquid } from 'liquidjs';
+import renderMailjetTemplate from './renderMailjetTemplate';
 
 const args = process.argv.slice(2);
 
@@ -24,10 +24,6 @@ if (!templateName || !variablesPath) {
     console.error('Usage: yarn emails:preview --template <name> --variables <path/to/variables.json> [--output <path/to/output.html>]');
     process.exit(1);
 }
-
-const normalizeMailjetSyntax = (template: string): string => template
-    .replaceAll(/\bvar:([A-Za-z0-9_.]+)/g, 'var.$1')
-    .replaceAll(/{%\s*elseif\b/g, '{% elsif');
 
 const run = async (): Promise<void> => {
     const templatePath = path.resolve(__dirname, 'src', `${templateName}.mjml`);
@@ -55,15 +51,8 @@ const run = async (): Promise<void> => {
         }
     }
 
-    const engine = new Liquid({
-        cache: false,
-        strictVariables: false,
-    });
     try {
-        const html = await engine.parseAndRender(normalizeMailjetSyntax(compiled.html), {
-            var: variables,
-            ...variables,
-        });
+        const html = await renderMailjetTemplate(compiled.html, variables);
 
         const outputDir = path.resolve(__dirname, 'preview');
         fs.mkdirSync(outputDir, { recursive: true });

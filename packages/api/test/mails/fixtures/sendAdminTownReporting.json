@@ -1,0 +1,35 @@
+{
+    "recipient": {
+        "email": "REPLACED_AT_RUNTIME",
+        "first_name": "Camille",
+        "last_name": "Martin"
+    },
+    "options": {
+        "preserveRecipient": false,
+        "variables": {
+            "town": [
+                {
+                    "title": "Localisation",
+                    "fields": [
+                        { "label": "Adresse", "value": "12 rue des Fauvettes, 44000 Nantes" },
+                        { "label": "Commune", "value": "Nantes" }
+                    ]
+                },
+                {
+                    "title": "Population",
+                    "fields": [
+                        { "label": "Nombre de ménages", "value": "18" },
+                        { "label": "Nombre de personnes", "value": "62" }
+                    ]
+                }
+            ],
+            "creator": {
+                "id": 5,
+                "first_name": "Jean",
+                "last_name": "Dupont",
+                "email": "jean.dupont@exemple.fr",
+                "organization": { "name": "Association Le Toit Partagé" }
+            }
+        }
+    }
+}
