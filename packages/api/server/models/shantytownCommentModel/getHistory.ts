@@ -162,16 +162,11 @@ export function buildQueryParams(
     );
 
     // on vérifie que le commentaire est bien sur le territoire de la recherche
-    let searchLocationClause: string[] = [];
     if (location.type !== 'nation') {
         const { clauses, replacements: searchLocationReplacements } = buildLocationClauseFragments([location], 'shantytownCommentSearchLocationCode');
         Object.assign(replacements, searchLocationReplacements);
-        searchLocationClause = clauses;
-    } else {
-        searchLocationClause.push('true');
+        where.push(`(${clauses.join(' OR ')})`);
     }
-
-    where.push(`(${searchLocationClause.join(' OR ')})`);
 
     // additional filters
     replacements.lastDate = lastDate;
