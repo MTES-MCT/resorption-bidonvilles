@@ -24,6 +24,11 @@ export default defineConfig({
         strictPort: true,
         allowedHosts: ["host.docker.internal", "localhost"],
     },
+    css: {
+        lightningcss: {
+            errorRecovery: true,
+        },
+    },
     build: {
         sourcemap: true,
         rollupOptions: {
