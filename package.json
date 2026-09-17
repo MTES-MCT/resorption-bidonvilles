@@ -2,7 +2,7 @@
   "packageManager": "yarn@3.2.0",
   "name": "@resorptionbidonvilles/fullstack",
   "description": "Dépôt fullstack de la plateforme Résorption Bidonvilles, par la DIHAL",
-  "version": "2.59.0",
+  "version": "2.59.1",
   "license": "AGPL-3.0-or-later",
   "workspaces": [
     "packages/api",
@@ -21,10 +21,11 @@
     "checkout": "./scripts/checkout.sh"
   },
   "dependencies": {
-    "echarts": "^5.5.0",
+    "echarts": "^6.1.0",
     "vue-echarts": "^6.7.3"
   },
   "resolutions": {
+    "get-intrinsic": "1.3.0",
     "vue": "3.5.22",
     "@vue/compiler-core": "3.5.22",
     "@vue/compiler-dom": "3.5.22",

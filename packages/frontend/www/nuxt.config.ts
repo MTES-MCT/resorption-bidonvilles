@@ -33,6 +33,11 @@ export default defineNuxtConfig({
                 'date-fns/locale',
             ]
         },
+        css: {
+            lightningcss: {
+                errorRecovery: true,
+            },
+        },
     },
     runtimeConfig: {
         debugLogs: process.env.NUXT_DEBUG_LOGS ?? "false",
