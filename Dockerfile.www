@@ -56,4 +56,4 @@ WORKDIR /home/node/app/
 COPY --chown=node:node ./packages/frontend/www/entrypoint.sh ./
 COPY --from=build --chown=node:node /home/node/app/packages/frontend/www/.output ./.output
 
-ENTRYPOINT [ "/bin/sh", "/home/node/app/entrypoint.sh" ]
+ENTRYPOINT ["node", "/home/node/app/.output/server/index.mjs"]
