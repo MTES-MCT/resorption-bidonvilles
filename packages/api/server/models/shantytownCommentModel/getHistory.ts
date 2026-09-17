@@ -83,13 +83,15 @@ function buildPrivateCommentsLocationClause(privateLocations: Location[]): { cla
     return buildLocationClauseFragments(privateLocations, 'privateShantytownCommentLocationCode');
 }
 
-export default async function getHistory(
+export type CommentHistoryQueryParams = { where: string[], replacements: Record<string, unknown>, limit: string };
+
+export function buildQueryParams(
     user: User,
     location: Location,
     numberOfActivities: number,
     lastDate: Date | string,
     maxDate: Date | string | null,
-): Promise<ShantytownCommentActivity[]> {
+): CommentHistoryQueryParams | null {
     // apply geographic level restrictions
     const where: string[] = [];
     const replacements: Record<string, unknown> = {
@@ -104,17 +106,23 @@ export default async function getHistory(
         private: restrict(location).for(user).askingTo('listPrivate', 'shantytown_comment'),
     };
     if (restrictedLocations.public.length === 0 && restrictedLocations.private.length === 0) {
-        return [];
+        return null;
     }
 
+    // on teste l'appartenance d'un commentaire aux tables de cibles via EXISTS plutôt que via les
+    // tableaux agrégés oca/uca : un simple test d'existence peut s'appuyer sur un index et ne nécessite
+    // pas d'agréger l'intégralité des tables de cibles avant de filtrer (cf. buildFilteredCommentsSql)
     const permissionWhere = {
         // ces tableaux listent des conditions cumulatives (AND)
         publicComments: [
-            'uca.user_target_id IS NULL',
-            'oca.organization_target_id IS NULL',
+            'NOT EXISTS (SELECT 1 FROM shantytown_comment_user_targets scut WHERE scut.fk_comment = comments.shantytown_comment_id)',
+            'NOT EXISTS (SELECT 1 FROM shantytown_comment_organization_targets scot WHERE scot.fk_comment = comments.shantytown_comment_id)',
         ],
         privateComments: [
-            '(uca.user_target_id IS NOT NULL OR oca.organization_target_id IS NOT NULL)',
+            `(
+                    EXISTS (SELECT 1 FROM shantytown_comment_user_targets scut WHERE scut.fk_comment = comments.shantytown_comment_id)
+                OR EXISTS (SELECT 1 FROM shantytown_comment_organization_targets scot WHERE scot.fk_comment = comments.shantytown_comment_id)
+            )`,
         ],
     };
 
@@ -135,8 +143,8 @@ export default async function getHistory(
     // soit il a accès aux commentaires privés sur le territoire considéré (geo.length > 0)
     permissionWhere.privateComments.push(
         `(
-                :userId = ANY(uca.user_target_id)
-            OR :organizationId = ANY(oca.organization_target_id)
+                EXISTS (SELECT 1 FROM shantytown_comment_user_targets scut WHERE scut.fk_comment = comments.shantytown_comment_id AND scut.fk_user = :userId)
+            OR EXISTS (SELECT 1 FROM shantytown_comment_organization_targets scot WHERE scot.fk_comment = comments.shantytown_comment_id AND scot.fk_organization = :organizationId)
             OR :userId = comments.created_by
             ${privateCommentLocationClause.length > 0 ? `OR (${privateCommentLocationClause.join(' OR ')})` : ''}
         )`,
@@ -172,23 +180,57 @@ export default async function getHistory(
         where.push('comments.created_at >= :maxDate');
     }
 
+    return { where, replacements, limit };
+}
+
+export default async function getHistory(
+    user: User,
+    location: Location,
+    numberOfActivities: number,
+    lastDate: Date | string,
+    maxDate: Date | string | null,
+): Promise<ShantytownCommentActivity[]> {
+    const queryParams = buildQueryParams(user, location, numberOfActivities, lastDate, maxDate);
+    if (queryParams === null) {
+        return [];
+    }
+    const { where, replacements, limit } = queryParams;
+
+    // filtered_comments détermine, via de simples tests EXISTS (indexables), quels commentaires
+    // satisfont les droits d'accès et le filtre géographique - avant tout agrégat et avant le LIMIT.
+    // organization_comment_access / user_comment_access n'agrègent ensuite que les cibles des
+    // commentaires déjà retenus, au lieu de l'intégralité des deux tables de cibles à chaque appel.
     const activities = await sequelize.query(
-        `WITH organization_comment_access AS (
+        `WITH filtered_comments AS (
+            SELECT comments.shantytown_comment_id, comments.created_at
+            FROM shantytown_comments comments
+            LEFT JOIN shantytowns ON comments.fk_shantytown = shantytowns.shantytown_id
+            LEFT JOIN cities ON shantytowns.fk_city = cities.code
+            LEFT JOIN epci ON cities.fk_epci = epci.code
+            LEFT JOIN departements ON cities.fk_departement = departements.code
+            LEFT JOIN regions ON departements.fk_region = regions.code
+            ${where.length > 0 ? `WHERE ${where.join(' AND ')}` : ''}
+            ORDER BY comments.created_at DESC
+            ${limit}
+        ),
+        organization_comment_access AS (
            SELECT
                 scot.fk_comment AS shantytown_comment_id,
-                ARRAY_AGG(organizations.name) AS organization_target_name,
-                ARRAY_AGG(organizations.organization_id) AS organization_target_id
-            FROM shantytown_comment_organization_targets scot 
+                ARRAY_AGG(organizations.name ORDER BY organizations.organization_id) AS organization_target_name,
+                ARRAY_AGG(organizations.organization_id ORDER BY organizations.organization_id) AS organization_target_id
+            FROM shantytown_comment_organization_targets scot
             LEFT JOIN organizations ON organizations.organization_id = scot.fk_organization
+            WHERE scot.fk_comment IN (SELECT shantytown_comment_id FROM filtered_comments)
             GROUP BY scot.fk_comment
         ),
         user_comment_access AS (
-            SELECT 
+            SELECT
                 scut.fk_comment AS shantytown_comment_id,
-                ARRAY_AGG(CONCAT(users.first_name, ' ', users.last_name)) AS user_target_name,
-                ARRAY_AGG(users.user_id) AS user_target_id
-            FROM shantytown_comment_user_targets scut 
+                ARRAY_AGG(CONCAT(users.first_name, ' ', users.last_name) ORDER BY users.user_id) AS user_target_name,
+                ARRAY_AGG(users.user_id ORDER BY users.user_id) AS user_target_id
+            FROM shantytown_comment_user_targets scut
             LEFT JOIN users ON users.user_id = scut.fk_user
+            WHERE scut.fk_comment IN (SELECT shantytown_comment_id FROM filtered_comments)
             GROUP BY scut.fk_comment
         )
             SELECT
@@ -215,7 +257,8 @@ export default async function getHistory(
                 departements.name AS "departementName",
                 regions.code AS "regionCode",
                 regions.name AS "regionName"
-            FROM shantytown_comments comments
+            FROM filtered_comments fc
+            JOIN shantytown_comments comments ON comments.shantytown_comment_id = fc.shantytown_comment_id
             LEFT JOIN organization_comment_access oca ON comments.shantytown_comment_id = oca.shantytown_comment_id
             LEFT JOIN user_comment_access uca ON comments.shantytown_comment_id = uca.shantytown_comment_id
             LEFT JOIN shantytowns ON comments.fk_shantytown = shantytowns.shantytown_id
@@ -225,9 +268,7 @@ export default async function getHistory(
             LEFT JOIN epci ON cities.fk_epci = epci.code
             LEFT JOIN departements ON cities.fk_departement = departements.code
             LEFT JOIN regions ON departements.fk_region = regions.code
-            ${where.length > 0 ? `WHERE ${where.join(' AND ')}` : ''}
             ORDER BY comments.created_at DESC
-            ${limit}
             `,
         {
             type: QueryTypes.SELECT,
