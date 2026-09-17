@@ -1,11 +1,10 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import geoUtils from '#server/utils/geo';
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
 import { Location } from '#server/models/geoModel/Location.d';
-import outremer from '#server/utils/permission/outremer';
 import validateSafeWhereClause from '#server/models/_common/validateSafeWhereClause';
+import buildLocationClauseFragments from '#server/models/_common/buildLocationClauseFragments';
 import getUsenameOf from './_common/getUsenameOf';
 import serializeShantytown from './_common/serializeShantytown';
 import getDiff from './_common/getDiff';
@@ -21,7 +20,6 @@ import {
 } from '#root/types/resources/Activity.d';
 import { User } from '#root/types/resources/User.d';
 
-const { fromGeoLevelToTableName } = geoUtils;
 const { restrict } = permissionUtils;
 
 type ShantytownActivityRow = ShantytownRow & {
@@ -41,28 +39,8 @@ function buildLocationRestrictionClauses(restrictedLocations: Location[]): { whe
         return { where: [], replacements: {} };
     }
 
-    const restrictedLocationTypes = new Set(['metropole', 'outremer']);
-    const locationReplacements: Record<string, unknown> = {};
-
-    const clause = restrictedLocations.flatMap((l, index) => {
-        // On fait l'exclusion ou inclusion si c'est metropole ou outremer
-        if (restrictedLocationTypes.has(l.type)) {
-            locationReplacements.outreMerDepts = outremer.departements;
-            return l.type === 'metropole'
-                ? 'departements.code NOT IN (:outreMerDepts)'
-                : 'departements.code IN (:outreMerDepts)';
-        }
-        locationReplacements[`shantytownLocationCode${index}`] = (l as any)[l.type].code;
-
-        const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownLocationCode${index}`];
-        if (l.type === 'city') {
-            arr.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :shantytownLocationCode${index}`);
-        }
-
-        return arr;
-    }).join(' OR ');
-
-    return { where: [clause], replacements: locationReplacements };
+    const { clauses, replacements } = buildLocationClauseFragments(restrictedLocations, 'shantytownLocationCode');
+    return { where: [clauses.join(' OR ')], replacements };
 }
 
 function buildActivityFiltersSQL(filters: HistoryFilters, maxDate: Date | string | null): string {

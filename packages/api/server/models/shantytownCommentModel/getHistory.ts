@@ -1,21 +1,19 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-import geoUtils from '#server/utils/geo';
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
 import getAddressSimpleOf from '#server/models/shantytownModel/_common/getAddressSimpleOf';
 import getUsenameOf from '#server/models/shantytownModel/_common/getUsenameOf';
-import outremer from '#server/utils/permission/outremer';
+import buildLocationClauseFragments from '#server/models/_common/buildLocationClauseFragments';
 import { Location } from '#server/models/geoModel/Location.d';
 import serializeComment from '#server/models/shantytownCommentModel/serializeComment';
 import { ShantytownCommentRow } from '#server/models/shantytownCommentModel/ShantytownCommentRow.d';
 import { ShantytownCommentActivity } from '#root/types/resources/Activity.d';
 import { User } from '#root/types/resources/User.d';
 
-const { fromGeoLevelToTableName } = geoUtils;
 const { formatName } = userModel;
 const { restrict } = permissionUtils;
 
@@ -33,32 +31,6 @@ export type ShantytownCommentHistoryRow = ShantytownCommentRow & {
     regionCode: string,
     regionName: string
 };
-const RESTRICTED_LOCATION_TYPES = new Set(['metropole', 'outremer']);
-
-function buildLocationClauseFragments(locations: Location[], replacementPrefix: string): { clauses: string[], replacements: Record<string, unknown> } {
-    const extraReplacements: Record<string, unknown> = {};
-
-    const clauses = locations.flatMap((l, index) => {
-        // On fait l'exclusion ou inclusion si c'est metropole ou outremer
-        if (RESTRICTED_LOCATION_TYPES.has(l.type)) {
-            extraReplacements.outreMerDepts = outremer.departements;
-            return l.type === 'metropole'
-                ? 'departements.code NOT IN (:outreMerDepts)'
-                : 'departements.code IN (:outreMerDepts)';
-        }
-
-        const key = `${replacementPrefix}${index}`;
-        const arr = [`${fromGeoLevelToTableName(l.type)}.code = :${key}`];
-        if (l.type === 'city') {
-            arr.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :${key}`);
-        }
-        extraReplacements[key] = (l as any)[l.type].code;
-
-        return arr;
-    });
-
-    return { clauses, replacements: extraReplacements };
-}
 
 function buildPublicCommentsClause(publicLocations: Location[]): { clause: string | null, replacements: Record<string, unknown> } {
     if (publicLocations.length === 0) {
