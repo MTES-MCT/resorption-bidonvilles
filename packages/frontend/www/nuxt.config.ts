@@ -38,7 +38,7 @@ export default defineNuxtConfig({
                 errorRecovery: true,
             },
         },
-        envPrefix: ['VITE_'],
+
     },
     runtimeConfig: {
         debugLogs: process.env.NUXT_DEBUG_LOGS ?? "false",
