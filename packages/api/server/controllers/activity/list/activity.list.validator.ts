@@ -110,7 +110,7 @@ export default [
     // location (type and code)
     query('locationType')
         .optional()
-        .isString().bail().withMessage('Le type de périmètre géographique doit être une chaîne de caractères'),
+        .isIn(['nation', 'metropole', 'outremer', 'region', 'departement', 'epci', 'city']).bail().withMessage('Le type de périmètre géographique est invalide'),
 
     query('locationCode')
         .if((value, { req }) => req.query.locationType !== undefined)
