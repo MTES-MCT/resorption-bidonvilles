@@ -1,22 +1,32 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":groupSlug",
-    ":semanticCommits"
-  ],
+  "extends": ["config:recommended", ":semanticCommits"],
   "labels": ["dependencies", "renovate"],
   "timezone": "Europe/Paris",
   "repositories": ["MTES-MCT/resorption-bidonvilles"],
   "packageRules": [
     {
       "description": "Regroupement des paquets Vue.js et Nuxt",
-      "matchPackageNames": ["vue", "nuxt", "@nuxt/*", "@vue/*", "vue-router", "pinia", "vuex"],
+      "matchPackageNames": [
+        "vue",
+        "nuxt",
+        "@nuxt/*",
+        "@vue/*",
+        "vue-router",
+        "pinia",
+        "vuex"
+      ],
       "groupName": "Écosystème Vue / Nuxt"
     },
     {
       "description": "Regroupement des paquets Express et middlewares backend",
-      "matchPackageNames": ["express", "body-parser", "cors", "helmet", "morgan"],
+      "matchPackageNames": [
+        "express",
+        "body-parser",
+        "cors",
+        "helmet",
+        "morgan"
+      ],
       "groupName": "Écosystème Express / API"
     },
     {
