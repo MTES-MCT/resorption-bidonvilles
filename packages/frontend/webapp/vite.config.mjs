@@ -31,9 +31,31 @@ export default defineConfig({
     },
     build: {
         sourcemap: true,
-        rollupOptions: {
-            output: {
-                codeSplitting: true,
+        chunkSizeWarningLimit: 1200,
+    },
+    rolldownOptions: {
+        output: {
+            manualChunks(id) {
+                if (id.includes("node_modules")) {
+                    // Isoles les gros blocs connus du projet
+                    if (id.includes("@gouvfr") || id.includes("dsfr")) {
+                        return "vendor-dsfr";
+                    }
+                    if (
+                        id.includes("vue") ||
+                        id.includes("nuxt") ||
+                        id.includes("@vue")
+                    ) {
+                        return "vendor-framework";
+                    }
+
+                    // Pour le reste, découpe par paquet npm
+                    const packageName = id
+                        .toString()
+                        .split("node_modules/")[1]
+                        .split("/")[0];
+                    return `vendor-${packageName.replace("@", "")}`;
+                }
             },
         },
     },
