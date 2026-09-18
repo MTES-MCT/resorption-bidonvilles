@@ -33,7 +33,7 @@ export default defineConfig({
         sourcemap: true,
         rollupOptions: {
             output: {
-                sourcemap: true,
+                codeSplitting: true,
             },
         },
     },

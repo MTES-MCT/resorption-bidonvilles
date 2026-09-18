@@ -1,4 +1,5 @@
-ENV_FILE=$(find /home/node/app/.output/server/chunks -type f -name "*.mjs" -exec grep -l 'NUXT_DOMAIN' {} + | head -n 1)
+ENV_FILE=$(find /home/node/app/.output/server/chunks -type f -name "*.mjs" -exec grep -l 'NUXT_PUBLIC_DOMAIN' {} + | head -n 1)
+
 TEMPLATE="$ENV_FILE.template"
 
 if [ ! -f "$TEMPLATE" ]
