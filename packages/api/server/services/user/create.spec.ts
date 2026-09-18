@@ -14,7 +14,7 @@ const sandbox = sinon.createSandbox();
 const sequelize = {
     transaction: sandbox.stub(),
 };
-const mattermostUtils = {
+const tchapUtils = {
     triggerNotifyNewUserFromRectorat: sandbox.stub(),
 };
 const userModel = {
@@ -22,7 +22,7 @@ const userModel = {
 };
 
 rewiremock('#db/sequelize').with({ sequelize });
-rewiremock('#server/utils/mattermost').with(mattermostUtils);
+rewiremock('#server/utils/tchap').with(tchapUtils);
 rewiremock('#server/models/userModel').with(userModel);
 
 rewiremock.enable();
@@ -35,7 +35,7 @@ describe('userService.createUser()', () => {
         sandbox.reset();
     });
 
-    it('envoie une notification mattermost lorsqu\'un utilisateur de rectorat est créé', async () => {
+    it('envoie une notification Tchap lorsqu\'un utilisateur de rectorat est créé', async () => {
         // prepare
         const user = fakeUser();
         user.organization.type.uid = 'rectorat';
@@ -44,10 +44,10 @@ describe('userService.createUser()', () => {
         // execute
         await createUser({});
         // assert
-        expect(mattermostUtils.triggerNotifyNewUserFromRectorat).to.have.been.calledWith(user);
+        expect(tchapUtils.triggerNotifyNewUserFromRectorat).to.have.been.calledWith(user);
     });
 
-    it('n\'envoie pas de notification mattermost lorsqu\'un utilisateur hors rectorat est créé', async () => {
+    it('n\'envoie pas de notification Tchap lorsqu\'un utilisateur hors rectorat est créé', async () => {
         // prepare
         const user = fakeUser();
         sequelize.transaction.resolves(user.id);
@@ -55,7 +55,7 @@ describe('userService.createUser()', () => {
         // execute
         await createUser({});
         // assert
-        expect(mattermostUtils.triggerNotifyNewUserFromRectorat).to.not.have.been.called;
+        expect(tchapUtils.triggerNotifyNewUserFromRectorat).to.not.have.been.called;
     });
 
     it('retourne l\'utilisateur nouvellement créé', async () => {
@@ -69,13 +69,13 @@ describe('userService.createUser()', () => {
         expect(response).to.be.eql(user);
     });
 
-    it('ne lance pas d\'exception si l\'envoi de la notification mattermost échoue', async () => {
+    it('ne lance pas d\'exception si l\'envoi de la notification Tchap échoue', async () => {
         // prepare
         const user = fakeUser();
         user.organization.type.uid = 'rectorat';
         sequelize.transaction.resolves(user.id);
         userModel.findOne.withArgs(user.id).resolves(user);
-        mattermostUtils.triggerNotifyNewUserFromRectorat.rejects(new Error('une erreur'));
+        tchapUtils.triggerNotifyNewUserFromRectorat.rejects(new Error('une erreur'));
         // assert
         await expect(createUser({})).not.to.be.rejected;
     });

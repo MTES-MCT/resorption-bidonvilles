@@ -3,7 +3,7 @@ import { S3 } from '#server/utils/s3';
 import { DeleteObjectCommand } from '@aws-sdk/client-s3';
 import getArchivedAttachments from '#server/models/attachmentModel/getArchives';
 import deleteArchivedAttachments from '#server/models/attachmentModel/deleteArchives';
-import mattermost from '#server/utils/mattermost';
+import tchapUtils from '#server/utils/tchap';
 
 export default async () => {
     const attachments = await getArchivedAttachments();
@@ -37,11 +37,11 @@ export default async () => {
         try {
             await deleteArchivedAttachments(attachmentsToBeDeleted);
         } catch {
-            await mattermost.triggerAttachmentArchiveCleanupError();
+            await tchapUtils.triggerAttachmentArchiveCleanupError();
         }
     }
 
-    await mattermost.triggerAttachmentArchiveCleanup(
+    await tchapUtils.triggerAttachmentArchiveCleanup(
         deletionResponses.length,
         deletionResponses.length - attachmentsToBeDeleted.length,
     );

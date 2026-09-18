@@ -7,7 +7,7 @@ import serializeComment from '#server/models/actionModel/fetchComments/serialize
 import uploadAttachments from '#server/services/attachment/upload';
 import scanAttachmentErrors from '#server/services/attachment/scanAttachmentErrors';
 import { ActionRowComment } from '#server/models/actionModel/fetchComments/ActionCommentRow.d';
-import sendMattermostNotification from './createComment.sendMattermostNotification';
+import sendNotification from './createComment.sendNotification';
 import sendMailNotifications from './createComment.sendMailNotifications';
 import { ActionRawComment } from '#root/types/resources/ActionCommentRaw.d';
 import Action from '#root/types/resources/Action.d';
@@ -62,9 +62,9 @@ export default async function createComment(authorId: number, action: Action, co
     }
 
 
-    // on tente d'envoyer une notification mattermost
+    // on tente d'envoyer une notification Tchap
     try {
-        await sendMattermostNotification(action, comment);
+        await sendNotification(action, comment);
     } catch {
         // DO NOTHING
     }
