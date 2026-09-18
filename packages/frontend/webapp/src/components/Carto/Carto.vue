@@ -66,7 +66,7 @@ import marqueurLocationDefault from "@/utils/marqueurLocationDefault";
 import marqueurSiteDefault from "@/utils/marqueurSiteDefault";
 import formatDate from "@common/utils/formatDate";
 import domtoimage from "dom-to-image-more";
-import * as L from "leaflet";
+import L from "leaflet";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/leaflet.markercluster";
