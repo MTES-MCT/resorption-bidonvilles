@@ -267,8 +267,8 @@ export default async function getHistory(
     const oldestSeenIds = new Set<number>();
 
     // on récupère pour chaque bidonville la plus vieille version existante qui n'est pas une création
-    activities.reverse();
-    activities.forEach((activity: ShantytownActivityRow) => {
+    const chronologicalActivities = activities.slice().reverse();
+    chronologicalActivities.forEach((activity: ShantytownActivityRow) => {
         if (!oldestSeenIds.has(activity.id) && (activity.updatedAt.valueOf() - activity.createdAt.valueOf() > CREATION_UPDATE_DELTA_THRESHOLD_MS)) {
             oldestSeenIds.add(activity.id);
             listIdOldestVersions.push(activity.id);
@@ -375,7 +375,7 @@ export default async function getHistory(
         previousVersions[activity.id] = serializeShantytown(activity, user);
     });
 
-    const chronologicalResults = activities
+    const chronologicalResults = chronologicalActivities
         .map((activity: ShantytownActivityRow) => {
             const previousVersion = previousVersions[activity.id] ?? null;
             const serializedShantytown = serializeShantytown(activity, user);
