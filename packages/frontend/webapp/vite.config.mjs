@@ -63,7 +63,7 @@ export default defineConfig({
         __APP_VERSION__: JSON.stringify(version),
     },
     optimizeDeps: {
-        include: ["@turf/turf"],
+        include: ["@turf/turf", "leaflet"],
     },
     resolve: {
         alias: {
