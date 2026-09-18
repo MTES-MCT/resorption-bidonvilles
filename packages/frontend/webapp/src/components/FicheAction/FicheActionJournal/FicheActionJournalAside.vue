@@ -15,10 +15,10 @@
                 >Quelles sont les règles de confidentialités ?</template
             >
             <template v-slot:description
-                >Ne pas citer l’identité des individus (nom, âge, sexe,
-                origine…), ni les infos relatives à d'éventuelles condamnations
-                judiciaires. Ne pas tenir de propos à visée insultante,
-                discriminatoire, raciste…</template
+                >Ne pas citer l’identité d’individus (nom, âge, sexe, origine…)
+                - quel que soit leur statut, ni les informations relatives à des
+                condamnations judiciaires. Ne pas tenir de propos à visée
+                insultante, discriminatoire, raciste…</template
             >
         </FicheActionJournalAsideRubrique>
     </aside>
