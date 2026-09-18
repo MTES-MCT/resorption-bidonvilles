@@ -1,6 +1,7 @@
 /* eslint-disable newline-per-chained-call */
 import { body, param } from 'express-validator';
 import actionModel from '#server/models/actionModel';
+import { buildCommentTargetsValidatorChain } from '#server/utils/comment/commentTargetsValidatorChain';
 
 export default [
     param('id')
@@ -25,4 +26,6 @@ export default [
     body('description')
         .trim()
         .notEmpty().withMessage('La description est obligatoire'),
+
+    ...buildCommentTargetsValidatorChain(req => req.body.action?.location),
 ];
