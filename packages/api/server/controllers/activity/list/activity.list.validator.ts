@@ -38,13 +38,15 @@ export default [
     query('lastActivityDate')
         .customSanitizer(value => value ?? Date.now()),
 
-    // filter
-    query('filter')
+    // activity type filter
+    query('activityTypeFilter')
         .optional()
         .isString().bail().withMessage('La liste de filtre doit être une chaîne de caractères')
         .customSanitizer(value => value.split(','))
         .custom((value) => {
             const knownFilters = [
+                'question',
+                'answer',
                 'shantytownCreation',
                 'shantytownClosing',
                 'shantytownUpdate',
@@ -61,7 +63,7 @@ export default [
             return true;
         }),
 
-    query('filter')
+    query('activityTypeFilter')
         .customSanitizer(value => value ?? [
             'shantytownCreation',
             'shantytownClosing',
@@ -71,14 +73,55 @@ export default [
             'actionComment',
         ]),
 
+    // resorbed filter
+    query('resorbedFilter')
+        .optional()
+        .isString().bail().withMessage('La liste de filtre "résorbé" doit être une chaîne de caractères')
+        .customSanitizer(value => value.split(','))
+        .custom((value) => {
+            const unknownValues = value.filter(s => !['yes', 'no'].includes(s));
+            if (unknownValues.length > 0) {
+                throw new Error(`Les valeurs "${unknownValues.join(',')}" du filtre "résorbé" n'existent pas`);
+            }
+
+            return true;
+        }),
+
+    query('resorbedFilter')
+        .customSanitizer(value => value ?? ['yes', 'no']),
+
+    // my towns filter
+    query('myTownsFilter')
+        .optional()
+        .isString().bail().withMessage('La liste de filtre "mes sites" doit être une chaîne de caractères')
+        .customSanitizer(value => value.split(','))
+        .custom((value) => {
+            const unknownValues = value.filter(s => !['yes', 'no'].includes(s));
+            if (unknownValues.length > 0) {
+                throw new Error(`Les valeurs "${unknownValues.join(',')}" du filtre "mes sites" n'existent pas`);
+            }
+
+            return true;
+        }),
+
+    query('myTownsFilter')
+        .customSanitizer(value => value ?? ['yes', 'no']),
+
     // location (type and code)
+    query('locationType')
+        .optional()
+        .isString().bail().withMessage('Le type de périmètre géographique doit être une chaîne de caractères')
+        .isIn(['nation', 'metropole', 'outremer', 'region', 'departement', 'epci', 'city']).bail().withMessage('Le type de périmètre géographique est invalide'),
+
+    query('locationCode')
+        .if((value, { req }) => req.query.locationType !== undefined)
+        .exists({ checkNull: true }).bail().withMessage('Le code de la localisation demandée est obligatoire')
+        .isString().bail().withMessage('Le code de la localisation demandée doit être une chaîne de caractères'),
+
     query('locationType')
         .optional()
         .custom(async (type, { req }) => {
             const code = req.query.locationCode;
-            if (!code) {
-                throw new Error('Le code de la localisation demandée est obligatoire');
-            }
 
             let location;
             try {

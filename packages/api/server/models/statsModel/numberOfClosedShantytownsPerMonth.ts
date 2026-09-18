@@ -1,9 +1,13 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-import convertToDateMapping from './_common/convertToDateMapping';
+import convertToDateMapping, { Result } from './_common/convertToDateMapping';
 
-export default async (departement = null, startDateStr = '2019-06-01') => {
+export default async function numberOfClosedShantytownsPerMonth(departement?: string | null, startDateStr: string = '2019-06-01'): Promise<Result[]> {
+    const params: { startDateStr: string, departement?: string } = { startDateStr };
+    if (departement) {
+        params.departement = departement;
+    }
     const rows: {
         year: string;
         month: string;
@@ -15,15 +19,16 @@ export default async (departement = null, startDateStr = '2019-06-01') => {
             COUNT(*) AS total
         FROM shantytowns LEFT JOIN cities AS city ON shantytowns.fk_city = city.code
         WHERE
-            closed_at > '${startDateStr}'
+            closed_at > :startDateStr
             AND closed_with_solutions != 'yes'
-            ${departement ? `AND fk_departement = '${departement}'` : ''}
+            ${departement ? 'AND fk_departement = :departement' : ''}
         GROUP BY year, month
         ORDER BY year ASC ,month ASC`,
         {
             type: QueryTypes.SELECT,
+            replacements: params,
         },
     );
 
     return convertToDateMapping(rows, new Date(startDateStr));
-};
+}
