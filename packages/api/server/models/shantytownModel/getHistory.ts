@@ -34,6 +34,15 @@ type HistoryFilters = {
     myTownsFilter: HistoryMyTownsFilter[],
 };
 
+// Delta en dessous duquel une ligne (historique ou état courant) est considérée comme n'ayant
+// subi aucune modification réelle depuis sa création (ex: écriture technique en cascade juste
+// après la création). Ce seuil doit être identique côté SQL (buildActivityFiltersSQL) et côté JS
+// (recherche de la version la plus ancienne) : une même ligne ne doit jamais être classée
+// "création" par l'un et "déjà modifiée" par l'autre.
+// TODO reste une heuristique temporelle, pas une preuve structurelle de création : à remplacer par
+// un marqueur explicite (ex: absence de ligne d'historique antérieure) dans une branche dédiée.
+const CREATION_UPDATE_DELTA_THRESHOLD_MS = 1000;
+
 function buildLocationRestrictionClauses(restrictedLocations: Location[]): { where: string[], replacements: Record<string, unknown> } {
     if (restrictedLocations.some(l => l.type === 'nation')) {
         return { where: [], replacements: {} };
@@ -55,9 +64,9 @@ function buildActivityFiltersSQL(filters: HistoryFilters, maxDate: Date | string
         resorbedFilter.includes('yes') ? '' : 'AND shantytowns.closed_with_solutions != \'yes\'',
         myTownsFilter.includes('no') ? '' : 'AND shantytown_actors.fk_user IS NOT NULL',
         myTownsFilter.includes('yes') ? '' : 'AND shantytown_actors.fk_user IS NULL',
-        shantytownFilter.includes('shantytownCreation') ? '' : 'AND shantytowns.updated_at - shantytowns.created_at > \'00:00:01\'',
+        shantytownFilter.includes('shantytownCreation') ? '' : `AND shantytowns.updated_at - shantytowns.created_at > interval '${CREATION_UPDATE_DELTA_THRESHOLD_MS} milliseconds'`,
         shantytownFilter.includes('shantytownClosing') ? '' : 'AND shantytowns.closed_at IS NULL',
-        shantytownFilter.includes('shantytownUpdate') ? '' : 'AND (shantytowns.closed_at IS NOT NULL OR shantytowns.updated_at - shantytowns.created_at <= \'00:00:01\')',
+        shantytownFilter.includes('shantytownUpdate') ? '' : `AND (shantytowns.closed_at IS NOT NULL OR shantytowns.updated_at - shantytowns.created_at <= interval '${CREATION_UPDATE_DELTA_THRESHOLD_MS} milliseconds')`,
         maxDate ? 'AND shantytowns.updated_at >= :maxDate' : '',
     ].join('\n');
 }
@@ -259,7 +268,7 @@ export default async function getHistory(
     // on récupère pour chaque bidonville la plus vieille version existante qui n'est pas une création
     activities.reverse();
     activities.forEach((activity: ShantytownActivityRow) => {
-        if (!(listIdOldestVersions.includes(activity.id)) && (activity.updatedAt.valueOf() - activity.createdAt.valueOf() > 10)) {
+        if (!(listIdOldestVersions.includes(activity.id)) && (activity.updatedAt.valueOf() - activity.createdAt.valueOf() > CREATION_UPDATE_DELTA_THRESHOLD_MS)) {
             listIdOldestVersions.push(activity.id);
         }
         listOldestVersions.push([activity.id, activity.hid]);
