@@ -262,7 +262,7 @@ function getQueryString(where: string[]): string {
                     WITH
                         shantytown_computed_origins AS (SELECT
                             s.hid AS fk_shantytown,
-                            string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), ','), ',') AS origins
+                            array_remove(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), NULL) AS origins
                         FROM "ShantytownHistories" s
                         LEFT JOIN "ShantytownOriginHistories" so ON so.fk_shantytown = s.hid
                         LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
@@ -341,7 +341,7 @@ function getQueryString(where: string[]): string {
                     WITH
                         shantytown_computed_origins AS (SELECT
                             s.shantytown_id AS fk_shantytown,
-                            string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), ','), ',') AS origins
+                            array_remove(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), NULL) AS origins
                         FROM shantytowns s
                         LEFT JOIN shantytown_origins so ON so.fk_shantytown = s.shantytown_id
                         LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
