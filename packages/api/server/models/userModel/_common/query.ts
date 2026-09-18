@@ -5,6 +5,7 @@ import permissionModel from '#server/models/permissionModel';
 import permissionUtils from '#server/utils/permission';
 import { Where, WhereClause, WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import { validateWhereClauseAgainstInjectionPatterns } from '#server/models/_common/validateSafeWhereClause';
+import isValidSqlIdentifier from '#server/models/_common/isValidSqlIdentifier';
 import { Permission } from '#server/models/permissionModel/types/Permission.d';
 import { PermissionHash } from '#server/models/permissionModel/find';
 import interventionAreaModel from '#server/models/interventionAreaModel/index';
@@ -15,8 +16,6 @@ import {
 } from './query.d';
 
 const { getPermission } = permissionUtils;
-
-const COLUMN_NAME_PATTERN = /^\w+$/;
 
 // Construit la clause de restriction territoriale à partir d'une permission non nationale.
 // Retourne null si l'utilisateur a un accès national (aucune restriction à ajouter).
@@ -45,7 +44,7 @@ function buildTerritorialClauseGroup(permission: Permission): WhereClauseGroup |
 // Construit le fragment SQL d'une clause individuelle (colonne + opérateur + placeholder),
 // ainsi que le replacement associé. Ne mute jamais son paramètre `clause`.
 function buildClauseFragment(column: string, clause: WhereClause, index: number): { fragment: string, replacements: Record<string, unknown> } {
-    if (!COLUMN_NAME_PATTERN.test(column)) {
+    if (!isValidSqlIdentifier(column)) {
         throw new Error('Clause WHERE invalide: nom de colonne non autorisé');
     }
 

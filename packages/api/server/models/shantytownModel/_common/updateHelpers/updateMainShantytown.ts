@@ -1,7 +1,6 @@
 import { sequelize } from '#db/sequelize';
 import { Transaction } from 'sequelize';
-
-const COLUMN_NAME_PATTERN = /^\w+$/;
+import isValidSqlIdentifier from '#server/models/_common/isValidSqlIdentifier';
 
 /**
  * Met à jour les données principales du shantytown
@@ -16,7 +15,7 @@ export default async function updateMainShantytown(
         return;
     }
 
-    if (columns.some(column => !COLUMN_NAME_PATTERN.test(column))) {
+    if (columns.some(column => !isValidSqlIdentifier(column))) {
         throw new Error('Nom de colonne invalide pour la mise à jour du site');
     }
 

@@ -7,6 +7,7 @@ import incomingTownsModel from '#server/models/incomingTownsModel';
 import shantytownPreparatoryPhasesTowardResorptionModel from '#server/models/shantytownPreparatoryPhasesTowardResorptionModel';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import validateSafeWhereClause from '#server/models/_common/validateSafeWhereClause';
+import isValidSqlIdentifier from '#server/models/_common/isValidSqlIdentifier';
 import permissionUtils from '#server/utils/permission';
 import { Where } from '#server/models/_common/types/Where.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
@@ -55,19 +56,17 @@ const TABLE_NAMES_BY_MODE: Record<QueryTableMode, Record<string, string>> = {
     },
 };
 
-const IDENTIFIER_PATTERN = /^\w+$/;
-
 function validateDynamicSqlFragments(selection: Record<string, string>, joins: { table: string, on: string }[], order: string | null): void {
     Object.keys(selection).forEach((key) => {
-        if (!IDENTIFIER_PATTERN.test(key.replace(/[.:()]/g, '')) && !/^[\w.:()]+$/.test(key)) {
+        if (!isValidSqlIdentifier(key.replace(/[.:()]/g, '')) && !/^[\w.:()]+$/.test(key)) {
             throw new Error('Invalid input');
         }
-        if (typeof selection[key] === 'string' && !IDENTIFIER_PATTERN.test(selection[key])) {
+        if (typeof selection[key] === 'string' && !isValidSqlIdentifier(selection[key])) {
             throw new Error('Invalid input');
         }
     });
     joins.forEach((join) => {
-        if (typeof join.table === 'string' && !IDENTIFIER_PATTERN.test(join.table.replace(/[" ]/g, '')) && !/^[\w" ]+$/.test(join.table)) {
+        if (typeof join.table === 'string' && !isValidSqlIdentifier(join.table.replace(/[" ]/g, '')) && !/^[\w" ]+$/.test(join.table)) {
             throw new Error('Invalid input');
         }
         if (typeof join.on === 'string' && !/^[\w.:=() ]+$/.test(join.on)) {
