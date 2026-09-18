@@ -198,7 +198,9 @@ export default async function getHistory(
                     ORDER BY shantytowns.updated_at DESC
                     ${limit}
                     )
-                UNION
+                -- UNION ALL et non UNION : "hid" (réel) vs "0 AS hid" (sentinelle) rendent les deux
+                -- branches disjointes par construction, la déduplication de UNION ne peut rien retirer
+                UNION ALL
                 (
                     WITH
                         shantytown_computed_origins AS (SELECT
