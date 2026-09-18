@@ -262,13 +262,15 @@ export default async function getHistory(
             replacements,
         },
     );
-    const listOldestVersions = [];
-    const listIdOldestVersions = [];
+    const listOldestVersions: [number, number][] = [];
+    const listIdOldestVersions: number[] = [];
+    const oldestSeenIds = new Set<number>();
 
     // on récupère pour chaque bidonville la plus vieille version existante qui n'est pas une création
     activities.reverse();
     activities.forEach((activity: ShantytownActivityRow) => {
-        if (!(listIdOldestVersions.includes(activity.id)) && (activity.updatedAt.valueOf() - activity.createdAt.valueOf() > CREATION_UPDATE_DELTA_THRESHOLD_MS)) {
+        if (!oldestSeenIds.has(activity.id) && (activity.updatedAt.valueOf() - activity.createdAt.valueOf() > CREATION_UPDATE_DELTA_THRESHOLD_MS)) {
+            oldestSeenIds.add(activity.id);
             listIdOldestVersions.push(activity.id);
         }
         listOldestVersions.push([activity.id, activity.hid]);
@@ -373,13 +375,14 @@ export default async function getHistory(
         previousVersions[activity.id] = serializeShantytown(activity, user);
     });
 
-    return activities
+    const chronologicalResults = activities
         .map((activity: ShantytownActivityRow) => {
             const previousVersion = previousVersions[activity.id] ?? null;
             const serializedShantytown = serializeShantytown(activity, user);
             previousVersions[activity.id] = serializedShantytown;
             return buildActivityFromRow(activity, previousVersion, serializedShantytown);
         })
-        .reverse()
-        .filter(activity => activity !== null);
+        .filter((activity): activity is ShantytownActivity => activity !== null);
+
+    return chronologicalResults.reverse();
 }
