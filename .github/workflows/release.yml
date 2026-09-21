@@ -49,18 +49,13 @@ jobs:
             jq --arg v "$NEW_VER" '.version = $v' "$file" > tmp.json && mv tmp.json "$file"
           done
 
-      - name: Commit change in package.json
+      - name: Commit change in package.json and tag
         run: |
           git config --local user.email "admin@resorption-bidonvilles.beta.gouv.fr"
           git config --local user.name "GitHub Action"
           git commit -m "📦 Release ${{ steps.version.outputs.new_tag }}" -a
           git tag ${{ steps.version.outputs.new_tag }}
-      - name: Push changes
-        uses: ad-m/github-push-action@v0.8.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-          tags: true
+          git push origin HEAD:${{ github.ref }} --tags
       - name: Merge develop into master
         uses: devmasx/merge-branch@v1.4.0
         with:
