@@ -3,6 +3,13 @@ name: release
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   prebuild-qa:
     uses: ./.github/workflows/qa.yml
@@ -10,6 +17,8 @@ jobs:
 
   upgrade-version:
     needs: prebuild-qa
+    permissions:
+      contents: write
     runs-on: ubuntu-24.04
     outputs:
       new_tag_with_v: ${{ steps.version.outputs.new_tag }}
