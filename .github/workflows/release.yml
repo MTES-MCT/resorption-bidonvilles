@@ -15,7 +15,7 @@ jobs:
       new_tag_with_v: ${{ steps.version.outputs.new_tag }}
       new_tag: ${{ steps.version_no_v.outputs.new_tag }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: '0'
       - name: Compute the new version number
@@ -81,7 +81,7 @@ jobs:
     needs: upgrade-version
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: 'master'
           fetch-depth: '0'
@@ -117,7 +117,7 @@ jobs:
     needs: upgrade-version
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: 'master'
           fetch-depth: '0'
@@ -153,7 +153,7 @@ jobs:
     needs: upgrade-version
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: 'master'
           fetch-depth: '0'
