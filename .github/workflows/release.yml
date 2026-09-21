@@ -56,13 +56,13 @@ jobs:
           git commit -m "📦 Release ${{ steps.version.outputs.new_tag }}" -a
           git tag ${{ steps.version.outputs.new_tag }}
           git push origin HEAD:${{ github.ref }} --tags
+
       - name: Merge develop into master
-        uses: devmasx/merge-branch@v1.4.0
-        with:
-          github_token: ${{ github.token }}
-          type: now
-          from_branch: develop
-          target_branch: master
+        run: |
+          git fetch origin master
+          git checkout master
+          git merge develop -m "Merge branch 'develop' into master"
+          git push origin master
 
   build-www:
     needs: upgrade-version
