@@ -5,7 +5,7 @@
         category="financements"
         entityType="action"
     >
-        <p v-if="action.hasDihalFinancing" class="mb-4">
+        <p v-if="action.hasDihalFinancing" class="mb-4 -mt-4">
             ID Chorus :
             <DsfrTagCopy :label="ACCOUNTING_REFERENCE" dataType="ID Chorus" />
         </p>
