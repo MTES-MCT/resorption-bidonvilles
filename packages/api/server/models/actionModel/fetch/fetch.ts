@@ -36,7 +36,7 @@ export default async function fetch(user: User, actionIds?: number[], transactio
         fetchManagers(actionIds, clauseGroup, transaction),
         fetchOperators(actionIds, clauseGroup, transaction),
         fetchShantytowns(actionIds, clauseGroup, transaction),
-        fetchComments(actionIds, undefined, clauseGroup, transaction),
+        fetchComments(actionIds, undefined, clauseGroup, transaction, user),
         fetchMetrics(actionIds, clauseGroup, transaction),
         financeClauseGroup === null ? [] : fetchFinances(actionIds, clauseGroup, financeClauseGroup, transaction),
     ]);
