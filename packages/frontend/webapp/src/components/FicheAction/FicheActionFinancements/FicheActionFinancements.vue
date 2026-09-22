@@ -6,8 +6,11 @@
         entityType="action"
     >
         <p v-if="action.hasDihalFinancing" class="mb-4 -mt-4">
-            ID Chorus :
-            <DsfrTagCopy :label="ACCOUNTING_REFERENCE" dataType="ID Chorus" />
+            Code programmation des crédits Résorption Bidonvilles - Dihal :
+            <DsfrTagCopy
+                :label="ACCOUNTING_REFERENCE"
+                dataType="Code programmation des crédits Résorption Bidonvilles - Dihal"
+            />
         </p>
 
         <ActionFinances
