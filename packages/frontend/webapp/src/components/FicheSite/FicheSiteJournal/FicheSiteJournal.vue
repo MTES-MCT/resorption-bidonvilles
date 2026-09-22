@@ -22,15 +22,10 @@
             "
         >
             <template v-slot:aside>
-                <FicheSiteJournalAside
-                    :town="town"
-                    ref="aside"
-                    class="opacity-0 transition-opacity"
-                />
+                <FicheSiteJournalAside :town="town" />
             </template>
             <template v-slot:body>
                 <FicheSiteJournalFormNouveauMessage
-                    ref="messageForm"
                     :town="town"
                     class="mb-12"
                 />
@@ -38,23 +33,6 @@
         </FicheJournalLayout>
 
         <FicheJournalLayout id="messages_du_site">
-            <template v-slot:aside
-                ><div
-                    class="flex sticky justify-center top-8 py-2 mb-2 bg-orange200"
-                    v-if="
-                        userStore.hasLocalizedPermission(
-                            'shantytown_comment.create',
-                            town
-                        )
-                    "
-                >
-                    <DsfrButton
-                        icon="fr-icon-pencil-line"
-                        size="small"
-                        @click="focusForm"
-                        label="Ecrire un message"
-                    /></div
-            ></template>
             <template v-slot:body>
                 <h3 class="text-lg font-bold mr-4">
                     {{ comments.length }} message{{
@@ -76,9 +54,8 @@
 </template>
 
 <script setup>
-import { ref, toRefs, computed, watch } from "vue";
+import { toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
-import router from "@/helpers/router";
 
 import { Icon } from "@resorptionbidonvilles/ui";
 import FicheJournalLayout from "@/components/FicheJournalLayout/FicheJournalLayout.vue";
@@ -92,20 +69,7 @@ const props = defineProps({
 const { town } = toRefs(props);
 const userStore = useUserStore();
 
-const aside = ref(null);
-const messageForm = ref(null);
-const isFocused = computed(() => messageForm.value?.isFocused);
-
 const comments = computed(() => {
     return [...town.value.comments].sort((a, b) => b.createdAt - a.createdAt);
 });
-
-watch(isFocused, () => {
-    aside.value.$el.style.opacity = isFocused.value === true ? "1" : "0";
-});
-
-function focusForm() {
-    router.push("#journal_du_site");
-    messageForm.value.focus();
-}
 </script>
