@@ -5,6 +5,14 @@
         category="financements"
         entityType="action"
     >
+        <p v-if="action.hasDihalFinancing" class="mb-4 -mt-4">
+            Code programmation des crédits Résorption Bidonvilles - Dihal :
+            <DsfrTagCopy
+                :label="ACCOUNTING_REFERENCE"
+                dataType="Code programmation des crédits Résorption Bidonvilles - Dihal"
+            />
+        </p>
+
         <ActionFinances
             :minYear="minYear"
             :maxYear="maxYear"
@@ -18,6 +26,9 @@ import { toRefs, computed } from "vue";
 
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
 import ActionFinances from "@/components/ActionFinances/ActionFinances.vue";
+import DsfrTagCopy from "@/components/DsfrTagCopy/DsfrTagCopy.vue";
+
+const ACCOUNTING_REFERENCE = "0177-01-02-11-41";
 
 const props = defineProps({
     action: Object,
