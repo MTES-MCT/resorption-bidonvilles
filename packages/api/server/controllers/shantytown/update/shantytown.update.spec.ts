@@ -4,7 +4,11 @@ import sinonChai from 'sinon-chai';
 import rewiremock from 'rewiremock/node';
 import { mockReq, mockRes } from 'sinon-express-mock';
 import { serialized as generateUser } from '#test/utils/user';
+import { serialized as generateTown } from '#test/utils/shantytown';
+import locationUtils from '#test/utils/location';
 import ServiceError from '#server/errors/ServiceError';
+
+const { paris, marseille } = locationUtils;
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -24,6 +28,7 @@ rewiremock.disable();
 describe('townController.edit()', () => {
     afterEach(() => {
         sandbox.restore();
+        shantytownService.update.resetHistory();
     });
 
     describe('Avec un input valide', () => {
@@ -229,6 +234,96 @@ describe('townController.edit()', () => {
         it('appelle next() avec l\'erreur', () => {
             const callArgs = next.getCall(0).args[0];
             expect(callArgs.message).to.equal('Unexpected error');
+        });
+    });
+
+    describe('Avec un utilisateur dont les droits d\'écriture sont restreints territorialement', () => {
+        // utilisateur ayant le droit de mettre à jour uniquement les sites du département de Paris (75)
+        const restrictedUser = () => generateUser({
+            permissions: {
+                shantytown: {
+                    update: {
+                        allowed: true,
+                        allowed_on_national: false,
+                        allowed_on: {
+                            regions: [],
+                            departements: [paris.departement()],
+                            epci: [],
+                            cities: [],
+                            actions: [],
+                        },
+                    },
+                },
+            },
+        });
+
+        describe('si req.town appartient à un territoire hors du périmètre autorisé', () => {
+            let input;
+            let res;
+            let next;
+            beforeEach(async () => {
+                input = {
+                    params: { id: '1' },
+                    body: { attachments: [] },
+                    files: [],
+                    user: restrictedUser(),
+                    town: generateTown(marseille.city()),
+                };
+
+                res = mockRes();
+                next = sandbox.stub();
+                await edit(mockReq(input), res, next);
+            });
+
+            it('répond une 403', () => {
+                expect(res.status).to.have.been.calledOnceWith(403);
+            });
+
+            it('retourne le message de droits insuffisants', () => {
+                expect(res.send).to.have.been.calledOnceWith({
+                    user_message: 'Vous n\'avez pas les droits suffisants pour mettre à jour les données du site.',
+                });
+            });
+
+            it('n\'appelle jamais le service shantytown/update', () => {
+                expect(shantytownService.update).to.not.have.been.called;
+            });
+        });
+
+        describe('si req.town appartient à un territoire dans le périmètre autorisé', () => {
+            let input;
+            let output;
+            let res;
+            beforeEach(async () => {
+                input = {
+                    params: { id: '1' },
+                    body: { attachments: [] },
+                    files: [],
+                    user: restrictedUser(),
+                    town: generateTown(paris.city()),
+                };
+
+                output = { id: 1, name: 'Name' };
+                shantytownService.update.resolves(output);
+
+                res = mockRes();
+                await edit(mockReq(input), res, () => { });
+            });
+
+            it('fait appel au service shantytown/update', () => {
+                expect(shantytownService.update).to.have.been.calledOnceWith(
+                    { ...input.body, id: input.params.id },
+                    input.user,
+                    {
+                        filesDatas: input.body.attachments,
+                        files: input.files,
+                    },
+                );
+            });
+
+            it('répond une 200', () => {
+                expect(res.status).to.have.been.calledOnceWith(200);
+            });
         });
     });
 });
