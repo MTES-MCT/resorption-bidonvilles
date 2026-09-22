@@ -3,7 +3,7 @@ import userModel from '#server/models/userModel/index';
 import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
 import mattermost from '#server/utils/mattermost';
-import can from '#server/utils/permission/can';
+import getPermission from '#server/utils/permission/getPermission';
 import agendaFactory from '#server/loaders/agendaLoader';
 import { User } from '#root/types/resources/User.d';
 
@@ -107,7 +107,8 @@ const onboardingJob = [
 ];
 
 export default async function deactivate(id: number, selfDeactivation: boolean, author: User, reason: string = null, anonymizationRequested: boolean = false): Promise<User> {
-    if (!can(author).do('deactivate', 'user')) {
+    const permission = getPermission(author, 'deactivate', 'user');
+    if (!permission) {
         throw new ServiceError('deactivation_permission_failure', new Error('Erreur de permission'));
     }
     let user: User;
