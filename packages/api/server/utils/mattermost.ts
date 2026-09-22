@@ -648,6 +648,8 @@ export async function triggerShantytownCreationAlert(town: Shantytown, user: Use
         ].join('');
     }
 
+    const builtAtStr = town.builtAt ? formatDate(new Date(town.builtAt * 1000)) : 'Non renseignée';
+
     const mattermostMessage: MattermostMsg = buildMattermostMessage(
         '#notif-ouverture-sites',
         `:rotating_light: Site ouvert ${townLink} par ${username}`,
@@ -659,7 +661,7 @@ export async function triggerShantytownCreationAlert(town: Shantytown, user: Use
             },
             {
                 short: false,
-                value: `*Date d'installation du site* : ${formatDate(new Date(town.builtAt * 1000))}`,
+                value: `*Date d'installation du site* : ${builtAtStr}`,
             },
             {
                 short: false,
