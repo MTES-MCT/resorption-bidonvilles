@@ -6,10 +6,10 @@ import userAccessModel from '#server/models/userAccessModel';
 import organizationModel from '#server/models/organizationModel';
 import accessRequestService from '#server/services/accessRequest/accessRequestService';
 import checkPassword from '#server/utils/checkPassword';
-import mattermostUtils from '#server/utils/mattermost';
+import tchapUtils from '#server/utils/tchap';
 import authUtils from '#server/utils/auth';
 
-const { triggerNewUserAlert } = mattermostUtils;
+const { triggerNewUserAlert } = tchapUtils;
 const { hashPassword } = authUtils;
 
 export default async (req, res, next) => {
@@ -89,11 +89,9 @@ export default async (req, res, next) => {
         return next(error);
     }
 
-    // Send a Matermost alert, if it fails, do nothing
+    // Send a Tchap alert, if it fails, do nothing
     try {
-        if (CONFIG.mattermost) {
-            await triggerNewUserAlert(user);
-        }
+        await triggerNewUserAlert(user);
     } catch (err) {
         // eslint-disable-next-line no-console
         console.log(`Error with new user webhook : ${err.message}`);

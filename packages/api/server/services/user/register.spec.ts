@@ -57,7 +57,7 @@ describe('userService/register', () => {
         let error;
         try {
             await register(fakeContactBody());
-            expect.fail('should have thrown an error');
+            expect.fail('une erreur aurait dû être levée');
         } catch (e) {
             error = e;
         }
@@ -71,7 +71,7 @@ describe('userService/register', () => {
         createUser.rejects(new Error());
         try {
             await register(fakeContactBody());
-            expect.fail('should have thrown an error');
+            expect.fail('une erreur aurait dû être levée');
         } catch {
             // DO NOTHING
         }

@@ -5,8 +5,7 @@ import mails from '#server/mails/mails';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import permissionUtils from '#server/utils/permission';
 import { Departement } from '#server/models/geoModel/Location.d';
-import mattermostUtils from '#server/utils/mattermost';
-import config from '#server/config';
+import tchapUtils from '#server/utils/tchap';
 import { RawParcel } from '#server/models/majicModel/findParcel/RawParcel.d';
 import { RawOwner } from '#server/models/majicModel/findOwners/RawOwner.d';
 
@@ -75,14 +74,9 @@ export default async function findMajicOwners(parcelId: string, departementId: s
         throw new ServiceError('mail_send_failed', new Error('Une erreur est survenue lors de l\'envoi du courriel.'));
     }
 
-    // Envoyer la notification mattermost
-    const { triggerLandRegistryRequest } = mattermostUtils;
-    const { mattermost } = config;
-    if (!mattermost) {
-        return;
-    }
+    // Envoyer la notification Tchap
     try {
-        await triggerLandRegistryRequest(user, parcelId, majicYear);
+        await tchapUtils.triggerLandRegistryRequest(user, parcelId, majicYear);
     } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e);
