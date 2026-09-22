@@ -7,6 +7,7 @@ import incomingTownsModel from '#server/models/incomingTownsModel';
 import shantytownPreparatoryPhasesTowardResorptionModel from '#server/models/shantytownPreparatoryPhasesTowardResorptionModel';
 import stringifyWhereClause from '#server/models/_common/stringifyWhereClause';
 import validateSafeWhereClause from '#server/models/_common/validateSafeWhereClause';
+import isValidSqlIdentifier from '#server/models/_common/isValidSqlIdentifier';
 import permissionUtils from '#server/utils/permission';
 import { Where } from '#server/models/_common/types/Where.d';
 import { AuthUser } from '#server/middlewares/authMiddleware';
@@ -23,23 +24,70 @@ type ShantytownObject = {
     hash: { [key: number] : Shantytown },
     ordered: Shantytown[],
 };
-function getBaseSql(table, whereClause = null, order = null, additionalSQL: any = {}) {
-    const tables = {
-        shantytowns: table === 'regular' ? 'shantytowns' : 'ShantytownHistories',
-        shantytown_origins: table === 'regular' ? 'shantytown_origins' : 'ShantytownOriginHistories',
-        origin_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
-        shantytown_toilet_types: table === 'regular' ? 'shantytown_toilet_types' : 'shantytown_toilet_types_history',
-        toilet_types_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
-        electricity_access_types: table === 'regular' ? 'electricity_access_types' : 'electricity_access_types_history',
-        electricity_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
-        shantytown_resorption_phases: table === 'regular' ? 'shantytown_preparatory_phases_toward_resorption' : 'shantytown_resorption_phases_history',
-        resorption_phases_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
-        shantytown_parcel_owners: table === 'regular' ? 'shantytown_parcel_owners' : 'shantytown_parcel_owners_history',
-        parcel_owners_foreign_key: table === 'regular' ? 'shantytown_id' : 'hid',
-    };
+
+type QueryTableMode = 'regular' | 'history';
+
+const TABLE_NAMES_BY_MODE: Record<QueryTableMode, Record<string, string>> = {
+    regular: {
+        shantytowns: 'shantytowns',
+        shantytown_origins: 'shantytown_origins',
+        origin_foreign_key: 'shantytown_id',
+        shantytown_toilet_types: 'shantytown_toilet_types',
+        toilet_types_foreign_key: 'shantytown_id',
+        electricity_access_types: 'electricity_access_types',
+        electricity_foreign_key: 'shantytown_id',
+        shantytown_resorption_phases: 'shantytown_preparatory_phases_toward_resorption',
+        resorption_phases_foreign_key: 'shantytown_id',
+        shantytown_parcel_owners: 'shantytown_parcel_owners',
+        parcel_owners_foreign_key: 'shantytown_id',
+    },
+    history: {
+        shantytowns: 'ShantytownHistories',
+        shantytown_origins: 'ShantytownOriginHistories',
+        origin_foreign_key: 'hid',
+        shantytown_toilet_types: 'shantytown_toilet_types_history',
+        toilet_types_foreign_key: 'hid',
+        electricity_access_types: 'electricity_access_types_history',
+        electricity_foreign_key: 'hid',
+        shantytown_resorption_phases: 'shantytown_resorption_phases_history',
+        resorption_phases_foreign_key: 'hid',
+        shantytown_parcel_owners: 'shantytown_parcel_owners_history',
+        parcel_owners_foreign_key: 'hid',
+    },
+};
+
+function validateDynamicSqlFragments(selection: Record<string, string>, joins: { table: string, on: string }[], order: string | null): void {
+    Object.keys(selection).forEach((key) => {
+        if (!isValidSqlIdentifier(key.replace(/[.:()]/g, '')) && !/^[\w.:()]+$/.test(key)) {
+            throw new Error('Invalid input');
+        }
+        if (typeof selection[key] === 'string' && !isValidSqlIdentifier(selection[key])) {
+            throw new Error('Invalid input');
+        }
+    });
+    joins.forEach((join) => {
+        if (typeof join.table === 'string' && !isValidSqlIdentifier(join.table.replace(/[" ]/g, '')) && !/^[\w" ]+$/.test(join.table)) {
+            throw new Error('Invalid input');
+        }
+        if (typeof join.on === 'string' && !/^[\w.:=() ]+$/.test(join.on)) {
+            throw new Error('Invalid input');
+        }
+    });
+    if (order !== null && typeof order === 'string' && !/^[\w., "]+$/.test(order)) {
+        throw new Error('Invalid input');
+    }
+}
+
+type AdditionalSql = {
+    selection?: Record<string, string>,
+    joins?: { table: string, on: string }[],
+};
+
+function getBaseSql(table: QueryTableMode, whereClause = null, order = null, additionalSQL: AdditionalSql = {}) {
+    const tables = TABLE_NAMES_BY_MODE[table];
 
     const selection = {
-        ...(additionalSQL.selection ?? {}),
+        ...additionalSQL.selection,
         ...SQL.selection,
     };
     const joins = [
@@ -47,11 +95,13 @@ function getBaseSql(table, whereClause = null, order = null, additionalSQL: any 
         ...SQL.joins,
     ];
 
+    validateDynamicSqlFragments(selection, joins, order);
+
     return `
         WITH
             shantytown_computed_origins AS (SELECT
                 s.${tables.origin_foreign_key} AS fk_shantytown,
-                string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), ','), ',') AS origins
+                array_remove(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), NULL) AS origins
             FROM "${tables.shantytowns}" s
             LEFT JOIN "${tables.shantytown_origins}" so ON so.fk_shantytown = s.${tables.origin_foreign_key}
             LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
@@ -163,7 +213,7 @@ export default async function query(
     where: Where = [],
     order = ['departements.code ASC', 'cities.name ASC'],
     includeChangelog = false,
-    additionalSQL = {},
+    additionalSQL: AdditionalSql = {},
     argReplacements = {},
 ): Promise<Shantytown[]> {
     const permissionsClauseGroup = pWhere().can(user).do(feature, 'shantytown');

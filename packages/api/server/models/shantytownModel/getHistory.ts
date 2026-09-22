@@ -1,22 +1,25 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
-import geoUtils from '#server/utils/geo';
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
 import { Location } from '#server/models/geoModel/Location.d';
-import outremer from '#server/utils/permission/outremer';
+import validateSafeWhereClause from '#server/models/_common/validateSafeWhereClause';
+import buildLocationClauseFragments from '#server/models/_common/buildLocationClauseFragments';
 import getUsenameOf from './_common/getUsenameOf';
 import serializeShantytown from './_common/serializeShantytown';
 import getDiff from './_common/getDiff';
 import SQL, { ShantytownRow } from './_common/SQL';
+import { Shantytown } from '#root/types/resources/Shantytown.d';
 
 import {
     BaseShantytownActivity,
     ShantytownActivity,
+    HistoryShantytownFilter,
+    HistoryResorbedFilter,
+    HistoryMyTownsFilter,
 } from '#root/types/resources/Activity.d';
 import { User } from '#root/types/resources/User.d';
 
-const { fromGeoLevelToTableName } = geoUtils;
 const { restrict } = permissionUtils;
 
 type ShantytownActivityRow = ShantytownRow & {
@@ -25,49 +28,133 @@ type ShantytownActivityRow = ShantytownRow & {
     author_last_name: string,
     author_organization: number,
 };
-type HistoryShantytownFilter = 'shantytownCreation' | 'shantytownClosing' | 'shantytownUpdate';
-type HistoryResorbedFilter = 'yes' | 'no';
-type HistoryMyTownsFilter = 'yes' | 'no';
+type HistoryFilters = {
+    shantytownFilter: HistoryShantytownFilter[],
+    resorbedFilter: HistoryResorbedFilter[],
+    myTownsFilter: HistoryMyTownsFilter[],
+};
 
-export default async (user: User, location: Location, shantytownFilter: HistoryShantytownFilter[], resorbedFilter: HistoryResorbedFilter[], myTownsFilter: HistoryMyTownsFilter[], numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<ShantytownActivity[]> => {
+// Delta en dessous duquel une ligne (historique ou état courant) est considérée comme n'ayant
+// subi aucune modification réelle depuis sa création (ex: écriture technique en cascade juste
+// après la création). Ce seuil doit être identique côté SQL (buildActivityFiltersSQL) et côté JS
+// (recherche de la version la plus ancienne) : une même ligne ne doit jamais être classée
+// "création" par l'un et "déjà modifiée" par l'autre.
+// TODO reste une heuristique temporelle, pas une preuve structurelle de création : à remplacer par
+// un marqueur explicite (ex: absence de ligne d'historique antérieure) dans une branche dédiée.
+const CREATION_UPDATE_DELTA_THRESHOLD_MS = 1000;
+
+function buildLocationRestrictionClauses(restrictedLocations: Location[]): { where: string[], replacements: Record<string, unknown> } {
+    if (restrictedLocations.some(l => l.type === 'nation')) {
+        return { where: [], replacements: {} };
+    }
+
+    const { clauses, replacements } = buildLocationClauseFragments(restrictedLocations, 'shantytownLocationCode');
+    return { where: [clauses.join(' OR ')], replacements };
+}
+
+function buildActivityFiltersSQL(filters: HistoryFilters, maxDate: Date | string | null): string {
+    const { shantytownFilter, resorbedFilter, myTownsFilter } = filters;
+
+    if (!Array.isArray(shantytownFilter) || !Array.isArray(resorbedFilter) || !Array.isArray(myTownsFilter)) {
+        throw new TypeError('Filtres d\'historique invalides : un tableau était attendu');
+    }
+
+    return [
+        resorbedFilter.includes('no') ? '' : 'AND shantytowns.closed_with_solutions = \'yes\'',
+        resorbedFilter.includes('yes') ? '' : 'AND shantytowns.closed_with_solutions != \'yes\'',
+        myTownsFilter.includes('no') ? '' : 'AND shantytown_actors.fk_user IS NOT NULL',
+        myTownsFilter.includes('yes') ? '' : 'AND shantytown_actors.fk_user IS NULL',
+        shantytownFilter.includes('shantytownCreation') ? '' : `AND shantytowns.updated_at - shantytowns.created_at > interval '${CREATION_UPDATE_DELTA_THRESHOLD_MS} milliseconds'`,
+        shantytownFilter.includes('shantytownClosing') ? '' : 'AND shantytowns.closed_at IS NULL',
+        shantytownFilter.includes('shantytownUpdate') ? '' : `AND (shantytowns.closed_at IS NOT NULL OR shantytowns.updated_at - shantytowns.created_at <= interval '${CREATION_UPDATE_DELTA_THRESHOLD_MS} milliseconds')`,
+        maxDate ? 'AND shantytowns.updated_at >= :maxDate' : '',
+    ].join('\n');
+}
+
+function buildActivityFromRow(activity: ShantytownActivityRow, previousVersion: Shantytown | null, serializedShantytown: Shantytown): ShantytownActivity | null {
+    const base: BaseShantytownActivity = {
+        entity: 'shantytown',
+        date: activity.updatedAt.getTime() / 1000,
+        author: {
+            name: userModel.formatName({
+                first_name: activity.author_first_name,
+                last_name: activity.author_last_name,
+            }),
+            organization: activity.author_organization,
+        },
+        shantytown: {
+            id: activity.id,
+            usename: getUsenameOf(activity),
+            resorptionTarget: activity.resorptionTarget,
+            city: {
+                code: activity.cityCode,
+                name: activity.cityName,
+                main: activity.cityMain,
+            },
+            epci: {
+                code: activity.epciCode,
+                name: activity.epciName,
+            },
+            departement: {
+                code: activity.departementCode,
+                name: activity.departementName,
+            },
+            region: {
+                code: activity.regionCode,
+                name: activity.regionName,
+            },
+        },
+    };
+
+    if (previousVersion === null) {
+        return { ...base, action: 'creation' };
+    }
+
+    if (previousVersion.closedAt === null && activity.closedAt !== null) {
+        return { ...base, action: 'closing', shantytown: { ...base.shantytown, closedWithSolutions: activity.closedWithSolutions === 'yes' } };
+    }
+
+    // on utilise le nom du site dans la précédente version (au cas ou ce dernier aurait changé)
+    const diff = getDiff(previousVersion, serializedShantytown);
+    if (diff.length === 0) {
+        return null;
+    }
+
+    return {
+        ...base, action: 'update', shantytown: { ...base.shantytown, usename: getUsenameOf(previousVersion) }, diff,
+    };
+}
+
+export default async function getHistory(
+    user: User,
+    location: Location,
+    filters: HistoryFilters,
+    numberOfActivities: number,
+    lastDate: Date | string,
+    maxDate: Date | string | null,
+): Promise<ShantytownActivity[]> {
     // apply geographic level restrictions
-    const where = [];
-    const replacements: any = {
+    const replacements: Record<string, unknown> = {
         maxDate,
         userId: user.id,
+        lastDate,
     };
-    const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
+    if (numberOfActivities !== -1) {
+        replacements.numberOfActivities = numberOfActivities;
+    }
+    const limit = numberOfActivities !== -1 ? 'limit :numberOfActivities' : '';
 
     const restrictedLocations = restrict(location).for(user).askingTo('list', 'shantytown');
     if (restrictedLocations.length === 0) {
         return [];
     }
 
-    const restrictedLocationTypes = new Set(['metropole', 'outremer']);
+    const { where, replacements: locationReplacements } = buildLocationRestrictionClauses(restrictedLocations);
+    Object.assign(replacements, locationReplacements);
+    where.forEach(clause => validateSafeWhereClause(clause));
 
-    if (!restrictedLocations.some(l => l.type === 'nation')) {
-        where.push(
-            restrictedLocations.map((l, index) => {
-                // On fait l'exclusion ou inclusion si c'est metropole ou outremer
-                if (restrictedLocationTypes.has(l.type)) {
-                    if (!replacements.outreMerDepts) {
-                        replacements.outreMerDepts = outremer.departements;
-                    }
-                    return l.type === 'metropole'
-                        ? 'departements.code NOT IN (:outreMerDepts)'
-                        : 'departements.code IN (:outreMerDepts)';
-                }
-                replacements[`shantytownLocationCode${index}`] = l[l.type].code;
-
-                const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownLocationCode${index}`];
-                if (l.type === 'city') {
-                    arr.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :shantytownLocationCode${index}`);
-                }
-
-                return arr;
-            }).flat().join(' OR '),
-        );
-    }
+    const activityFiltersSQL = buildActivityFiltersSQL(filters, maxDate);
+    validateSafeWhereClause(activityFiltersSQL);
 
     const activities: ShantytownActivityRow[] = await sequelize.query(
         `
@@ -81,7 +168,7 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
                     WITH
                         shantytown_computed_origins AS (SELECT
                             s.hid AS fk_shantytown,
-                            string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), ','), ',') AS origins
+                            array_remove(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), NULL) AS origins
                         FROM "ShantytownHistories" s
                         LEFT JOIN "ShantytownOriginHistories" so ON so.fk_shantytown = s.hid
                         LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
@@ -115,24 +202,19 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
                     LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.hid
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE ((${where.join(') OR (')}))` : ''}
-                    ${where.length > 0 ? 'AND' : 'WHERE'} shantytowns.updated_at < '${lastDate}'
-                    ${resorbedFilter.includes('no') ? '' : 'AND shantytowns.closed_with_solutions = \'yes\''}
-                    ${resorbedFilter.includes('yes') ? '' : 'AND shantytowns.closed_with_solutions != \'yes\''}
-                    ${myTownsFilter.includes('no') ? '' : 'AND shantytown_actors.fk_user IS NOT NULL'}
-                    ${myTownsFilter.includes('yes') ? '' : 'AND shantytown_actors.fk_user IS NULL'}
-                    ${shantytownFilter.includes('shantytownCreation') ? '' : 'AND shantytowns.updated_at - shantytowns.created_at > \'00:00:01\''}
-                    ${shantytownFilter.includes('shantytownClosing') ? '' : 'AND shantytowns.closed_at IS NULL'}
-                    ${shantytownFilter.includes('shantytownUpdate') ? '' : 'AND (shantytowns.closed_at IS NOT NULL OR shantytowns.updated_at - shantytowns.created_at <= \'00:00:01\')'}
-                    ${maxDate ? ' AND shantytowns.updated_at >= :maxDate' : ''}
+                    ${where.length > 0 ? 'AND' : 'WHERE'} shantytowns.updated_at < :lastDate
+                    ${activityFiltersSQL}
                     ORDER BY shantytowns.updated_at DESC
                     ${limit}
                     )
-                UNION
+                -- UNION ALL et non UNION : "hid" (réel) vs "0 AS hid" (sentinelle) rendent les deux
+                -- branches disjointes par construction, la déduplication de UNION ne peut rien retirer
+                UNION ALL
                 (
                     WITH
                         shantytown_computed_origins AS (SELECT
                             s.shantytown_id AS fk_shantytown,
-                            string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), ','), ',') AS origins
+                            array_remove(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), NULL) AS origins
                         FROM shantytowns s
                         LEFT JOIN shantytown_origins so ON so.fk_shantytown = s.shantytown_id
                         LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
@@ -165,20 +247,13 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
                     LEFT JOIN shantytown_toilet_types stt ON stt.fk_shantytown = shantytowns.shantytown_id
                     ${SQL.joins.map(({ table, on }) => `LEFT JOIN ${table} ON ${on}`).join('\n')}
                     ${where.length > 0 ? `WHERE (${where.join(') OR (')})` : ''}
-                    ${where.length > 0 ? 'AND' : 'WHERE'} shantytowns.updated_at < '${lastDate}'
-                    ${resorbedFilter.includes('no') ? '' : 'AND shantytowns.closed_with_solutions = \'yes\''}
-                    ${resorbedFilter.includes('yes') ? '' : 'AND shantytowns.closed_with_solutions != \'yes\''}
-                    ${myTownsFilter.includes('no') ? '' : 'AND shantytown_actors.fk_user IS NOT NULL'}
-                    ${myTownsFilter.includes('yes') ? '' : 'AND shantytown_actors.fk_user IS NULL'}
-                    ${shantytownFilter.includes('shantytownCreation') ? '' : 'AND shantytowns.updated_at - shantytowns.created_at > \'00:00:01\''}
-                    ${shantytownFilter.includes('shantytownClosing') ? '' : 'AND shantytowns.closed_at IS NULL'}
-                    ${shantytownFilter.includes('shantytownUpdate') ? '' : 'AND (shantytowns.closed_at IS NOT NULL OR shantytowns.updated_at - shantytowns.created_at <= \'00:00:01\')'}
-                    ${maxDate ? ' AND shantytowns.updated_at >= :maxDate' : ''}
+                    ${where.length > 0 ? 'AND' : 'WHERE'} shantytowns.updated_at < :lastDate
+                    ${activityFiltersSQL}
                     ORDER BY shantytowns.updated_at DESC
                     ${limit}
                 )) activities
             LEFT JOIN users author ON activities.authorId = author.user_id
-            WHERE activities."updatedAt" < '${lastDate}'
+            WHERE activities."updatedAt" < :lastDate
             ORDER BY activities."updatedAt" DESC
             ${limit}
             `,
@@ -187,15 +262,18 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
             replacements,
         },
     );
-    const listOldestVersions = [];
-    const listIdOldestVersions = [];
+    const listOldestVersions: [number, number][] = [];
+    const listIdOldestVersions: number[] = [];
+    const oldestSeenIds = new Set<number>();
 
     // on récupère pour chaque bidonville la plus vieille version existante qui n'est pas une création
-    activities.reverse().forEach((activity: ShantytownActivityRow) => {
-        if (!(listIdOldestVersions.includes(activity.id)) && (activity.updatedAt.valueOf() - activity.createdAt.valueOf() > 10)) {
+    const chronologicalActivities = activities.slice().reverse();
+    chronologicalActivities.forEach((activity: ShantytownActivityRow) => {
+        if (!oldestSeenIds.has(activity.id) && (activity.updatedAt.valueOf() - activity.createdAt.valueOf() > CREATION_UPDATE_DELTA_THRESHOLD_MS)) {
+            oldestSeenIds.add(activity.id);
             listIdOldestVersions.push(activity.id);
         }
-        listOldestVersions.push(`(${activity.id} , ${activity.hid})`);
+        listOldestVersions.push([activity.id, activity.hid]);
     });
     // on récupère les précédentes versions des éléments de listIdOldestVersions afin de pouvoir appliquer getDiff
     const queryPreviousVersions: ShantytownActivityRow[] = listIdOldestVersions.length === 0 ? [] : await sequelize.query(
@@ -203,7 +281,7 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
             WITH
             shantytown_computed_origins AS (SELECT
                 s.hid AS fk_shantytown,
-                string_to_array(array_to_string(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), ','), ',') AS origins
+                array_remove(array_agg(soo.social_origin_id::VARCHAR || '|' || soo.uid || '|' || soo.label), NULL) AS origins
             FROM "ShantytownHistories" s
             LEFT JOIN "ShantytownOriginHistories" so ON so.fk_shantytown = s.hid
             LEFT JOIN social_origins soo ON so.fk_social_origin = soo.social_origin_id
@@ -275,85 +353,36 @@ export default async (user: User, location: Location, shantytownFilter: HistoryS
                     SELECT sho.shantytown_id, MAX(sho.updated_at)
                     FROM "ShantytownHistories" sho
                     WHERE
-                        sho.shantytown_id IN (${listIdOldestVersions})
-                        AND (sho.shantytown_id, sho.hid) NOT IN (${listOldestVersions})
-                        AND sho.updated_at < '${lastDate}'
+                        sho.shantytown_id IN (:listIdOldestVersions)
+                        AND (sho.shantytown_id, sho.hid) NOT IN (:listOldestVersions)
+                        AND sho.updated_at < :lastDate
                     GROUP BY shantytown_id
                )
             `,
         {
             type: QueryTypes.SELECT,
-            replacements,
+            replacements: {
+                ...replacements,
+                listIdOldestVersions,
+                listOldestVersions,
+            },
         },
     );
 
     const previousVersions = {};
 
-    // eslint-disable-next-line array-callback-return
-    queryPreviousVersions.map((activity: ShantytownActivityRow) => {
-        const serializedShantytown = serializeShantytown(activity, user);
-        previousVersions[activity.id] = serializedShantytown;
+    queryPreviousVersions.forEach((activity: ShantytownActivityRow) => {
+        previousVersions[activity.id] = serializeShantytown(activity, user);
     });
 
-    return activities
+    const chronologicalResults = chronologicalActivities
         .map((activity: ShantytownActivityRow) => {
-            const base: BaseShantytownActivity = {
-                entity: 'shantytown',
-                date: activity.updatedAt.getTime() / 1000,
-                author: {
-                    name: userModel.formatName({
-                        first_name: activity.author_first_name,
-                        last_name: activity.author_last_name,
-                    }),
-                    organization: activity.author_organization,
-                },
-
-                shantytown: {
-                    id: activity.id,
-                    usename: getUsenameOf(activity),
-                    resorptionTarget: activity.resorptionTarget,
-                    city: {
-                        code: activity.cityCode,
-                        name: activity.cityName,
-                        main: activity.cityMain,
-                    },
-                    epci: {
-                        code: activity.epciCode,
-                        name: activity.epciName,
-                    },
-                    departement: {
-                        code: activity.departementCode,
-                        name: activity.departementName,
-                    },
-                    region: {
-                        code: activity.regionCode,
-                        name: activity.regionName,
-                    },
-                },
-            };
-
             const previousVersion = previousVersions[activity.id] ?? null;
             const serializedShantytown = serializeShantytown(activity, user);
             previousVersions[activity.id] = serializedShantytown;
-            let o:ShantytownActivity;
+            return buildActivityFromRow(activity, previousVersion, serializedShantytown);
+        })
+        .filter((activity): activity is ShantytownActivity => activity !== null);
 
-            if (previousVersion === null) {
-                o = { ...base, action: 'creation' };
-            } else if (previousVersion.closedAt === null && activity.closedAt !== null) {
-                o = { ...base, action: 'closing', shantytown: { ...base.shantytown, closedWithSolutions: activity.closedWithSolutions === 'yes' } };
-            } else {
-                o = { ...base, action: 'update', diff: [] };
-                // on utilise le nom du site dans la précédente version (au cas ou ce dernier aurait changé)
-                o.shantytown.usename = getUsenameOf(previousVersion);
-
-                const diff = getDiff(previousVersion, serializedShantytown);
-                if (diff.length === 0) {
-                    return null;
-                }
-
-                o.diff = diff;
-            }
-            return o;
-        }).reverse()
-        .filter(activity => activity !== null);
-};
+    return chronologicalResults.reverse();
+}

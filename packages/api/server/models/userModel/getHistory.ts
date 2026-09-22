@@ -23,8 +23,13 @@ type UserActivityRow = {
     cities: string[],
 };
 
-export default async (location: Location, numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<UserActivity[]> => {
-    const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
+export default async function getHistory(
+    location: Location,
+    numberOfActivities: number,
+    lastDate: Date | string,
+    maxDate: Date | string | null,
+):Promise<UserActivity[]> {
+    const limit = numberOfActivities !== -1 ? 'limit :numberOfActivities' : '';
     const outremerCondition = `(
                 EXISTS (
                     SELECT 1
@@ -77,6 +82,7 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
             replacements: {
                 maxDate,
                 lastDate,
+                numberOfActivities,
                 outreMerDepts: outremer.departements,
                 outreMerRegions: outremer.regions,
                 city: location.city?.code || null,
@@ -125,4 +131,4 @@ export default async (location: Location, numberOfActivities: number, lastDate: 
                 },
             },
         }));
-};
+}
