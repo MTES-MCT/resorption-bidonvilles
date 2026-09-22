@@ -10,17 +10,18 @@ import config from '#server/config';
 import { RawParcel } from '#server/models/majicModel/findParcel/RawParcel.d';
 import { RawOwner } from '#server/models/majicModel/findOwners/RawOwner.d';
 
-export default async function findMajicOwners(parcelId: string, departementId: string, user: AuthUser) {
+export default async function findMajicOwners(parcelId: string, user: AuthUser) {
+    // On trouve le département concerné par la parcelle
+    const dept = parcelId.substring(0, 2);
+
     if (!permissionUtils.can(user).do('access', 'land_registry').on(
-        { type: 'departement', departement: { code: departementId } } as Departement,
+        { type: 'departement', departement: { code: dept } } as Departement,
     )) {
         throw new ServiceError('permission_denied', new Error('Vous n\'avez pas la permission d\'accéder au registre foncier.'));
     }
 
     // On trouve l'année de parution de la bdd
     const majicYear = await majicModel.getMajicYear();
-    // On trouve le département concerné par la parcelle
-    const dept = parcelId.substring(0, 2);
 
     // Composition du nom des tables
     const schema = `ff${majicYear}_dep`;
