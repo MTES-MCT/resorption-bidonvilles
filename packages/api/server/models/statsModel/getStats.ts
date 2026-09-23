@@ -115,7 +115,8 @@ export default async (user: User, location: Location) => {
                     fk_user,
                     (floor(((now() - INTERVAL '1 day')::date - datetime::date) / 7)) AS week
                 FROM user_webapp_navigation_logs
-                WHERE datetime::date < now()::date
+                WHERE datetime >= now() - INTERVAL '91 days'
+                    AND datetime < date_trunc('day', now())
                 GROUP BY fk_user, week
             ) t
             ${where !== null ? `
