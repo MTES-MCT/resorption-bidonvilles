@@ -113,6 +113,41 @@ const normalizeValue = (value: any): any => {
     return value;
 };
 
+/**
+ * Vérifie que l'utilisateur a le droit d'écrire (créer/modifier/signaler) un site sur le territoire
+ * de la commune soumise (req.body.city) ET, en cas de mise à jour, sur le territoire du site
+ * réellement ciblé par la requête (req.town), afin d'empêcher un utilisateur de contourner ses
+ * restrictions territoriales en soumettant le citycode d'une commune où il a des droits alors
+ * que le site visé par :id se trouve ailleurs.
+ * @throws {Error} si l'utilisateur n'a pas les droits suffisants
+ */
+export function checkWritePermissions(mode: string, req: any): true {
+    if (!can(req.user).do(mode, 'shantytown').on(req.body.city)) {
+        let wording;
+        switch (mode) {
+            case 'create':
+                wording = 'de déclarer un';
+                break;
+            case 'update':
+                wording = 'de modifier un';
+                break;
+            case 'report':
+                wording = 'd\'informer d\'un nouveau';
+                break;
+            default:
+                wording = 'd\'agir sur un';
+                break;
+        }
+        throw new Error(`Vous n'avez pas le droit ${wording} site sur ce territoire`);
+    }
+
+    if (mode === 'update' && req.town && !can(req.user).do('update', 'shantytown').on(req.town)) {
+        throw new Error('Vous n\'avez pas le droit de modifier un site sur ce territoire');
+    }
+
+    return true;
+}
+
 export default mode => ([
     param('id')
         .if(() => mode === 'update')
@@ -653,26 +688,7 @@ export default mode => ([
                 return true;
             }
 
-            if (!can(req.user).do(mode, 'shantytown').on(req.body.city)) {
-                let wording;
-                switch (mode) {
-                    case 'create':
-                        wording = 'de déclarer un';
-                        break;
-                    case 'update':
-                        wording = 'de modifier un';
-                        break;
-                    case 'report':
-                        wording = 'd\'informer d\'un nouveau';
-                        break;
-                    default:
-                        wording = 'd\'agir sur un';
-                        break;
-                }
-                throw new Error(`Vous n'avez pas le droit ${wording} site sur ce territoire`);
-            }
-
-            return true;
+            return checkWritePermissions(mode, req);
         })
         // coordonnées GPS
         .custom((value, { req }) => {
