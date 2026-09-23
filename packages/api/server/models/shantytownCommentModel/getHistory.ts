@@ -1,21 +1,19 @@
 import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 
-import geoUtils from '#server/utils/geo';
 import userModel from '#server/models/userModel';
 import permissionUtils from '#server/utils/permission';
 import shantytownCommentTagModel from '#server/models/shantytownCommentTagModel/index';
 import { CommentTagObject } from '#server/models/shantytownCommentTagModel/getTagsForComments';
 import getAddressSimpleOf from '#server/models/shantytownModel/_common/getAddressSimpleOf';
 import getUsenameOf from '#server/models/shantytownModel/_common/getUsenameOf';
-import outremer from '#server/utils/permission/outremer';
+import buildLocationClauseFragments from '#server/models/_common/buildLocationClauseFragments';
 import { Location } from '#server/models/geoModel/Location.d';
 import serializeComment from '#server/models/shantytownCommentModel/serializeComment';
 import { ShantytownCommentRow } from '#server/models/shantytownCommentModel/ShantytownCommentRow.d';
 import { ShantytownCommentActivity } from '#root/types/resources/Activity.d';
 import { User } from '#root/types/resources/User.d';
 
-const { fromGeoLevelToTableName } = geoUtils;
 const { formatName } = userModel;
 const { restrict } = permissionUtils;
 
@@ -33,99 +31,92 @@ export type ShantytownCommentHistoryRow = ShantytownCommentRow & {
     regionCode: string,
     regionName: string
 };
-export default async (user: User, location: Location, numberOfActivities: number, lastDate: Date, maxDate: Date):Promise<ShantytownCommentActivity[]> => {
+
+function buildPublicCommentsClause(publicLocations: Location[]): { clause: string | null, replacements: Record<string, unknown> } {
+    if (publicLocations.length === 0) {
+        return { clause: 'false', replacements: {} };
+    }
+    if (publicLocations.some(l => l.type === 'nation')) {
+        return { clause: null, replacements: {} };
+    }
+
+    const { clauses, replacements } = buildLocationClauseFragments(publicLocations, 'shantytownCommentLocationCode');
+    return { clause: `(${clauses.join(' OR ')})`, replacements };
+}
+
+function buildPrivateCommentsLocationClause(privateLocations: Location[]): { clauses: string[], replacements: Record<string, unknown> } {
+    if (privateLocations.length === 0) {
+        return { clauses: [], replacements: {} };
+    }
+    if (privateLocations.some(l => l.type === 'nation')) {
+        return { clauses: ['true'], replacements: {} };
+    }
+
+    return buildLocationClauseFragments(privateLocations, 'privateShantytownCommentLocationCode');
+}
+
+export type CommentHistoryQueryParams = { where: string[], replacements: Record<string, unknown>, limit: string };
+
+export function buildQueryParams(
+    user: User,
+    location: Location,
+    numberOfActivities: number,
+    lastDate: Date | string,
+    maxDate: Date | string | null,
+): CommentHistoryQueryParams | null {
     // apply geographic level restrictions
     const where: string[] = [];
-    const replacements: any = {
+    const replacements: Record<string, unknown> = {
         maxDate,
     };
-    const limit = numberOfActivities !== -1 ? `limit ${numberOfActivities}` : '';
-
+    const limit = numberOfActivities !== -1 ? 'LIMIT :numberOfActivities' : '';
+    if (numberOfActivities !== -1) {
+        replacements.numberOfActivities = numberOfActivities;
+    }
     const restrictedLocations = {
         public: restrict(location).for(user).askingTo('list', 'shantytown_comment'),
         private: restrict(location).for(user).askingTo('listPrivate', 'shantytown_comment'),
     };
-    const restrictedLocationTypes = new Set(['metropole', 'outremer']);
-
     if (restrictedLocations.public.length === 0 && restrictedLocations.private.length === 0) {
-        return [];
+        return null;
     }
 
+    // on teste l'appartenance d'un commentaire aux tables de cibles via EXISTS plutôt que via les
+    // tableaux agrégés oca/uca : un simple test d'existence peut s'appuyer sur un index et ne nécessite
+    // pas d'agréger l'intégralité des tables de cibles avant de filtrer (cf. buildFilteredCommentsSql)
     const permissionWhere = {
         // ces tableaux listent des conditions cumulatives (AND)
         publicComments: [
-            'uca.user_target_id IS NULL',
-            'oca.organization_target_id IS NULL',
+            'NOT EXISTS (SELECT 1 FROM shantytown_comment_user_targets scut WHERE scut.fk_comment = comments.shantytown_comment_id)',
+            'NOT EXISTS (SELECT 1 FROM shantytown_comment_organization_targets scot WHERE scot.fk_comment = comments.shantytown_comment_id)',
         ],
         privateComments: [
-            '(uca.user_target_id IS NOT NULL OR oca.organization_target_id IS NOT NULL)',
+            `(
+                    EXISTS (SELECT 1 FROM shantytown_comment_user_targets scut WHERE scut.fk_comment = comments.shantytown_comment_id)
+                OR EXISTS (SELECT 1 FROM shantytown_comment_organization_targets scot WHERE scot.fk_comment = comments.shantytown_comment_id)
+            )`,
         ],
     };
 
     // public comments
-    if (restrictedLocations.public.length === 0) {
-        permissionWhere.publicComments.push('false');
-    } else if (!restrictedLocations.public.some(l => l.type === 'nation')) {
-        // geo permission
-        const publicCommentLocationClause = restrictedLocations.public.map((l, index) => {
-            // On fait l'exclusion ou inclusion si c'est metropole ou outremer
-            if (restrictedLocationTypes.has(l.type)) {
-                if (!replacements.outreMerDepts) {
-                    replacements.outreMerDepts = outremer.departements;
-                }
-                return l.type === 'metropole'
-                    ? 'departements.code NOT IN (:outreMerDepts)'
-                    : 'departements.code IN (:outreMerDepts)';
-            }
-            const arr = [`${fromGeoLevelToTableName(l.type)}.code = :shantytownCommentLocationCode${index}`];
-            if (l.type === 'city') {
-                arr.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :shantytownCommentLocationCode${index}`);
-            }
-
-            replacements[`shantytownCommentLocationCode${index}`] = l[l.type].code;
-
-            return arr;
-        }).flat();
-
-        permissionWhere.publicComments.push(`(${publicCommentLocationClause.join(' OR ')})`);
+    const publicCommentsResult = buildPublicCommentsClause(restrictedLocations.public);
+    Object.assign(replacements, publicCommentsResult.replacements);
+    if (publicCommentsResult.clause !== null) {
+        permissionWhere.publicComments.push(publicCommentsResult.clause);
     }
 
     // private comments
-    const privateCommentLocationClause = [];
-    if (restrictedLocations.private.length > 0) {
-        if (restrictedLocations.private.some(l => l.type === 'nation')) {
-            privateCommentLocationClause.push('true');
-        } else {
-            restrictedLocations.private.forEach((l, index) => {
-                // On fait l'exclusion ou inclusion si c'est metropole ou outremer
-                if (restrictedLocationTypes.has(l.type)) {
-                    if (!replacements.outreMerDepts) {
-                        replacements.outreMerDepts = outremer.departements;
-                    }
-                    privateCommentLocationClause.push(
-                        l.type === 'metropole'
-                            ? 'departements.code NOT IN (:outreMerDepts)'
-                            : 'departements.code IN (:outreMerDepts)',
-                    );
-                } else {
-                    privateCommentLocationClause.push(`${fromGeoLevelToTableName(l.type)}.code = :privateShantytownCommentLocationCode${index}`);
-                    if (l.type === 'city') {
-                        privateCommentLocationClause.push(`${fromGeoLevelToTableName(l.type)}.fk_main = :privateShantytownCommentLocationCode${index}`);
-                    }
-
-                    replacements[`privateShantytownCommentLocationCode${index}`] = l[l.type].code;
-                }
-            });
-        }
-    }
+    const privateCommentsLocationResult = buildPrivateCommentsLocationClause(restrictedLocations.private);
+    Object.assign(replacements, privateCommentsLocationResult.replacements);
+    const privateCommentLocationClause = privateCommentsLocationResult.clauses;
 
     // access permission
     // soit l'utilisateur est un auteur/destinataire du message
     // soit il a accès aux commentaires privés sur le territoire considéré (geo.length > 0)
     permissionWhere.privateComments.push(
         `(
-                :userId = ANY(uca.user_target_id)
-            OR :organizationId = ANY(oca.organization_target_id)
+                EXISTS (SELECT 1 FROM shantytown_comment_user_targets scut WHERE scut.fk_comment = comments.shantytown_comment_id AND scut.fk_user = :userId)
+            OR EXISTS (SELECT 1 FROM shantytown_comment_organization_targets scot WHERE scot.fk_comment = comments.shantytown_comment_id AND scot.fk_organization = :organizationId)
             OR :userId = comments.created_by
             ${privateCommentLocationClause.length > 0 ? `OR (${privateCommentLocationClause.join(' OR ')})` : ''}
         )`,
@@ -143,30 +134,11 @@ export default async (user: User, location: Location, numberOfActivities: number
     );
 
     // on vérifie que le commentaire est bien sur le territoire de la recherche
-    const searchLocationClause = [];
     if (location.type !== 'nation') {
-        // On fait l'exclusion ou inclusion si c'est metropole ou outremer
-        if (restrictedLocationTypes.has(location.type)) {
-            if (!replacements.outreMerDepts) {
-                replacements.outreMerDepts = outremer.departements;
-            }
-            searchLocationClause.push(
-                location.type === 'metropole'
-                    ? 'departements.code NOT IN (:outreMerDepts)'
-                    : 'departements.code IN (:outreMerDepts)',
-            );
-        } else {
-            searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.code = :shantytownCommentSearchLocationCode`);
-            if (location.type === 'city') {
-                searchLocationClause.push(`${fromGeoLevelToTableName(location.type)}.fk_main = :shantytownCommentSearchLocationCode`);
-            }
-            replacements.shantytownCommentSearchLocationCode = location[location.type].code;
-        }
-    } else {
-        searchLocationClause.push('true');
+        const { clauses, replacements: searchLocationReplacements } = buildLocationClauseFragments([location], 'shantytownCommentSearchLocationCode');
+        Object.assign(replacements, searchLocationReplacements);
+        where.push(`(${clauses.join(' OR ')})`);
     }
-
-    where.push(`(${searchLocationClause.join(' OR ')})`);
 
     // additional filters
     replacements.lastDate = lastDate;
@@ -175,23 +147,57 @@ export default async (user: User, location: Location, numberOfActivities: number
         where.push('comments.created_at >= :maxDate');
     }
 
+    return { where, replacements, limit };
+}
+
+export default async function getHistory(
+    user: User,
+    location: Location,
+    numberOfActivities: number,
+    lastDate: Date | string,
+    maxDate: Date | string | null,
+): Promise<ShantytownCommentActivity[]> {
+    const queryParams = buildQueryParams(user, location, numberOfActivities, lastDate, maxDate);
+    if (queryParams === null) {
+        return [];
+    }
+    const { where, replacements, limit } = queryParams;
+
+    // filtered_comments détermine, via de simples tests EXISTS (indexables), quels commentaires
+    // satisfont les droits d'accès et le filtre géographique - avant tout agrégat et avant le LIMIT.
+    // organization_comment_access / user_comment_access n'agrègent ensuite que les cibles des
+    // commentaires déjà retenus, au lieu de l'intégralité des deux tables de cibles à chaque appel.
     const activities = await sequelize.query(
-        `WITH organization_comment_access AS (
+        `WITH filtered_comments AS (
+            SELECT comments.shantytown_comment_id, comments.created_at
+            FROM shantytown_comments comments
+            LEFT JOIN shantytowns ON comments.fk_shantytown = shantytowns.shantytown_id
+            LEFT JOIN cities ON shantytowns.fk_city = cities.code
+            LEFT JOIN epci ON cities.fk_epci = epci.code
+            LEFT JOIN departements ON cities.fk_departement = departements.code
+            LEFT JOIN regions ON departements.fk_region = regions.code
+            ${where.length > 0 ? `WHERE ${where.join(' AND ')}` : ''}
+            ORDER BY comments.created_at DESC
+            ${limit}
+        ),
+        organization_comment_access AS (
            SELECT
                 scot.fk_comment AS shantytown_comment_id,
-                ARRAY_AGG(organizations.name) AS organization_target_name,
-                ARRAY_AGG(organizations.organization_id) AS organization_target_id
-            FROM shantytown_comment_organization_targets scot 
+                ARRAY_AGG(organizations.name ORDER BY organizations.organization_id) AS organization_target_name,
+                ARRAY_AGG(organizations.organization_id ORDER BY organizations.organization_id) AS organization_target_id
+            FROM shantytown_comment_organization_targets scot
             LEFT JOIN organizations ON organizations.organization_id = scot.fk_organization
+            WHERE scot.fk_comment IN (SELECT shantytown_comment_id FROM filtered_comments)
             GROUP BY scot.fk_comment
         ),
         user_comment_access AS (
-            SELECT 
+            SELECT
                 scut.fk_comment AS shantytown_comment_id,
-                ARRAY_AGG(CONCAT(users.first_name, ' ', users.last_name)) AS user_target_name,
-                ARRAY_AGG(users.user_id) AS user_target_id
-            FROM shantytown_comment_user_targets scut 
+                ARRAY_AGG(CONCAT(users.first_name, ' ', users.last_name) ORDER BY users.user_id) AS user_target_name,
+                ARRAY_AGG(users.user_id ORDER BY users.user_id) AS user_target_id
+            FROM shantytown_comment_user_targets scut
             LEFT JOIN users ON users.user_id = scut.fk_user
+            WHERE scut.fk_comment IN (SELECT shantytown_comment_id FROM filtered_comments)
             GROUP BY scut.fk_comment
         )
             SELECT
@@ -218,7 +224,8 @@ export default async (user: User, location: Location, numberOfActivities: number
                 departements.name AS "departementName",
                 regions.code AS "regionCode",
                 regions.name AS "regionName"
-            FROM shantytown_comments comments
+            FROM filtered_comments fc
+            JOIN shantytown_comments comments ON comments.shantytown_comment_id = fc.shantytown_comment_id
             LEFT JOIN organization_comment_access oca ON comments.shantytown_comment_id = oca.shantytown_comment_id
             LEFT JOIN user_comment_access uca ON comments.shantytown_comment_id = uca.shantytown_comment_id
             LEFT JOIN shantytowns ON comments.fk_shantytown = shantytowns.shantytown_id
@@ -228,9 +235,7 @@ export default async (user: User, location: Location, numberOfActivities: number
             LEFT JOIN epci ON cities.fk_epci = epci.code
             LEFT JOIN departements ON cities.fk_departement = departements.code
             LEFT JOIN regions ON departements.fk_region = regions.code
-            ${where.length > 0 ? `WHERE ${where.join(' AND ')}` : ''}
             ORDER BY comments.created_at DESC
-            ${limit}
             `,
         {
             type: QueryTypes.SELECT,
@@ -289,4 +294,4 @@ export default async (user: User, location: Location, numberOfActivities: number
                 tags: commentTags[activity.commentId] || [],
             }),
         }));
-};
+}

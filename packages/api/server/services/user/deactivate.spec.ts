@@ -57,6 +57,27 @@ rewiremock.enable();
 import deactivateUser from './deactivate';
 rewiremock.disable();
 
+// L'utilisateur factice par défaut (#test/utils/user) n'a aucune permission
+// sur l'entité "user" (permissions.user: {}). On fusionne donc explicitement
+// une permission "deactivate" autorisée, sans écraser les autres permissions
+// déjà présentes sur l'utilisateur factice.
+const fakeAuthorizedUser = (override: Record<string, any> = {}) => fakeUser({
+    ...override,
+    permissions: {
+        ...fakeUser().permissions,
+        ...override.permissions,
+        user: {
+            ...fakeUser().permissions.user,
+            ...override.permissions?.user,
+            deactivate: {
+                allowed: true,
+                allowed_on_national: true,
+                allowed_on: null,
+            },
+        },
+    },
+});
+
 describe('userService.deactivate()', () => {
     let transaction;
     beforeEach(() => {
@@ -72,8 +93,8 @@ describe('userService.deactivate()', () => {
         sandbox.reset();
     });
 
-    it('change le statut du compte à inactif en base de données', async () => {
-        const user = fakeUser({ id: 42, status: 'active' });
+    it(' change le statut du compte à inactif en base de données', async () => {
+        const user = fakeAuthorizedUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.userModel.deactivate.withArgs([42], 'admin', false, transaction).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
@@ -84,8 +105,8 @@ describe('userService.deactivate()', () => {
         expect(transaction.commit).to.have.been.calledOnce;
     });
 
-    it('retourne le compte désactivé', async () => {
-        const user = fakeUser({ id: 42, status: 'active' });
+    it(' retourne le compte désactivé', async () => {
+        const user = fakeAuthorizedUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
         const expectedUser = { ...user, status: 'inactive' };
@@ -94,8 +115,8 @@ describe('userService.deactivate()', () => {
         expect(response).to.be.eql(expectedUser);
     });
 
-    it('exécute l\'ensemble des requêtes dans une transaction', async () => {
-        const user = fakeUser({ id: 42, status: 'active' });
+    it(' exécute l\'ensemble des requêtes dans une transaction', async () => {
+        const user = fakeAuthorizedUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
@@ -104,8 +125,8 @@ describe('userService.deactivate()', () => {
         expect(transaction.commit).to.have.been.calledOnce;
     });
 
-    it('s\'il s\'agit d\'une auto-désactivation, envoie un mail de confirmation', async () => {
-        const user = fakeUser({ id: 42, status: 'active' });
+    it(' s\'il s\'agit d\'une auto-désactivation, envoie un mail de confirmation', async () => {
+        const user = fakeAuthorizedUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
         const expectedUser = { ...user, status: 'inactive' };
@@ -115,8 +136,8 @@ describe('userService.deactivate()', () => {
         expect(stubs.mails.sendUserDeactivationConfirmation).to.have.been.calledWith(expectedUser);
     });
 
-    it('s\'il s\'agit d\'une auto-désactivation, n\'envoie pas un mail d\'alerte', async () => {
-        const user = fakeUser({ id: 42, status: 'active' });
+    it(' s\'il s\'agit d\'une auto-désactivation, n\'envoie pas un mail d\'alerte', async () => {
+        const user = fakeAuthorizedUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
@@ -124,8 +145,8 @@ describe('userService.deactivate()', () => {
         expect(stubs.mails.sendUserDeactivationByAdminAlert).to.not.have.been.called;
     });
 
-    it('s\'il s\'agit d\'une auto-désactivation, envoie une notification mattermost', async () => {
-        const user = fakeUser({ id: 42, status: 'active' });
+    it(' s\'il s\'agit d\'une auto-désactivation, envoie une notification mattermost', async () => {
+        const user = fakeAuthorizedUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
         const expectedUser = { ...user, status: 'inactive' };
@@ -135,8 +156,8 @@ describe('userService.deactivate()', () => {
         expect(stubs.mattermost.triggerNotifyNewUserSelfDeactivation).to.have.been.calledWith(expectedUser);
     });
 
-    it('s\'il ne s\'agit PAS d\'une auto-désactivation, envoie un mail avec la raison de la désactivation', async () => {
-        const user = fakeUser();
+    it(' s\'il ne s\'agit PAS d\'une auto-désactivation, envoie un mail avec la raison de la désactivation', async () => {
+        const user = fakeAuthorizedUser({ id: 42 });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
         const expectedUser = { ...user, status: 'inactive' };
@@ -150,8 +171,8 @@ describe('userService.deactivate()', () => {
         });
     });
 
-    it('envoie le mail d\'alerte de désactivation avec une raison par défaut si la raison est manquante', async () => {
-        const user = fakeUser();
+    it(' envoie le mail d\'alerte de désactivation avec une raison par défaut si la raison est manquante', async () => {
+        const user = fakeAuthorizedUser({ id: 42 });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
         const expectedUser = { ...user, status: 'inactive' };
@@ -165,8 +186,8 @@ describe('userService.deactivate()', () => {
         });
     });
 
-    it('s\'il ne s\'agit PAS d\'une auto-désactivation, n\'envoie pas un mail de confirmation', async () => {
-        const user = fakeUser();
+    it(' s\'il ne s\'agit PAS d\'une auto-désactivation, n\'envoie pas un mail de confirmation', async () => {
+        const user = fakeAuthorizedUser({ id: 42 });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
@@ -174,8 +195,8 @@ describe('userService.deactivate()', () => {
         expect(stubs.mails.sendUserDeactivationConfirmation).to.not.have.been.called;
     });
 
-    it('s\'il ne s\'agit PAS d\'une auto-désactivation, n\'envoie pas de notification mattermost', async () => {
-        const user = fakeUser();
+    it(' s\'il ne s\'agit PAS d\'une auto-désactivation, n\'envoie pas de notification mattermost', async () => {
+        const user = fakeAuthorizedUser({ id: 42 });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         stubs.userModel.deactivate.withArgs([42]).resolves([{ user_id: 42, fk_status: 'inactive' }]);
 
@@ -183,8 +204,8 @@ describe('userService.deactivate()', () => {
         expect(stubs.mattermost.triggerNotifyNewUserSelfDeactivation).to.not.have.been.called;
     });
 
-    it('ignore les erreurs de l\'envoi du mail de confirmation', async () => {
-        const user = fakeUser();
+    it(' ignore les erreurs de l\'envoi du mail de confirmation', async () => {
+        const user = fakeAuthorizedUser({ id: 42 });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         const error = new Error('Échec d\'envoi du mail de confirmation');
         error.stack = undefined; // Supprime la stack trace
@@ -194,8 +215,8 @@ describe('userService.deactivate()', () => {
         await deactivateUser(42, true, user);
     });
 
-    it('ignore les erreurs de l\'envoi de la notification mattermost', async () => {
-        const user = fakeUser();
+    it(' ignore les erreurs de l\'envoi de la notification mattermost', async () => {
+        const user = fakeAuthorizedUser({ id: 42 });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         const error = new Error('Échec d\'envoi de la notification Mattermost');
         error.stack = undefined; // Supprime la stack trace
@@ -205,8 +226,8 @@ describe('userService.deactivate()', () => {
         await deactivateUser(42, true, user);
     });
 
-    it('ignore les erreurs de l\'envoi du mail d\'alerte', async () => {
-        const user = fakeUser();
+    it(' ignore les erreurs de l\'envoi du mail d\'alerte', async () => {
+        const user = fakeAuthorizedUser({ id: 42 });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         const error = new Error('Échec d\'envoi du mail d\'alerte');
         error.stack = undefined; // Supprime la stack trace
@@ -216,11 +237,11 @@ describe('userService.deactivate()', () => {
         await deactivateUser(42, false, user);
     });
 
-    it('en cas d\'erreur de la modification de l\'utilisateur, lance une ServiceError', async () => {
+    it(' en cas d\'erreur de la modification de l\'utilisateur, lance une ServiceError', async () => {
         const error = new Error('Erreur de mise à jour');
         error.stack = undefined; // Supprime la stack trace
         stubs.userModel.deactivate.rejects(error);
-        const user = fakeUser({ id: 42, status: 'active' });
+        const user = fakeAuthorizedUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.withArgs(42).resolves(user);
         try {
             await deactivateUser(42, true, user);
@@ -232,10 +253,10 @@ describe('userService.deactivate()', () => {
         }
     });
 
-    it('en cas d\'erreur de la modification de l\'utilisateur, rollback la transaction', async () => {
+    it(' en cas d\'erreur de la modification de l\'utilisateur, rollback la transaction', async () => {
         const error = new Error('Erreur lors de la désactivation de l\'utilisateur');
         error.stack = undefined; // Supprime la stack trace
-        const user = fakeUser({ id: 42, status: 'active' });
+        const user = fakeAuthorizedUser({ id: 42, status: 'active' });
         stubs.userModel.findOne.resolves(user);
         stubs.userModel.deactivate.rejects(error);
 
@@ -247,8 +268,8 @@ describe('userService.deactivate()', () => {
         }
     });
 
-    it('en cas d\'erreur de la recherche de l\'utilisateur, ne crée pas de transaction', async () => {
-        const user = fakeUser({ id: 42, status: 'active' });
+    it(' en cas d\'erreur de la recherche de l\'utilisateur, ne crée pas de transaction', async () => {
+        const user = fakeAuthorizedUser({ id: 42, status: 'active' });
         const error = new Error('test');
 
         // Simuler que findOne échoue
@@ -261,9 +282,9 @@ describe('userService.deactivate()', () => {
         expect(stubs.sequelize.transaction).to.not.have.been.called;
     });
 
-    it('en cas d\'erreur de la modification de l\'utilisateur, rollback la transaction', async () => {
+    it(' en cas d\'erreur de la modification de l\'utilisateur, rollback la transaction', async () => {
         // Given
-        const user = fakeUser({ id: 42, status: 'active' });
+        const user = fakeAuthorizedUser({ id: 42, status: 'active' });
 
         // Simuler une erreur de mise à jour
         const error = new Error('Erreur de mise à jour');
@@ -286,10 +307,10 @@ describe('userService.deactivate()', () => {
         }
     });
 
-    it('en cas d\'erreur dans la transaction, lance une ServiceError', async () => {
+    it(' en cas d\'erreur dans la transaction, lance une ServiceError', async () => {
         const error = new Error('Échec de la transaction');
         error.stack = undefined; // Supprime la stack trace
-        const user = fakeUser({ id: 42, status: 'active' });
+        const user = fakeAuthorizedUser({ id: 42, status: 'active' });
 
         // Simuler que la transaction échoue lors du commit
         stubs.userModel.findOne.withArgs(42).resolves(user);
@@ -304,5 +325,43 @@ describe('userService.deactivate()', () => {
             expect(e.code).to.equal('transaction_failure');
             expect(transaction.rollback).to.have.been.called;
         }
+    });
+
+    describe('contrôle de permission', () => {
+        it(' lance une ServiceError "deactivation_permission_failure" si l\'auteur n\'a pas la permission deactivate/user, sans jamais désactiver l\'utilisateur', async () => {
+            const author = fakeUser({
+                id: 99,
+                permissions: {
+                    ...fakeUser().permissions,
+                    user: {},
+                },
+            });
+            const user = fakeAuthorizedUser({ id: 42, status: 'active' });
+            stubs.userModel.findOne.withArgs(42).resolves(user);
+
+            try {
+                await deactivateUser(42, false, author);
+                expect.fail('should have thrown an error');
+            } catch (e) {
+                expect(e).to.be.an.instanceof(ServiceError);
+                expect(e.code).to.equal('deactivation_permission_failure');
+            }
+
+            expect(stubs.userModel.deactivate).to.not.have.been.called;
+            expect(stubs.userModel.findOne).to.not.have.been.called;
+            expect(stubs.sequelize.transaction).to.not.have.been.called;
+        });
+
+        it(' autorise la désactivation si l\'auteur possède la permission deactivate/user', async () => {
+            const author = fakeAuthorizedUser({ id: 99 });
+            const user = fakeAuthorizedUser({ id: 42, status: 'active' });
+            stubs.userModel.findOne.withArgs(42).resolves(user);
+            stubs.userModel.deactivate.withArgs([42], 'admin', false, transaction).resolves([{ user_id: 42, fk_status: 'inactive' }]);
+
+            const response = await deactivateUser(42, false, author);
+
+            expect(response.status).to.equal('inactive');
+            expect(stubs.userModel.deactivate).to.have.been.calledOnce;
+        });
     });
 });

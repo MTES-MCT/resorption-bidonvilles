@@ -19,13 +19,12 @@ interface MajicParcelGetRequest extends Request {
 export default async (req: MajicParcelGetRequest, res: Response, next: NextFunction) => {
     const {
         parcelid,
-        departmentid,
     } = req.query;
 
     const { user } = req;
 
     try {
-        await majicService.find(parcelid as string, departmentid as string, user);
+        await majicService.find(parcelid as string, user);
     } catch (error) {
         const { code } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
 

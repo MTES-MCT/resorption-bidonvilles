@@ -3,22 +3,25 @@
         ref="textarea"
         :rows="rows"
         id="comment"
-        :label="labels.comment"
-        placeholder="Partagez votre passage sur le site, le contexte sanitaire, la situation des habitants, difficultés rencontrées lors de votre intervention…"
+        :label="label"
+        :placeholder="placeholder"
+        :aria-label="label || placeholder || 'Message'"
         @paste="onPaste"
     />
 </template>
 
 <script setup>
-import { ref, computed, toRefs } from "vue";
-import labels from "../FicheSiteJournalFormNouveauMessage.labels";
+import { computed, ref, toRefs } from "vue";
 import { TextArea } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     rows: Number,
+    label: String,
+    placeholder: String,
 });
-const { rows } = toRefs(props);
+const { rows, label, placeholder } = toRefs(props);
 const textarea = ref(null);
+
 const emit = defineEmits(["paste"]);
 
 const isFocused = computed(() => {

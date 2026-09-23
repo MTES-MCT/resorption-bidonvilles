@@ -31,7 +31,9 @@ export default (shantytownIds: number[] | null, annee_action: number, clauseGrou
     LEFT JOIN
         actions ON ash.fk_action = actions.action_id
     LEFT JOIN
-        departements ON departements.code = actions.fk_departement`;
+        departements ON departements.code = actions.fk_departement
+    LEFT JOIN
+        regions ON regions.code = departements.fk_region`;
 
     return sequelize.query(
         `
@@ -54,7 +56,7 @@ export default (shantytownIds: number[] | null, annee_action: number, clauseGrou
             action_shantytowns ash
         LEFT JOIN
             action_finances as af ON af.fk_action = ash.fk_action
-        ${'departements' in clauseGroup ? leftJoins : ''}
+        ${('departements' in clauseGroup || 'regions' in clauseGroup) ? leftJoins : ''}
         ${where.length > 0 ? `WHERE ${where.join(' AND ')}` : ''}
         GROUP BY 1, 2, 3
         ORDER BY 1, 2
