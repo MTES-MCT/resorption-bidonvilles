@@ -11,6 +11,10 @@ export default (userIds: number[], organizationIds: number[], transaction: Trans
         where.push('intervention_areas.fk_organization IN (:organizationIds)');
     }
 
+    if (where.length === 0) {
+        return Promise.resolve([]);
+    }
+
     return sequelize.query(
         `SELECT DISTINCT
             intervention_areas.fk_user,
