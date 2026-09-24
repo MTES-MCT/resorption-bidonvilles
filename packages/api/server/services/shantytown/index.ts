@@ -2,6 +2,7 @@ import anonymizeOwners from './anonymizeOwners';
 import create from './create';
 import list from './list';
 import find from './find';
+import findNearby from './findNearby';
 import findJusticeReaders from './findJusticeReaders';
 import forceUpdateWithoutChanges from './forceUpdateWithoutChanges';
 import getClosureYearRange from './getClosureYearRange';
@@ -19,6 +20,7 @@ export default {
     create,
     list,
     find,
+    findNearby,
     findJusticeReaders,
     getClosureYearRange,
     close,

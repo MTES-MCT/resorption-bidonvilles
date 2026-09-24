@@ -1,17 +1,21 @@
-import shantytownModel from '#server/models/shantytownModel';
+import shantytownService from '#server/services/shantytown';
 
-const { findNearby } = shantytownModel;
+const ERROR_RESPONSES = {
+    fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
+    undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
+};
 
 export default async (req, res, next) => {
     try {
         const { latitude, longitude } = req.query;
         const distance = 0.5;
-        const towns = await findNearby(req.user, latitude, longitude, distance);
+        const towns = await shantytownService.findNearby(req.user, latitude, longitude, distance);
         return res.status(200).send({ towns });
     } catch (error) {
-        res.status(500).send({
-            user_message: 'Une erreur est survenue lors de la lecture en base de données',
+        const { code, message } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
+        res.status(code).send({
+            user_message: message,
         });
-        return next(error);
+        return next(error.nativeError ?? error);
     }
 };

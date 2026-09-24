@@ -2,10 +2,10 @@ import { query } from 'express-validator';
 
 export default [
     query('longitude')
-        .isFloat()
-        .notEmpty().withMessage('Le paramètre longitude est obligatoire'),
+        .notEmpty().bail().withMessage('Le paramètre longitude est obligatoire')
+        .isFloat().bail().withMessage('Le paramètre longitude doit être un nombre décimal'),
 
     query('latitude')
-        .isFloat()
-        .notEmpty().withMessage('Le paramètre latitude est obligatoire'),
+        .notEmpty().bail().withMessage('Le paramètre latitude est obligatoire')
+        .isFloat().bail().withMessage('Le paramètre latitude doit être un nombre décimal'),
 ];
