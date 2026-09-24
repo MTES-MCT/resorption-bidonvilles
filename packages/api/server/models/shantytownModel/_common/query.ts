@@ -56,9 +56,16 @@ const TABLE_NAMES_BY_MODE: Record<QueryTableMode, Record<string, string>> = {
     },
 };
 
-function validateDynamicSqlFragments(selection: Record<string, string>, joins: { table: string, on: string }[], order: string | null): void {
+// Mots-clés SQL qui n'ont rien à faire dans un fragment de sélection : ce DSL ne sert
+// qu'à des formules arithmétiques (ex: distance de Haversine), jamais à des sous-requêtes.
+const FORBIDDEN_SELECTION_KEYWORDS = /\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|CREATE|ALTER|GRANT|REVOKE|EXEC)\b/i;
+
+export function validateDynamicSqlFragments(selection: Record<string, string>, joins: { table: string, on: string }[], order: string | null): void {
     Object.keys(selection).forEach((key) => {
-        if (!isValidSqlIdentifier(key.replace(/[.:()]/g, '')) && !/^[\w.:()]+$/.test(key)) {
+        if (
+            (!isValidSqlIdentifier(key.replace(/[.:()]/g, '')) && !/^[\w.:()*/+\-,\s]+$/.test(key))
+            || FORBIDDEN_SELECTION_KEYWORDS.test(key)
+        ) {
             throw new Error('Invalid input');
         }
         if (typeof selection[key] === 'string' && !isValidSqlIdentifier(selection[key])) {
