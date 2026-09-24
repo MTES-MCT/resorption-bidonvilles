@@ -1,6 +1,7 @@
 import shantytownService from '#server/services/shantytown';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
 
-const ERROR_RESPONSES = {
+const ERROR_RESPONSES: ControllerErrors = {
     fetch_failed: { code: 400, message: 'Une lecture en base de données a échoué' },
     undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
 };
