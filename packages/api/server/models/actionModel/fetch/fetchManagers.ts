@@ -4,7 +4,7 @@ import ActionUserRow from './ActionUserRow.d';
 import enrichWhere from './enrichWhere';
 
 export default function fetchManagers(actionIds?: number[], clauseGroup: object = {}, transaction?: Transaction): Promise<ActionUserRow[]> {
-    const where = [];
+    const where = ['(users.user_id IS NULL OR users.anonymized_at IS NULL)'];
     const replacements = { actionIds };
     if (actionIds !== undefined) {
         where.push('action_managers.fk_action IN (:actionIds)');
