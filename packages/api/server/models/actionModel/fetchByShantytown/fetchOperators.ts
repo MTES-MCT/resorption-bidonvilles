@@ -4,7 +4,7 @@ import ActionUserRow from '../fetch/ActionUserRow';
 import enrichWhere from '../fetch/enrichWhere';
 
 export default function fetchOperators(shantytownIds: number[], clauseGroup: object = {}): Promise<ActionUserRow[]> {
-    const where = [];
+    const where = ['(users.user_id IS NULL OR users.anonymized_at IS NULL)'];
     const replacements = { shantytownIds };
 
     enrichWhere(where, replacements, clauseGroup);

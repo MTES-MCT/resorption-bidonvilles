@@ -229,6 +229,41 @@ describe('services/action.update()', () => {
             expect(caughtError).to.be.instanceOf(ServiceError);
             expect(caughtError?.code).to.equal('forbidden_principal_change');
         });
+
+        it('lève ServiceError forbidden_principal_change si un user lambda désigne un nouveau principal alors que l\'ancien (anonymisé) a disparu du payload', async () => {
+            // Cas réel : l'opérateur principal (id=10) a été anonymisé, il n'apparaît donc plus
+            // du tout dans le payload envoyé par le frontend (cf. formatFormAction.js). Le payload
+            // ne contient qu'un opérateur inédit (id=20) désigné principal : son id n'existe pas
+            // en BDD, il ne peut donc pas être détecté par la comparaison "par id commun" seule.
+            const operatorsWithoutAnonymizedPrincipal: ActionOperatorInput[] = [
+                { id: 20, organization_id: 3, is_principal: true },
+            ];
+            const lambdaUser = fakeUser({ id: 99, role_id: 'collaborator' });
+
+            let caughtError: ServiceError | null = null;
+            try {
+                await update(actionWithPrincipal, lambdaUser, buildActionData(operatorsWithoutAnonymizedPrincipal));
+            } catch (err) {
+                caughtError = err as ServiceError;
+            }
+
+            expect(stubs.updateActionModel).not.to.have.been.called;
+            expect(stubs.sequelize.transaction).not.to.have.been.called;
+            expect(caughtError).to.be.instanceOf(ServiceError);
+            expect(caughtError?.code).to.equal('forbidden_principal_change');
+        });
+
+        it('autorise un pilote à désigner un nouveau principal quand l\'ancien (anonymisé) a disparu du payload', async () => {
+            const piloteUser = fakeUser({ id: 42, role_id: 'collaborator' });
+            const operatorsWithoutAnonymizedPrincipal: ActionOperatorInput[] = [
+                { id: 20, organization_id: 3, is_principal: true },
+            ];
+
+            await update(actionWithPrincipal, piloteUser, buildActionData(operatorsWithoutAnonymizedPrincipal));
+
+            expect(stubs.updateActionModel).to.have.been.calledOnce;
+            expect(stubs.transaction.commit).to.have.been.calledOnce;
+        });
     });
 
     describe('comportement nominal', () => {
