@@ -1,12 +1,17 @@
 import query from './_common/query';
 
-export default (user, userIds) => query(
+const findByIds = (user, userIds) => query(
     [
         {
             user_id: userIds,
+        },
+        {
+            anonymized_at: { value: null },
         },
     ],
     { auth: false, extended: false },
     user,
     'list',
 );
+
+export default findByIds;

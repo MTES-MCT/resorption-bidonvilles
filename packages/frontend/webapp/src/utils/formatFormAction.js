@@ -1,5 +1,6 @@
 import { normalizeShantytownIds } from "./normalizeShantytownIds";
 import sortOperatorsByPrincipal from "./sortOperatorsByPrincipal";
+import isAnonymizedUser from "./isAnonymizedUser";
 
 export const fields = [
     "nombre_personnes",
@@ -61,12 +62,14 @@ export const formatFormAction = (data) => {
             organizations: [],
             users: data.managers
                 ? data.managers.flatMap(({ name, abbreviation, users }) =>
-                      users.map((user) => ({
-                          id: user.id,
-                          label: `${user.first_name} ${user.last_name} (${
-                              abbreviation || name
-                          })`,
-                      }))
+                      users
+                          .filter((user) => !isAnonymizedUser(user))
+                          .map((user) => ({
+                              id: user.id,
+                              label: `${user.first_name} ${user.last_name} (${
+                                  abbreviation || name
+                              })`,
+                          }))
                   )
                 : [],
         },
@@ -75,13 +78,15 @@ export const formatFormAction = (data) => {
             users: data.operators
                 ? sortOperatorsByPrincipal(data.operators).flatMap(
                       ({ name, abbreviation, users }) =>
-                          users.map((user) => ({
-                              id: user.id,
-                              label: `${user.first_name} ${user.last_name} (${
-                                  abbreviation || name
-                              })`,
-                              is_principal: user.is_principal === true,
-                          }))
+                          users
+                              .filter((user) => !isAnonymizedUser(user))
+                              .map((user) => ({
+                                  id: user.id,
+                                  label: `${user.first_name} ${
+                                      user.last_name
+                                  } (${abbreviation || name})`,
+                                  is_principal: user.is_principal === true,
+                              }))
                   )
                 : [],
         },
