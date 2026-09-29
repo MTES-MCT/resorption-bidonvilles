@@ -1,18 +1,11 @@
-import chai from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-
 import { rewiremock } from '#test/rewiremock';
+import {
+    createAnonymizedUsersFetchStub,
+    registerAnonymizedUsersFetchHooks,
+    expectAnonymizedUsersExcluded,
+} from '#test/utils/actionModelAnonymizedUsersFetch';
 
-const { expect } = chai;
-chai.use(sinonChai);
-
-const sandbox = sinon.createSandbox();
-const queryStub = sandbox.stub();
-
-const fakeSequelize = {
-    query: queryStub,
-};
+const { sandbox, queryStub, fakeSequelize } = createAnonymizedUsersFetchStub();
 
 rewiremock('#db/sequelize').with({ sequelize: fakeSequelize });
 rewiremock('sequelize').with({ QueryTypes: { SELECT: 'SELECT' } });
@@ -24,19 +17,9 @@ import fetchManagers from './fetchManagers';
 rewiremock.disable();
 
 describe('models/actionModel/fetch/fetchManagers()', () => {
-    beforeEach(() => {
-        queryStub.resolves([]);
-    });
-
-    afterEach(() => {
-        sandbox.reset();
-    });
+    registerAnonymizedUsersFetchHooks({ sandbox, queryStub });
 
     it('exclut les pilotes dont le compte est anonymisé (traités comme des utilisateurs inexistants)', async () => {
-        await fetchManagers([1]);
-
-        expect(queryStub).to.have.been.calledOnce;
-        const sql: string = queryStub.firstCall.args[0];
-        expect(sql).to.include('users.anonymized_at IS NULL');
+        await expectAnonymizedUsersExcluded(queryStub, fetchManagers);
     });
 });
