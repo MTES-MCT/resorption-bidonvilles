@@ -17,5 +17,7 @@
 <script setup>
 import { CheckableGroup, Icon, Radio } from "@resorptionbidonvilles/ui";
 import labels from "../FicheActionJournalFormNouveauMessage.labels";
-import items from "@/utils/comment_modes";
+import { getCommentModes } from "@/utils/comment_modes";
+
+const items = getCommentModes("action");
 </script>
