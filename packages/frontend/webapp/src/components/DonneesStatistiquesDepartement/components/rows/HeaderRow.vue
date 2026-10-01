@@ -121,7 +121,7 @@ const globalCollapseStatus = computed(() => {
         return "mixed";
     }
 
-    return hasFalse ? false : true;
+    return !hasFalse;
 });
 
 const collapseTitle = computed(() => {
