@@ -5,7 +5,7 @@
                 >{{ user.last_name.toUpperCase() }} </span
             ><br /><span class="text-lg">{{ user.first_name }}</span>
         </h1>
-        <img :src="avatarImg" class="w-24" />
+        <img :src="avatarImg" class="w-24" alt="" />
     </header>
     <p>
         Structure :<br />
