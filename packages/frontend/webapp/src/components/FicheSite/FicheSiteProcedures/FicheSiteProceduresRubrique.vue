@@ -4,29 +4,28 @@
             <div
                 :class="[
                     { 'pb-4': !collapsed },
-                    'border-1 border-cardBorder rounded px-8 mt-2 hover:bg-G100 cursor-pointer',
+                    'border-1 border-cardBorder rounded px-8 mt-2 hover:bg-G100',
                 ]"
-                @click="toggleCollapse"
             >
-                <div
+                <button
+                    type="button"
                     :class="{
                         'border-b-2 border-G200 ': !collapsed,
                     }"
-                    class="py-2 font-bold text-primary flex items-center justify-between"
+                    class="rubrique-titre py-2 font-bold text-primary flex items-center justify-between cursor-pointer"
+                    :aria-expanded="!collapsed"
+                    :aria-controls="detailsId"
+                    @click="toggleCollapse"
                 >
-                    <div>
+                    <span>
                         <span>
                             {{ enrichedTitle }}
                         </span>
-                    </div>
-                    <Button
-                        :icon="collapsed ? 'chevron-up' : 'chevron-down'"
-                        variant="primaryText"
-                        type="button"
-                    />
-                </div>
+                    </span>
+                    <Icon :icon="collapsed ? 'chevron-down' : 'chevron-up'" />
+                </button>
 
-                <div v-if="!collapsed">
+                <div v-if="!collapsed" :id="detailsId">
                     <slot />
                 </div>
             </div>
@@ -35,9 +34,9 @@
 </template>
 
 <script setup>
-import { computed, toRefs, ref } from "vue";
+import { computed, toRefs, ref, useId } from "vue";
 
-import { Button } from "@resorptionbidonvilles/ui";
+import { Icon } from "@resorptionbidonvilles/ui";
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 
 const props = defineProps({
@@ -46,6 +45,7 @@ const props = defineProps({
 });
 const { title, titleSupplements } = toRefs(props);
 const collapsed = ref(true);
+const detailsId = `procedures-${useId()}`;
 
 function toggleCollapse() {
     collapsed.value = !collapsed.value;
@@ -58,3 +58,10 @@ const enrichedTitle = computed(() => {
     return title.value + " - " + titleSupplements.value;
 });
 </script>
+
+<style scoped>
+.rubrique-titre {
+    width: 100%;
+    text-align: left;
+}
+</style>
