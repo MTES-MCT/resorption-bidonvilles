@@ -3,24 +3,10 @@
   "packageManager": "yarn@3.2.0",
   "main": "./src/index.mjs",
   "devDependencies": {
-    "@babel/preset-env": "^7.22.4",
-    "@babel/preset-typescript": "^7.21.5",
-    "@storybook/addon-essentials": "^7.0.18",
-    "@storybook/addon-links": "^7.0.18",
-    "@storybook/addon-styling": "^1.0.8",
-    "@storybook/vue3": "^7.0.18",
-    "@storybook/vue3-webpack5": "^7.0.18",
     "autoprefixer": "^10.4.4",
     "postcss": "^8.5.23",
     "postcss-flexbugs-fixes": "^5.0.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "storybook": "^7.6.21",
-    "tailwindcss": "^3.0.23",
-    "vue-i18n": "^11.1.1"
-  },
-  "scripts": {
-    "storybook": "storybook dev -p 6006"
+    "tailwindcss": "^3.0.23"
   },
   "dependencies": {
     "vee-validate": "^4.13.2"

@@ -10,7 +10,7 @@
                 icon="arrow-left"
                 iconPosition="left"
                 type="button"
-                variant="textPrimary"
+                variant="primaryText"
                 :disabled="focusedYear <= minYear"
                 @click="previousYear"
                 >Année précédente</Button
@@ -22,7 +22,7 @@
                 icon="arrow-right"
                 iconPosition="right"
                 type="button"
-                variant="textPrimary"
+                variant="primaryText"
                 :disabled="focusedYear >= maxYear"
                 @click="nextYear"
                 >Année suivante</Button
@@ -66,6 +66,7 @@
                     v-else-if="column === 'actions'"
                     type="button"
                     icon="trash-alt"
+                    :aria-label="`Supprimer la ligne ${row + 1}`"
                     size="sm"
                     variant="primary"
                     @click="removeRow(row)"

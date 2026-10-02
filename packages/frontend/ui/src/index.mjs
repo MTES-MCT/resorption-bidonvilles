@@ -1,5 +1,3 @@
-export { default as Accordion } from './components/Accordion/Accordion.vue';
-export { default as AccordionItem } from './components/Accordion/AccordionItem.vue';
 export { default as AsyncSelect } from './components/Input/AsyncSelect.vue';
 export { default as Autocomplete } from './components/Input/Autocomplete.vue';
 export { default as BottomPagination } from './components/BottomPagination.vue';
@@ -22,9 +20,7 @@ export { default as FilePreviewList } from './components/FilePreview/FilePreview
 export { default as FooterBar } from './components/FooterBar/FooterBar.vue';
 export { default as FormParagraph } from './components/FormParagraph.vue';
 export { default as Icon } from './components/Icon.vue';
-export { default as IdentiteVisuelle } from './components/IdentiteVisuelle/IdentiteVisuelle.vue';
 export { default as InputFiles } from './components/Input/InputFiles.vue';
-export { default as InputGroup } from './components/Input/InputGroup.vue';
 export { default as InputError } from './components/Input/utils/InputError.vue';
 export { default as InputLabel } from './components/Input/utils/InputLabel.vue';
 export { default as InputWrapper } from './components/Input/utils/InputWrapper.vue';
@@ -34,10 +30,8 @@ export { default as LinkButton } from './components/LinkButton.vue';
 export { default as LinkOrganization } from './components/LinkOrganization.vue';
 export { default as MandatoryStar } from './components/Input/utils/MandatoryStar.vue';
 export { default as Menu } from './components/Menu/Menu.vue';
-export { default as MenuItem } from './components/Menu/MenuItem.vue';
 export { default as Modal } from './components/Modal.vue';
 export { default as Radio } from './components/Input/Radio.vue';
-export { default as RbLogo } from './components/RbLogo.vue';
 export { default as Spinner } from './components/Spinner.vue';
 export { default as Pagination } from './components/Pagination.vue';
 export { default as PanneauLateral } from './components/PanneauLateral.vue';
