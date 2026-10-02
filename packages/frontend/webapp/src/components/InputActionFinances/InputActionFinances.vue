@@ -66,6 +66,7 @@
                     v-else-if="column === 'actions'"
                     type="button"
                     icon="trash-alt"
+                    :aria-label="`Supprimer la ligne ${row + 1}`"
                     size="sm"
                     variant="primary"
                     @click="removeRow(row)"
