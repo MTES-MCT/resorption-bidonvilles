@@ -34,16 +34,19 @@
                     status.positive.length ||
                     status.unknown.length
                 "
-                class="border-1 border-cardBorder rounded px-8 mt-4 hover:bg-G100 cursor-pointer"
-                @click="toggleCollapse"
+                class="border-1 border-cardBorder rounded px-8 mt-4 hover:bg-G100"
             >
-                <div
+                <button
+                    type="button"
                     :class="{
                         'border-b-2 border-G200 ': !collapsed,
                     }"
-                    class="py-2 font-bold text-primary flex items-center justify-between"
+                    class="rubrique-titre py-2 font-bold text-primary flex items-center justify-between cursor-pointer"
+                    :aria-expanded="!collapsed"
+                    :aria-controls="detailsId"
+                    @click="toggleCollapse"
                 >
-                    <div>
+                    <span>
                         <span v-if="status.negative.length">
                             {{ status.negative.length }} action{{
                                 status.negative.length > 1 ? "s" : ""
@@ -72,15 +75,11 @@
                                 status.unknown.length > 1 ? "s" : ""
                             }}
                         </span>
-                    </div>
-                    <Button
-                        :icon="collapsed ? 'chevron-up' : 'chevron-down'"
-                        variant="primaryText"
-                        type="button"
-                    />
-                </div>
+                    </span>
+                    <Icon :icon="collapsed ? 'chevron-down' : 'chevron-up'" />
+                </button>
 
-                <div v-if="!collapsed">
+                <div v-if="!collapsed" :id="detailsId">
                     <FicheSiteConditionsDeVieDetails
                         v-if="status.negative.length"
                         type="negative"
@@ -103,9 +102,9 @@
 </template>
 
 <script setup>
-import { toRefs, ref, computed } from "vue";
+import { toRefs, ref, computed, useId } from "vue";
 
-import { Button, Icon } from "@resorptionbidonvilles/ui";
+import { Icon } from "@resorptionbidonvilles/ui";
 import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue";
 import FicheSiteConditionsDeVieDetails from "./FicheSiteConditionsDeVieDetails.vue";
 
@@ -134,6 +133,7 @@ const props = defineProps({
 });
 const { title, status, info, showStatus, answers, inverted } = toRefs(props);
 const collapsed = ref(true);
+const detailsId = `conditions-vie-${useId()}`;
 
 const COLORS = {
     good: "text-tertiaryA11Y",
@@ -185,3 +185,10 @@ function toggleCollapse() {
     collapsed.value = !collapsed.value;
 }
 </script>
+
+<style scoped>
+.rubrique-titre {
+    width: 100%;
+    text-align: left;
+}
+</style>
