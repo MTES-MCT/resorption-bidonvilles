@@ -17,9 +17,15 @@
                 </template>
                 <ToolTip
                     tip="Cliquez ici pour modifier vos champs d'intervention"
-                    @click="openSelfThemes"
                 >
-                    <Button icon="plus" size="sm" variant="primaryOutline" />
+                    <Button
+                        type="button"
+                        icon="plus"
+                        size="sm"
+                        variant="primaryOutline"
+                        aria-label="Modifier mes champs d'intervention"
+                        @click="openSelfThemes"
+                    />
                 </ToolTip>
             </div>
             <p class="text-right mt-6">
