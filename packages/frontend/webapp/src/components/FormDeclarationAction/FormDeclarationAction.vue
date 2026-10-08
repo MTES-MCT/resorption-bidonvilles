@@ -21,6 +21,7 @@
             :departement="departement"
         />
         <FormDeclarationActionIndicateurs
+            ref="indicateursSection"
             class="mt-6"
             :errors="indicateursErrors"
         />
@@ -31,6 +32,7 @@
             v-if="error || Object.keys(errors).length > 0"
             :message="error"
             :summary="cleanedErrors"
+            @select="onSummarySelect"
         />
     </ArrangementLeftMenu>
 </template>
@@ -54,7 +56,17 @@ import { useNotificationStore } from "@/stores/notification.store";
 import { useModaleStore } from "@/stores/modale.store";
 import { trackEvent } from "@/helpers/matomo";
 import router from "@/helpers/router";
-import focusFirstErrorField from "@/utils/focusFirstErrorField";
+import focusFirstErrorField, {
+    findFirstFieldIdInDomOrder,
+} from "@/utils/focusFirstErrorField";
+import parseIndicateursErrors, {
+    GENERAL_YEAR_KEY,
+    buildIndicateursSummary,
+    collectIndicateursErrors,
+    getIndicateursYearsInError,
+    parseIndicateursSummaryKey,
+} from "@/utils/parseIndicateursErrors";
+import focusFieldById from "@common/utils/focusFieldById";
 import _ from "lodash-es";
 import backOrReplace from "@/utils/backOrReplace";
 import {
@@ -152,10 +164,61 @@ watch(
 );
 
 // Watch pour le focus automatique sur les erreurs de validation
-watch(errors, (newErrors) => {
-    if (Object.keys(newErrors).length > 0) {
-        focusFirstErrorField(newErrors);
+const indicateursSection = ref(null);
+
+// Les indicateurs sont validés pour toutes les années, mais une seule est
+// affichée : on bascule sur l'année fautive (la plus ancienne en erreur, ou
+// l'année déjà affichée si elle l'est) et on attend son rendu avant le focus.
+// Retourne l'id (= nom) du premier champ en erreur de l'année affichée, dans
+// l'ordre du DOM, ou null.
+async function revealIndicateursErrors() {
+    const freshErrors = await collectIndicateursErrors(
+        validationSchema,
+        values
+    );
+    const years = getIndicateursYearsInError(freshErrors);
+    if (years.length === 0) {
+        return null;
     }
+
+    indicateursErrors.value = freshErrors;
+    const shownYear = await indicateursSection.value?.showFirstYearInError(
+        years
+    );
+    if (shownYear === null || shownYear === undefined) {
+        return null;
+    }
+
+    return findFirstFieldIdInDomOrder(
+        Object.keys(freshErrors[shownYear] || {})
+    );
+}
+
+// Clic sur une erreur d'indicateurs dans le résumé : afficher l'année concernée
+// avant de placer le focus sur le champ.
+async function onSummarySelect(key) {
+    const target = parseIndicateursSummaryKey(key);
+    if (!target) {
+        return;
+    }
+
+    await indicateursSection.value?.showYear(target.year);
+    focusFieldById(target.field);
+}
+
+watch(errors, async (newErrors) => {
+    if (Object.keys(newErrors).length === 0) {
+        return;
+    }
+
+    const explicitTargets = {};
+    if (Object.keys(newErrors).some((key) => key.startsWith("indicateurs"))) {
+        const indicateursTargetId = await revealIndicateursErrors();
+        if (indicateursTargetId) {
+            explicitTargets.indicateurs = indicateursTargetId;
+        }
+    }
+    focusFirstErrorField(newErrors, "erreurs", explicitTargets);
 });
 
 const originalValues = ref(null);
@@ -186,16 +249,9 @@ const cleanedErrors = computed(() => {
             }
         });
 
-    // Erreurs indicateurs depuis la source yup fiable
-    Object.keys(indicateursErrors.value).forEach((key) => {
-        const errorMessage = indicateursErrors.value[key];
-        if (typeof errorMessage === "string") {
-            const match = errorMessage.match(/^FIELD:([^|]+)\|MESSAGE:(.+)$/);
-            cleaned[key] = match ? match[2] : errorMessage;
-        } else {
-            cleaned[key] = errorMessage;
-        }
-    });
+    // Erreurs indicateurs depuis la source yup fiable : une entrée par année et
+    // par champ (clé "indicateurs-ANNÉE-champ"), message préfixé de l'année.
+    Object.assign(cleaned, buildIndicateursSummary(indicateursErrors.value));
 
     return cleaned;
 });
@@ -241,6 +297,7 @@ watch(
 
 const hasChanges = ref(false);
 
+// Format : { année: { champ: message } } (clé GENERAL_YEAR_KEY pour les erreurs sans année).
 // Ref alimenté par le watch sur values.indicateurs (mode 'silent').
 // Séparé de errors.value car le mode 'silent' ne propage pas les erreurs
 // d'indicateurs dans vee-validate.
@@ -576,19 +633,23 @@ watch(
             return;
         }
         // vee-validate stocke toutes les erreurs des sous-champs indicateurs
-        // dans un tableau plat sous la clé "indicateurs".
-        // Chaque message encode le nom du champ : "FIELD:fieldName|MESSAGE:..."
-        // On reconstruit un objet { fieldName: message } pour l'affichage inline.
-        indicateursErrors.value = fieldResult.errors.reduce((acc, msg) => {
-            const match =
-                typeof msg === "string"
-                    ? msg.match(/^FIELD:([^|]+)\|MESSAGE:(.+)$/)
-                    : null;
-            if (match) {
-                acc[match[1]] = match[2];
-            }
-            return acc;
-        }, {});
+        // dans un tableau plat de messages sous la clé "indicateurs", sans chemin
+        // donc sans année. On revalide donc directement avec yup pour lire l'année
+        // dans le chemin de chaque erreur : { année: { fieldName: message } }.
+        // Les messages sans préfixe sont conservés sous la clé "indicateurs"
+        // (repli) pour rester visibles dans le résumé d'erreurs.
+        const errorsByYear = await collectIndicateursErrors(
+            validationSchema,
+            values
+        );
+        indicateursErrors.value =
+            Object.keys(errorsByYear).length > 0
+                ? errorsByYear
+                : {
+                      [GENERAL_YEAR_KEY]: parseIndicateursErrors(
+                          fieldResult.errors
+                      ),
+                  };
     },
     { deep: true }
 );
