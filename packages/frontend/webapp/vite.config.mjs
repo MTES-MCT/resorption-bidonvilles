@@ -63,7 +63,7 @@ export default defineConfig({
         __APP_VERSION__: JSON.stringify(version),
     },
     optimizeDeps: {
-        include: ["@turf/turf", "leaflet"],
+        include: ["@turf/turf", "leaflet", "keycloak-js"],
     },
     resolve: {
         alias: {
