@@ -147,7 +147,7 @@ const headerDatas = ref({
     quickLinks: [
         {
             label: 'Connexion',
-            href: `${WEBAPP_URL}/connexion`,
+            href: `${WEBAPP_URL}/tableau-de-bord`,
             icon: 'fr-icon-lock-line',
         }, {
             label: 'Accès au blog',
