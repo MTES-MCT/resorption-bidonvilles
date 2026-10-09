@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
+import jwksClient from 'jwks-rsa';
 import * as Sentry from '@sentry/node';
 import config from '#server/config';
-import findOneUser from '#server/models/userModel/findOne';
+import findOneByEmail from '#server/models/userModel/findOneByEmail';
 import { User } from '#root/types/resources/User.d';
 
 const { auth: authConfig } = config;
@@ -32,6 +33,20 @@ const MAGIC_TOKENS = {
     },
 };
 
+const keycloakClient = jwksClient({
+    jwksUri: `https://${authConfig.keycloakHostname}/realms/SISIAO/protocol/openid-connect/certs`,
+    cache: true,
+    rateLimit: true,
+});
+
+function getKey(header: jwt.JwtHeader, callback: jwt.SigningKeyCallback) {
+    keycloakClient.getSigningKey(header.kid, (err, key) => {
+        if (err) { return callback(err); }
+        const signingKey = key?.getPublicKey();
+        return callback(null, signingKey);
+    });
+}
+
 async function authenticateUser(req) {
     const token = req.headers?.['x-access-token'] ?? req.query.accessToken;
 
@@ -47,7 +62,11 @@ async function authenticateUser(req) {
         decoded = MAGIC_TOKENS[token];
     } else {
         try {
-            decoded = jwt.verify(token, authConfig.secret);
+            decoded = await new Promise((resolve, reject) => {
+                jwt.verify(token, getKey, (err, payload) => {
+                    if (err) { reject(err); } else { resolve(payload); }
+                });
+            });
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);
@@ -58,10 +77,11 @@ async function authenticateUser(req) {
         }
     }
 
-    const user = await findOneUser(decoded.userId, {
+    const user = await findOneByEmail(decoded.email, {
         extended: true,
         app: true,
     });
+
     if (user === null) {
         throw new AuthenticateError({
             code: 3,

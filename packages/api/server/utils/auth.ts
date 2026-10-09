@@ -56,6 +56,7 @@ export default {
 
     /**
      * Generates an account activation link
+     *  TODO: Adapter à l'utilisation de Keycloak
      *
      * @param {Number} userAccessId
      *
@@ -75,9 +76,6 @@ export default {
                 id: userAccessId,
             },
             authConfig.secret,
-            {
-                expiresIn,
-            },
         );
 
         return `${webappUrl}/activer-mon-compte/${encodeURIComponent(token)}`;
