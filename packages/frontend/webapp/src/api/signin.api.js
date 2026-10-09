@@ -1,8 +1,7 @@
 import { axios } from "@/helpers/axios";
 
-export function signin(email, password) {
+export function signin(keycloakId) {
     return axios.post("/signin", {
-        email,
-        password,
+        keycloakId,
     });
 }
