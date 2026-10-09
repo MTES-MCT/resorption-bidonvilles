@@ -82,6 +82,9 @@ export const useUserStore = defineStore("user", {
                 tokenCreatedAt === null
                     ? null
                     : Number.parseInt(tokenCreatedAt, 10),
+            isReady: false,
+            isAuthenticated: false,
+            initError: null,
         };
     },
     getters: {
