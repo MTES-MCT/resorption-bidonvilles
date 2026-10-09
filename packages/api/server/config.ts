@@ -12,6 +12,7 @@ export default {
     port: process.env.RB_API_PORT,
     blogUrl: process.env.RB_API_BLOG_URL,
     auth: {
+        keycloakHostname: process.env.KEYCLOAK_HOSTNAME,
         secret: process.env.RB_API_AUTH_SECRET,
         expiresIn: process.env.RB_API_AUTH_EXPIRES_IN,
     },
