@@ -15,6 +15,13 @@ const SENTRY_CONFIG = {
     DSN: import.meta.env.VITE_SENTRY_DSN || "${VITE_SENTRY_DSN}",
 };
 
+const KEYCLOAK_CONFIG = {
+    URL: import.meta.env.VITE_KEYCLOAK_URL || "${VITE_KEYCLOAK_URL}",
+    REALM: import.meta.env.VITE_KEYCLOAK_REALM || "${VITE_KEYCLOAK_REALM}",
+    CLIENT_ID:
+        import.meta.env.VITE_KEYCLOAK_CLIENT_ID || "${VITE_KEYCLOAK_CLIENT_ID}",
+};
+
 export default {
     WWW_URL: import.meta.env.VITE_WWW_URL || "${VITE_WWW_URL}",
     API_URL: import.meta.env.VITE_API_URL || "${VITE_API_URL}",
@@ -26,6 +33,7 @@ export default {
         "true"
             ? SENTRY_CONFIG
             : null,
+    KEYCLOAK: KEYCLOAK_CONFIG,
     ADRESSE_API_URL:
         import.meta.env.VITE_ADRESSE_API_URL || "${VITE_ADRESSE_API_URL}",
 };
