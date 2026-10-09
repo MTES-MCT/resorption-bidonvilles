@@ -12,6 +12,7 @@ import { useI18n } from "./helpers/i18n";
 import { applyEnvironmentMarking } from "./helpers/envLabel";
 import env from "./helpers/env";
 import "@common/helpers/yup";
+import { useAuthStore } from "@/stores/auth.store";
 
 import "./assets/main.css";
 
@@ -26,5 +27,10 @@ app.use(createPinia());
 app.use(router);
 useMatomo(app, router);
 app.component("DatePicker", Datepicker);
+
+const authStore = useAuthStore();
+authStore.initKeycloak().catch(() => {
+    // Échec silencieux au boot : géré au niveau des composants/guards si besoin
+});
 
 app.mount("#app");
