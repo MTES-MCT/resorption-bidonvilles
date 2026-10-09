@@ -1,16 +1,20 @@
 import { trackLogout } from "@/helpers/matomo.js";
 import { useUserStore } from "@/stores/user.store";
-import router from "@/helpers/router";
+import { useAuthStore } from "@/stores/auth.store";
+import keycloak from "@/helpers/keycloak";
 import ENV from "@/helpers/env";
 
-export default function (redirectTo = null) {
+async function logout() {
+    const authStore = useAuthStore();
     const userStore = useUserStore();
-    userStore.signout();
     trackLogout();
+    // 1. Vide les stores locaux
+    authStore.$reset();
+    userStore.signout();
 
-    if (redirectTo !== null) {
-        router.push(redirectTo);
-    } else {
-        location.replace(ENV.WWW_URL);
-    }
+    // 2. Déclenche le logout Keycloak
+    await keycloak.logout({
+        redirectUri: ENV.WWW_URL,
+    });
 }
+export default logout;
