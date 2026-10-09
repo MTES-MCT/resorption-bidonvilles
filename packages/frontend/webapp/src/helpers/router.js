@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+import { useAuthStore } from "@/stores/auth.store";
 import { useUserStore } from "@/stores/user.store.js";
 import { useConfigStore } from "@/stores/config.store.js";
 import { useNavigationStore } from "@/stores/navigation.store";
@@ -475,7 +476,20 @@ const router = createRouter({
         },
         {
             path: "/connexion",
-            component: () => import("@/views/ConnexionView.vue"),
+            beforeEnter: async () => {
+                console.log("&&&&& CONNEXION &&&");
+
+                const authStore = useAuthStore();
+                await authStore.ensureReady();
+                if (authStore.isAuthenticated) {
+                    return "/tableau-de-bord";
+                }
+                await authStore.login({
+                    redirectUri: window.location.origin + "/tableau-de-bord",
+                });
+                return false;
+            },
+            // component: () => import("@/views/ConnexionView.vue"),
             meta: {
                 title: "S'identifier sur la plateforme",
                 requirements: {
@@ -505,9 +519,8 @@ const router = createRouter({
         },
         {
             path: "/deconnexion",
-            beforeEnter: (to, from, next) => {
+            beforeEnter: () => {
                 logout();
-                return next("/connexion");
             },
             component: () => null,
             meta: {
@@ -670,6 +683,9 @@ router.beforeEach(async (to, from) => {
     currentRouteIsBacked = window.popStateDetected === true;
     window.popStateDetected = false;
 
+    const authStore = useAuthStore();
+    await authStore.ensureReady();
+
     const userStore = useUserStore();
     let { requirements } = to.meta;
     if (requirements === undefined) {
@@ -680,6 +696,24 @@ router.beforeEach(async (to, from) => {
             topicsChosen: true,
             changelogSeen: true,
         };
+    }
+
+    const requiresAuth = requirements?.auth === "signedIn";
+
+    if (!requiresAuth) {
+        return true;
+    }
+
+    // Gestion de panne Keycloak sur route protégée
+    if (authStore.initError) {
+        return "/tableau-de-bord";
+    }
+
+    // Non connecté sur route protégée
+    if (!authStore.isAuthenticated) {
+        await authStore.login({
+            redirectUri: window.location.origin + to.fullPath,
+        });
     }
 
     // cas particulier des pages en auth 'none'
@@ -716,10 +750,6 @@ router.beforeEach(async (to, from) => {
     }
 
     const navigationStore = useNavigationStore();
-    if (requirements.auth === "signedIn" && !userStore.isLoggedIn) {
-        navigationStore.entrypoint = to.fullPath;
-        return "/connexion";
-    }
 
     const configStore = useConfigStore();
     if (requirements.configLoaded === true && !configStore.isLoaded) {
@@ -757,6 +787,16 @@ router.beforeEach(async (to, from) => {
         ) {
             return "/page-interdite";
         }
+    }
+
+    // Renvoi vers la mire Keycloak pour l'auth
+    if (to.path === "/connexion") {
+        if (!authStore.isAuthenticated) {
+            await authStore.login({
+                redirectUri: window.location.origin + "/tableau-de-bord",
+            });
+        }
+        return;
     }
 
     // if logged, register navigation log
