@@ -20,17 +20,16 @@ import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue"
 import CarteUtilisateur from "@/components/CarteUtilisateur/CarteUtilisateur.vue";
 import sortOperatorsByPrincipal from "@/utils/sortOperatorsByPrincipal";
 import usePhoneVisibility from "@/composables/usePhoneVisibility";
+import isAnonymizedUser from "@/utils/isAnonymizedUser";
 
 const props = defineProps({
     action: Object,
 });
 const { action } = toRefs(props);
 const { hidePhone } = usePhoneVisibility();
-const isDeactivatedUser = (user) =>
-    user.first_name === "Utilisateur" && user.last_name === "Désactivé";
 const users = computed(() =>
     sortOperatorsByPrincipal(action.value.operators)
         .flatMap(({ users: orgUsers }) => orgUsers)
-        .filter((user) => !isDeactivatedUser(user))
+        .filter((user) => !isAnonymizedUser(user))
 );
 </script>
