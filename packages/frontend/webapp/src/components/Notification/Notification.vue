@@ -10,6 +10,7 @@
         <div class="flex-1 p-3 bg-white relative">
             <button
                 type="button"
+                aria-label="Fermer la notification"
                 class="text-primary text-xs hover:bg-G200 px-3 py-2 absolute top-1 right-1"
                 @click="close"
             >
