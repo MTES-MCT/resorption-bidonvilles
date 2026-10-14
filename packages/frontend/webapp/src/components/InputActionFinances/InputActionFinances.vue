@@ -34,8 +34,15 @@
                 >Aucun financement renseigné pour cette année</template
             >
             <template v-slot:cell="{ column, row }">
+                <label
+                    v-if="column === 'finance_type'"
+                    class="fr-sr-only"
+                    :for="`finance-type-${focusedYear}-${row}`"
+                    >Type de financement, ligne {{ row + 1 }}</label
+                >
                 <SelectUi
                     v-if="column === 'finance_type'"
+                    :id="`finance-type-${focusedYear}-${row}`"
                     v-model="value[focusedYear][row].finance_type"
                     withoutMargin
                 >
@@ -50,16 +57,19 @@
                 <TextInputUi
                     v-if="column === 'comments'"
                     v-model="value[focusedYear][row].comments"
+                    :aria-label="`Description, ligne ${row + 1}`"
                     withoutMargin
                 />
                 <TextInputUi
                     v-else-if="column === 'amount'"
                     v-model="value[focusedYear][row].amount"
+                    :aria-label="`Montant du financement, ligne ${row + 1}`"
                     withoutMargin
                 />
                 <TextInputUi
                     v-else-if="column === 'real_amount'"
                     v-model="value[focusedYear][row].real_amount"
+                    :aria-label="`Dépense exécutée, ligne ${row + 1}`"
                     withoutMargin
                 />
                 <Button
