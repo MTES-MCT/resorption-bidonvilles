@@ -8727,11 +8727,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*":
-  version: 26.6.1
-  resolution: "@types/node@npm:26.6.1"
+  version: 26.6.4
+  resolution: "@types/node@npm:26.6.4"
   dependencies:
     undici-types: ~8.9.0
-  checksum: 73952ba62826a5aaec2457d429357d7be72213527a1af322596b261620b98bb6b89a602e701f4e8427d2e85587120f766fdc9f9e02d1045d7685985a12d649ac
+  checksum: b40a51a6b095e2f696d4127e0fe617fa5c74fe9b8a3783115af04c3108f5f063e46ea44b8d2a0eff895f67a0d4ea5dd4eece7df34a0748f14484e1c75d8ae306
   languageName: node
   linkType: hard
 
