@@ -1,3 +1,5 @@
+import { normalizeEnvLabel } from "./envLabel.js";
+
 const MATOMO_CONFIG = {
     ENABLE: import.meta.env.VITE_MATOMO_ENABLE || "${VITE_MATOMO_ENABLE}",
     HOST: import.meta.env.VITE_MATOMO_HOST || "${VITE_MATOMO_HOST}",
@@ -28,4 +30,8 @@ export default {
             : null,
     ADRESSE_API_URL:
         import.meta.env.VITE_ADRESSE_API_URL || "${VITE_ADRESSE_API_URL}",
+    // Chaîne vide (= production) si absente, vide ou placeholder non substitué
+    ENV_LABEL: normalizeEnvLabel(
+        import.meta.env.VITE_ENV_LABEL || "${VITE_ENV_LABEL}"
+    ),
 };
