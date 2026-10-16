@@ -30,6 +30,8 @@ import { useRoute } from "vue-router";
 import { requestCreation } from "@/api/contact.api.js";
 import { trackEvent } from "@/helpers/matomo.js";
 import router from "@/helpers/router.js";
+import env from "@/helpers/env";
+import { prefixTitleWithLabel } from "@/helpers/envLabel";
 import { useNotificationStore } from "@/stores/notification.store.js";
 import translations from "./FormDemandeAcces.translations";
 
@@ -88,10 +90,12 @@ async function submit(values) {
     );
 }
 const changePageTitle = () => {
-    document.title =
+    document.title = prefixTitleWithLabel(
         !demandeAccesOnly.value && language.value === "fr"
             ? "Contacter l'équipe"
-            : "Demander un accès";
+            : "Demander un accès",
+        env.ENV_LABEL
+    );
 };
 
 watch(demandeAccesOnly, () => {
