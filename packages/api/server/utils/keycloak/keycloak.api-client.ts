@@ -419,7 +419,7 @@ export async function createKeycloakApi(
         await authenticatedInstance.delete(realmUrl, buildConfig(accessToken));
     }
 
-    async function getUsers(pages: boolean = false): Promise<UserRepresentation[]> {
+    async function getUsers(): Promise<UserRepresentation[]> {
         // https://sandbox-api.piste.gouv.fr/dihal/sisiao/connect/v1/admin/realms/SISIAO/users
         return fetchAllUserPages(`${realmUrl}/users`);
         // let response:UserRepresentation[];
