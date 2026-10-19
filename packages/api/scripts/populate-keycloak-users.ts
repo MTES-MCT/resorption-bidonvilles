@@ -43,16 +43,11 @@ const DRY_RUN = process.argv.includes('--dry-run');
 const SKIP_EXISTING = process.argv.includes('--skip-existing');
 
 const KEYCLOAK_BASE_URL = process.env.RB_API_KEYCLOAK_URL ?? 'http://localhost:8080';
+const PISTE_URL = process.env.RB_API_PISTE_URL ?? 'https://sandbox-api.piste.gouv.fr';
 const KEYCLOAK_REALM = process.env.KEYCLOAK_REALM ?? '';
-const KEYCLOAK_ADMIN_USER = process.env.KEYCLOAK_ADMIN ?? 'admin';
-const KEYCLOAK_ADMIN_PASSWORD = process.env.KEYCLOAK_ADMIN_PASSWORD ?? '';
 
 if (!KEYCLOAK_REALM) {
     console.error('❌  KEYCLOAK_REALM manquant dans les variables d\'environnement.');
-    process.exit(1);
-}
-if (!KEYCLOAK_ADMIN_PASSWORD) {
-    console.error('❌  KEYCLOAK_ADMIN_PASSWORD manquant dans les variables d\'environnement.');
     process.exit(1);
 }
 
@@ -98,65 +93,10 @@ const publicAxios = axios.create({ baseURL: KEYCLOAK_BASE_URL });
 
 /**
  * Instance authentifiée – toutes les requêtes admin.
- * Le token est injecté via un intercepteur juste avant chaque requête.
+ * Les tokens (admin Keycloak + PISTE) sont gérés automatiquement par createKeycloakApi
+ * via les variables d'environnement.
  */
-const adminAxios = axios.create({ baseURL: KEYCLOAK_BASE_URL });
-
-let cachedAdminToken: string | null = null;
-
-/** Obtient (et met en cache) un token admin Keycloak. */
-async function getAdminToken(): Promise<string> {
-    if (cachedAdminToken) {
-        return cachedAdminToken;
-    }
-
-    const params = new URLSearchParams({
-        grant_type: 'password',
-        client_id: 'admin-cli',
-        username: KEYCLOAK_ADMIN_USER,
-        password: KEYCLOAK_ADMIN_PASSWORD,
-    });
-
-    const response = await publicAxios.post<{ access_token: string }>(
-        '/realms/master/protocol/openid-connect/token',
-        params,
-        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
-    );
-
-    cachedAdminToken = response.data.access_token;
-    return cachedAdminToken;
-}
-
-// Intercepteur : injecte le Bearer token admin avant chaque requête authentifiée.
-adminAxios.interceptors.request.use(async (config) => {
-    const token = await getAdminToken();
-    if (!config.headers) {
-        config.headers = {} as typeof config.headers;
-    }
-    config.headers.Authorization = `Bearer ${token}`;
-    if (!config.headers['Content-Type']) {
-        config.headers['Content-Type'] = 'application/json';
-    }
-    return config;
-});
-
-// Recréé un token si on reçoit un 401 (token expiré pendant le script).
-adminAxios.interceptors.response.use(
-    response => response,
-    async (error) => {
-        if (axios.isAxiosError(error) && error.response?.status === 401) {
-            cachedAdminToken = null;
-            const token = await getAdminToken();
-            const config = error.config!;
-            config.headers!.Authorization = `Bearer ${token}`;
-            return adminAxios.request(config);
-        }
-        return Promise.reject(error);
-    },
-);
-
-// Instanciation du client Keycloak réutilisable
-const keycloakApi = createKeycloakApi(adminAxios, publicAxios);
+const adminAxios = axios.create({ baseURL: PISTE_URL });
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -172,6 +112,8 @@ function warn(msg: string): void {
 
 /** Écrit le keycloak_id dans la base de données. */
 async function saveKeycloakId(userId: number, keycloakId: string): Promise<void> {
+    log('# Enregistrement de l\'ID Keycloak en DB métier');
+
     await sequelize.query(
         'UPDATE users SET keycloak_id = :keycloakId, updated_at = NOW() WHERE user_id = :userId',
         { replacements: { keycloakId, userId }, type: QueryTypes.UPDATE },
@@ -184,6 +126,8 @@ async function saveKeycloakId(userId: number, keycloakId: string): Promise<void>
  * Les identifiants proviennent des hash et salt de la DB PostgreSQL.
  */
 function buildCredentials(password: string | null, salt: string | null): CredentialRepresentation[] | undefined {
+    log(' # Création du hash/salt du mot de passe pour Keycloak');
+
     if (!password || !salt) {
         return undefined;
     }
@@ -213,6 +157,8 @@ function buildCredentials(password: string | null, salt: string | null): Credent
 // ---------------------------------------------------------------------------
 
 async function main(): Promise<void> {
+    log('# Démarrage du script de peuplement de Keycloak');
+
     if (DRY_RUN) {
         log('🔍  Mode --dry-run activé : aucune modification ne sera effectuée.\n');
     }
@@ -221,9 +167,16 @@ async function main(): Promise<void> {
     await sequelize.authenticate();
     log('✅  Connexion à la base de données OK.');
 
-    // 2. Vérification de la connexion Keycloak et chargement des rôles du realm
-    await getAdminToken();
-    log(`✅  Connexion à Keycloak OK (realm: ${KEYCLOAK_REALM}).\n`);
+    // createKeycloakApi gère lui-même le cache et le refresh des tokens admin Keycloak
+    // et PISTE dans sa closure. Aucun tokenProvider externe nécessaire ici.
+    const keycloakApi = await createKeycloakApi(adminAxios, publicAxios);
+
+
+    // 2. Vérification de la connexion Keycloak (déclenche le premier fetch de token)
+    // await keycloakApi.getRealmPublicKey();
+    const keyclaokHealth = await keycloakApi.healthcheck();
+    log(`🤔  Keycloak Health: ${JSON.stringify(keyclaokHealth, null, 4)}`);
+    log(`✅  Connexion à Keycloak OK (server: ${KEYCLOAK_BASE_URL} realm: ${KEYCLOAK_REALM}).\n`);
 
     // 3. Lecture des utilisateurs
     const whereClause = SKIP_EXISTING
@@ -234,6 +187,7 @@ async function main(): Promise<void> {
         `SELECT user_id, email, first_name, last_name, fk_status, fk_role, fk_role_regular, password, salt, keycloak_id
          FROM users
          WHERE ${whereClause}
+         AND user_id in ('513', '1168', '2546', '3354', '205')
          ORDER BY user_id`,
         { type: QueryTypes.SELECT },
     );
@@ -263,10 +217,11 @@ async function main(): Promise<void> {
             }
 
             // Cas 2 : cherche si l'utilisateur existe déjà dans Keycloak par email
+            log(`${user.email} : Recherche dans Keycloak par email...`);
             const existing = await keycloakApi.getUserByEmail(user.email);
-
             const roleAdmin = user.fk_role;
             const isAdmin = ['national_admin', 'local_admin'].includes(roleAdmin ?? '');
+            console.log(`Existing? ${JSON.stringify(existing)} and isAdmin? ${isAdmin}`);
 
             let keycloakId: string;
 
@@ -278,19 +233,12 @@ async function main(): Promise<void> {
                     log(`  🔄  ${label} — trouvé dans Keycloak (${keycloakId}) [dry-run, OTP: ${isAdmin ? 'oui' : 'non'}].`);
                     reused++;
                 } else {
-                    if (isAdmin) {
-                        const currentActions = existing.requiredActions ?? [];
-                        if (!currentActions.includes('CONFIGURE_TOTP')) {
-                            await keycloakApi.updateUser(keycloakId, {
-                                ...existing,
-                                requiredActions: [...currentActions, 'CONFIGURE_TOTP'],
-                            });
-                        }
-                    }
+                    await keycloakApi.assignRealmRoles(keycloakId, [isAdmin ? 'RB_ADMINISTRATEUR' : 'RB_UTILISATEUR']);
 
                     log(`  🔄  ${label} — synchronisé dans Keycloak (${keycloakId})${isAdmin ? ' [OTP]' : ''}.`);
                     reused++;
                 }
+                // throw new Error('Stop after role sync');
             } else {
                 // Pas encore dans Keycloak → on le crée
                 if (DRY_RUN) {
@@ -307,8 +255,11 @@ async function main(): Promise<void> {
                     enabled: ['active', 'new'].includes(user.fk_status),
                     emailVerified: true,
                     credentials: buildCredentials(user.password, user.salt),
-                    requiredActions: isAdmin ? ['CONFIGURE_TOTP'] : [],
+                    // requiredActions: isAdmin ? ['CONFIGURE_TOTP'] : [],
                 });
+
+                // On attribue le rôle admin ou utilisateur
+                await keycloakApi.assignRealmRoles(keycloakId, [isAdmin ? 'RB_ADMINISTRATEUR' : 'RB_UTILISATEUR']);
 
                 log(`  ➕  ${label} — créé dans Keycloak (${keycloakId}).`);
                 created++;
