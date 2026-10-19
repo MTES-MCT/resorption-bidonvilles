@@ -27,6 +27,7 @@ export interface UserRepresentation {
     enabled?: boolean
     credentials?: CredentialRepresentation[]
     requiredActions?: string[]
+    clientRoles?: string | string[]
     groups?: string[]
     attributes?: Record<string, string[]>
 }

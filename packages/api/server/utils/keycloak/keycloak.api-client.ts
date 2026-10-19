@@ -1,4 +1,6 @@
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import {
+    AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig,
+} from 'axios';
 import type { AxiosInstance } from 'axios';
 import {
     ClientRepresentation,
@@ -6,7 +8,6 @@ import {
     UPConfig,
     UserRepresentation,
 } from './keycloak-api-types';
-
 
 export interface AdminCredentials {
     username: string
@@ -46,25 +47,179 @@ export const KeycloakPublicAxiosInstance = Symbol('KeycloakPublicAxiosInstance')
 export const KeycloakAuthenticatedAxiosInstance = Symbol('KeycloakAuthenticatedAxiosInstance');
 
 /**
+ * Fournisseurs de tokens injectés dans les intercepteurs Axios.
+ * Chaque callback est appelé une première fois (lazy), puis à nouveau si un 401
+ * est reçu (invalidation du cache côté appelant).
+ */
+export interface TokenProviders {
+    /** Renvoie un token valide pour l'en-tête X-Admin-Token (Keycloak). */
+    getAdminToken: () => Promise<string>;
+    /** Renvoie un Bearer token valide pour l'API Piste. */
+    getPisteToken: () => Promise<string>;
+}
+
+/**
  * Functional version of the Keycloak API client. Instead of a class, we expose a factory
  * `createKeycloakApi` that receives the required Axios instances and the app config
  * service, and returns a plain object containing async functions that perform the same
  * operations as the original class methods.
+ *
+ * @param authenticatedInstance - Instance Axios pour les appels admin.
+ * @param publicInstance        - Instance Axios pour les appels publics (tokens, certs).
+ * @param tokenProviders        - Optionnel. Fournisseurs de tokens admin Keycloak et Piste.
+ *                                Quand fournis, les tokens sont injectés automatiquement
+ *                                dans chaque requête via des intercepteurs et rafraîchis
+ *                                en cas de réponse 401.
  */
-export function createKeycloakApi(
+export async function createKeycloakApi(
     authenticatedInstance: AxiosInstance,
     publicInstance: AxiosInstance,
+    tokenProviders?: TokenProviders,
 ) {
     const realm = process.env.KEYCLOAK_REALM;
     const realmUrl = `/admin/realms/${realm}`;
 
+    // -------------------------------------------------------------------------
+    // Gestion interne des tokens (cache vivant dans la closure de l'instance)
+    // -------------------------------------------------------------------------
+
+    // Cache admin Keycloak — persistant entre tous les appels de cette instance.
+    let cachedAdminToken: string | null = null;
+
+    // Récupère un nouveau token admin Keycloak et le stocke dans le cache.
+    // Ne doit être appelé que lorsque le cache est null (premier appel ou après un 401).
+    async function fetchAdminToken(): Promise<string> {
+        const adminClientId = process.env.RB_API_KEYCLOAK_BACK_CLIENT_ADMIN ?? 'rb-admin';
+        const adminClientSecret = process.env.RB_API_KEYCLOAK_BACK_CLIENT_ADMIN_SECRET;
+        const params = new URLSearchParams({
+            grant_type: 'client_credentials',
+            client_id: adminClientId,
+            ...(adminClientSecret ? { client_secret: adminClientSecret } : {}),
+            scope: 'openid',
+        });
+        console.log(`🔑 fetchAdminToken pour ${adminClientId}`);
+        const response = await publicInstance.post<TokenResponse>(
+            `/auth/realms/${realm}/protocol/openid-connect/token`,
+            params,
+            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+        );
+        // On ne stocke dans le cache QU'APRÈS un fetch réussi.
+        cachedAdminToken = response.data.access_token;
+        return cachedAdminToken;
+    }
+
+    async function resolveAdminToken(): Promise<string> {
+        // console.log('  && Vérification du CachedAdminToken', cachedAdminToken);
+        if (tokenProviders) {
+            return tokenProviders.getAdminToken();
+        }
+        // Retourne le token en cache s'il est encore valide, sinon en récupère un nouveau.
+        return cachedAdminToken ?? fetchAdminToken();
+    }
+
+    // Cache token PISTE — persistant entre tous les appels de cette instance.
+    let cachedPisteToken: string | null = null;
+
+    // Récupère un nouveau token PISTE et le stocke dans le cache.
+    async function fetchPisteToken(): Promise<string> {
+        const pisteClientId = process.env.RB_API_PISTE_CLIENT_ID;
+        const pisteClientSecret = process.env.RB_API_PISTE_CLIENT_SECRET;
+        const pisteOauthUrl = process.env.RB_API_PISTE_OAUTH_URL ?? 'https://sandbox-oauth.piste.gouv.fr';
+
+        if (!pisteClientId || !pisteClientSecret) {
+            throw new Error('Variables RB_API_PISTE_CLIENT_ID ou RB_API_PISTE_CLIENT_SECRET manquantes');
+        }
+        const params = new URLSearchParams({
+            grant_type: 'client_credentials',
+            scope: 'openid',
+            client_id: pisteClientId,
+            client_secret: pisteClientSecret,
+        });
+        const response = await publicInstance.post<TokenResponse>(
+            `${pisteOauthUrl}/api/oauth/token`,
+            params,
+        );
+        // On ne stocke dans le cache QU'APRÈS un fetch réussi.
+        cachedPisteToken = response.data.access_token;
+        return cachedPisteToken;
+    }
+
+    async function resolvePisteToken(): Promise<string> {
+        if (tokenProviders) {
+            return tokenProviders.getPisteToken();
+        }
+        return cachedPisteToken ?? fetchPisteToken();
+    }
+
+
+    // -------------------------------------------------------------------------
+    // Intercepteurs Axios : injectent les tokens sur chaque requête authentifiée
+    // et invalident le cache + réessaient une fois en cas de 401.
+    // -------------------------------------------------------------------------
+    authenticatedInstance.interceptors.request.use(
+        async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
+            const [adminToken, pisteToken] = await Promise.all([
+                resolveAdminToken(),
+                resolvePisteToken(),
+            ]);
+
+            // eslint-disable-next-line no-param-reassign
+            config.headers = config.headers ?? {} as typeof config.headers;
+            // eslint-disable-next-line no-param-reassign
+            config.headers.Authorization = `Bearer ${pisteToken}`;
+            // eslint-disable-next-line no-param-reassign
+            config.headers.ENVIRONNEMENT = 'PREPROD';
+            // eslint-disable-next-line no-param-reassign
+            config.headers['X-Admin-Token'] = adminToken;
+            if (!config.headers['Content-Type']) {
+                // eslint-disable-next-line no-param-reassign
+                config.headers['Content-Type'] = 'application/json';
+            }
+
+            return config;
+        },
+    );
+
+    authenticatedInstance.interceptors.response.use(
+        response => response,
+        async (error: unknown) => {
+            if (error instanceof AxiosError && error.response?.status === 401) {
+                const originalRequest = error.config as (typeof error.config & { retried?: boolean });
+                if (originalRequest && !originalRequest.retried) {
+                    originalRequest.retried = true;
+
+                    // Invalider les caches internes et forcer un nouveau fetch.
+                    // if (!tokenProviders) {
+                    //     cachedAdminToken = null;
+                    //     cachedPisteToken = null;
+                    // }
+
+                    // const [adminToken, pisteToken] = await Promise.all([
+                    //     resolveAdminToken(),
+                    //     resolvePisteToken(),
+                    // ]);
+
+                    // originalRequest.headers = originalRequest.headers ?? {} as typeof originalRequest.headers;
+                    // originalRequest.headers.Authorization = `Bearer ${pisteToken}`;
+                    // originalRequest.headers['X-Admin-Token'] = adminToken;
+
+                    return authenticatedInstance.request(originalRequest);
+                }
+            }
+            return Promise.reject(error);
+        },
+    );
+
+
     // Helper – builds the Axios config with the bearer token.
+    // Conservé pour la compatibilité avec les méthodes qui passent encore un token explicitement.
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    function buildConfig(accessToken: string): AxiosRequestConfig {
+    function buildConfig(accessToken: string, pisteAccessToken?: string): AxiosRequestConfig {
         return {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${pisteAccessToken}`,
+                'X-Admin-Token': accessToken,
             },
         };
     }
@@ -114,12 +269,29 @@ export function createKeycloakApi(
 
     async function get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
         try {
+            console.log('🎯    ## GETTING:', url);
+
             return await authenticatedInstance.get(url, config);
         } catch (e) {
             if (e instanceof AxiosError) {
+                console.log('### ERROR!', e);
+
                 const axiosError = e as AxiosError<{ errorMessage: string }>;
                 throw new Error(buildMessage('GET', url, axiosError), { cause: e });
             }
+            throw e;
+        }
+    }
+
+    async function healthcheck(): Promise<AxiosResponse> {
+        console.log('👨‍⚕️    Testing health check');
+        let healthResponse: AxiosResponse;
+        try {
+            healthResponse = await authenticatedInstance.get('/healthcheck');
+            // console.log('### Healthcheck:', healthResponse);
+            return healthResponse.data;
+        } catch (e) {
+            console.log('### Healthcheck Error:', e);
             throw e;
         }
     }
@@ -141,7 +313,7 @@ export function createKeycloakApi(
 
     async function fetchAllUserPages(url: string): Promise<UserRepresentation[]> {
         const allUsers: UserRepresentation[] = [];
-        const pageSize = 100;
+        const pageSize = 500;
         let first = 0;
         let current: UserRepresentation[];
         do {
@@ -153,27 +325,32 @@ export function createKeycloakApi(
             allUsers.push(...current);
             first += pageSize;
         } while (current.length === pageSize);
+        console.log(`Found ${allUsers.length} users`);
+        // throw new Error('STOP après users');
         return allUsers;
     }
 
     async function getAdminPublicKey(): Promise<PublicKeys> {
-        const response = await publicInstance.get<PublicKeys>('/realms/master/protocol/openid-connect/certs');
+        const response = await publicInstance.get<PublicKeys>(`/auth/realms/${realm}/protocol/openid-connect/certs`);
         return response.data;
     }
 
     async function getRealmPublicKey(): Promise<PublicKeys> {
-        const response = await publicInstance.get<PublicKeys>(`/realms/${realm}/protocol/openid-connect/certs`);
+        const response = await publicInstance.get<PublicKeys>(`/auth/realms/${realm}/protocol/openid-connect/certs`);
         return response.data;
     }
 
     async function getAdminToken(adminCredentials: AdminCredentials): Promise<string> {
         const body = new URLSearchParams({
-            grant_type: 'password',
-            client_id: 'admin-cli',
+            grant_type: 'client_credentials',
+            client_id: 'rb-admin',
             ...adminCredentials,
         });
+        // https://preprod.sisiao.dihal.gouv.fr/auth/realms/SISIAO/protocol/openid-connect/token
+        // https://preprod.sisiao.dihal.gouv.fr/auth/realms/SISIAO/protocol/openid-connect/token
+        // console.log('admin request', body);
         const response = await publicInstance.post<TokenResponse>(
-            '/realms/master/protocol/openid-connect/token',
+            `/auth/realms/${realm}/protocol/openid-connect/token`,
             body,
             {
                 headers: {
@@ -181,6 +358,7 @@ export function createKeycloakApi(
                 },
             },
         );
+        // console.log('admin response', response.data.access_token);
         return response.data.access_token;
     }
 
@@ -190,7 +368,7 @@ export function createKeycloakApi(
             ...userCredentials,
         });
         const response = await publicInstance.post<TokenResponse>(
-            `/realms/${realm}/protocol/openid-connect/token`,
+            `/auth/realms/${realm}/protocol/openid-connect/token`,
             body,
             {
                 headers: {
@@ -208,7 +386,7 @@ export function createKeycloakApi(
             audience: clientId,
         });
         const response = await publicInstance.post<TokenResponse>(
-            `/realms/${realm}/protocol/openid-connect/token`,
+            `/auth/realms/${realm}/protocol/openid-connect/token`,
             body,
             {
                 headers: {
@@ -241,8 +419,18 @@ export function createKeycloakApi(
         await authenticatedInstance.delete(realmUrl, buildConfig(accessToken));
     }
 
-    async function getUsers(): Promise<UserRepresentation[]> {
+    async function getUsers(pages: boolean = false): Promise<UserRepresentation[]> {
+        // https://sandbox-api.piste.gouv.fr/dihal/sisiao/connect/v1/admin/realms/SISIAO/users
         return fetchAllUserPages(`${realmUrl}/users`);
+        // let response:UserRepresentation[];
+        // if (pages) {
+        //     const users = await fetchAllUserPages(`${realmUrl}/users`);
+        //     response = users;
+        // } else {
+        //     const users = await get<UserRepresentation[]>(`${realmUrl}/users`);
+        //     response = users.data;
+        // }
+        // return response;
     }
 
     async function getUnmanagedAttributes(userId: string): Promise<Record<string, string[]> | undefined> {
@@ -303,7 +491,10 @@ export function createKeycloakApi(
     }
 
     async function getUserByEmail(email: string): Promise<UserRepresentation | undefined> {
+        console.log(`## Getting user by EMAIL /${realmUrl}/users?email=${email}&exact=true`);
+
         const response = await get<UserRepresentation[]>(`${realmUrl}/users?email=${email}&exact=true`);
+        console.log('Respones:', response?.data[0]);
         return response.data[0];
     }
 
@@ -315,6 +506,91 @@ export function createKeycloakApi(
 
     async function logoutUser(userId: string): Promise<void> {
         await post(`${realmUrl}/users/${userId}/logout`, {});
+    }
+
+    /**
+     * Assigns realm-level roles to a user.
+     *
+     * Keycloak requires:
+     *  1. Fetch each role representation (id + name) from the realm roles.
+     *  2. POST the role representations to /users/{userId}/role-mappings/realm
+     *
+     * @param userId    - The Keycloak user UUID.
+     * @param roleNames - Array of realm role names (e.g. ['RB_ADMINISTRATEUR']).
+     */
+    async function assignRealmRoles(
+        userId: string,
+        roleNames: string[],
+    ): Promise<void> {
+        if (roleNames.length === 0) {
+            return;
+        }
+
+        // 1. Resolve each role by name to get its representation {id, name}
+        const roleRepresentations = await Promise.all(
+            roleNames.map(async (roleName) => {
+                const roleResponse = await get<{ id: string; name: string }>(
+                    `${realmUrl}/roles/${encodeURIComponent(roleName)}`,
+                );
+                return roleResponse.data;
+            }),
+        );
+
+        // 2. Assign the roles to the user
+        await post(
+            `${realmUrl}/users/${userId}/role-mappings/realm`,
+            roleRepresentations,
+        );
+    }
+
+    /**
+     * Assigns client-level roles to a user.
+     *
+     * Keycloak requires:
+     *  1. Resolve the client internal UUID from its `clientId` name.
+     *  2. Fetch each role representation (id + name) from the client roles.
+     *  3. POST the role representations to the user's client role-mappings.
+     *
+     * @param userId    - The Keycloak user UUID.
+     * @param roleNames - Array of client role names (e.g. ['RB_ADMINISTRATEUR']).
+     * @param clientId  - Optional client clientId; defaults to KEYCLOAK_CLIENT_ID env var.
+     */
+    async function assignClientRoles(
+        userId: string,
+        roleNames: string[],
+        clientId = process.env.KEYCLOAK_CLIENT_ID ?? '',
+    ): Promise<void> {
+        if (!clientId) {
+            throw new Error('assignClientRoles: KEYCLOAK_CLIENT_ID is not set.');
+        }
+        if (roleNames.length === 0) {
+            return;
+        }
+
+        // 1. Get the client's internal UUID
+        const clientsResponse = await get<{ id: string }[]>(
+            `${realmUrl}/clients?clientId=${encodeURIComponent(clientId)}`,
+        );
+        const clientUuid = clientsResponse.data[0]?.id;
+        if (!clientUuid) {
+            throw new Error(`assignClientRoles: client '${clientId}' not found in realm.`);
+        }
+
+        // 2. Resolve each role by name to get its full representation {id, name}
+        const roleRepresentations = await Promise.all(
+            roleNames.map(async (roleName) => {
+                const roleResponse = await get<{ id: string; name: string }>(
+                    `${realmUrl}/clients/${clientUuid}/roles/${encodeURIComponent(roleName)}`,
+                );
+                return roleResponse.data;
+            }),
+        );
+
+        // 3. Assign the roles to the user
+        await post(
+            `${realmUrl}/users/${userId}/role-mappings/clients/${clientUuid}`,
+            roleRepresentations,
+        );
     }
 
     async function executeActionsEmail(
@@ -339,6 +615,12 @@ export function createKeycloakApi(
         return response.data;
     }
 
+    // Récupération initiale des tokens
+    // await Promise.all([
+    //     resolveAdminToken(),
+    //     resolvePisteToken(),
+    // ]);
+
     // Exported API surface – same naming as the original class for easier migration.
     return {
         updateRealm,
@@ -349,6 +631,7 @@ export function createKeycloakApi(
         getUserToken,
         getClientToken,
         getServiceAccountId,
+        healthcheck,
         createRealm,
         deleteRealm,
         getUsers,
@@ -366,5 +649,7 @@ export function createKeycloakApi(
         getUserById,
         logoutUser,
         executeActionsEmail,
+        assignClientRoles,
+        assignRealmRoles,
     } as const;
 }
