@@ -34,7 +34,7 @@ const MAGIC_TOKENS = {
 };
 
 const keycloakClient = jwksClient({
-    jwksUri: `https://${authConfig.keycloakHostname}/realms/SISIAO/protocol/openid-connect/certs`,
+    jwksUri: `https://${authConfig.keycloakHostname}/auth/realms/SISIAO/protocol/openid-connect/certs`,
     cache: true,
     rateLimit: true,
 });
