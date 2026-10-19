@@ -18,10 +18,13 @@ export const useAuthStore = defineStore("auth", {
 
             initPromise = keycloak
                 .init({
-                    onLoad: "check-sso",
+                    onLoad: "login-required",
                     checkLoginIframe: false,
                     pkceMethod: "S256",
-                    silentCheckSsoRedirectUri: `${window.location.origin}/silent-check-sso.html`,
+                    redirectUri:
+                        // "https://app.preprod.resorption-bidonvilles.dihal.gouv.fr/",
+                        window.location.origin + window.location.pathname,
+                    // silentCheckSsoRedirectUri: `${window.location.origin}/silent-check-sso.html`,
                 })
                 .then((authenticated) => {
                     this.isAuthenticated = authenticated;
