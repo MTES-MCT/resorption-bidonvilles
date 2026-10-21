@@ -8,6 +8,7 @@ import reactivate from './reactivate';
 import refuse from './refuse';
 import register from './register';
 import setExpertiseTopics from './setExpertiseTopics';
+import setRoleAdmin from './setRoleAdmin';
 import sendInactiveUserAlerts from './sendInactiveUserAlerts';
 import updatePermissionOptions from './updatePermissionOptions';
 
@@ -22,6 +23,7 @@ export default {
     refuse,
     register,
     setExpertiseTopics,
+    setRoleAdmin,
     sendInactiveUserAlerts,
     updatePermissionOptions,
 };
