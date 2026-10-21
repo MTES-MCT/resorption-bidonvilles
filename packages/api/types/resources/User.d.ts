@@ -77,6 +77,7 @@ export type User = {
     // filter: auth
     password?: string,
     salt?: string,
+    keycloak_id?: string,
 
     // filter: extended
     access_request_message?: string,
