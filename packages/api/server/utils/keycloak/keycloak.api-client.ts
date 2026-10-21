@@ -1,4 +1,4 @@
-import {
+import axios, {
     AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig,
 } from 'axios';
 import type { AxiosInstance } from 'axios';
@@ -58,6 +58,9 @@ export interface TokenProviders {
     getPisteToken: () => Promise<string>;
 }
 
+const KEYCLOAK_BASE_URL = process.env.RB_API_KEYCLOAK_URL ?? 'https://keycloak.resorption-bidonvilles.localhost';
+const PISTE_URL = process.env.RB_API_PISTE_URL ?? 'https://keycloak.resorption-bidonvilles.localhost/auth';
+
 /**
  * Functional version of the Keycloak API client. Instead of a class, we expose a factory
  * `createKeycloakApi` that receives the required Axios instances and the app config
@@ -72,12 +75,17 @@ export interface TokenProviders {
  *                                en cas de réponse 401.
  */
 export async function createKeycloakApi(
-    authenticatedInstance: AxiosInstance,
-    publicInstance: AxiosInstance,
+    rawAuthenticatedInstance?: AxiosInstance,
+    rawPublicInstance?: AxiosInstance,
     tokenProviders?: TokenProviders,
 ) {
     const realm = process.env.KEYCLOAK_REALM;
     const realmUrl = `/admin/realms/${realm}`;
+
+    const publicInstance = rawPublicInstance ?? axios.create({ baseURL: KEYCLOAK_BASE_URL });
+    const authenticatedInstance = rawAuthenticatedInstance ?? axios.create({ baseURL: PISTE_URL });
+    console.log('baseURL publicInstance:', publicInstance.defaults.baseURL);
+    console.log('authInstance:', authenticatedInstance.defaults.baseURL);
 
     // -------------------------------------------------------------------------
     // Gestion interne des tokens (cache vivant dans la closure de l'instance)
@@ -97,19 +105,27 @@ export async function createKeycloakApi(
             ...(adminClientSecret ? { client_secret: adminClientSecret } : {}),
             scope: 'openid',
         });
-        console.log(`🔑 fetchAdminToken pour ${adminClientId}`);
-        const response = await publicInstance.post<TokenResponse>(
-            `/auth/realms/${realm}/protocol/openid-connect/token`,
-            params,
-            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
-        );
-        // On ne stocke dans le cache QU'APRÈS un fetch réussi.
-        cachedAdminToken = response.data.access_token;
-        return cachedAdminToken;
+        console.log(`🔑 fetchAdminToken pour ${adminClientId} du realm ${realmUrl} avec en params ${params}`);
+        try {
+            const response = await publicInstance.post<TokenResponse>(
+                `/auth/realms/${realm}/protocol/openid-connect/token`,
+                params,
+                { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+            );
+            console.log('  && response.data: ', response.data);
+
+
+            // On ne stocke dans le cache QU'APRÈS un fetch réussi.
+            cachedAdminToken = response.data.access_token;
+            return cachedAdminToken;
+        } catch (err) {
+            console.error('  && Erreur fetchAdminToken: ', err);
+            throw err;
+        }
     }
 
     async function resolveAdminToken(): Promise<string> {
-        // console.log('  && Vérification du CachedAdminToken', cachedAdminToken);
+        console.log('  && Vérification du CachedAdminToken', cachedAdminToken);
         if (tokenProviders) {
             return tokenProviders.getAdminToken();
         }
@@ -480,6 +496,8 @@ export async function createKeycloakApi(
     }
 
     async function createUser(user: UserRepresentation): Promise<string> {
+        console.log('============= Creating USER! ===============');
+
         const response = await post(`${realmUrl}/users`, user);
         const userLocation = response.headers.location as string;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -503,6 +521,16 @@ export async function createKeycloakApi(
         return response?.data;
     }
 
+    async function getRoleRepresentations(roleNames: string[]): Promise<{ id: string; name: string }[]> {
+        return Promise.all(
+            roleNames.map(async (roleName) => {
+                const roleResponse = await get<{ id: string; name: string }>(
+                    `${realmUrl}/roles/${encodeURIComponent(roleName)}`,
+                );
+                return roleResponse.data;
+            }),
+        );
+    }
 
     async function logoutUser(userId: string): Promise<void> {
         await post(`${realmUrl}/users/${userId}/logout`, {});
@@ -525,19 +553,40 @@ export async function createKeycloakApi(
         if (roleNames.length === 0) {
             return;
         }
+        console.log('Assign roles:', roleNames, 'To user:', userId);
 
         // 1. Resolve each role by name to get its representation {id, name}
-        const roleRepresentations = await Promise.all(
-            roleNames.map(async (roleName) => {
-                const roleResponse = await get<{ id: string; name: string }>(
-                    `${realmUrl}/roles/${encodeURIComponent(roleName)}`,
-                );
-                return roleResponse.data;
-            }),
-        );
+        const roleRepresentations = await getRoleRepresentations(roleNames);
 
         // 2. Assign the roles to the user
         await post(
+            `${realmUrl}/users/${userId}/role-mappings/realm`,
+            roleRepresentations,
+        );
+    }
+
+    /**
+     * Delete realm-level roles to a user.
+     *
+     * Keycloak requires:
+     *  1. Fetch each role representation (id + name) from the realm roles.
+     *  2. POST the role representations to /users/{userId}/role-mappings/realm
+     *
+     * @param userId    - The Keycloak user UUID.
+     * @param roleNames - Array of realm role names (e.g. ['RB_ADMINISTRATEUR']).
+     */
+    async function deleteRealmRoles(
+        userId: string,
+        roleNames: string[],
+    ): Promise<void> {
+        if (roleNames.length === 0) {
+            return;
+        }
+
+        const roleRepresentations = await getRoleRepresentations(roleNames);
+
+        // Endpoint DELETE avec les rôles dans le body
+        await deleteRequest(
             `${realmUrl}/users/${userId}/role-mappings/realm`,
             roleRepresentations,
         );
@@ -651,5 +700,6 @@ export async function createKeycloakApi(
         executeActionsEmail,
         assignClientRoles,
         assignRealmRoles,
+        deleteRealmRoles,
     } as const;
 }
