@@ -14,7 +14,8 @@ export default async (user, transaction = undefined) => {
                 salt,
                 phone,
                 fk_status,
-                created_by
+                created_by,
+                keycloak_id
             )
 
             VALUES(
@@ -28,7 +29,8 @@ export default async (user, transaction = undefined) => {
                 :salt,
                 :phone,
                 'new',
-                :created_by
+                :created_by,
+                :keycloak_id
             )
             
             RETURNING user_id`,
