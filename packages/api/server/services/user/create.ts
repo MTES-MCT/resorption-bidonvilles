@@ -23,10 +23,12 @@ export default async (data, createdBy: number = null): Promise<User> => {
         keycloakApi = await createKeycloakApi(adminAxios, publicAxios);
 
         // 1. On vérifie si l'utilisateur existe déjà dans Keycloak
+        console.log("👤    On vérifie que l'utilisateur existe dans Keycloak");
         const existingUser = await keycloakApi.getUserByEmail(data.email);
         if (existingUser?.id) {
             keycloakId = existingUser.id;
         } else {
+            console.log("👤➕   Création de l'utilisateur dans Keycloak");
             keycloakId = await keycloakApi.createUser({
                 username: data.email,
                 email: data.email,
@@ -45,6 +47,7 @@ export default async (data, createdBy: number = null): Promise<User> => {
         throw error;
     }
     try {
+        console.log("👤    On insère l'utilisateur dans la base de données");
         const userId = await sequelize.transaction(async (t) => {
             const fk_role_regular = await organizationTypeModel.findRoleByOrganizationId(parseInt(data.organization, 10), t);
             Object.assign(data, { fk_role_regular });
