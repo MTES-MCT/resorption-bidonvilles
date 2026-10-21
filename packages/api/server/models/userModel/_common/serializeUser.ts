@@ -59,6 +59,7 @@ export default (user: RawUser, userAccesses: RawUserAccess[], interventionAreas:
         anonymization_requested: user.anonymization_requested,
         deactivated_at: user.deactivated_at ? user.deactivated_at.getTime() / 1000 : null,
         deactivation_type: user.deactivation_type,
+        keycloak_id: user.keycloak_id,
     };
 
     if (filters.auth === true) {

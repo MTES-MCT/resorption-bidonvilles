@@ -167,6 +167,7 @@ export default async function query(
             users.anonymization_requested,
             users.deactivated_at,
             users.deactivation_type,
+            users.keycloak_id,
             COALESCE(user_expertise_topics.topics, array[]::text[]) AS topics,
             COALESCE(email_unsubscriptions.unsubscriptions, array[]::enum_user_email_subscriptions_email_subscription[]) AS email_unsubscriptions,
             user_log_last_access AS last_access,

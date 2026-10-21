@@ -72,6 +72,7 @@ export type RawUser = {
     anonymization_requested: boolean | null,
     deactivated_at: Date | null,
     deactivation_type: string | null,
+    keycloak_id: string | null,
 };
 
 export type RawInterventionArea = {
