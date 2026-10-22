@@ -11,12 +11,12 @@
             contacter en cas d'urgence.</template
         >
         <template v-slot:actions>
-            <Button
-                icon="rotate-right"
+            <DsfrButton
+                icon="fr-icon-refresh-line"
                 iconPosition="left"
                 type="button"
                 @click="load"
-                >Réessayer</Button
+                >Réessayer</DsfrButton
             >
             <ButtonContact />
         </template>
@@ -32,7 +32,6 @@ import { onMounted, ref, computed } from "vue";
 import { check } from "@/api/activation_tokens.api";
 import router from "@/helpers/router";
 
-import { Button } from "@resorptionbidonvilles/ui";
 import Layout from "@/components/Layout/Layout.vue";
 import LayoutError from "@/components/LayoutError/LayoutError.vue";
 import LayoutLoading from "@/components/LayoutLoading/LayoutLoading.vue";
