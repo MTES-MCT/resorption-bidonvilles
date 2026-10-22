@@ -9,7 +9,7 @@
             <li v-for="error in summaryErrors" :key="error.key" class="list-none flex flex-row gap-1">
                 <span class="fr-icon-error-fill fr-icon--xs" aria-hidden="true"></span>
                 <span 
-                    @click="focusFieldById(error.key)"
+                    @click="onSelect(error.key)"
                     class="text-error hover:underline cursor-pointer"
                 >
                     {{ error.message }}
@@ -26,7 +26,8 @@ import focusFieldById from "@common/utils/focusFieldById";
 const props = defineProps({
     message: {
         type: String,
-        required: true,
+        required: false,
+        default: null,
     },
     summary: {
         type: Object,
@@ -35,7 +36,16 @@ const props = defineProps({
     }
 });
 
+// "select" permet au parent de préparer l'affichage du champ ciblé (ex : bascule
+// sur l'année concernée) en plus du focus par identifiant.
+const emit = defineEmits(["select"]);
+
 const { message, summary } = toRefs(props);
+
+function onSelect(key) {
+    emit("select", key);
+    focusFieldById(key);
+}
 const summaryErrors = computed(() => {
     if (!summary.value) {
         return [];
