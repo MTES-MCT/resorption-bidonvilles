@@ -51,7 +51,7 @@ async function submit(values) {
     });
     trackEvent("Demande d'accès", "Création compte");
 
-    router.push("/connexion");
+    router.push("/tableau-de-bord");
     notificationStore.success(
         "Compte activé",
         "Vous pouvez désormais vous connecter à la plateforme"

@@ -32,7 +32,7 @@ const topItems = [
     {
         icon: "fr-icon-lock-line",
         label: "Me connecter",
-        to: "/connexion",
+        to: "/tableau-de-bord",
         authRequirement: "signedOut",
     },
     {
