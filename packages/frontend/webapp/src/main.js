@@ -23,10 +23,4 @@ app.use(router);
 useMatomo(app, router);
 app.component("DatePicker", Datepicker);
 
-// Keycloak n'est PAS initialisé ici au boot.
-// Le guard du router (router.js) appelle ensureReady() uniquement pour les routes
-// protégées (auth: "signedIn"), ce qui déclenche l'init Keycloak si nécessaire.
-// Cela évite tout redirect Keycloak pour les routes publiques (signedOut/none),
-// quelle que soit l'environnement (localhost, preprod, prod).
-
 app.mount("#app");
