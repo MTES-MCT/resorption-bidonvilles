@@ -58,6 +58,9 @@ export const axios = axiosLib.create({
 });
 
 axios.interceptors.request.use(async (config) => {
+    // On n'attache le token que si Keycloak est authentifié.
+    // Si non authentifié (ou non initialisé, routes publiques), la requête passe sans token.
+    // La redirection vers Keycloak est gérée par le guard du router, pas par cet intercepteur.
     if (keycloak.authenticated) {
         try {
             // Rafraîchit le token s'il expire dans moins de 30 secondes
@@ -66,8 +69,6 @@ axios.interceptors.request.use(async (config) => {
         } catch {
             keycloak.login();
         }
-    } else {
-        keycloak.login();
     }
 
     return config;
