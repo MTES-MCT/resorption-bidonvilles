@@ -683,9 +683,6 @@ router.beforeEach(async (to, from) => {
     currentRouteIsBacked = window.popStateDetected === true;
     window.popStateDetected = false;
 
-    const authStore = useAuthStore();
-    await authStore.ensureReady();
-
     const userStore = useUserStore();
     let { requirements } = to.meta;
     if (requirements === undefined) {
@@ -700,9 +697,15 @@ router.beforeEach(async (to, from) => {
 
     const requiresAuth = requirements?.auth === "signedIn";
 
+    // Pour les routes publiques (signedOut ou none), on n'initialise pas Keycloak
+    // afin d'éviter le redirect check-sso vers la mire Keycloak.
     if (!requiresAuth) {
         return true;
     }
+
+    // Uniquement pour les routes protégées, on initialise Keycloak
+    const authStore = useAuthStore();
+    await authStore.ensureReady();
 
     // Gestion de panne Keycloak sur route protégée
     if (authStore.initError) {
