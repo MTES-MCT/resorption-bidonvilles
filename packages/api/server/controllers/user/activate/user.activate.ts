@@ -70,10 +70,11 @@ export default async (req, res, next) => {
     try {
         await sequelize.transaction(async (transaction) => {
             const now = new Date();
-            await userService.activate(user.keycloak_id, user.mail, req.body.password, user.salt);
+            const hashedPassword = hashPassword(req.body.password, user.salt);
+            await userService.activate(user.keycloak_id, user.mail, hashedPassword, user.salt);
             await organizationModel.activate(user.organization.id, transaction);
             await userModel.update(user.id, {
-                password: hashPassword(req.body.password, user.salt),
+                password: hashedPassword,
                 fk_status: 'active',
                 password_conformity: (!!user.is_admin),
             }, transaction);
