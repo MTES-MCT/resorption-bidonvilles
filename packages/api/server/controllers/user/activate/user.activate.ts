@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import CONFIG from '#server/config';
 import { sequelize } from '#db/sequelize';
+import userService from '#server/services/user';
 import userModel from '#server/models/userModel';
 import userAccessModel from '#server/models/userAccessModel';
 import organizationModel from '#server/models/organizationModel';
@@ -69,7 +70,7 @@ export default async (req, res, next) => {
     try {
         await sequelize.transaction(async (transaction) => {
             const now = new Date();
-
+            await userService.activate(user.keycloak_id, user.mail, req.body.password, user.salt);
             await organizationModel.activate(user.organization.id, transaction);
             await userModel.update(user.id, {
                 password: hashPassword(req.body.password, user.salt),

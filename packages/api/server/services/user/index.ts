@@ -1,3 +1,4 @@
+import activate from './activate';
 import anonymizationRequest from './anonymizationRequest';
 import anonymizeUser from './anonymizeUser';
 import create from './create';
@@ -13,6 +14,7 @@ import sendInactiveUserAlerts from './sendInactiveUserAlerts';
 import updatePermissionOptions from './updatePermissionOptions';
 
 export default {
+    activate,
     anonymizationRequest,
     anonymizeUser,
     create,

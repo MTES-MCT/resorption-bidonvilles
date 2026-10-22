@@ -35,7 +35,7 @@ export default async (data, createdBy: number = null): Promise<User> => {
                 firstName: data.first_name,
                 lastName: data.last_name,
                 enabled: true,
-                emailVerified: true,
+                emailVerified: false,
             // credentials: buildCredentials(data.password, data.salt),
             });
         }
