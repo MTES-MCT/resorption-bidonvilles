@@ -12,7 +12,7 @@ const activate = async (keycloakId: string, userEmail: string, password: string,
         const keycloakApi = await createKeycloakApi();
         await keycloakApi.updateUser(keycloakId, {
             email: userEmail,
-            enabled: true,
+            emailVerified: true,
             credentials: passwordHash,
         });
     } catch (error) {
