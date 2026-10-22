@@ -22,9 +22,7 @@ export const useAuthStore = defineStore("auth", {
                     checkLoginIframe: false,
                     pkceMethod: "S256",
                     redirectUri:
-                        // "https://app.preprod.resorption-bidonvilles.dihal.gouv.fr/",
                         window.location.origin + window.location.pathname,
-                    // silentCheckSsoRedirectUri: `${window.location.origin}/silent-check-sso.html`,
                 })
                 .then((authenticated) => {
                     this.isAuthenticated = authenticated;
