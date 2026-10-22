@@ -76,9 +76,13 @@
 </template>
 
 <script setup>
-import { toRefs, watch, ref, computed } from "vue";
+import { toRefs, watch, ref, computed, nextTick } from "vue";
 import { useField } from "vee-validate";
 import { Button } from "@resorptionbidonvilles/ui";
+import {
+    formatIndicateursYearError,
+    pickYearToDisplay,
+} from "@/utils/parseIndicateursErrors";
 import sectionsList from "./sections.list";
 import inputsList from "./inputs.list";
 
@@ -126,17 +130,23 @@ const focusedYearData = computed(() => {
     return value.value?.[focusedYear.value] || {};
 });
 
-// indicateursErrors est un objet plat { fieldName: message } reconstruit
-// depuis les messages yup encodés "FIELD:fieldName|MESSAGE:..." par le parent.
-// Il n'est pas filtré par année car la validation yup agit sur l'objet année
-// focalisé au moment de la saisie.
+// errors est un objet { année: { fieldName: message } } reconstruit par le
+// parent depuis les erreurs yup (messages encodés "FIELD:fieldName|MESSAGE:...").
+// Seules les erreurs de l'année affichée sont transmises aux champs, avec le
+// libellé de l'année en préfixe.
 const focusedYearErrors = computed(() => {
-    const errorsObj = errors.value;
-    if (!errorsObj || Object.keys(errorsObj).length === 0) {
+    const yearErrors = errors.value?.[focusedYear.value];
+    if (!yearErrors || Object.keys(yearErrors).length === 0) {
         return {};
     }
-    return Object.keys(errorsObj).reduce((acc, fieldName) => {
-        acc[fieldName] = [errorsObj[fieldName]];
+    return Object.keys(yearErrors).reduce((acc, fieldName) => {
+        acc[fieldName] = [
+            formatIndicateursYearError(
+                focusedYear.value,
+                fieldName,
+                yearErrors[fieldName]
+            ),
+        ];
         return acc;
     }, {});
 });
@@ -152,6 +162,28 @@ const sections = computed(() => {
 
 function setYear(year) {
     focusedYear.value = year;
+}
+// Affiche l'année demandée si elle est dans la plage navigable, puis attend
+// le rendu pour que les champs en erreur de cette année soient dans le DOM.
+async function showYear(year) {
+    if (year >= minYear.value && year <= maxYear.value) {
+        setYear(year);
+    }
+    await nextTick();
+}
+// Après une soumission rejetée : garde l'année affichée si elle est en erreur,
+// sinon bascule sur la plus ancienne année en erreur.
+async function showFirstYearInError(yearsInError) {
+    const year = pickYearToDisplay(
+        yearsInError,
+        focusedYear.value,
+        minYear.value,
+        maxYear.value
+    );
+    if (year !== null) {
+        await showYear(year);
+    }
+    return year;
 }
 function previousYear() {
     setYear(Math.max(minYear.value || 0, focusedYear.value - 1));
@@ -231,4 +263,6 @@ function applyNewTopics() {
 watch(minYear, applyNewTimeRange);
 watch(maxYear, applyNewTimeRange);
 watch(topics, applyNewTopics);
+
+defineExpose({ showYear, showFirstYearInError });
 </script>

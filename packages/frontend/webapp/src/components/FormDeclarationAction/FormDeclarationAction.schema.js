@@ -69,11 +69,15 @@ function calculateIdentifiedMinorsSum(parent) {
 // Validation miroir : la somme des niveaux saisis ne peut être INFÉRIEURE au
 // nombre de mineurs dont la scolarité a débuté cette année.
 // + La somme des niveaux ne peut dépasser le total des mineurs identifiés sur site.
+// Les messages portent le préfixe "FIELD:nom|MESSAGE:texte" (décodé par
+// parseIndicateursErrors) : l'erreur s'affiche sous un champ visible de la
+// ligne concernée. Le test est posé sur chacun des 5 niveaux, mais le champ
+// porteur est unique pour ne pas dupliquer l'affichage.
 function addSchoolLevelsSumValidation(schema) {
     return schema
         .test(
             "min-scolarises",
-            "La somme des niveaux ne peut être inférieure au nombre de mineurs dont la scolarité a débuté cette année",
+            "FIELD:scolaire_mineur_scolarise_dans_annee|MESSAGE:La somme des niveaux ne peut être inférieure au nombre de mineurs dont la scolarité a débuté cette année",
             function () {
                 const scolariseDansAnnee =
                     this.parent.scolaire_mineur_scolarise_dans_annee;
@@ -86,7 +90,7 @@ function addSchoolLevelsSumValidation(schema) {
         )
         .test(
             "max-identified-minors",
-            "La somme des mineurs scolarisés par niveau ne peut pas dépasser le nombre total de mineurs identifiés sur site",
+            "FIELD:scolaire_nombre_maternelle|MESSAGE:La somme des mineurs scolarisés par niveau ne peut pas dépasser le nombre total de mineurs identifiés sur site",
             function () {
                 const sumLevels = calculateSchoolLevelsSum(this.parent);
                 const sumIdentified = calculateIdentifiedMinorsSum(this.parent);

@@ -1,13 +1,70 @@
 /**
+ * Parmi des identifiants de champs, retourne celui dont l'élément apparaît en
+ * premier dans le DOM (ordre d'affichage), et non dans l'ordre des clés d'un objet.
+ * Les identifiants absents du DOM sont ignorés.
+ *
+ * @param {Array<string>} fieldIds
+ * @returns {string|null}
+ */
+export function findFirstFieldIdInDomOrder(fieldIds) {
+    let firstId = null;
+    let firstElement = null;
+
+    for (const fieldId of fieldIds || []) {
+        const element = document.getElementById(fieldId);
+        if (!element) {
+            continue;
+        }
+
+        if (
+            firstElement === null ||
+            element.compareDocumentPosition(firstElement) &
+                Node.DOCUMENT_POSITION_FOLLOWING
+        ) {
+            firstId = fieldId;
+            firstElement = element;
+        }
+    }
+
+    return firstId;
+}
+
+// Pour la section "indicateurs" (une seule clé d'erreur pour de nombreux inputs) :
+// 1. cible explicite (id du champ fautif, fourni par l'appelant) si elle existe ;
+// 2. sinon le premier input portant la classe "border-error" (secours) ;
+// 3. sinon la section elle-même (premier input de la section).
+function resolveErrorTarget(field, explicitTargetId) {
+    if (explicitTargetId) {
+        const explicitTarget = document.getElementById(explicitTargetId);
+        if (explicitTarget) {
+            return explicitTarget;
+        }
+    }
+
+    if (field.id !== "indicateurs") {
+        return field;
+    }
+
+    return (
+        field.querySelector(
+            "input.border-error, textarea.border-error, select.border-error"
+        ) || field
+    );
+}
+
+/**
  * Met en évidence tous les champs en erreur et scroll/focus sur le premier
  * Si aucun champ n'est trouvé, scroll vers le résumé des erreurs
  *
  * @param {Object} errors - Objet des erreurs de vee-validate
  * @param {string} errorSummaryId - ID de l'élément ErrorSummary
+ * @param {Object<string, string>} explicitTargets - Cibles explicites { cléErreur: idDuChamp }
+ *   qui remplacent la résolution par défaut pour cette clé (ex : indicateurs)
  */
 export default async function focusFirstErrorField(
     errors,
-    errorSummaryId = "erreurs"
+    errorSummaryId = "erreurs",
+    explicitTargets = {}
 ) {
     // Attendre que le DOM soit mis à jour
     await new Promise((resolve) => setTimeout(resolve, 100));
@@ -19,6 +76,7 @@ export default async function focusFirstErrorField(
 
     // Mettre en évidence tous les champs en erreur
     const highlightedFields = [];
+    const highlightedKeys = [];
 
     for (const errorKey of errorKeys) {
         // Essayer de trouver l'élément par son ID
@@ -31,6 +89,7 @@ export default async function focusFirstErrorField(
 
         if (field) {
             highlightedFields.push(field);
+            highlightedKeys.push(errorKey);
 
             // Ajouter une classe CSS pour mettre en évidence le champ en erreur
             field.classList.add("field-error-highlight");
@@ -42,7 +101,10 @@ export default async function focusFirstErrorField(
 
     // Scroll et focus sur le premier champ en erreur
     if (highlightedFields.length > 0) {
-        const firstErrorField = highlightedFields[0];
+        const firstErrorField = resolveErrorTarget(
+            highlightedFields[0],
+            explicitTargets?.[highlightedKeys[0]]
+        );
 
         // Scroller vers le premier champ
         firstErrorField.scrollIntoView({
