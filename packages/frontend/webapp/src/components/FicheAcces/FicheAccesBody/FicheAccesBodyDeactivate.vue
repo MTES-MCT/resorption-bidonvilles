@@ -14,7 +14,6 @@
             v-model="deactivationReason"
             placeholder="Raison pour laquelle vous désactivez cet accès..."
             :disabled="isLoading"
-            class="bg-white"
             tabindex="0"
         />
         <div
@@ -37,13 +36,12 @@
         </div>
         <ErrorSummary v-if="error" :message="error" :summary="errorSummary" />
         <div class="flex items-center justify-end gap-2">
-            <Button
+            <DsfrButton
                 v-if="deactivationReason.length > 0"
-                variant="primaryText"
+                secondary
                 @click="cancelReason"
                 :disabled="isLoading"
-                class="!border-2 !border-primary hover:!bg-primary hover:!text-white"
-                >Annuler</Button
+                >Annuler</DsfrButton
             >
             <Button
                 variant="tertiaryA11Yalt"
@@ -145,13 +143,3 @@ async function deactivate() {
     }
 }
 </script>
-
-<style scoped>
-.fr-fieldset__element {
-    margin-bottom: 0;
-}
-
-button {
-    border: inherit;
-}
-</style>
