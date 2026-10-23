@@ -5,8 +5,14 @@ import mails from '#server/mails/mails';
 import mattermost from '#server/utils/mattermost';
 import getPermission from '#server/utils/permission/getPermission';
 import agendaFactory from '#server/loaders/agendaLoader';
+import { deactivateUser } from '#server/utils/keycloak/keycloakRolesManagement';
 import { User } from '#root/types/resources/User.d';
 
+/**
+ * Vérifie que l'utilisateur existe et n'est pas déjà désactivé
+ * @param user - Utilisateur à vérifier
+ * @returns {Promise<void>}
+ */
 function checkUser(user: User): void {
     if (!user) {
         throw new Error('Le compte n\'a pas été trouvé en base de données');
@@ -17,6 +23,11 @@ function checkUser(user: User): void {
     }
 }
 
+/**
+ * Trouve un utilisateur par son ID et valide qu'il existe et n'est pas déjà désactivé
+ * @param id - ID de l'utilisateur
+ * @returns {Promise<User>}
+ */
 async function findAndValidateUser(id: number): Promise<User> {
     let user: User;
 
@@ -32,8 +43,22 @@ async function findAndValidateUser(id: number): Promise<User> {
     }
 }
 
+/**
+ * Désactive un utilisateur
+ * @param id - ID de l'utilisateur
+ * @param anonymizationRequested - Demande d'anonymisation en DB métier
+ * @param user - Utilisateur à désactiver
+ * @returns {Promise<User>}
+ */
 async function deactivateUserWithTransaction(id: number, anonymizationRequested: boolean, user: User): Promise<User> {
     const transaction = await sequelize.transaction();
+
+    // Supprime le rôle RB_* de l'utilisateur côté Keycloak
+    try {
+        await deactivateUser(user.keycloak_id);
+    } catch (error) {
+        throw new ServiceError('keycloak_user_deactivation_failure', error);
+    }
 
     try {
         const updatedUsers = await userModel.deactivate([id], 'admin', anonymizationRequested, transaction);
@@ -56,6 +81,13 @@ async function deactivateUserWithTransaction(id: number, anonymizationRequested:
     }
 }
 
+/**
+ * Envoie les notifications de désactivation
+ * @param user - Utilisateur désactivé
+ * @param selfDeactivation - Désactivation par l'utilisateur lui-même
+ * @param reason - Raison de la désactivation
+ * @returns {Promise<void>}
+ */
 async function sendNotifications(user: User, selfDeactivation: boolean, reason: string = null): Promise<void> {
     try {
         if (selfDeactivation) {
@@ -80,7 +112,9 @@ async function sendNotifications(user: User, selfDeactivation: boolean, reason: 
  * @param agenda - Instance Agenda
  * @param jobName - Nom du job à annuler
  * @param userId - ID de l'utilisateur
- */async function checkAndCancelJob(agenda, jobName: string, userId: number): Promise<void> {
+ * @returns {Promise<void>}
+ */
+async function checkAndCancelJob(agenda, jobName: string, userId: number): Promise<void> {
     // On recherche le job par son nom et l'identifiant du compte utilisateur
     const jobs = await agenda.jobs({
         name: jobName,
@@ -106,6 +140,15 @@ const onboardingJob = [
     'user_share',
 ];
 
+/**
+ * Désactive un utilisateur
+ * @param id - ID de l'utilisateur
+ * @param selfDeactivation - Désactivation par l'utilisateur lui-même
+ * @param author - Auteur de la désactivation
+ * @param reason - Raison de la désactivation
+ * @param anonymizationRequested - Demande d'anonymisation
+ * @returns {Promise<User>}
+ */
 export default async function deactivate(id: number, selfDeactivation: boolean, author: User, reason: string = null, anonymizationRequested: boolean = false): Promise<User> {
     const permission = getPermission(author, 'deactivate', 'user');
     if (!permission) {
