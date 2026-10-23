@@ -92,7 +92,7 @@ async function authenticateUser(req) {
     if (user.status !== 'active' || user.organization.active !== true) {
         throw new AuthenticateError({
             code: 4,
-            user_message: 'Votre session a expiré',
+            user_message: 'Votre compte est désactivé',
         });
     }
 
@@ -139,7 +139,7 @@ export async function authenticate(req, res, next, respond = true) {
             throw error;
         }
 
-        res.status(400).send(error.details);
+        res.status(403).send(error.details);
         return;
     }
 
