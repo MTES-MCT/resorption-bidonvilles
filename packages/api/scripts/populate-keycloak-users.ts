@@ -173,9 +173,6 @@ async function main(): Promise<void> {
 
 
     // 2. Vérification de la connexion Keycloak (déclenche le premier fetch de token)
-    // await keycloakApi.getRealmPublicKey();
-    const keyclaokHealth = await keycloakApi.healthcheck();
-    log(`🤔  Keycloak Health: ${JSON.stringify(keyclaokHealth, null, 4)}`);
     log(`✅  Connexion à Keycloak OK (server: ${KEYCLOAK_BASE_URL} realm: ${KEYCLOAK_REALM}).\n`);
 
     // 3. Lecture des utilisateurs
