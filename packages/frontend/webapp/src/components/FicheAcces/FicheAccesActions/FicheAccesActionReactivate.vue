@@ -1,18 +1,16 @@
 <template>
-    <Button
+    <DsfrButton
         v-if="user.status === 'inactive' && user.anonymized_at === null"
-        variant="primary"
-        icon="user-check"
-        iconPosition="left"
+        primary
+        icon="mdi:account-check"
         :loading="isLoading"
         :disabled="disabled"
-        >Réactiver l'accès</Button
+        >Réactiver l'accès</DsfrButton
     >
 </template>
 
 <script setup>
 import { toRefs } from "vue";
-import { Button } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     user: Object,

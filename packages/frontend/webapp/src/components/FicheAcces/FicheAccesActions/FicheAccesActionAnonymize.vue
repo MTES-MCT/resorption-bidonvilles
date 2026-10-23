@@ -1,26 +1,18 @@
 <template>
-    <Button
+    <DsfrButton
         v-if="user.status === 'inactive' && user.anonymized_at === null"
-        :variant="
-            user.anonymization_requested ? 'secondaryOutline' : 'primaryOutline'
+        :secondary="!user.anonymization_requested"
+        :primary="user.anonymization_requested"
+        :icon="
+            user.anonymization_requested ? 'mdi:incognito-off' : 'mdi:incognito'
         "
-        icon="user-secret"
-        iconPosition="left"
         :loading="isLoading"
         :disabled="disabled"
-        class="!border-2"
-        :class="[
-            user.anonymization_requested
-                ? '!border-secondary hover:!bg-secondary'
-                : '!border-primary hover:!bg-primary',
-        ]"
-        >{{ buttonLabel }}</Button
+        >{{ buttonLabel }}</DsfrButton
     >
 </template>
-
 <script setup>
 import { computed, toRefs } from "vue";
-import { Button } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     user: Object,
@@ -35,9 +27,3 @@ const buttonLabel = computed(() => {
         : "Anonymiser l'utilisateur";
 });
 </script>
-
-<style scoped>
-button {
-    border: inherit;
-}
-</style>
