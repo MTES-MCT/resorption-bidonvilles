@@ -2,9 +2,15 @@
     <DsfrButton
         v-if="user.status === 'inactive' && user.anonymized_at === null"
         primary
-        icon="mdi:account-check"
-        :loading="isLoading"
-        :disabled="disabled"
+        :icon="
+            isLoading
+                ? {
+                      name: 'ri:loader-4-line',
+                      animation: 'spin',
+                  }
+                : 'mdi:account-check'
+        "
+        :disabled="disabled || isLoading"
         >Réactiver l'accès</DsfrButton
     >
 </template>

@@ -7,8 +7,16 @@
             user.status !== 'refused'
         "
         secondary
+        :icon="
+            isLoading
+                ? {
+                      name: 'ri:loader-4-line',
+                      animation: 'spin',
+                  }
+                : null
+        "
         :loading="isLoading"
-        :disabled="disabled"
+        :disabled="disabled || isLoading"
         >Définir comme « Administrateur local »
     </DsfrButton>
 </template>
