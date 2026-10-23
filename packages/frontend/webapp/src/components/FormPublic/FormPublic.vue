@@ -61,7 +61,7 @@
 
         <!-- form buttons -->
         <ContentWrapper :size="size" class="mt-4">
-            <slot name="button">
+            <slot name="button" :isLoading="isLoading">
                 <p class="text-center">
                     <DsfrButton type="submit">Envoyer</DsfrButton>
                 </p>
@@ -101,15 +101,19 @@ const props = defineProps({
 
 const form = ref(null);
 const error = ref(null);
+const isLoading = ref(false);
 
 const { schema, submit, size, showErrorSummary, language } = toRefs(props);
 
 async function formSubmit(...args) {
     error.value = null;
+    isLoading.value = true;
 
     try {
         await submit.value(...args);
+        isLoading.value = false;
     } catch (e) {
+        isLoading.value = false;
         error.value = e?.user_message || "Une erreur inconnue est survenue";
         form.value.setErrors(e?.fields || {});
     }
