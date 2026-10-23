@@ -1,11 +1,20 @@
 import userModel from '#server/models/userModel';
 import mailsUtils from '#server/mails/mails';
 import ServiceError from '#server/errors/ServiceError';
-import { createKeycloakApi } from '#server/utils/keycloak/keycloak.api-client';
+import { modifyUserRoles } from '#server/utils/keycloak/keycloakRolesManagement';
 import { User } from '#root/types/resources/User.d';
 
 const { sendAdminWelcome } = mailsUtils;
 
+/**
+ * Gère l'attribution du rôle d'administrateur (local) à un utilisateur
+ * Il existe 2 sources à mettre à jour:
+ * - keycloak pour l'authentification (un admin aura un OTP)
+ * - base de données métier pour les droits d'accès
+ * @param userId - Id de l'utilisateur
+ * @param admin  - True pour octroyer le rôle, false pour le retirer
+ * @returns      - L'utilisateur mis à jour
+ */
 const setRoleAdmin = async (userId: number, admin: boolean) => {
     let user: User | null;
 
@@ -18,18 +27,10 @@ const setRoleAdmin = async (userId: number, admin: boolean) => {
     } catch (error) {
         throw new ServiceError('user_not_found', error);
     }
-    console.log('User:', user);
+
     // 2. Modification du realm role de l'utilisateur sur keycloak
     try {
-        const keycloakApi = await createKeycloakApi();
-        if (user && admin) {
-            console.log('Keycloak API created');
-            keycloakApi.assignRealmRoles(user.keycloak_id, ['RB_ADMINISTRATEUR']);
-            keycloakApi.deleteRealmRoles(user.keycloak_id, ['RB_UTILISATEUR']);
-        } else if (user) {
-            keycloakApi.assignRealmRoles(user.keycloak_id, ['RB_UTILISATEUR']);
-            keycloakApi.deleteRealmRoles(user.keycloak_id, ['RB_ADMINISTRATEUR']);
-        }
+        await modifyUserRoles(user, admin);
     } catch (error) {
         throw new ServiceError('keycloak_update_role_failure', error);
     }
