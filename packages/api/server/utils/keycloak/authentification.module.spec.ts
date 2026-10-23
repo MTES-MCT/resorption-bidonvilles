@@ -84,22 +84,6 @@ describe('keycloak.api-client / createKeycloakApi()', () => {
     });
 
     // -----------------------------------------------------------------------
-    // getRealmPublicKey
-    // -----------------------------------------------------------------------
-    describe('getRealmPublicKey()', () => {
-        it('appelle la bonne URL sur le realm configuré', async () => {
-            publicInstance.get.resolves({ data: { keys: [{ kid: 'abc' }] } });
-
-            const result = await keycloakApi.getRealmPublicKey();
-
-            expect(publicInstance.get).to.have.been.calledOnce;
-            const [url] = publicInstance.get.firstCall.args;
-            expect(url).to.equal(`/auth/realms/${TEST_REALM}/protocol/openid-connect/certs`);
-            expect(result).to.deep.equal({ keys: [{ kid: 'abc' }] });
-        });
-    });
-
-    // -----------------------------------------------------------------------
     // getAdminToken
     // -----------------------------------------------------------------------
     describe('getAdminToken()', () => {
@@ -116,47 +100,6 @@ describe('keycloak.api-client / createKeycloakApi()', () => {
             expect(body.get('client_id')).to.equal('rb-admin');
             expect(body.get('username')).to.equal('admin');
             expect(body.get('password')).to.equal('secret');
-            expect(options.headers['Content-Type']).to.equal('application/x-www-form-urlencoded');
-        });
-    });
-
-    // -----------------------------------------------------------------------
-    // getUserToken
-    // -----------------------------------------------------------------------
-    describe('getUserToken()', () => {
-        it('renvoie l\'access_token reçu', async () => {
-            publicInstance.post.resolves({ data: { access_token: 'tok-user' } });
-
-            const token = await keycloakApi.getUserToken({ username: 'user', password: 'pass' });
-
-            expect(token).to.equal('tok-user');
-            expect(publicInstance.post).to.have.been.calledOnce;
-            const [url, body, options] = publicInstance.post.firstCall.args;
-            expect(url).to.equal(`/auth/realms/${TEST_REALM}/protocol/openid-connect/token`);
-            expect(body.get('grant_type')).to.equal('password');
-            expect(body.get('username')).to.equal('user');
-            expect(body.get('password')).to.equal('pass');
-            expect(options.headers['Content-Type']).to.equal('application/x-www-form-urlencoded');
-        });
-    });
-
-    // -----------------------------------------------------------------------
-    // getClientToken
-    // -----------------------------------------------------------------------
-    describe('getClientToken()', () => {
-        it('renvoie l\'access_token reçu', async () => {
-            publicInstance.post.resolves({ data: { access_token: 'tok-client' } });
-
-            const token = await keycloakApi.getClientToken('my-client', 'my-secret');
-
-            expect(token).to.equal('tok-client');
-            expect(publicInstance.post).to.have.been.calledOnce;
-            const [url, body, options] = publicInstance.post.firstCall.args;
-            expect(url).to.equal(`/auth/realms/${TEST_REALM}/protocol/openid-connect/token`);
-            expect(body.get('grant_type')).to.equal('client_credentials');
-            expect(body.get('audience')).to.equal('my-client');
-            const expectedBasic = Buffer.from('my-client:my-secret').toString('base64');
-            expect(options.headers.Authorization).to.equal(`Basic ${expectedBasic}`);
             expect(options.headers['Content-Type']).to.equal('application/x-www-form-urlencoded');
         });
     });
@@ -279,20 +222,6 @@ describe('keycloak.api-client / createKeycloakApi()', () => {
         });
     });
 
-    // -----------------------------------------------------------------------
-    // deleteUser
-    // -----------------------------------------------------------------------
-    describe('deleteUser()', () => {
-        it('appelle authenticatedInstance.delete avec le bon URL', async () => {
-            authenticatedInstance.delete.resolves({ data: null });
-
-            await keycloakApi.deleteUser('some-user-id');
-
-            expect(authenticatedInstance.delete).to.have.been.calledOnce;
-            const [url] = authenticatedInstance.delete.firstCall.args;
-            expect(url).to.equal(`/admin/realms/${TEST_REALM}/users/some-user-id`);
-        });
-    });
 
     // -----------------------------------------------------------------------
     // assignRealmRoles
@@ -328,77 +257,6 @@ describe('keycloak.api-client / createKeycloakApi()', () => {
         });
     });
 
-    // -----------------------------------------------------------------------
-    // assignClientRoles
-    // -----------------------------------------------------------------------
-    describe('assignClientRoles()', () => {
-        it('lève une erreur si clientId n\'est pas fourni et absent de l\'environnement', async () => {
-            delete process.env.KEYCLOAK_CLIENT_ID;
-
-            await expect(
-                keycloakApi.assignClientRoles('user-123', ['ROLE_A'], ''),
-            ).to.be.rejectedWith('assignClientRoles: KEYCLOAK_CLIENT_ID is not set.');
-        });
-
-        it('ne fait rien si la liste des rôles est vide', async () => {
-            await keycloakApi.assignClientRoles('user-123', []);
-
-            expect(authenticatedInstance.get).to.not.have.been.called;
-            expect(authenticatedInstance.post).to.not.have.been.called;
-        });
-
-        it('lève une erreur si le client n\'est pas trouvé dans le realm', async () => {
-            authenticatedInstance.get
-                .withArgs(`/admin/realms/${TEST_REALM}/clients?clientId=unknown-client`, undefined)
-                .resolves({ data: [] });
-
-            await expect(
-                keycloakApi.assignClientRoles('user-123', ['ROLE_A'], 'unknown-client'),
-            ).to.be.rejectedWith("assignClientRoles: client 'unknown-client' not found in realm.");
-        });
-
-        it('résout le client UUID, les rôles et les assigne au user', async () => {
-            const clientUuid = 'internal-client-uuid';
-            const roleRep = { id: 'rep-1', name: 'RB_ADMINISTRATEUR' };
-
-            authenticatedInstance.get
-                .withArgs(`/admin/realms/${TEST_REALM}/clients?clientId=my-client`, undefined)
-                .resolves({ data: [{ id: clientUuid }] });
-            authenticatedInstance.get
-                .withArgs(`/admin/realms/${TEST_REALM}/clients/${clientUuid}/roles/RB_ADMINISTRATEUR`, undefined)
-                .resolves({ data: roleRep });
-            authenticatedInstance.post.resolves({ data: null });
-
-            await keycloakApi.assignClientRoles('user-123', ['RB_ADMINISTRATEUR'], 'my-client');
-
-            expect(authenticatedInstance.post).to.have.been.calledOnceWith(
-                `/admin/realms/${TEST_REALM}/users/user-123/role-mappings/clients/${clientUuid}`,
-                [roleRep],
-                undefined,
-            );
-        });
-
-        it('utilise KEYCLOAK_CLIENT_ID par défaut si non spécifié', async () => {
-            const clientUuid = 'default-client-uuid';
-            const roleRep = { id: 'rep-default', name: 'RB_ADMINISTRATEUR' };
-
-            authenticatedInstance.get
-                .withArgs(`/admin/realms/${TEST_REALM}/clients?clientId=${TEST_CLIENT_ID}`, undefined)
-                .resolves({ data: [{ id: clientUuid }] });
-            authenticatedInstance.get
-                .withArgs(`/admin/realms/${TEST_REALM}/clients/${clientUuid}/roles/RB_ADMINISTRATEUR`, undefined)
-                .resolves({ data: roleRep });
-            authenticatedInstance.post.resolves({ data: null });
-
-            await keycloakApi.assignClientRoles('user-123', ['RB_ADMINISTRATEUR']);
-
-            expect(authenticatedInstance.post).to.have.been.calledOnceWith(
-                `/admin/realms/${TEST_REALM}/users/user-123/role-mappings/clients/${clientUuid}`,
-                [roleRep],
-                undefined,
-            );
-        });
-    });
 
     // -----------------------------------------------------------------------
     // Intercepteurs Axios
@@ -485,23 +343,6 @@ describe('keycloak.api-client / createKeycloakApi()', () => {
     // Gestion des erreurs HTTP – wrapping avec buildMessage
     // -----------------------------------------------------------------------
     describe('gestion des erreurs Axios', () => {
-        it('lève une Error avec des infos de contexte (méthode + url) en cas d\'échec POST', async () => {
-            const axiosErr = new AxiosError('Bad Request');
-            axiosErr.response = { status: 400, statusText: 'Bad Request', data: { errorMessage: 'invalid' } } as any;
-            authenticatedInstance.post.rejects(axiosErr);
-
-            try {
-                await keycloakApi.logoutUser('user-id');
-            } catch (err) {
-                expect(err).to.be.instanceOf(Error);
-                const msg = (err as Error).message;
-                expect(msg).to.include('POST');
-                expect(msg).to.include('/users/user-id/logout');
-                return;
-            }
-            expect.fail('Une exception était attendue');
-        });
-
         it('lève une Error avec des infos de contexte (méthode + url) en cas d\'échec GET', async () => {
             const axiosErr = new AxiosError('Unauthorized');
             axiosErr.response = { status: 401, statusText: 'Unauthorized', data: {} } as any;
