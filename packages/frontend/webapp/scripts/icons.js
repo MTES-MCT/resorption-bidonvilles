@@ -28,8 +28,11 @@ const riIconNames = [
 ];
 
 const mdiIconNames = [
+    "account-check",
     "account-edit",
     "home-remove-outline",
+    "incognito",
+    "incognito-off",
     "play",
     "delete-outline",
     "content-copy",
