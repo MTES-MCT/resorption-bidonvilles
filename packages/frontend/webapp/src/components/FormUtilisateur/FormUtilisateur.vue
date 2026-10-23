@@ -117,9 +117,19 @@
             <FormUtilisateurInputLegal :label="labels.legal" />
         </template>
 
-        <template v-slot:button="{ disabled }">
+        <template v-slot:button="{ disabled, isLoading }">
             <p class="text-center">
-                <DsfrButton type="submit" :disabled="disabled"
+                <DsfrButton
+                    type="submit"
+                    :disabled="disabled || isLoading"
+                    :icon="
+                        isLoading
+                            ? {
+                                  name: 'ri:loader-4-line',
+                                  animation: 'spin',
+                              }
+                            : null
+                    "
                     ><slot name="submit"
                 /></DsfrButton>
             </p>
@@ -169,6 +179,10 @@ const props = defineProps({
     language: {
         type: String,
         default: "fr",
+    },
+    disabled: {
+        type: Boolean,
+        default: false,
     },
 });
 
