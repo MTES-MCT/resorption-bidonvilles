@@ -44,8 +44,9 @@ export function buildDocumentTitle(title, defaultTitle, label) {
 }
 
 /**
- * Applique le marquage visuel de l'environnement (titre initial et favicon)
- * quand un label est défini. Sans label, ne fait rien.
+ * Applique le marquage de l'environnement sur le titre initial de la page
+ * (préfixe "[LABEL] ") quand un label est défini. Sans label, ou si le titre
+ * est vide ou déjà préfixé, ne fait rien.
  */
 export function applyEnvironmentMarking(label) {
     if (!label) {
@@ -55,11 +56,5 @@ export function applyEnvironmentMarking(label) {
     const currentTitle = document.title;
     if (currentTitle !== "" && !currentTitle.startsWith(`[${label}]`)) {
         document.title = prefixTitleWithLabel(currentTitle, label);
-    }
-
-    const icon = document.querySelector('link[rel="icon"]');
-    if (icon) {
-        icon.setAttribute("href", "/favicon-preprod.svg");
-        icon.setAttribute("type", "image/svg+xml");
     }
 }

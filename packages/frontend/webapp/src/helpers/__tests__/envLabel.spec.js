@@ -20,32 +20,20 @@ describe("normalizeEnvLabel (valeurs littérales)", () => {
 });
 
 describe("applyEnvironmentMarking", () => {
-    let icon;
-
     beforeEach(() => {
-        document.head.innerHTML = "";
-        icon = document.createElement("link");
-        icon.setAttribute("rel", "icon");
-        icon.setAttribute("href", "/favicon.ico");
-        icon.setAttribute("type", "image/x-icon");
-        document.head.appendChild(icon);
         document.title = "Résorption Bidonvilles";
     });
 
-    it("préfixe le titre et modifie le favicon", () => {
+    it("préfixe le titre", () => {
         applyEnvironmentMarking("PRÉPROD");
 
         expect(document.title).toBe("[PRÉPROD] Résorption Bidonvilles");
-        expect(icon.getAttribute("href")).toBe("/favicon-preprod.svg");
-        expect(icon.getAttribute("type")).toBe("image/svg+xml");
     });
 
     it("ne fait rien sans label", () => {
         applyEnvironmentMarking("");
 
         expect(document.title).toBe("Résorption Bidonvilles");
-        expect(icon.getAttribute("href")).toBe("/favicon.ico");
-        expect(icon.getAttribute("type")).toBe("image/x-icon");
     });
 
     it("ne préfixe pas deux fois le titre", () => {
