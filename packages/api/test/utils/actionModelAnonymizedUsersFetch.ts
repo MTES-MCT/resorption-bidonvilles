@@ -1,46 +1,33 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
+import { rewiremock } from '#test/rewiremock';
 
 chai.use(sinonChai);
 const { expect } = chai;
 
-export interface AnonymizedUsersFetchStub {
-    sandbox: sinon.SinonSandbox;
-    queryStub: sinon.SinonStub;
-    fakeSequelize: { query: sinon.SinonStub };
-}
-
-// Ne fait aucun appel à rewiremock ici : `.with()` doit être invoqué depuis le
-// fichier de test lui-même, sinon rewiremock lève une "isolation breach".
-export function createAnonymizedUsersFetchStub(): AnonymizedUsersFetchStub {
+// rewiremock exige que `.with()` et l'import du module testé soient faits par
+// la même fonction appelante, sinon il lève une "isolation breach" : d'où un
+// import() dynamique ici plutôt qu'un import statique dans chaque spec.
+export default async function expectAnonymizedUsersExcluded(modulePath: string, enrichWherePath: string): Promise<void> {
     const sandbox = sinon.createSandbox();
-    const queryStub = sandbox.stub();
-    const fakeSequelize = {
-        query: queryStub,
-    };
+    const queryStub = sandbox.stub().resolves([]);
+    const fakeSequelize = { query: queryStub };
 
-    return { sandbox, queryStub, fakeSequelize };
-}
+    rewiremock('#db/sequelize').with({ sequelize: fakeSequelize });
+    rewiremock('sequelize').with({ QueryTypes: { SELECT: 'SELECT' } });
+    rewiremock(enrichWherePath).callThrough();
 
-export function registerAnonymizedUsersFetchHooks({ sandbox, queryStub }: Pick<AnonymizedUsersFetchStub, 'sandbox' | 'queryStub'>): void {
-    beforeEach(() => {
-        queryStub.resolves([]);
-    });
+    rewiremock.enable();
+    const { default: fetch } = await import(modulePath);
+    rewiremock.disable();
 
-    afterEach(() => {
-        sandbox.reset();
-    });
-}
-
-export async function expectAnonymizedUsersExcluded(
-    queryStub: sinon.SinonStub,
-    fetch: (ids: number[]) => Promise<unknown>,
-): Promise<void> {
     await fetch([1]);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     expect(queryStub).to.have.been.calledOnce;
     const sql: string = queryStub.firstCall.args[0];
     expect(sql).to.include('users.anonymized_at IS NULL');
+
+    sandbox.restore();
 }

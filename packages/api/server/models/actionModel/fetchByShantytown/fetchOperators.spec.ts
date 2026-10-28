@@ -1,25 +1,10 @@
-import { rewiremock } from '#test/rewiremock';
-import {
-    createAnonymizedUsersFetchStub,
-    registerAnonymizedUsersFetchHooks,
-    expectAnonymizedUsersExcluded,
-} from '#test/utils/actionModelAnonymizedUsersFetch';
-
-const { sandbox, queryStub, fakeSequelize } = createAnonymizedUsersFetchStub();
-
-rewiremock('#db/sequelize').with({ sequelize: fakeSequelize });
-rewiremock('sequelize').with({ QueryTypes: { SELECT: 'SELECT' } });
-rewiremock('../fetch/enrichWhere').callThrough();
-
-rewiremock.enable();
-// eslint-disable-next-line import/newline-after-import, import/first
-import fetchOperators from './fetchOperators';
-rewiremock.disable();
+import expectAnonymizedUsersExcluded from '#test/utils/actionModelAnonymizedUsersFetch';
 
 describe('models/actionModel/fetchByShantytown/fetchOperators()', () => {
-    registerAnonymizedUsersFetchHooks({ sandbox, queryStub });
-
     it('exclut les opérateurs dont le compte est anonymisé (traités comme des utilisateurs inexistants)', async () => {
-        await expectAnonymizedUsersExcluded(queryStub, fetchOperators);
+        await expectAnonymizedUsersExcluded(
+            '#server/models/actionModel/fetchByShantytown/fetchOperators',
+            '#server/models/actionModel/fetch/enrichWhere',
+        );
     });
 });
