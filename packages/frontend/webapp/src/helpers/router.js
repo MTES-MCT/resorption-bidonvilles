@@ -6,6 +6,8 @@ import { useNavigationStore } from "@/stores/navigation.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import logout from "@/utils/logout";
 import waitForElement from "@/utils/waitForElement";
+import env from "@/helpers/env";
+import { buildDocumentTitle } from "@/helpers/envLabel";
 const defaultTitle = "Résorption Bidonvilles"; // Titre par défaut
 let currentRouteIsBacked = false;
 window.popStateDetected = false;
@@ -773,7 +775,7 @@ router.beforeEach(async (to, from) => {
 });
 
 export function setDocumentTitle(title) {
-    document.title = title ? `${title} — ${defaultTitle}` : defaultTitle;
+    document.title = buildDocumentTitle(title, defaultTitle, env.ENV_LABEL);
 }
 
 export default router;
