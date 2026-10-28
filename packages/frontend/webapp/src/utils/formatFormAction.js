@@ -26,6 +26,19 @@ export const fields = [
     "scolaire_mineur_scolarise_dans_annee",
 ];
 
+const formatOrgUsers = (orgs, extraFields = () => ({})) =>
+    orgs.flatMap(({ name, abbreviation, users }) =>
+        users
+            .filter((user) => !isAnonymizedUser(user))
+            .map((user) => ({
+                id: user.id,
+                label: `${user.first_name} ${user.last_name} (${
+                    abbreviation || name
+                })`,
+                ...extraFields(user),
+            }))
+    );
+
 export const formatFormAction = (data) => {
     const formatted = {
         name: data.project_name || data.name || "",
@@ -60,33 +73,14 @@ export const formatFormAction = (data) => {
         location_autre: data.location_other || "",
         managers: {
             organizations: [],
-            users: data.managers
-                ? data.managers.flatMap(({ name, abbreviation, users }) =>
-                      users
-                          .filter((user) => !isAnonymizedUser(user))
-                          .map((user) => ({
-                              id: user.id,
-                              label: `${user.first_name} ${user.last_name} (${
-                                  abbreviation || name
-                              })`,
-                          }))
-                  )
-                : [],
+            users: data.managers ? formatOrgUsers(data.managers) : [],
         },
         operators: {
             organizations: [],
             users: data.operators
-                ? sortOperatorsByPrincipal(data.operators).flatMap(
-                      ({ name, abbreviation, users }) =>
-                          users
-                              .filter((user) => !isAnonymizedUser(user))
-                              .map((user) => ({
-                                  id: user.id,
-                                  label: `${user.first_name} ${
-                                      user.last_name
-                                  } (${abbreviation || name})`,
-                                  is_principal: user.is_principal === true,
-                              }))
+                ? formatOrgUsers(
+                      sortOperatorsByPrincipal(data.operators),
+                      (user) => ({ is_principal: user.is_principal === true })
                   )
                 : [],
         },
