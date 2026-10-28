@@ -5,7 +5,7 @@
             :style="{ height: `${hauteur}px` }"
             aria-hidden="true"
         />
-        <div ref="bandeau" class="bandeauEnvironnement">
+        <div ref="bandeau" class="z-[1000] fixed top-0 left-0 right-0">
             <DsfrNotice
                 type="warning"
                 :title="`Environnement de test (${label}) : les données ne sont pas réelles.`"
@@ -61,13 +61,3 @@ onBeforeUnmount(function arreterObservation() {
     document.documentElement.style.removeProperty("scroll-padding-top");
 });
 </script>
-
-<style scoped>
-.bandeauEnvironnement {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1100;
-}
-</style>
