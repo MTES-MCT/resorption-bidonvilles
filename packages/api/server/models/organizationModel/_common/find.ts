@@ -32,7 +32,7 @@ type OrganizationRow = {
 type OrganizationFindOptions = {
     ids?: number[],
     activeOnly?: boolean,
-    nonEmpty?: boolean,
+    activeOrganizationsOnly?: boolean,
 };
 
 export default async (options: OrganizationFindOptions = {}, requestingUser?: User, transaction?: Transaction): Promise<Organization[]> => {
@@ -43,14 +43,8 @@ export default async (options: OrganizationFindOptions = {}, requestingUser?: Us
         replacements.ids = options.ids;
     }
 
-    if (options.nonEmpty === true) {
-        where.push(`
-            organizations.active = TRUE
-            AND
-            users.fk_status = 'active'
-            AND
-            users.to_be_tracked = TRUE
-        `);
+    if (options.activeOrganizationsOnly === true) {
+        where.push('organizations.active = TRUE');
     }
 
     const users: OrganizationRow[] = await sequelize.query(
