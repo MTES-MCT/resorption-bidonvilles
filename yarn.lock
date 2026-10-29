@@ -2701,13 +2701,13 @@ __metadata:
   linkType: hard
 
 "@iconify/vue@npm:^5.0.0":
-  version: 5.0.1
-  resolution: "@iconify/vue@npm:5.0.1"
+  version: 5.0.3
+  resolution: "@iconify/vue@npm:5.0.3"
   dependencies:
     "@iconify/types": ^2.0.0
   peerDependencies:
     vue: ">=3.0.0"
-  checksum: 7c73efd965cca4d549b4872e60deca6876312e2d1aa7871f4d76305c86b4c9909f6dfcecb30eb5407bc4d61f2662d7b2da04dec9abf0c2714cb5356ccd59f726
+  checksum: 221bca01dbd88f46567b602b70641bc7c55d2426a930899ddc219d1d92604df058118bae3c6cdeb5deffe0aa2c95cfd0157bfd5fb574d80061e84260543c99a5
   languageName: node
   linkType: hard
 
