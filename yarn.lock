@@ -2494,10 +2494,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gouvfr/dsfr@npm:1.14.3":
-  version: 1.14.3
-  resolution: "@gouvfr/dsfr@npm:1.14.3"
-  checksum: df22708d0cc6d38800065badd1d25de3ebe2ddf7322a91401c5e804f853f8e07f1af558a8edd6d7e37833e32dc26c74f6550abe92cd1a363dfac2841eb877cc3
+"@gouvfr/dsfr@npm:1.15.3":
+  version: 1.15.3
+  resolution: "@gouvfr/dsfr@npm:1.15.3"
+  checksum: 35fea831072be506323d78965bfc745e959615121773a098a3c00d60e3b71fea26a2580bf3206849b8282c5606a25a2f5ed99a2e3e37d9891132cbf10e6cd0ca
   languageName: node
   linkType: hard
 
@@ -5073,7 +5073,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@resorptionbidonvilles/webapp3@workspace:packages/frontend/webapp"
   dependencies:
-    "@gouvfr/dsfr": 1.14.3
+    "@gouvfr/dsfr": 1.15.3
     "@gouvminint/vue-dsfr": ^8.8.0
     "@iconify-json/bxs": latest
     "@iconify-json/carbon": ^1.2.13
@@ -5130,7 +5130,7 @@ __metadata:
   dependencies:
     "@fortawesome/free-brands-svg-icons": ^6.1.1
     "@fortawesome/free-solid-svg-icons": ^6.1.1
-    "@gouvfr/dsfr": 1.14.3
+    "@gouvfr/dsfr": 1.15.3
     "@gouvminint/vue-dsfr": ^8.8.0
     "@nuxtjs/i18n": ^9.2.0
     "@nuxtjs/tailwindcss": ^6.8.0
