@@ -17,11 +17,11 @@ function checkUser(user: User): void {
     }
 }
 
-async function findAndValidateUser(id: number): Promise<User> {
+async function findAndValidateUser(id: number, author: User): Promise<User> {
     let user: User;
 
     try {
-        user = await userModel.findOne(id, undefined, null, 'deactivate');
+        user = await userModel.findOne(id, undefined, author, 'deactivate');
         checkUser(user);
         return user;
     } catch (error) {
@@ -113,7 +113,7 @@ export default async function deactivate(id: number, selfDeactivation: boolean, 
     }
     let user: User;
     try {
-        user = await findAndValidateUser(id);
+        user = await findAndValidateUser(id, author);
     } catch (e) {
         throw new ServiceError('user_search_failure', new Error(e.message));
     }

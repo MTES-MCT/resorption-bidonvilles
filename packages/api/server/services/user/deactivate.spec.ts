@@ -358,5 +358,37 @@ describe('userService.deactivate()', () => {
             expect(response.status).to.equal('inactive');
             expect(stubs.userModel.deactivate).to.have.been.calledOnce;
         });
+
+        it(' transmet l\'auteur à userModel.findOne afin d\'appliquer le filtre territorial', async () => {
+            const author = fakeAuthorizedUser({ id: 99 });
+            const user = fakeAuthorizedUser({ id: 42, status: 'active' });
+            stubs.userModel.findOne.withArgs(42).resolves(user);
+            stubs.userModel.deactivate.withArgs([42], 'admin', false, transaction).resolves([{ user_id: 42, fk_status: 'inactive' }]);
+
+            await deactivateUser(42, false, author);
+
+            expect(stubs.userModel.findOne).to.have.been.calledOnceWithExactly(42, undefined, author, 'deactivate');
+        });
+
+        it(' lance une ServiceError "user_search_failure" si la cible est hors du territoire de l\'auteur, sans jamais la désactiver', async () => {
+            const author = fakeAuthorizedUser({ id: 99 });
+            const user = fakeAuthorizedUser({ id: 42, status: 'active' });
+            // sans filtre territorial (auteur null), la cible serait retrouvée
+            stubs.userModel.findOne.resolves(user);
+            stubs.userModel.deactivate.resolves([{ user_id: 42, fk_status: 'inactive' }]);
+            // avec le filtre territorial de l'auteur, la cible n'est pas retrouvée
+            stubs.userModel.findOne.withArgs(42, undefined, author, 'deactivate').resolves(null);
+
+            try {
+                await deactivateUser(42, false, author);
+                expect.fail('une erreur aurait dû être levée');
+            } catch (e) {
+                expect(e).to.be.an.instanceof(ServiceError);
+                expect(e.code).to.equal('user_search_failure');
+            }
+
+            expect(stubs.userModel.deactivate).to.not.have.been.called;
+            expect(stubs.sequelize.transaction).to.not.have.been.called;
+        });
     });
 });
