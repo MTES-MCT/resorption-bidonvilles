@@ -391,4 +391,64 @@ describe('userService.deactivate()', () => {
             expect(stubs.sequelize.transaction).to.not.have.been.called;
         });
     });
+
+    describe('auto-désactivation par un utilisateur ordinaire', () => {
+        it(' permet à un utilisateur sans permission deactivate/user de désactiver son propre compte', async () => {
+            const author = fakeUser({ id: 42, status: 'active' });
+            stubs.userModel.findOne.withArgs(42, undefined, null, 'deactivate').resolves(author);
+            stubs.userModel.deactivate.withArgs([42], 'admin', false, transaction).resolves([{ user_id: 42, fk_status: 'inactive' }]);
+
+            const response = await deactivateUser(42, true, author);
+
+            expect(stubs.userModel.deactivate).to.have.been.calledOnce;
+            expect(response.status).to.equal('inactive');
+        });
+
+        it(' recherche le compte sans filtre territorial lors d\'une auto-désactivation', async () => {
+            const author = fakeUser({ id: 42, status: 'active' });
+            stubs.userModel.findOne.withArgs(42, undefined, null, 'deactivate').resolves(author);
+            stubs.userModel.deactivate.withArgs([42], 'admin', false, transaction).resolves([{ user_id: 42, fk_status: 'inactive' }]);
+
+            await deactivateUser(42, true, author);
+
+            expect(stubs.userModel.findOne).to.have.been.calledOnceWithExactly(42, undefined, null, 'deactivate');
+        });
+
+        it(' refuse qu\'un utilisateur sans permission désactive un autre compte en passant selfDeactivation à true', async () => {
+            const author = fakeUser({ id: 99 });
+            const user = fakeAuthorizedUser({ id: 42, status: 'active' });
+            stubs.userModel.findOne.resolves(user);
+            stubs.userModel.deactivate.resolves([{ user_id: 42, fk_status: 'inactive' }]);
+
+            try {
+                await deactivateUser(42, true, author);
+                expect.fail('une erreur aurait dû être levée');
+            } catch (e) {
+                expect(e).to.be.an.instanceof(ServiceError);
+                expect(e.code).to.equal('deactivation_permission_failure');
+            }
+
+            expect(stubs.userModel.findOne).to.not.have.been.called;
+            expect(stubs.userModel.deactivate).to.not.have.been.called;
+            expect(stubs.sequelize.transaction).to.not.have.been.called;
+        });
+
+        it(' refuse la désactivation de son propre compte sans permission si selfDeactivation vaut false', async () => {
+            const author = fakeUser({ id: 42, status: 'active' });
+            stubs.userModel.findOne.resolves(author);
+            stubs.userModel.deactivate.resolves([{ user_id: 42, fk_status: 'inactive' }]);
+
+            try {
+                await deactivateUser(42, false, author);
+                expect.fail('une erreur aurait dû être levée');
+            } catch (e) {
+                expect(e).to.be.an.instanceof(ServiceError);
+                expect(e.code).to.equal('deactivation_permission_failure');
+            }
+
+            expect(stubs.userModel.findOne).to.not.have.been.called;
+            expect(stubs.userModel.deactivate).to.not.have.been.called;
+            expect(stubs.sequelize.transaction).to.not.have.been.called;
+        });
+    });
 });

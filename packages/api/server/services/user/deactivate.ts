@@ -17,7 +17,7 @@ function checkUser(user: User): void {
     }
 }
 
-async function findAndValidateUser(id: number, author: User): Promise<User> {
+async function findAndValidateUser(id: number, author: User | null): Promise<User> {
     let user: User;
 
     try {
@@ -107,13 +107,21 @@ const onboardingJob = [
 ];
 
 export default async function deactivate(id: number, selfDeactivation: boolean, author: User, reason: string = null, anonymizationRequested: boolean = false): Promise<User> {
-    const permission = getPermission(author, 'deactivate', 'user');
-    if (!permission) {
-        throw new ServiceError('deactivation_permission_failure', new Error('Erreur de permission'));
+    // L'auto-désactivation est offerte à tout utilisateur par l'onglet « Désactiver mon compte »,
+    // sans qu'il ait la permission user.deactivate : elle est donc exemptée de la garde et de
+    // son filtre territorial. id === author.id est exigé pour que le booléen seul ne puisse
+    // jamais contourner la garde et viser un autre compte.
+    const isSelfDeactivation = selfDeactivation && id === author.id;
+
+    if (!isSelfDeactivation) {
+        const permission = getPermission(author, 'deactivate', 'user');
+        if (!permission) {
+            throw new ServiceError('deactivation_permission_failure', new Error('Erreur de permission'));
+        }
     }
     let user: User;
     try {
-        user = await findAndValidateUser(id, author);
+        user = await findAndValidateUser(id, isSelfDeactivation ? null : author);
     } catch (e) {
         throw new ServiceError('user_search_failure', new Error(e.message));
     }
