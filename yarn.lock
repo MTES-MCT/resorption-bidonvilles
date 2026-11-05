@@ -21302,13 +21302,13 @@ __metadata:
   linkType: hard
 
 "multer@npm:^2.0.1":
-  version: 2.4.0
-  resolution: "multer@npm:2.4.0"
+  version: 2.5.0
+  resolution: "multer@npm:2.5.0"
   dependencies:
     append-field: ^1.0.0
     busboy: ^1.6.0
     type-is: ^1.6.18
-  checksum: 1a47d3c5275c63e7e38b5c20c99a5426899c016a857b142de9cf23995f7eb5bd5e1e75ffb77990a82f2d2e447e314d9a60274740845e846fe0e1f74896d249b3
+  checksum: 9e4fdf9214e10816eb34182c2e8483f4245dc2012d2064c85df32c04d582f46b4a90c81da995b07291456f9d8d20b37f8b21e04b76ad20651f05731ba52474ab
   languageName: node
   linkType: hard
 
