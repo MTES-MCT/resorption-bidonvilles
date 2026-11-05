@@ -33,7 +33,7 @@
     "@vue/compiler-ssr": "3.5.22",
     "@vue/runtime-core": "3.5.22",
     "@vue/runtime-dom": "3.5.22",
-    "@vue/server-renderer": "3.5.22",
+    "@vue/server-renderer": "3.5.42",
     "@vue/reactivity": "3.5.22",
     "@vue/shared": "3.5.22"
   }
