@@ -1327,7 +1327,7 @@ describe('utils/tchap (résolution des salons)', () => {
                     const url = sentUrl();
                     const expectedPrefix = `${input}${SEND_PATH}`;
                     // booléens : évite d'imprimer 80 Ko en cas d'échec
-                    expect(url.length > expectedPrefix.length, 'URL appelée trop courte').to.be.eql(true);
+                    expect(url.length, 'URL appelée trop courte').to.be.above(expectedPrefix.length);
                     expect(url.startsWith(expectedPrefix), 'l\'URL appelée ne commence pas par la valeur conservée telle quelle').to.be.eql(true);
                     expect(stubs.sentry.captureMessage).to.not.have.been.called;
                 });
@@ -1341,7 +1341,7 @@ describe('utils/tchap (résolution des salons)', () => {
                     expect(durationMs < MAX_DURATION_MS, `durée mesurée : ${durationMs} ms (maximum ${MAX_DURATION_MS} ms)`).to.be.eql(true);
                     const url = sentUrl();
                     const expectedPrefix = `https://${HOST}${SEND_PATH}${encodeURIComponent(FROM_ENV.autoDesactivations)}/send/m.room.message/`;
-                    expect(url.length < 1000, `URL appelée trop longue : ${url.length} caractères`).to.be.eql(true);
+                    expect(url.length, `URL appelée trop longue : ${url.length} caractères`).to.be.below(1000);
                     expect(url.startsWith(expectedPrefix), `URL inattendue : ${url.slice(0, 300)}`).to.be.eql(true);
                     expect(stubs.sentry.captureMessage).to.not.have.been.called;
                 });

@@ -338,7 +338,7 @@ ${levelEmoji} ${htmlToPlainText(notification.text)}${fieldsPlainText}`;
  * @param payload - Contenu du message au format Matrix (msgtype, body, format, formatted_body, etc.)
  * @returns La Response finale ou null si le token Tchap n'est pas configuré
  */
-const sendMatrixEvent = async (safeBaseUrl: string, roomId: string, payload: Record<string, unknown>): Promise<Response | null> => {
+const sendMatrixEvent = (safeBaseUrl: string, roomId: string, payload: Record<string, unknown>): Promise<Response | null> => {
     if (!tchap.token) {
         Sentry.captureMessage('[Tchap] Impossible d\'envoyer le message : token Tchap non configuré', {
             level: 'error',
