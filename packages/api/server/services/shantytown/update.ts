@@ -4,7 +4,7 @@ import shantytownModel from '#server/models/shantytownModel';
 import attachmentService from '#server/services/attachment';
 import shantytownParcelOwnerService from '#server/services/shantytownParcelOwner';
 import ServiceError from '#server/errors/ServiceError';
-import { triggerReinstallationAlert } from '#server/utils/mattermost';
+import { triggerReinstallationAlert } from '#server/utils/tchap';
 import checkPopulationUpdate from '#server/services/shantytown/_common/populationStatus';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import find from './find';
@@ -251,7 +251,7 @@ async function sendReinstallationNotification(originalShantytown: ShantytownWith
         await triggerReinstallationAlert(updatedShantytown, user);
     } catch (err) {
         // eslint-disable-next-line no-console
-        console.error(`Error with reinstallation Mattermost webhook : ${err.message}`);
+        console.error(`Error with reinstallation Tchap webhook : ${err.message}`);
     }
 }
 

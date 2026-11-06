@@ -25,19 +25,15 @@ const stubs = {
     mails: {
         sendParcelOwner: sandbox.stub(),
     },
-    mattermostUtils: {
+    tchap: {
         triggerLandRegistryRequest: sandbox.stub(),
-    },
-    config: {
-        mattermost: false as string | boolean,
     },
 };
 
 rewiremock('#server/models/majicModel').with(stubs.majicModel);
 rewiremock('#server/services/majicLogs').with(stubs.majicLogsService);
 rewiremock('#server/mails/mails').with(stubs.mails);
-rewiremock('#server/utils/mattermost').with(stubs.mattermostUtils);
-rewiremock('#server/config').withDefault(stubs.config);
+rewiremock('#server/utils/tchap').with(stubs.tchap);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -66,7 +62,6 @@ const authorizedOnDept75 = () => fakeUser({
 describe('majicService.findMajicOwners()', () => {
     beforeEach(() => {
         sandbox.reset();
-        stubs.config.mattermost = false;
     });
     afterEach(() => {
         sandbox.reset();
@@ -140,22 +135,29 @@ describe('majicService.findMajicOwners()', () => {
             );
         });
 
-        it('déclenche une notification mattermost si le webhook est configuré', async () => {
-            stubs.config.mattermost = 'https://mattermost.example.com/webhook';
-            stubs.mattermostUtils.triggerLandRegistryRequest.resolves();
+        it('déclenche une notification Tchap', async () => {
+            stubs.tchap.triggerLandRegistryRequest.resolves();
             const user = authorizedOnDept75();
 
             await findMajicOwners(parcelId, user);
 
-            expect(stubs.mattermostUtils.triggerLandRegistryRequest).to.have.been.calledOnceWith(user, parcelId, '2023');
+            expect(stubs.tchap.triggerLandRegistryRequest).to.have.been.calledOnceWith(user, parcelId, '2023');
         });
 
-        it('ne déclenche pas de notification mattermost si le webhook n\'est pas configuré', async () => {
+        it('se résout normalement et journalise l\'erreur si la notification Tchap échoue', async () => {
+            const error = new Error('Échec d\'envoi de la notification Tchap');
+            stubs.tchap.triggerLandRegistryRequest.rejects(error);
+            const consoleErrorStub = sandbox.stub(console, 'error');
             const user = authorizedOnDept75();
 
-            await findMajicOwners(parcelId, user);
-
-            expect(stubs.mattermostUtils.triggerLandRegistryRequest).to.not.have.been.called;
+            try {
+                await findMajicOwners(parcelId, user);
+                expect(stubs.mails.sendParcelOwner).to.have.been.calledOnce;
+                expect(stubs.tchap.triggerLandRegistryRequest).to.have.been.calledOnce;
+                expect(consoleErrorStub).to.have.been.calledOnceWith(error);
+            } finally {
+                consoleErrorStub.restore();
+            }
         });
     });
 });

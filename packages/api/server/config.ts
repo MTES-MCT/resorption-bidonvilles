@@ -1,10 +1,12 @@
-import path from 'path';
+import path from 'node:path';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 export default {
-    environnement: process.env.NODE_ENV || 'production',
+    // valeur de NODE_ENV conservée telle quelle si elle est non vide ; absente ou vide => "development".
+    // Seule la valeur exacte "production" active les vrais salons Tchap (la bascule est faite dans utils/tchap.ts)
+    environnement: process.env.NODE_ENV || 'development',
     assetsSrc: path.resolve(__dirname, '../assets'),
     wwwUrl: `https://${process.env.RB_API_FRONT_DOMAIN}`,
     webappUrl: `https://app.${process.env.RB_API_FRONT_DOMAIN}`,
@@ -24,7 +26,30 @@ export default {
     agenda: {
         mongo_address: `mongodb://${process.env.RB_API_MONGO_USERNAME}:${process.env.RB_API_MONGO_PASSWORD}@${process.env.RB_API_MONGO_HOST}`,
     },
-    mattermost: process.env.RB_API_MATTERMOST_WEBHOOK ?? false,
+    tchap: {
+        token: process.env.RB_API_TCHAP_TOKEN,
+        baseUrl: process.env.RB_API_TCHAP_BASE_URL,
+        // Room ID Matrix de chaque salon de notification, lu dans l'environnement, jamais en dur dans le dépôt.
+        channels: {
+            'notif-dev-test': process.env.RB_API_TCHAP_NOTIF_DEV_TEST,
+            'notif-invitations-intervenants': process.env.RB_API_TCHAP_NOTIF_INVITATIONS_INTERVENANTS,
+            'notif-nettoyage-pieces-jointes': process.env.RB_API_TCHAP_NOTIF_NETTOYAGE_PIECES_JOINTES,
+            'notif-intervenants-declares': process.env.RB_API_TCHAP_NOTIF_INTERVENANTS_DECLARES,
+            'notif-canicule': process.env.RB_API_TCHAP_NOTIF_CANICULE,
+            'notif-requetes-cadastre': process.env.RB_API_TCHAP_NOTIF_REQUETES_CADASTRE,
+            'notif-action-nouveau-commentaire': process.env.RB_API_TCHAP_NOTIF_ACTION_NOUVEAU_COMMENTAIRE,
+            'notif-site-nouveau-commentaire': process.env.RB_API_TCHAP_NOTIF_SITE_NOUVEAU_COMMENTAIRE,
+            'notif-nouveaux-utilisateurs': process.env.RB_API_TCHAP_NOTIF_NOUVEAUX_UTILISATEURS,
+            tech: process.env.RB_API_TCHAP_TECH,
+            'notif-auto-desactivations': process.env.RB_API_TCHAP_NOTIF_AUTO_DESACTIVATIONS,
+            'notif-anonymisation': process.env.RB_API_TCHAP_NOTIF_ANONYMISATION,
+            'notif-personnes-invitees': process.env.RB_API_TCHAP_NOTIF_PERSONNES_INVITEES,
+            'notif-absence-pilote-action': process.env.RB_API_TCHAP_NOTIF_ABSENCE_PILOTE_ACTION,
+            'notif-fermeture-sites': process.env.RB_API_TCHAP_NOTIF_FERMETURE_SITES,
+            'notif-reinstallation': process.env.RB_API_TCHAP_NOTIF_REINSTALLATION,
+            'notif-ouverture-sites': process.env.RB_API_TCHAP_NOTIF_OUVERTURE_SITES,
+        },
+    },
     sentry: {
         dsn: process.env.RB_API_SENTRY_DSN || '',
     },
