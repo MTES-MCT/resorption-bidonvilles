@@ -42,7 +42,16 @@ type TchapNotification = {
     timestamp: Date; // calculé une seule fois par l'appelant, pour que html et plainTextFallback affichent la même heure
 };
 
-type TchapChannelKey = keyof typeof TCHAP_CHANNELS;
+type TchapChannelKey = keyof typeof config.tchap.channels;
+
+/**
+ * Salon Tchap effectivement visé : clé logique effective (après bascule hors production)
+ * et room ID Matrix configuré.
+ */
+type TchapChannel = {
+    name: TchapChannelKey;
+    roomId: string;
+};
 
 // ============================================================================
 // Constantes de configuration
@@ -50,34 +59,20 @@ type TchapChannelKey = keyof typeof TCHAP_CHANNELS;
 
 const { tchap, webappUrl } = config;
 
-// Note — instance sandbox dev01.tchap.incubateur.net : le proxy Caddy en amont applique
-// un filtrage par liste blanche sur le header User-Agent, mais UNIQUEMENT sur l'endpoint
-// /login (confirmé par tests curl comparatifs — "node" ou toute valeur hors liste blanche
-// y est rejeté en 403 M_FORBIDDEN, avant même la vérification des identifiants). Les
-// endpoints /send et /directory/room ne sont pas concernés. C'est pourquoi l'authentification
-// se fait via un token statique obtenu manuellement (voir RB_API_TCHAP_TOKEN dans .env /
-// config.ts) plutôt qu'un login automatique depuis l'application — à reprendre avec
-// l'administrateur Tchap avant l'implémentation définitive / le passage en production.
+/**
+ * Hôtes pour lesquels http: est toléré hors production (comparaison exacte sur url.hostname).
+ */
+const LOCAL_HOSTNAMES = ['localhost', '127.0.0.1', '[::1]'];
 
-const TCHAP_CHANNELS = {
-    'notif-dev-test': '!ACZQkXFLuYbMHsUkuy:dev01.tchap.incubateur.net',
-    'notif-invitations-intervenants': '!wslIZrwttMBocvElcJ:dev01.tchap.incubateur.net',
-    'notif-nettoyage-piecesjointes': '!LFQXdWBrmtCXyGySVu:dev01.tchap.incubateur.net',
-    'notif-intervenants-declares': '!BqKSaiqdbWHvTMXPpK:dev01.tchap.incubateur.net',
-    'notif-canicule': '!BEFPavPCSuDRSTNyRh:dev01.tchap.incubateur.net',
-    'notif-requetes-cadastre': '!qkzVpjgvmRxQrqEPMu:dev01.tchap.incubateur.net',
-    'notif-action-nouveau-commentaire': '!kXoLdTKpuphtlFtbjl:dev01.tchap.incubateur.net',
-    'notif-site-nouveau-commentaire': '!AnMHnJRgMsxZGBSKYc:dev01.tchap.incubateur.net',
-    'notif-nouveaux-utilisateurs': '!jnnXdNkBSszdhyAYvN:dev01.tchap.incubateur.net',
-    tech: '!GwVHNVyVNrTsAcNshs:dev01.tchap.incubateur.net',
-    'notif-auto-desactivations': '!bvkDdQPkWIFcaVJlKv:dev01.tchap.incubateur.net',
-    'notif-anonymisation': '!tWZQJEPaqdvAkzFuvW:dev01.tchap.incubateur.net',
-    'notif-personnes-invitees': '!fcRFOFBrkXkMGqYdOk:dev01.tchap.incubateur.net',
-    'notif-absence-pilote-action': '!OqlLzaEOcVwFGHiEga:dev01.tchap.incubateur.net',
-    'notif-fermeture-sites': '!swmPvwsxQGcqTOgYPw:dev01.tchap.incubateur.net',
-    'notif-reinstallation': '!muHrBsrXzYGABPQKxB:dev01.tchap.incubateur.net',
-    'notif-ouverture-sites': '!vOyjBSsOrxpfOdvrxN:dev01.tchap.incubateur.net',
-} as const;
+/**
+ * Marqueur qui remplace le room ID du salon visé dans les erreurs transmises à Sentry.
+ */
+const ROOM_ID_PLACEHOLDER = '[salon]';
+
+/**
+ * Profondeur maximale de parcours des causes imbriquées lors de la rédaction d'une erreur.
+ */
+const MAX_ERROR_CAUSE_DEPTH = 5;
 
 /**
  * Mapping niveau de sévérité → emoji associé.
@@ -101,6 +96,25 @@ const escapeHtml = (text: string): string => text
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll('\'', '&#039;');
+
+/**
+ * Convertit un fragment HTML (produit avec escapeHtml) en texte brut : les liens sont
+ * remplacés par leur libellé (URL omise), les <br/> par des sauts de ligne, les autres
+ * balises sont retirées.
+ * L'ordre est important : les balises sont retirées AVANT le décodage des entités, sinon un
+ * texte utilisateur échappé (&lt;b&gt;) serait décodé puis supprimé comme une vraie balise.
+ * &amp; est décodé en dernier pour ne pas décoder deux fois (&amp;lt; donne &lt;).
+ */
+const htmlToPlainText = (html: string): string => html
+    .replaceAll(/<a\s[^>]*>(.*?)<\/a>/gs, '$1')
+    .replaceAll(/<br\s*\/?>/gi, '\n')
+    .replaceAll(/<[^>]*>/g, '')
+    .replaceAll('&lt;', '<')
+    .replaceAll('&gt;', '>')
+    .replaceAll('&quot;', '"')
+    .replaceAll('&#039;', '\'')
+    .replaceAll('&#39;', '\'')
+    .replaceAll('&amp;', '&');
 
 /**
  * Formate une date en "JJ/MM/AAAA à HH:mm".
@@ -130,60 +144,89 @@ const buildIncomingTownsHtml = (town: Shantytown | ShantytownWithEnrichedComment
 };
 
 /**
- * Résout la clé logique d'un salon vers son room ID Matrix réel, en basculant
- * systématiquement vers le salon de test en environnement de développement
- * (pour éviter de polluer les vrais salons de notification pendant les tests locaux).
+ * Nettoie (espaces et barres obliques finales retirés) puis contrôle l'URL du serveur Tchap :
+ * elle doit s'analyser par `new URL` et être en https:. Hors production, http: est accepté pour les
+ * seuls hôtes localhost, 127.0.0.1 et [::1] (hôte réel lu dans url.hostname, identifiants éventuels exclus).
+ * Retourne null (fail closed) si elle est absente, invalide ou non sécurisée.
  */
-const resolveNotifChannel = (channelKey: TchapChannelKey): string => {
-    if (config.environnement === 'development') {
-        return TCHAP_CHANNELS['notif-dev-test'];
-    }
-    return TCHAP_CHANNELS[channelKey];
-};
-
-/**
- * Résout un alias de salon (ou retourne le roomId tel quel s'il ne commence pas par #).
- * Retourne null si la résolution échoue.
- */
-const resolveRoomId = async (channel: string): Promise<string | null> => {
-    if (!tchap) {
+const sanitizeBaseUrl = (rawBaseUrl: string | undefined): string | null => {
+    const cleaned = rawBaseUrl?.trim().replace(/\/+$/, '');
+    if (!cleaned) {
         return null;
     }
 
-    let roomId = channel;
-    let roomAlias = channel;
-
-    if (roomId.startsWith('#')) {
-        if (tchap.privateSpace) {
-            roomAlias = `#${tchap.privateSpace}_${channel.substring(1)}`;
-        }
-
-        // Si l'alias ne contient pas de serveur (ex: #nom-salon), on formate l'alias complet Tchap
-        if (!roomAlias.includes(':') && tchap.domain) {
-            roomAlias = `${roomAlias}:${tchap.domain}`;
-        }
-
-        // Résolution de l'alias vers l'ID du salon via Matrix API
-        try {
-            const aliasReq = await fetch(`${tchap.baseUrl}/_matrix/client/v3/directory/room/${encodeURIComponent(roomAlias)}`);
-            if (aliasReq.ok) {
-                const aliasData = (await aliasReq.json()) as { room_id: string };
-                roomId = aliasData.room_id;
-            } else {
-                Sentry.captureMessage(`[Tchap] Impossible de résoudre l'alias ${roomAlias}`, {
-                    level: 'warning',
-                });
-                return null;
-            }
-        } catch {
-            Sentry.captureMessage(`[Tchap] Erreur lors de la résolution de l'alias ${roomAlias}`, {
-                level: 'warning',
-            });
-            return null;
-        }
+    let url: URL;
+    try {
+        url = new URL(cleaned);
+    } catch {
+        return null;
     }
 
-    return roomId;
+    if (url.protocol === 'https:') {
+        return cleaned;
+    }
+    if (url.protocol === 'http:' && config.environnement !== 'production' && LOCAL_HOSTNAMES.includes(url.hostname)) {
+        return cleaned;
+    }
+    return null;
+};
+
+// Calculée au chargement du module ; null = URL refusée (aucune requête, donc jamais de jeton envoyé)
+const baseUrl = sanitizeBaseUrl(tchap?.baseUrl);
+
+// Garantit un seul signalement Sentry par processus (Sentry n'est pas forcément initialisé à l'import)
+let invalidBaseUrlReported = false;
+
+/**
+ * Signale à Sentry, une seule fois, que l'URL du serveur Tchap est refusée.
+ * Aucune valeur issue de l'URL n'est transmise (elle peut contenir des identifiants).
+ */
+const reportInvalidBaseUrlOnce = (): void => {
+    if (invalidBaseUrlReported) {
+        return;
+    }
+    invalidBaseUrlReported = true;
+    Sentry.captureMessage('[Tchap] RB_API_TCHAP_BASE_URL invalide ou non sécurisée (https:// requis) : notification non envoyée', {
+        level: 'error',
+    });
+};
+
+// Room ID Matrix valide (après trim) : commence par "!", sans espace ni saut de ligne ; la partie ":serveur" n'est pas exigée
+const ROOM_ID_PATTERN = /^!\S+$/;
+
+/**
+ * Résout la clé logique d'un salon vers un TchapChannel (clé effective + room ID Matrix lu dans config.tchap.channels),
+ * en basculant systématiquement vers le salon de test (notif-dev-test) en environnement autre
+ * que "production" (pour éviter de polluer les vrais salons de notification pendant les tests locaux).
+ * Retourne null, après signalement à Sentry, si l'URL du serveur est refusée (voir sanitizeBaseUrl)
+ * si le room ID du salon retenu est absent ou vide (une valeur composée uniquement d'espaces
+ * est considérée comme absente), ou s'il est invalide (voir ROOM_ID_PATTERN) ; la valeur invalide
+ * n'est jamais transmise à Sentry.
+ */
+const resolveNotifChannel = (channelKey: TchapChannelKey): TchapChannel | null => {
+    // URL du serveur refusée : inutile de poursuivre (et de signaler en plus un salon non configuré)
+    if (!baseUrl) {
+        reportInvalidBaseUrlOnce();
+        return null;
+    }
+
+    const key: TchapChannelKey = config.environnement !== 'production' ? 'notif-dev-test' : channelKey;
+    const roomId = tchap.channels[key]?.trim();
+    if (!roomId) {
+        Sentry.captureMessage(`[Tchap] Salon "${key}" non configuré : notification non envoyée`, {
+            level: 'error',
+            extra: { channel: key },
+        });
+        return null;
+    }
+    if (!ROOM_ID_PATTERN.test(roomId)) {
+        Sentry.captureMessage(`[Tchap] Salon "${key}" : identifiant invalide (un room ID commençant par "!" est attendu) : notification non envoyée`, {
+            level: 'error',
+            extra: { channel: key },
+        });
+        return null;
+    }
+    return { name: key, roomId };
 };
 
 /**
@@ -212,9 +255,9 @@ const renderFieldsAsHtml = (fields: NotificationField[]): string => fields
  */
 const renderFieldsAsPlainText = (fields: NotificationField[]): string => fields
     .map((field) => {
-        let content = field.text;
+        let content = htmlToPlainText(field.text);
         if (field.suffix) {
-            content += field.suffix;
+            content += htmlToPlainText(field.suffix);
         }
         return `${field.label}: ${content}`;
     })
@@ -244,18 +287,19 @@ const renderNotificationAsPlainText = (notification: TchapNotification): string 
     const fieldsPlainText = notification.fields.length > 0 ? `\n${renderFieldsAsPlainText(notification.fields)}` : '';
 
     return `🤖 Alerte Résorption bidonvilles - ${formatDateTime(notification.timestamp)}
-${levelEmoji} ${notification.text}${fieldsPlainText}`;
+${levelEmoji} ${htmlToPlainText(notification.text)}${fieldsPlainText}`;
 };
 
 /**
  * Envoie un événement Matrix (message) dans un salon donné.
  * Fonction interne utilisée par sendHtmlMessage.
  *
- * @param roomId - Identifiant Matrix du salon (déjà résolu, format !xxx:domain)
+ * @param safeBaseUrl - URL du serveur Tchap, nettoyée et validée par sanitizeBaseUrl
+ * @param roomId - Identifiant Matrix du salon (format !xxx:serveur)
  * @param payload - Contenu du message au format Matrix (msgtype, body, format, formatted_body, etc.)
  * @returns La Response finale ou null si le token Tchap n'est pas configuré
  */
-const sendMatrixEvent = async (roomId: string, payload: Record<string, unknown>): Promise<Response | null> => {
+const sendMatrixEvent = async (safeBaseUrl: string, roomId: string, payload: Record<string, unknown>): Promise<Response | null> => {
     if (!tchap?.token) {
         Sentry.captureMessage('[Tchap] Impossible d\'envoyer le message : token Tchap non configuré', {
             level: 'error',
@@ -264,7 +308,7 @@ const sendMatrixEvent = async (roomId: string, payload: Record<string, unknown>)
     }
 
     const txnId = `req_${Date.now()}_${randomUUID()}`;
-    const sendUrl = `${tchap.baseUrl}/_matrix/client/v3/rooms/${encodeURIComponent(roomId)}/send/m.room.message/${txnId}`;
+    const sendUrl = `${safeBaseUrl}/_matrix/client/v3/rooms/${encodeURIComponent(roomId)}/send/m.room.message/${txnId}`;
 
     return fetch(sendUrl, {
         method: 'PUT',
@@ -276,25 +320,93 @@ const sendMatrixEvent = async (roomId: string, payload: Record<string, unknown>)
     });
 };
 
+const escapeRegExp = (text: string): string => text.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
+ * Construit une expression qui reconnaît un texte brut ou tel qu'encodé par encodeURIComponent
+ * (en majuscules comme en minuscules, y compris à demi encodé, caractère par caractère).
+ */
+const toEncodingTolerantPattern = (text: string): string => [...text]
+    .map((char) => {
+        const encoded = encodeURIComponent(char);
+        return encoded === char ? escapeRegExp(char) : `(?:${escapeRegExp(char)}|${escapeRegExp(encoded)})`;
+    })
+    .join('');
+
+/**
+ * Retourne une fonction qui remplace par un marqueur le room ID fourni, sous toutes ses formes
+ * (brute, encodée, à demi encodée, partie identifiant seule).
+ */
+const createRoomIdRedactor = (roomId: string): ((text: string) => string) => {
+    const patterns = [roomId, roomId.replace(/^[!#]/, '').split(':')[0]]
+        .filter(Boolean)
+        .sort((a, b) => b.length - a.length)
+        .map(toEncodingTolerantPattern);
+    if (patterns.length === 0) {
+        return (text: string): string => text;
+    }
+    const regex = new RegExp(patterns.join('|'), 'gi');
+    return (text: string): string => text.replace(regex, ROOM_ID_PLACEHOLDER);
+};
+
+/**
+ * Produit une copie d'une erreur dont le room ID est rédigé (message, stack, propriétés textuelles
+ * comme `input`, et causes imbriquées), pour qu'aucun identifiant de salon ne parte vers Sentry.
+ * Les propriétés non textuelles sont écartées. Le parcours est limité en profondeur et protégé
+ * contre les références circulaires.
+ */
+const sanitizeErrorForSentry = (
+    error: unknown,
+    redact: (text: string) => string,
+    depth = 0,
+    seen = new WeakSet<object>(),
+): unknown => {
+    if (typeof error === 'string') {
+        return redact(error);
+    }
+    if (!(error instanceof Error) || seen.has(error)) {
+        return undefined;
+    }
+    seen.add(error);
+
+    const copy = new Error(redact(error.message));
+    copy.name = error.name;
+    copy.stack = error.stack === undefined ? undefined : redact(error.stack);
+    Object.entries(error).forEach(([key, value]) => {
+        if (typeof value === 'string') {
+            Object.assign(copy, { [key]: redact(value) });
+        }
+    });
+
+    const { cause } = error as Error & { cause?: unknown };
+    if (cause !== undefined && depth < MAX_ERROR_CAUSE_DEPTH) {
+        Object.assign(copy, { cause: sanitizeErrorForSentry(cause, redact, depth + 1, seen) });
+    }
+    return copy;
+};
+
 /**
  * Envoie un message HTML natif dans un salon Tchap/Matrix.
  * Fonction dédiée pour construire directement du HTML sans passer par Markdown.
- * Gère automatiquement le retry en cas de token expiré (401).
+ * Aucun retry : un échec (exception, réponse HTTP non ok, token absent) est signalé à Sentry
+ * sans aucune donnée du message ni room ID (seul le nom de la clé logique du salon est transmis),
+ * puis l'envoi est abandonné. En cas d'exception, l'erreur d'origine est reliée à l'événement par
+ * `cause`, après rédaction du room ID (voir sanitizeErrorForSentry).
+ * Si RB_API_TCHAP_BASE_URL est refusée (voir sanitizeBaseUrl), rien n'est envoyé.
  */
-const sendHtmlMessage = async (channel: string, html: string, plainTextFallback: string): Promise<void> => {
+const sendHtmlMessage = async (channel: TchapChannel | null, html: string, plainTextFallback: string): Promise<void> => {
     // Si pas de config Tchap ou pas de canal spécifié, on abandonne
     if (!tchap || !channel) {
         return;
     }
 
-    try {
-        // 1. Résolution du roomId
-        const roomId = await resolveRoomId(channel);
-        if (!roomId) {
-            return;
-        }
+    if (!baseUrl) {
+        reportInvalidBaseUrlOnce();
+        return;
+    }
 
-        // 2. Construction du payload Matrix avec HTML natif
+    try {
+        // 1. Construction du payload Matrix avec HTML natif
         const payload = {
             msgtype: 'm.text',
             body: plainTextFallback,
@@ -302,14 +414,14 @@ const sendHtmlMessage = async (channel: string, html: string, plainTextFallback:
             formatted_body: html,
         };
 
-        // 3. Envoi via la fonction partagée
-        const response = await sendMatrixEvent(roomId, payload);
+        // 2. Envoi via la fonction partagée
+        const response = await sendMatrixEvent(baseUrl, channel.roomId, payload);
 
-        // 4. Gestion des erreurs
+        // 3. Gestion des erreurs
         if (!response) {
             Sentry.captureMessage('[Tchap] Impossible d\'envoyer le message HTML : token Tchap non configuré', {
                 level: 'error',
-                extra: { channel, roomId },
+                extra: { channel: channel.name },
             });
             return;
         }
@@ -317,12 +429,15 @@ const sendHtmlMessage = async (channel: string, html: string, plainTextFallback:
         if (!response.ok) {
             Sentry.captureMessage(`[Tchap] Échec d'envoi (${response.status} ${response.statusText})`, {
                 level: 'warning',
-                extra: { channel, roomId },
+                extra: { channel: channel.name },
             });
         }
-    } catch (error) {
-        Sentry.captureException(error, {
-            extra: { channel, html, plainTextFallback },
+    } catch (error: unknown) {
+        // L'erreur d'origine (pile comprise) est transmise en `cause`, uniquement après rédaction du room ID
+        const redact = createRoomIdRedactor(channel.roomId);
+        const message = `[Tchap] Une erreur est survenue lors de la tentative d'envoi d'une notification vers le salon "${channel.name}"`;
+        Sentry.captureException(Object.assign(new Error(message), { cause: sanitizeErrorForSentry(error, redact) }), {
+            extra: { channel: channel.name },
         });
     }
 };
@@ -420,7 +535,7 @@ export async function triggerAttachmentArchiveCleanup(deleteRequestsCount: numbe
         return;
     }
 
-    const notifChannel = resolveNotifChannel('notif-nettoyage-piecesjointes');
+    const notifChannel = resolveNotifChannel('notif-nettoyage-pieces-jointes');
 
     const text = `Un nettoyage automatique des fichiers vient d'être effectué pour un total de ${deleteRequestsCount} fichiers à supprimer et ${errorsCount} erreurs rencontrées`;
 
@@ -442,7 +557,7 @@ export async function triggerAttachmentArchiveCleanupError(): Promise<void> {
         return;
     }
 
-    const notifChannel = resolveNotifChannel('notif-nettoyage-piecesjointes');
+    const notifChannel = resolveNotifChannel('notif-nettoyage-pieces-jointes');
 
     const text = 'Une erreur est survenue lors du DELETE en base de données';
 
