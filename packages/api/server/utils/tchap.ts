@@ -98,17 +98,43 @@ const escapeHtml = (text: string): string => text
     .replaceAll('\'', '&#039;');
 
 /**
+ * Supprime chaque portion allant d'un "<" au premier ">" qui le suit (sémantique de /<[^>]*>/g),
+ * sans regex. Un "<" sans ">" après lui est conservé avec tout le reste de la chaîne.
+ * Propriété : tout "<" qui subsiste n'est suivi d'aucun ">", donc aucune balise ne peut se
+ * reconstituer (<<b>script> donne script>). Complexité linéaire : chaque caractère est parcouru
+ * une seule fois, et le balayage s'arrête dès qu'un "<" n'a plus de ">" après lui.
+ */
+function stripTags(html: string): string {
+    let result = '';
+    let cursor = 0;
+
+    while (cursor < html.length) {
+        const open = html.indexOf('<', cursor);
+        if (open === -1) {
+            break;
+        }
+
+        const close = html.indexOf('>', open + 1);
+        if (close === -1) {
+            break;
+        }
+
+        result += html.slice(cursor, open);
+        cursor = close + 1;
+    }
+
+    return result + html.slice(cursor);
+}
+
+/**
  * Convertit un fragment HTML (produit avec escapeHtml) en texte brut : les liens sont
- * remplacés par leur libellé (URL omise), les <br/> par des sauts de ligne, les autres
- * balises sont retirées.
+ * conservés sous forme de leur libellé (URL omise, la suppression générique des balises garde
+ * le texte), les <br/> sont remplacés par des sauts de ligne, les balises sont retirées.
  * L'ordre est important : les balises sont retirées AVANT le décodage des entités, sinon un
  * texte utilisateur échappé (&lt;b&gt;) serait décodé puis supprimé comme une vraie balise.
  * &amp; est décodé en dernier pour ne pas décoder deux fois (&amp;lt; donne &lt;).
  */
-const htmlToPlainText = (html: string): string => html
-    .replaceAll(/<a\s[^>]*>(.*?)<\/a>/gs, '$1')
-    .replaceAll(/<br\s*\/?>/gi, '\n')
-    .replaceAll(/<[^>]*>/g, '')
+const htmlToPlainText = (html: string): string => stripTags(html.replaceAll(/<br\s*\/?>/gi, '\n'))
     .replaceAll('&lt;', '<')
     .replaceAll('&gt;', '>')
     .replaceAll('&quot;', '"')
@@ -608,7 +634,7 @@ const triggerHeatwaveStatusChange = async (user: User, town: Shantytown, heatwav
     const level: NotificationLevel = heatwaveStatus ? 'critic' : 'warning';
 
     // Construction du texte principal de la notification (avec lien vers le profil de l'utilisateur)
-    const text = `Une alerte canicule a été ${statusVerb} par <a href="${userProfileUrl}">${userFullName}</a> ${user.email}`;
+    const text = `Une alerte canicule a été ${statusVerb} par <a href="${userProfileUrl}">${userFullName}</a> ${escapeHtml(user.email)}`;
 
     // Modélisation du contenu des champs en structure neutre (source de vérité unique)
     const fields: NotificationField[] = [
@@ -654,7 +680,7 @@ async function triggerLandRegistryRequest(user: User, parcel: string, dataYear: 
     const userFullName = `${escapeHtml(user.first_name)} ${escapeHtml(user.last_name)}`;
     const userProfileUrl = `${webappUrl}/acces/${user.id}`;
 
-    const text = `Demande d'information cadastre de: <a href="${userProfileUrl}">${userFullName}</a> ${user.email}`;
+    const text = `Demande d'information cadastre de: <a href="${userProfileUrl}">${userFullName}</a> ${escapeHtml(user.email)}`;
 
     const fields: NotificationField[] = [
         ...buildUserLocationFields(user),
@@ -764,7 +790,7 @@ async function triggerNewUserAlert(user: User): Promise<void> {
     const userProfileUrl = `${webappUrl}/acces/${user.id}`;
 
     // Texte principal de la notification
-    const text = `Nouvel utilisateur: <a href="${userProfileUrl}">${userFullName}</a> ${user.email}`;
+    const text = `Nouvel utilisateur: <a href="${userProfileUrl}">${userFullName}</a> ${escapeHtml(user.email)}`;
 
     // Construction des champs de notification
     const fields: NotificationField[] = buildUserLocationFields(user);
@@ -1131,6 +1157,8 @@ export async function triggerShantytownCreationAlert(town: Shantytown, user: Use
 
     await sendHtmlMessage(notifChannel, html, plainTextFallback);
 }
+
+export { htmlToPlainText };
 
 export default {
     triggerActorInvitedAlert,

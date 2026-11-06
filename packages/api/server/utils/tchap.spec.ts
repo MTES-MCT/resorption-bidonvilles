@@ -524,6 +524,116 @@ describe('utils/tchap (résolution des salons)', () => {
         });
     });
 
+    describe('échappement de l\'e-mail de l\'utilisateur dans le message', () => {
+        type SentContent = { body: string, formatted_body: string };
+
+        const MALICIOUS_EMAIL = '"<a href=//evil.example>x</a>"@x.fr';
+
+        function sentContent(): SentContent {
+            expect(stubs.fetch).to.have.been.calledOnce;
+            const [, init] = stubs.fetch.firstCall.args as [string, { body: string }];
+            return JSON.parse(init.body) as SentContent;
+        }
+
+        // retire la forme échappée (qui contient légitimement « href=//evil » en texte) pour ne détecter que l'attribut brut
+        function withoutEscapedEmail(html: string): string {
+            return html.replaceAll('&lt;a href=//evil.example&gt;', '');
+        }
+
+        function loadForEmails(): TchapModule['default'] {
+            const { default: tchap } = loadTchap({
+                NODE_ENV: 'production',
+                [envVarName('notif-canicule')]: '!envCanicule:serveur.test',
+                [envVarName('notif-requetes-cadastre')]: '!envCadastre:serveur.test',
+                [envVarName('notif-nouveaux-utilisateurs')]: '!envNouveaux:serveur.test',
+                [envVarName('notif-invitations-intervenants')]: '!envInvitations:serveur.test',
+                [envVarName('notif-personnes-invitees')]: '!envInvitees:serveur.test',
+            });
+            return tchap;
+        }
+
+        const senders: Array<[string, (tchap: TchapModule['default'], email: string) => Promise<unknown>]> = [
+            ['triggerHeatwaveStatusChange', (tchap, email) => tchap.triggerHeatwaveStatusChange(fakeUser({ id: 123, email }), fakeTown, true)],
+            ['triggerLandRegistryRequest', (tchap, email) => tchap.triggerLandRegistryRequest(fakeUser({ id: 123, email }), 'AB 123', '2024')],
+            ['triggerNewUserAlert', (tchap, email) => tchap.triggerNewUserAlert(fakeUser({ id: 123, email }))],
+        ];
+
+        senders.forEach(([name, send]) => {
+            describe(name, () => {
+                it('n\'insère aucune balise issue de l\'e-mail dans formatted_body, mais sa forme échappée', async () => {
+                    const tchap = loadForEmails();
+
+                    await send(tchap, MALICIOUS_EMAIL);
+
+                    const { formatted_body: formattedBody } = sentContent();
+                    expect(formattedBody).to.not.include('<a href=//evil');
+                    expect(withoutEscapedEmail(formattedBody)).to.not.include('href=//evil');
+                    expect(formattedBody).to.include('&lt;a href=//evil.example&gt;');
+                });
+
+                it('affiche l\'e-mail tel quel, en texte littéral, dans body', async () => {
+                    const tchap = loadForEmails();
+
+                    await send(tchap, MALICIOUS_EMAIL);
+
+                    const { body } = sentContent();
+                    expect(body).to.include('<a href=//evil.example>x</a>');
+                });
+
+                it('conserve le lien légitime du profil dans formatted_body', async () => {
+                    const tchap = loadForEmails();
+
+                    await send(tchap, MALICIOUS_EMAIL);
+
+                    const { formatted_body: formattedBody } = sentContent();
+                    expect(formattedBody).to.match(/<a href="[^"]*\/acces\/123">/);
+                });
+
+                it('non-régression : un e-mail ordinaire apparaît tel quel dans formatted_body', async () => {
+                    const tchap = loadForEmails();
+
+                    await send(tchap, 'alice@example.fr');
+
+                    const { formatted_body: formattedBody } = sentContent();
+                    expect(formattedBody).to.include('alice@example.fr');
+                });
+
+                it('échappe l\'esperluette de l\'e-mail dans formatted_body et la décode dans body', async () => {
+                    const tchap = loadForEmails();
+
+                    await send(tchap, '"a&b"@x.fr');
+
+                    const { body, formatted_body: formattedBody } = sentContent();
+                    expect(formattedBody).to.include('a&amp;b');
+                    expect(body).to.include('a&b');
+                    expect(body).to.not.include('a&amp;b');
+                });
+            });
+        });
+
+        describe('e-mails des invités externes (non-régression)', () => {
+            it('triggerActorInvitedAlert échappe l\'e-mail de l\'invité externe', async () => {
+                const tchap = loadForEmails();
+
+                await tchap.triggerActorInvitedAlert(fakeTown, fakeUser(), MALICIOUS_EMAIL);
+
+                const { formatted_body: formattedBody } = sentContent();
+                expect(withoutEscapedEmail(formattedBody)).to.not.include('href=//evil');
+                expect(formattedBody).to.include('&lt;a href=//evil.example&gt;');
+            });
+
+            it('triggerPeopleInvitedAlert échappe l\'e-mail des invités', async () => {
+                const tchap = loadForEmails();
+
+                await tchap.triggerPeopleInvitedAlert([fakeUser({ email: MALICIOUS_EMAIL })], fakeUser(), 'Message');
+
+                const { formatted_body: formattedBody } = sentContent();
+                expect(withoutEscapedEmail(formattedBody)).to.not.include('href=//evil');
+                expect(formattedBody).to.include('&lt;a href=//evil.example&gt;');
+            });
+        });
+    });
+
     describe('config.tchap.channels', () => {
         it('expose exactement les 17 clés logiques, chacune valant la variable RB_API_TCHAP_<CLE> correspondante', () => {
             const env: Record<string, string> = { NODE_ENV: 'production' };
