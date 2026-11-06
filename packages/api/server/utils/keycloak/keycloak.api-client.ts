@@ -443,6 +443,16 @@ export async function createKeycloakApi(
     }
 
     /**
+     * Réinitialise le mot de passe d'un utilisateur.
+     * @param {string} userId - ID de l'utilisateur
+     * @param {string} password - Nouveau mot de passe
+     * @returns {Promise<void>}
+     */
+    async function resetPassword(userId: string, password: string): Promise<void> {
+        await put(`${realmUrl}/users/${userId}/reset-password`, { type: 'password', value: password, temporary: false });
+    }
+
+    /**
      * Récupère un utilisateur par son email (car il peut y en avoir plusieurs).
      * @param {string} email - Email de l'utilisateur
      * @returns {Promise<UserRepresentation | undefined>} Utilisateur trouvé
@@ -531,15 +541,16 @@ export async function createKeycloakApi(
     }
 
     return {
+        assignRealmRoles,
+        createUser,
+        deleteRealmRoles,
         getAdminPublicKey,
         getAdminToken,
-        healthcheck,
         getUsers,
-        createUser,
-        updateUser,
         getUserByEmail,
         getUserById,
-        assignRealmRoles,
-        deleteRealmRoles,
+        healthcheck,
+        resetPassword,
+        updateUser,
     } as const;
 }
