@@ -62,7 +62,7 @@ const { tchap, webappUrl } = config;
 /**
  * Hôtes pour lesquels http: est toléré hors production (comparaison exacte sur url.hostname).
  */
-const LOCAL_HOSTNAMES = ['localhost', '127.0.0.1', '[::1]'];
+const LOCAL_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]']);
 
 /**
  * Marqueur qui remplace le room ID du salon visé dans les erreurs transmises à Sentry.
@@ -165,14 +165,14 @@ const sanitizeBaseUrl = (rawBaseUrl: string | undefined): string | null => {
     if (url.protocol === 'https:') {
         return cleaned;
     }
-    if (url.protocol === 'http:' && config.environnement !== 'production' && LOCAL_HOSTNAMES.includes(url.hostname)) {
+    if (url.protocol === 'http:' && config.environnement !== 'production' && LOCAL_HOSTNAMES.has(url.hostname)) {
         return cleaned;
     }
     return null;
 };
 
 // Calculée au chargement du module ; null = URL refusée (aucune requête, donc jamais de jeton envoyé)
-const baseUrl = sanitizeBaseUrl(tchap?.baseUrl);
+const baseUrl = sanitizeBaseUrl(tchap.baseUrl);
 
 // Garantit un seul signalement Sentry par processus (Sentry n'est pas forcément initialisé à l'import)
 let invalidBaseUrlReported = false;
@@ -300,7 +300,7 @@ ${levelEmoji} ${htmlToPlainText(notification.text)}${fieldsPlainText}`;
  * @returns La Response finale ou null si le token Tchap n'est pas configuré
  */
 const sendMatrixEvent = async (safeBaseUrl: string, roomId: string, payload: Record<string, unknown>): Promise<Response | null> => {
-    if (!tchap?.token) {
+    if (!tchap.token) {
         Sentry.captureMessage('[Tchap] Impossible d\'envoyer le message : token Tchap non configuré', {
             level: 'error',
         });
@@ -320,7 +320,7 @@ const sendMatrixEvent = async (safeBaseUrl: string, roomId: string, payload: Rec
     });
 };
 
-const escapeRegExp = (text: string): string => text.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const escapeRegExp = (text: string): string => text.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 
 /**
  * Construit une expression qui reconnaît un texte brut ou tel qu'encodé par encodeURIComponent
@@ -396,7 +396,7 @@ const sanitizeErrorForSentry = (
  */
 const sendHtmlMessage = async (channel: TchapChannel | null, html: string, plainTextFallback: string): Promise<void> => {
     // Si pas de config Tchap ou pas de canal spécifié, on abandonne
-    if (!tchap || !channel) {
+    if (!channel) {
         return;
     }
 
@@ -491,10 +491,6 @@ const formatTownStatus = (status: string): string => {
 // ============================================================================
 
 async function triggerActorInvitedAlert(town: Shantytown, host: User, invited: User | string): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-invitations-intervenants');
 
     const townName = escapeHtml(town.name || town.usename);
@@ -531,10 +527,6 @@ async function triggerActorInvitedAlert(town: Shantytown, host: User, invited: U
 }
 
 export async function triggerAttachmentArchiveCleanup(deleteRequestsCount: number, errorsCount: number): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-nettoyage-pieces-jointes');
 
     const text = `Un nettoyage automatique des fichiers vient d'être effectué pour un total de ${deleteRequestsCount} fichiers à supprimer et ${errorsCount} erreurs rencontrées`;
@@ -553,10 +545,6 @@ export async function triggerAttachmentArchiveCleanup(deleteRequestsCount: numbe
 }
 
 export async function triggerAttachmentArchiveCleanupError(): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-nettoyage-pieces-jointes');
 
     const text = 'Une erreur est survenue lors du DELETE en base de données';
@@ -575,10 +563,6 @@ export async function triggerAttachmentArchiveCleanupError(): Promise<void> {
 }
 
 async function triggerDeclaredActor(town: Shantytown, user: User): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-intervenants-declares');
 
     const townName = escapeHtml(town.name || town.usename);
@@ -605,10 +589,6 @@ async function triggerDeclaredActor(town: Shantytown, user: User): Promise<void>
 }
 
 const triggerHeatwaveStatusChange = async (user: User, town: Shantytown, heatwaveStatus: boolean): Promise<void> => {
-    if (!tchap) {
-        return;
-    }
-
     const organizationAbbreviation: string = user.organization.abbreviation ? ` (${user.organization.abbreviation})` : '';
 
     const notifChannel = resolveNotifChannel('notif-canicule');
@@ -669,10 +649,6 @@ const triggerHeatwaveStatusChange = async (user: User, town: Shantytown, heatwav
 
 
 async function triggerLandRegistryRequest(user: User, parcel: string, dataYear: string): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-requetes-cadastre');
 
     const userFullName = `${escapeHtml(user.first_name)} ${escapeHtml(user.last_name)}`;
@@ -706,10 +682,6 @@ async function triggerLandRegistryRequest(user: User, parcel: string, dataYear: 
 }
 
 async function triggerNewActionComment(comment: string, action: Action, author: CommentAuthor): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-action-nouveau-commentaire');
 
     const actionFullName = (await getActionFullName(action.id)) ?? action.name;
@@ -745,10 +717,6 @@ async function triggerNewActionComment(comment: string, action: Action, author: 
 }
 
 async function triggerNewComment(commentDescription: string, tagLabels: string[], town: Shantytown, author: User): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-site-nouveau-commentaire');
 
     const townName = escapeHtml(town.name || town.usename);
@@ -790,10 +758,6 @@ async function triggerNewComment(commentDescription: string, tagLabels: string[]
 }
 
 async function triggerNewUserAlert(user: User): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-nouveaux-utilisateurs');
 
     const userFullName = `${escapeHtml(user.first_name)} ${escapeHtml(user.last_name)}`;
@@ -821,10 +785,6 @@ async function triggerNewUserAlert(user: User): Promise<void> {
 }
 
 async function triggerNotifyNewUserFromRectorat(user: User): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('tech');
 
     const userFullName = `${escapeHtml(user.first_name)} ${escapeHtml(user.last_name)}`;
@@ -846,10 +806,6 @@ async function triggerNotifyNewUserFromRectorat(user: User): Promise<void> {
 }
 
 async function triggerNotifyNewUserSelfDeactivation(user: User): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-auto-desactivations');
 
     const userFullName = `${escapeHtml(user.first_name)} ${escapeHtml(user.last_name)}`;
@@ -871,10 +827,6 @@ async function triggerNotifyNewUserSelfDeactivation(user: User): Promise<void> {
 }
 
 async function triggerNotifyOwnersAnonymization(shantytownLines: number, shantytownHistoryLines: number): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const createLinesMessage = (count: number): string => {
         if (count <= 0) {
             return 'Aucune ligne';
@@ -914,10 +866,6 @@ async function triggerNotifyOwnersAnonymization(shantytownLines: number, shantyt
 }
 
 export async function triggerNotifyOwnersAnonymizationError(message: string): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-anonymisation');
 
     const text = 'Une erreur est survenue lors de l\'anonymisation des propriétaires en base de données';
@@ -943,10 +891,6 @@ export async function triggerNotifyOwnersAnonymizationError(message: string): Pr
 }
 
 async function triggerPeopleInvitedAlert(guests: User[], greeter: User, msg: string): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-personnes-invitees');
 
     // Construction du libellé du greeter (invitant) selon qu'il a un id ou non
@@ -993,10 +937,6 @@ async function triggerPeopleInvitedAlert(guests: User[], greeter: User, msg: str
 }
 
 async function triggerRemoveDeclaredActor(town: Shantytown, user: User): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-intervenants-declares');
 
     const townName = escapeHtml(town.name || town.usename);
@@ -1023,10 +963,6 @@ async function triggerRemoveDeclaredActor(town: Shantytown, user: User): Promise
 }
 
 async function triggerRequestActionPilot(action: EnrichedAction, user: User): Promise<boolean> {
-    if (!tchap) {
-        return false;
-    }
-
     const notifChannel = resolveNotifChannel('notif-absence-pilote-action');
 
     const userFullName = `${escapeHtml(user.first_name)} ${escapeHtml(user.last_name)}`;
@@ -1051,10 +987,6 @@ async function triggerRequestActionPilot(action: EnrichedAction, user: User): Pr
 }
 
 async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-fermeture-sites');
 
     const townName = escapeHtml(town.name || town.usename);
@@ -1115,10 +1047,6 @@ async function triggerShantytownCloseAlert(town: Shantytown, user: User): Promis
 }
 
 export async function triggerReinstallationAlert(town: Shantytown | ShantytownWithEnrichedComments, user: User): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-reinstallation');
 
     const townName = escapeHtml(town.name || town.usename);
@@ -1160,10 +1088,6 @@ export async function triggerReinstallationAlert(town: Shantytown | ShantytownWi
 }
 
 export async function triggerShantytownCreationAlert(town: Shantytown, user: User): Promise<void> {
-    if (!tchap) {
-        return;
-    }
-
     const notifChannel = resolveNotifChannel('notif-ouverture-sites');
 
     const townName = escapeHtml(town.name || town.usename);
