@@ -170,13 +170,26 @@ const buildIncomingTownsHtml = (town: Shantytown | ShantytownWithEnrichedComment
 };
 
 /**
+ * Retire les barres obliques finales d'une chaîne en temps linéaire (parcours depuis la fin,
+ * sans expression régulière, pour éviter tout backtracking quadratique).
+ */
+function trimTrailingSlashes(value: string): string {
+    let end = value.length;
+    while (end > 0 && value[end - 1] === '/') {
+        end -= 1;
+    }
+    return value.slice(0, end);
+}
+
+/**
  * Nettoie (espaces et barres obliques finales retirés) puis contrôle l'URL du serveur Tchap :
  * elle doit s'analyser par `new URL` et être en https:. Hors production, http: est accepté pour les
  * seuls hôtes localhost, 127.0.0.1 et [::1] (hôte réel lu dans url.hostname, identifiants éventuels exclus).
  * Retourne null (fail closed) si elle est absente, invalide ou non sécurisée.
  */
 const sanitizeBaseUrl = (rawBaseUrl: string | undefined): string | null => {
-    const cleaned = rawBaseUrl?.trim().replace(/\/+$/, '');
+    const trimmed = rawBaseUrl?.trim();
+    const cleaned = trimmed === undefined ? undefined : trimTrailingSlashes(trimmed);
     if (!cleaned) {
         return null;
     }

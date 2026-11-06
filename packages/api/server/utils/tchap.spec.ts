@@ -1300,6 +1300,76 @@ describe('utils/tchap (résolution des salons)', () => {
                 expectMissingVariableReported('notif-auto-desactivations');
             });
         });
+
+        describe('nettoyage de la barre finale : coût linéaire et équivalence', () => {
+            const MAX_DURATION_MS = 500;
+            const SEND_PATH = '/_matrix/client/v3/rooms/';
+
+            // durée (en ms) du rechargement du module et d'un envoi ; un premier chargement non mesuré
+            // absorbe la compilation ts-node, pour ne mesurer que le nettoyage de l'URL
+            async function measureLoadAndSend(baseUrlValue: string): Promise<number> {
+                loadTchap(envFor('production', `https://${HOST}`));
+                stubs.fetch.resetHistory();
+
+                const start = process.hrtime.bigint();
+                await sendOnce(envFor('production', baseUrlValue));
+                return Number(process.hrtime.bigint() - start) / 1e6;
+            }
+
+            describe('performance (pas de backtracking quadratique)', () => {
+                it('une très longue suite de barres suivie d\'un caractère reste traitée en moins de 500 ms, valeur conservée telle quelle', async function slowInputWithTrailingCharacter() {
+                    this.timeout(15000);
+                    const input = `https://${HOST}${'/'.repeat(80000)}a`;
+
+                    const durationMs = await measureLoadAndSend(input);
+
+                    expect(durationMs < MAX_DURATION_MS, `durée mesurée : ${durationMs} ms (maximum ${MAX_DURATION_MS} ms)`).to.be.eql(true);
+                    const url = sentUrl();
+                    const expectedPrefix = `${input}${SEND_PATH}`;
+                    // booléens : évite d'imprimer 80 Ko en cas d'échec
+                    expect(url.length > expectedPrefix.length, 'URL appelée trop courte').to.be.eql(true);
+                    expect(url.startsWith(expectedPrefix), 'l\'URL appelée ne commence pas par la valeur conservée telle quelle').to.be.eql(true);
+                    expect(stubs.sentry.captureMessage).to.not.have.been.called;
+                });
+
+                it('une valeur composée de 400 000 barres finales reste traitée en moins de 500 ms, toutes les barres finales sont retirées', async function slowInputOnlyTrailingSlashes() {
+                    this.timeout(15000);
+                    const input = `https://${HOST}${'/'.repeat(400000)}`;
+
+                    const durationMs = await measureLoadAndSend(input);
+
+                    expect(durationMs < MAX_DURATION_MS, `durée mesurée : ${durationMs} ms (maximum ${MAX_DURATION_MS} ms)`).to.be.eql(true);
+                    const url = sentUrl();
+                    const expectedPrefix = `https://${HOST}${SEND_PATH}${encodeURIComponent(FROM_ENV.autoDesactivations)}/send/m.room.message/`;
+                    expect(url.length < 1000, `URL appelée trop longue : ${url.length} caractères`).to.be.eql(true);
+                    expect(url.startsWith(expectedPrefix), `URL inattendue : ${url.slice(0, 300)}`).to.be.eql(true);
+                    expect(stubs.sentry.captureMessage).to.not.have.been.called;
+                });
+            });
+
+            describe('équivalence avec le comportement d\'origine', () => {
+                [
+                    { label: 'sans barre finale', input: `https://${HOST}`, expectedBase: `https://${HOST}` },
+                    { label: 'avec un préfixe et une barre finale', input: `https://${HOST}/prefix/`, expectedBase: `https://${HOST}/prefix` },
+                    { label: 'avec des barres internes conservées et une barre finale retirée', input: `https://${HOST}/a//b/`, expectedBase: `https://${HOST}/a//b` },
+                    { label: 'avec des barres internes conservées et plusieurs barres finales retirées', input: `  https://${HOST}/a//b///  `, expectedBase: `https://${HOST}/a//b` },
+                ].forEach(({ label, input, expectedBase }) => {
+                    it(`conserve la base attendue ${label}`, async () => {
+                        await sendOnce(envFor('production', input));
+
+                        const url = sentUrl();
+                        expect(url.startsWith(`${expectedBase}${SEND_PATH}`), `URL inattendue : ${url}`).to.be.eql(true);
+                        expect(stubs.sentry.captureMessage).to.not.have.been.called;
+                    });
+                });
+
+                it('refuse une valeur composée uniquement d\'espaces et de barres : aucun fetch, un seul message Sentry', async () => {
+                    await sendOnce(envFor('production', '  ///  '));
+
+                    expectRejectedOnce();
+                });
+            });
+        });
     });
 
     describe('contrôle du format du room ID du salon', () => {
