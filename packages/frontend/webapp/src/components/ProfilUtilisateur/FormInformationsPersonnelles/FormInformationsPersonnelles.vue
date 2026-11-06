@@ -31,7 +31,7 @@
             :message="error || 'Certaines données sont incorrectes'"
         />
 
-        <Button type="submit" @click="onSubmit">Sauvegarder</Button>
+        <DsfrButton type="submit" @click="onSubmit">Sauvegarder</DsfrButton>
     </form>
 </template>
 
@@ -51,7 +51,6 @@ import { edit } from "@/api/users.api";
 import {
     LinkOrganization,
     Warning,
-    Button,
     ErrorSummary,
 } from "@resorptionbidonvilles/ui";
 import FormInformationsPersonnellesInputFirstName from "./inputs/FormInformationsPersonnellesInputFirstName.vue";
