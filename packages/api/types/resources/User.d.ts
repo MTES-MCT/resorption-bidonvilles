@@ -96,3 +96,14 @@ export type User = {
     deactivated_at?: number | null,
     deactivation_type?: string | null,
 };
+
+export type UserUpdateInput = {
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    phone?: string;
+    position?: string;
+    email_subscriptions?: string[];
+    email_unsubscriptions?: string[];
+    password?: string;
+};
