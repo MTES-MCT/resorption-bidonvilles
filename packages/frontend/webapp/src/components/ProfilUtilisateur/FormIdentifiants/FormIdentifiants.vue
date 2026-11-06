@@ -27,8 +27,11 @@
             />
         </div>
 
-        <Button type="submit" @click="onSubmit" :disabled="passwordCheckBlocked"
-            >Sauvegarder</Button
+        <DsfrButton
+            type="submit"
+            @click="onSubmit"
+            :disabled="passwordCheckBlocked"
+            >Sauvegarder</DsfrButton
         >
     </form>
 </template>
@@ -45,7 +48,7 @@ import { edit } from "@/api/me.api";
 import router from "@/helpers/router";
 
 // components
-import { Button, Icon, Warning } from "@resorptionbidonvilles/ui";
+import { Icon, Warning } from "@resorptionbidonvilles/ui";
 import FormIdentifiantsInputPassword from "./inputs/FormIdentifiantsInputPassword.vue";
 
 // data
@@ -110,7 +113,9 @@ const onSubmit = handleSubmit(async (values) => {
         passwordCheckBlockTime.value = null;
 
         try {
-            await edit({ password: values.newPassword });
+            await edit({
+                password: values.newPassword,
+            });
             notificationStore.success(
                 "Vos identifiants",
                 "Votre mot de passe a bien été modifié"
