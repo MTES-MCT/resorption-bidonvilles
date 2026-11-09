@@ -58,6 +58,7 @@ const DISTINCTIVE_LAST_NAME = 'NomDistinctifAzerty';
 
 const MANAGED_ENV_KEYS = [
     'NODE_ENV',
+    'RB_API_ENV_LABEL',
     'RB_API_TCHAP_TOKEN',
     'RB_API_TCHAP_BASE_URL',
     ...new Set([...Object.values(ENV_VARS), ...CHANNEL_KEYS.map(envVarName)]),
@@ -781,6 +782,191 @@ describe('utils/tchap (résolution des salons)', () => {
             await tchap.triggerNotifyNewUserSelfDeactivation(distinctiveUser());
 
             expect(sentRoomId()).to.be.eql(FROM_ENV.autoDesactivations);
+        });
+    });
+
+    describe('étiquette d\'environnement (RB_API_ENV_LABEL)', () => {
+        const REAL_AND_DEV_ROOMS = {
+            [ENV_VARS.devTest]: FROM_ENV.devTest,
+            [ENV_VARS.autoDesactivations]: FROM_ENV.autoDesactivations,
+        };
+
+        describe('en production sans étiquette', () => {
+            [
+                { label: 'absente', value: undefined },
+                { label: 'vide', value: '' },
+                { label: 'composée d\'espaces', value: '   ' },
+            ].forEach(({ label, value }) => {
+                it(`utilise le vrai salon de la clé quand l'étiquette est ${label}`, async () => {
+                    const { default: tchap } = loadTchap({
+                        NODE_ENV: 'production',
+                        RB_API_ENV_LABEL: value,
+                        ...REAL_AND_DEV_ROOMS,
+                    });
+
+                    await tchap.triggerNotifyNewUserSelfDeactivation(distinctiveUser());
+
+                    expect(sentRoomId()).to.be.eql(FROM_ENV.autoDesactivations);
+                    expect(stubs.sentry.captureMessage).to.not.have.been.called;
+                });
+            });
+        });
+
+        describe('en production avec une étiquette', () => {
+            ['PREPROD', 'DEVELOPPEMENT', ' PREPROD '].forEach((label) => {
+                it(`redirige vers notif-dev-test avec l'étiquette "${label}", même si le salon de la clé est configuré`, async () => {
+                    const { default: tchap } = loadTchap({
+                        NODE_ENV: 'production',
+                        RB_API_ENV_LABEL: label,
+                        ...REAL_AND_DEV_ROOMS,
+                    });
+
+                    await tchap.triggerNotifyNewUserSelfDeactivation(distinctiveUser());
+
+                    expect(sentRoomId()).to.be.eql(FROM_ENV.devTest);
+                    expect(stubs.sentry.captureMessage).to.not.have.been.called;
+                });
+            });
+
+            it('redirige vers notif-dev-test quelle que soit la clé demandée', async () => {
+                const { default: tchap } = loadTchap({
+                    NODE_ENV: 'production',
+                    RB_API_ENV_LABEL: 'PREPROD',
+                    ...REAL_AND_DEV_ROOMS,
+                    [ENV_VARS.tech]: FROM_ENV.tech,
+                });
+
+                await tchap.triggerNotifyNewUserFromRectorat(distinctiveUser());
+
+                expect(sentRoomId()).to.be.eql(FROM_ENV.devTest);
+            });
+        });
+
+        describe('hors production', () => {
+            [
+                { label: 'NODE_ENV="development"', nodeEnv: 'development' },
+                { label: 'NODE_ENV absent', nodeEnv: undefined },
+            ].forEach(({ label, nodeEnv }) => {
+                it(`redirige vers notif-dev-test quand l'étiquette est vide (${label})`, async () => {
+                    const { default: tchap } = loadTchap({
+                        NODE_ENV: nodeEnv,
+                        RB_API_ENV_LABEL: '',
+                        ...REAL_AND_DEV_ROOMS,
+                    });
+
+                    await tchap.triggerNotifyNewUserSelfDeactivation(distinctiveUser());
+
+                    expect(sentRoomId()).to.be.eql(FROM_ENV.devTest);
+                });
+
+                it(`redirige vers notif-dev-test quand l'étiquette est absente (${label})`, async () => {
+                    const { default: tchap } = loadTchap({
+                        NODE_ENV: nodeEnv,
+                        RB_API_ENV_LABEL: undefined,
+                        ...REAL_AND_DEV_ROOMS,
+                    });
+
+                    await tchap.triggerNotifyNewUserSelfDeactivation(distinctiveUser());
+
+                    expect(sentRoomId()).to.be.eql(FROM_ENV.devTest);
+                });
+            });
+
+            it('redirige vers notif-dev-test avec NODE_ENV="development" et l\'étiquette "PREPROD"', async () => {
+                const { default: tchap } = loadTchap({
+                    NODE_ENV: 'development',
+                    RB_API_ENV_LABEL: 'PREPROD',
+                    ...REAL_AND_DEV_ROOMS,
+                });
+
+                await tchap.triggerNotifyNewUserSelfDeactivation(distinctiveUser());
+
+                expect(sentRoomId()).to.be.eql(FROM_ENV.devTest);
+            });
+        });
+
+        describe('signalement Sentry quand la redirection est due à l\'étiquette', () => {
+            const LABEL = 'PREPROD_ETIQUETTE_DISTINCTIVE';
+
+            function preprodEnv(overrides: Record<string, string | undefined> = {}): Record<string, string | undefined> {
+                return {
+                    NODE_ENV: 'production',
+                    RB_API_ENV_LABEL: LABEL,
+                    ...REAL_AND_DEV_ROOMS,
+                    ...overrides,
+                };
+            }
+
+            function expectNoLabelNorRoomLeak(): void {
+                const serialized = serializeSentryArgs();
+                [LABEL, 'ETIQUETTE_DISTINCTIVE', 'RB_API_ENV_LABEL', FROM_ENV.autoDesactivations, FROM_ENV.devTest, DISTINCTIVE_FIRST_NAME, DISTINCTIVE_LAST_NAME, 'formatted_body', 'token-de-test'].forEach((forbidden) => {
+                    expect(serialized, `"${forbidden}" ne doit pas partir vers Sentry`).to.not.include(forbidden);
+                });
+            }
+
+            it('nomme notif-dev-test quand ce salon est absent, même si le salon de la clé est configuré', async () => {
+                const { default: tchap } = loadTchap(preprodEnv({ [ENV_VARS.devTest]: undefined }));
+
+                await tchap.triggerNotifyNewUserSelfDeactivation(distinctiveUser());
+
+                expect(stubs.fetch).to.not.have.been.called;
+                expectMissingVariableReported('notif-dev-test');
+                expectNoLabelNorRoomLeak();
+            });
+
+            it('nomme notif-dev-test quand ce salon est vide ou composé d\'espaces', async () => {
+                const { default: tchap } = loadTchap(preprodEnv({ [ENV_VARS.devTest]: '   ' }));
+
+                await tchap.triggerNotifyNewUserSelfDeactivation(distinctiveUser());
+
+                expect(stubs.fetch).to.not.have.been.called;
+                expectMissingVariableReported('notif-dev-test');
+                expectNoLabelNorRoomLeak();
+            });
+
+            it('nomme notif-dev-test quand son identifiant est invalide, sans citer l\'étiquette', async () => {
+                const { default: tchap } = loadTchap(preprodEnv({ [ENV_VARS.devTest]: '#dev:serveur.test' }));
+
+                await tchap.triggerNotifyNewUserSelfDeactivation(distinctiveUser());
+
+                expect(stubs.fetch).to.not.have.been.called;
+                expect(stubs.sentry.captureException).to.not.have.been.called;
+                expect(stubs.sentry.captureMessage).to.have.been.calledOnce;
+                expect(stubs.sentry.captureMessage.firstCall.args).to.be.eql([
+                    '[Tchap] Salon "notif-dev-test" : identifiant invalide (un room ID commençant par "!" est attendu) : notification non envoyée',
+                    { level: 'error', extra: { channel: 'notif-dev-test' } },
+                ]);
+                expectNoLabelNorRoomLeak();
+            });
+
+            it('ignore un identifiant invalide dans le salon de la clé quand notif-dev-test est valide', async () => {
+                const { default: tchap } = loadTchap(preprodEnv({ [ENV_VARS.autoDesactivations]: '#alias:serveur.test' }));
+
+                await tchap.triggerNotifyNewUserSelfDeactivation(distinctiveUser());
+
+                expect(sentRoomId()).to.be.eql(FROM_ENV.devTest);
+                expect(sentryEvents()).to.be.empty;
+            });
+
+            it('nomme notif-dev-test en cas d\'exception pendant l\'envoi, sans citer l\'étiquette', async () => {
+                stubs.fetch.rejects(new Error('connect ECONNREFUSED 10.0.0.1:443'));
+                const { default: tchap } = loadTchap(preprodEnv());
+
+                await tchap.triggerHeatwaveStatusChange(distinctiveUser(), fakeTown, true);
+
+                expectSentryEvent('[Tchap] Une erreur est survenue lors de la tentative d\'envoi d\'une notification vers le salon "notif-dev-test"', 'notif-dev-test');
+                expectNoLabelNorRoomLeak();
+            });
+
+            it('nomme notif-dev-test en cas d\'échec HTTP, sans citer l\'étiquette', async () => {
+                stubs.fetch.resolves({ ok: false, status: 500, statusText: 'Internal Server Error' });
+                const { default: tchap } = loadTchap(preprodEnv());
+
+                await tchap.triggerHeatwaveStatusChange(distinctiveUser(), fakeTown, true);
+
+                expectSentryEvent('[Tchap] Échec d\'envoi (500 Internal Server Error)', 'notif-dev-test');
+                expectNoLabelNorRoomLeak();
+            });
         });
     });
 

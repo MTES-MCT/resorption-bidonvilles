@@ -7,6 +7,10 @@ export default {
     // valeur de NODE_ENV conservée telle quelle si elle est non vide ; absente ou vide => "development".
     // Seule la valeur exacte "production" active les vrais salons Tchap (la bascule est faite dans utils/tchap.ts)
     environnement: process.env.NODE_ENV || 'development',
+    // Étiquette d'environnement (ex. "PREPROD", "DEVELOPPEMENT"), vide en production ; absente, vide ou espaces => ''.
+    // C'est la seconde barrière du routage Tchap (voir utils/tchap.ts), commune en esprit à VITE_ENV_LABEL du webapp :
+    // seule une étiquette vide permet d'ouvrir les vrais salons.
+    envLabel: (process.env.RB_API_ENV_LABEL ?? '').trim(),
     assetsSrc: path.resolve(__dirname, '../assets'),
     wwwUrl: `https://${process.env.RB_API_FRONT_DOMAIN}`,
     webappUrl: `https://app.${process.env.RB_API_FRONT_DOMAIN}`,

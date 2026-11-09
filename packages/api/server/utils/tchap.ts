@@ -235,8 +235,9 @@ const ROOM_ID_PATTERN = /^!\S+$/;
 
 /**
  * Résout la clé logique d'un salon vers un TchapChannel (clé effective + room ID Matrix lu dans config.tchap.channels),
- * en basculant systématiquement vers le salon de test (notif-dev-test) en environnement autre
- * que "production" (pour éviter de polluer les vrais salons de notification pendant les tests locaux).
+ * en basculant systématiquement vers le salon de test (notif-dev-test) sauf si NODE_ENV vaut "production"
+ * ET que l'étiquette d'environnement (RB_API_ENV_LABEL) est vide (pour éviter de polluer les vrais salons
+ * de notification en local ou en préproduction).
  * Retourne null, après signalement à Sentry, si l'URL du serveur est refusée (voir sanitizeBaseUrl)
  * si le room ID du salon retenu est absent ou vide (une valeur composée uniquement d'espaces
  * est considérée comme absente), ou s'il est invalide (voir ROOM_ID_PATTERN) ; la valeur invalide
@@ -249,7 +250,7 @@ const resolveNotifChannel = (channelKey: TchapChannelKey): TchapChannel | null =
         return null;
     }
 
-    const key: TchapChannelKey = config.environnement !== 'production' ? 'notif-dev-test' : channelKey;
+    const key: TchapChannelKey = config.environnement === 'production' && config.envLabel === '' ? channelKey : 'notif-dev-test';
     const roomId = tchap.channels[key]?.trim();
     if (!roomId) {
         Sentry.captureMessage(`[Tchap] Salon "${key}" non configuré : notification non envoyée`, {
