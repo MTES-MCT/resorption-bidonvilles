@@ -291,12 +291,18 @@ describe('keycloak.api-client / createKeycloakApi()', () => {
         });
 
         it('réessaie la requête en cas de réponse 401', async () => {
+            const tokenProviders = {
+                getAdminToken: sandbox.stub().resolves('admin-token-refreshed'),
+                getPisteToken: sandbox.stub().resolves('piste-token-refreshed'),
+            };
+
             const { createKeycloakApi } = await rewiremock.module(
                 () => import('./keycloak.api-client'),
             );
             await createKeycloakApi(
                 authenticatedInstance as any,
                 publicInstance as any,
+                tokenProviders,
             );
 
             const responseInterceptorSuccess = authenticatedInstance.interceptors.response.use.lastCall.args[0];

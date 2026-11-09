@@ -66,6 +66,12 @@ const roleModel = {
 const blogService = {
     get: sandbox.stub(),
 };
+const roleModel = {
+    findAll: sandbox.stub(),
+};
+const blogService = {
+    get: sandbox.stub(),
+};
 
 rewiremock('#server/config').withDefault({
     activationTokenExpiresIn: '1',
@@ -93,6 +99,7 @@ rewiremock('#server/models/userModel/index').with(userModel);
 rewiremock('#server/models/preparatoryPhasesTowardResorptionModel/index').with(preparatoryPhasesTowardResorptionModel);
 rewiremock('#server/models/roleModel/index').with(roleModel);
 rewiremock('#server/services/heatwave/index').with(heatwaveService);
+rewiremock('#server/models/roleModel/index').with(roleModel);
 rewiremock('#server/services/blog/index').with(blogService);
 
 rewiremock.enable();
