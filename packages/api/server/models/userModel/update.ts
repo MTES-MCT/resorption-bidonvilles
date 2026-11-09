@@ -5,6 +5,8 @@ interface UserUpdateExtendedInput extends UserUpdateInput {
     fk_status?: string;
     fk_role_regular?: string;
     password_conformity?: boolean;
+    expertise_topics_chosen?: boolean;
+    expertise_comment?: string;
 }
 
 /**
