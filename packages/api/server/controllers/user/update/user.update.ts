@@ -1,68 +1,43 @@
-import userModel from '#server/models/userModel';
-import authUtils from '#server/utils/auth';
+import userService from '#server/services/user';
+import { Request, Response, NextFunction } from 'express';
+import { User, UserUpdateInput } from '#root/types/resources/User.d';
 
-const { hashPassword } = authUtils;
+interface UserRequest extends Request {
+    user: User
+}
 
-export default async (req, res, next) => {
-    if (req.user.role_id !== 'national_admin' && req.params?.id !== req.user.id) {
+/**
+ * @param req                          - {UserRequest} La requête http entrante
+ * @param res                          - {Response} La réponse http sortante
+ * @param next                         - {NextFunction} La prochaine fonction de callback
+ * @returns {Promise<Response | void>} - La réponse http sortante ou la prochaine fonction de callback
+ */
+export default async (req: UserRequest, res: Response, next: NextFunction): Promise<Response | void> => {
+    if ((req.user.role_id !== 'national_admin' && req.user.id !== req.body?.id)) {
         return res.status(403).send({
             user_message: 'Vous n\'avez pas les droits suffisants pour modifier cet utilisateur',
         });
     }
 
+    const { id: bodyId } = req.body;
     const { id: paramId } = req.params;
     const { id: connectedUserId } = req.user;
 
-    const userId = paramId ?? connectedUserId;
+    const userId: number = paramId ? Number(paramId) : Number(bodyId ?? connectedUserId);
 
     const {
-        first_name: firstName, last_name: lastName, email, phone, position,
-        email_subscriptions: emailSubscriptions, email_unsubscriptions: emailUnsubscriptions,
+        first_name, last_name, email, phone, position,
+        email_subscriptions, email_unsubscriptions,
         password,
-    } = req.body;
-    const user = await userModel.findOne(userId, { auth: true });
-
-    if (user === null) {
-        res.status(500).send({
-            user_message: 'Impossible de trouver vos informations en bases de données.',
-        });
-        return next(new Error(`User #${userId} does not exist`));
-    }
-
-    // actually update the user
-    const data: any = {
-        first_name: firstName,
-        last_name: lastName,
-        email,
-        phone,
-        position,
-        email_unsubscriptions: emailUnsubscriptions,
-        password: password ? hashPassword(password, user.salt) : undefined,
-    };
-
-    const filteredData: any = Object.keys(data).reduce((acc, key) => {
-        if (data[key] === undefined) {
-            return acc;
-        }
-
-        acc[key] = data[key];
-        return acc;
-    }, {});
-    if (Object.keys(filteredData).length === 0) {
-        return res.status(200).send({});
-    }
-
+    }: UserUpdateInput = req.body;
     try {
-        await userModel.update(userId, filteredData);
-        delete filteredData.password;
-        if (filteredData.email_unsubscriptions) {
-            filteredData.email_subscriptions = emailSubscriptions;
-            delete filteredData.email_unsubscriptions;
-        }
-        return res.status(200).send(filteredData);
+        const updatedUser = await userService.update(userId, {
+            first_name, last_name, email, phone, position, email_subscriptions, email_unsubscriptions, password,
+        });
+        return res.status(200).send(updatedUser);
     } catch (error) {
         res.status(500).send({
-            user_message: 'Une erreur est survenue dans l\'écriture de vos informations en base de données.',
+            user_message: 'Une erreur est survenue dans la mise à jour de vos informations',
         });
         return next(error);
     }

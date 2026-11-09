@@ -1,6 +1,20 @@
 import { sequelize } from '#db/sequelize';
+import { UserUpdateInput } from '#root/types/resources/User.d';
 
-export default async (userId, values, transaction = undefined) => {
+interface UserUpdateExtendedInput extends UserUpdateInput {
+    fk_status?: string;
+    fk_role_regular?: string;
+    password_conformity?: boolean;
+}
+
+/**
+ * @description Update a user
+ * @param   userId          - {number} ID de l'utilisateur à mettre à jour
+ * @param   values          - {UserUpdateExtendedInput} Les données à mettre à jour
+ * @param   transaction     - {Transaction} La transaction à utiliser
+ * @returns {Promise<void>} - Ne retourne rien
+ */
+export default async (userId: number, values: UserUpdateExtendedInput, transaction = undefined): Promise<void> => {
     if (userId === undefined) {
         throw new Error('The user id is missing');
     }

@@ -1,19 +1,27 @@
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import CONFIG from '#server/config';
-import userModel from '#server/models/userModel';
-import authUtils from '#server/utils/auth';
-import checkPassword from '#server/utils/checkPassword';
+import { ControllerErrors } from '#server/errors/ControllerErrors';
+import userService from '#server/services/user';
 
-const { hashPassword } = authUtils;
+const ERRORS: ControllerErrors = {
+    undefined: { code: 500, message: 'Une erreur inconnue est survenue' },
+};
 
-export default async (req, res, next) => {
+/**
+ * Vérifie la validité du jeton, puis met à jour le mot de passe
+ * @param req - Requête
+ * @param res - Réponse
+ * @param next - Prochain middleware
+ */
+export default async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
     if (!req.body.token) {
         return res.status(400).send({
             user_message: 'Le jeton d\'identification est manquant',
         });
     }
 
-    let decoded;
+    let decoded: any;
     try {
         decoded = jwt.verify(req.body.token, CONFIG.auth.secret);
     } catch (error) {
@@ -30,39 +38,15 @@ export default async (req, res, next) => {
         });
     }
 
-    const user = await userModel.findOne(decoded.userId, { auth: true });
-    if (user === null) {
-        return res.status(400).send({
-            user_message: 'Le jeton d\'identification ne correspond à aucun utilisateur',
-        });
-    }
-
-    if (user.id !== parseInt(req.params.id, 10)) {
-        return res.status(400).send({
-            user_message: 'Le jeton d\'identification n\'est pas valide',
-        });
-    }
-
-    const errors = checkPassword(req.body.password, user.is_admin);
-    if (errors.length > 0) {
-        return res.status(400).send({
-            user_message: 'Le mot de passe est invalide',
-            fields: {
-                password: errors,
-            },
-        });
-    }
-
     try {
-        await userModel.update(user.id, {
-            password: hashPassword(req.body.password, user.salt),
-            password_conformity: (!!user.is_admin),
-        });
+        await userService.setPassword(req.body.password, decoded.userId, decoded);
     } catch (error) {
-        res.status(500).send({
-            user_message: 'Une erreur est survenue lors de l\'écriture en base de données',
+        const { code, message } = ERRORS[error?.code] ?? ERRORS.undefined;
+        res.status(code).send({
+            user_message: message,
         });
-        return next(error);
+
+        next(error?.nativeError ?? error);
     }
 
     return res.status(200).send({});

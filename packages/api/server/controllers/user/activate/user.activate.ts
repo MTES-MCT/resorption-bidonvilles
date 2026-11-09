@@ -9,29 +9,40 @@ import accessRequestService from '#server/services/accessRequest/accessRequestSe
 import checkPassword from '#server/utils/checkPassword';
 import tchapUtils from '#server/utils/tchap';
 import authUtils from '#server/utils/auth';
+import { Request, Response, NextFunction } from 'express';
+import { User, UserActivateRequest } from '#root/types/resources/User.d';
 
 const { triggerNewUserAlert } = tchapUtils;
 const { hashPassword } = authUtils;
 
-export default async (req, res, next) => {
+interface ActivateUserRequest extends Request {
+    body: UserActivateRequest,
+}
+
+/**
+ * @description Active un utilisateur
+ * @param   req                 - {UserActivateRequest} La requête
+ * @param   res                 - {Response} La réponse
+ * @param   next                - {NextFunction} La fonction suivante
+ * @returns {Promise<Response>} - Renvoie la réponse Express
+ */
+export default async (req:ActivateUserRequest, res:Response, next:NextFunction): Promise<Response | void> => {
     if (!req.body.token) {
         return res.status(400).send({
             user_message: 'Le jeton d\'activation est manquant',
         });
     }
 
-    let decoded;
+    let decoded: any;
     try {
         decoded = jwt.verify(req.body.token, CONFIG.auth.secret);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+    } catch {
         return res.status(400).send({
             user_message: 'Le jeton d\'activation est invalide ou expiré',
         });
     }
 
-    let user;
+    let user: User;
     if (decoded.userId !== undefined) {
         user = await userModel.findOne(decoded.userId, { auth: true });
     } else {
@@ -70,8 +81,8 @@ export default async (req, res, next) => {
     try {
         await sequelize.transaction(async (transaction) => {
             const now = new Date();
-            const hashedPassword = hashPassword(req.body.password, user.salt);
-            await userService.activate(user.keycloak_id, user.mail, hashedPassword, user.salt);
+            const hashedPassword:string = hashPassword(req.body.password, user.salt);
+            await userService.activate(user.keycloak_id, user.email, req.body.password);
             await organizationModel.activate(user.organization.id, transaction);
             await userModel.update(user.id, {
                 password: hashedPassword,
