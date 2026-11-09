@@ -7,6 +7,7 @@ interface UserUpdateExtendedInput extends UserUpdateInput {
     password_conformity?: boolean;
     expertise_topics_chosen?: boolean;
     expertise_comment?: string;
+    last_access?: Date;
 }
 
 /**
