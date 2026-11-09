@@ -21,7 +21,9 @@ const sendActivationLink = sandbox.stub();
 const mails = {
     sendUserReactivationAlert: sandbox.stub(),
 };
-const keycloakRolesManagement = sandbox.stub();
+const keycloakRolesManagement = {
+    modifyUserRoles: sandbox.stub().resolves(),
+};
 
 rewiremock('#db/sequelize').with({ sequelize });
 rewiremock('#server/models/userModel/reactivate').with(reactivate);
@@ -47,6 +49,7 @@ describe('userService.reactivate()', () => {
             rollback: sandbox.stub(),
         };
         sequelize.transaction.withArgs().resolves(transaction);
+        keycloakRolesManagement.modifyUserRoles.resolves();
     });
 
     it('change le statut du compte à \'active\' ou \'new\' en base de données', async () => {

@@ -15,9 +15,13 @@ const userModel = {
 const mails = {
     sendInactiveUserDeactivationAlert: sandbox.stub(),
 };
+const keycloakRolesManagement = {
+    deactivateUser: sandbox.stub().resolves(),
+};
 
 rewiremock('#server/mails/mails').with(mails);
 rewiremock('#server/models/userModel/index').with(userModel);
+rewiremock('#server/utils/keycloak/keycloakRolesManagement').with(keycloakRolesManagement);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -25,6 +29,10 @@ import deactivateInactiveUsers from './deactivateInactiveUsers';
 rewiremock.disable();
 
 describe('userService/deactivateInactiveUsers', () => {
+    beforeEach(() => {
+        keycloakRolesManagement.deactivateUser.resolves();
+    });
+
     afterEach(() => {
         sandbox.reset();
     });
