@@ -20,10 +20,17 @@ const tchapUtils = {
 const userModel = {
     findOne: sandbox.stub(),
 };
+const fakeKeycloakApi = {
+    getUserByEmail: sandbox.stub().resolves(null),
+    createUser: sandbox.stub().resolves('fake-keycloak-id'),
+    assignRealmRoles: sandbox.stub().resolves(),
+};
+const createKeycloakApi = sandbox.stub().resolves(fakeKeycloakApi);
 
 rewiremock('#db/sequelize').with({ sequelize });
 rewiremock('#server/utils/tchap').with(tchapUtils);
 rewiremock('#server/models/userModel').with(userModel);
+rewiremock('#server/utils/keycloak/keycloak.api-client').with({ createKeycloakApi });
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -31,6 +38,13 @@ import createUser from './create';
 rewiremock.disable();
 
 describe('userService.createUser()', () => {
+    beforeEach(() => {
+        fakeKeycloakApi.getUserByEmail.resolves(null);
+        fakeKeycloakApi.createUser.resolves('fake-keycloak-id');
+        fakeKeycloakApi.assignRealmRoles.resolves();
+        createKeycloakApi.resolves(fakeKeycloakApi);
+    });
+
     afterEach(() => {
         sandbox.reset();
     });
