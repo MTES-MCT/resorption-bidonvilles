@@ -28,6 +28,9 @@ const stubs = {
         jobs: sandbox.stub().resolves([]),
         cancel: sandbox.stub().resolves(0),
     },
+    keycloakRolesManagement: {
+        deactivateUser: sandbox.stub().resolves(),
+    },
     sequelize: {
         transaction: sandbox.stub(),
     },
@@ -38,6 +41,7 @@ rewiremock('#server/models/userModel/index').with(stubs.userModel);
 rewiremock('#server/mails/mails').with(stubs.mails);
 rewiremock('#server/utils/tchap').with(stubs.tchap);
 rewiremock('#server/loaders/agendaLoader').with(() => stubs.agenda);
+rewiremock('#server/utils/keycloak/keycloakRolesManagement').with(stubs.keycloakRolesManagement);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -75,6 +79,7 @@ describe('userService.deactivate()', () => {
         };
 
         stubs.sequelize.transaction = sandbox.stub().resolves(transaction);
+        stubs.keycloakRolesManagement.deactivateUser.resolves();
     });
     afterEach(() => {
         sandbox.reset();
