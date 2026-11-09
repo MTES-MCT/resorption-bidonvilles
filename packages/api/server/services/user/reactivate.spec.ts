@@ -21,11 +21,13 @@ const sendActivationLink = sandbox.stub();
 const mails = {
     sendUserReactivationAlert: sandbox.stub(),
 };
+const keycloakRolesManagement = sandbox.stub();
 
 rewiremock('#db/sequelize').with({ sequelize });
 rewiremock('#server/models/userModel/reactivate').with(reactivate);
 rewiremock('#server/models/userModel/findOne').with(findOneUser);
 rewiremock('#server/services/user/sendActivationLink').with(sendActivationLink);
+rewiremock('#server/utils/keycloak/keycloakRolesManagement').with(keycloakRolesManagement);
 rewiremock('#server/mails/mails').with(mails);
 
 rewiremock.enable();
