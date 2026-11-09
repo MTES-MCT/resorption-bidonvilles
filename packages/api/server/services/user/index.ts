@@ -11,6 +11,8 @@ import register from './register';
 import setExpertiseTopics from './setExpertiseTopics';
 import setRoleAdmin from './setRoleAdmin';
 import sendInactiveUserAlerts from './sendInactiveUserAlerts';
+import setPassword from './setPassword';
+import update from './update';
 import updatePermissionOptions from './updatePermissionOptions';
 
 export default {
@@ -27,5 +29,7 @@ export default {
     setExpertiseTopics,
     setRoleAdmin,
     sendInactiveUserAlerts,
+    setPassword,
+    update,
     updatePermissionOptions,
 };

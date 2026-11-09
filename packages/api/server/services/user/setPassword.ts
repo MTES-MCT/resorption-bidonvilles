@@ -10,10 +10,10 @@ const { hashPassword } = authUtils;
 /**
  * Met à jour le mot de passe d'un utilisateur
  * @param {string} password - Mot de passe
- * @param {number} userId   - Identifiant de l'utilisateur
+ * @param {number} userId   - Identifiant de l'utilisateur - utile si ça n'est pas soit même
  * @param {User} user       - Objet User
  */
-const setPassword = async (password: string, userId: number, user: User) => {
+const setPassword = async (password: string, userId: number, user: User): Promise<void> => {
     if (user === null) {
         throw new ServiceError('setPassword', new Error('L\'utilisateur n\'existe pas'));
     }

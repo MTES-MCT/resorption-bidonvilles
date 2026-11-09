@@ -5,9 +5,9 @@ import type { UserUpdateInput } from '#root/types/resources/User.d';
 
 /**
  * Met à jour un utilisateur
- * @param userId    - ID utilisateur en base
- * @param userDatas - Data de l'utilisateur à modifier
- * @returns Data modifiée
+ * @param   userId    - ID utilisateur en base
+ * @param   userDatas - Data de l'utilisateur à modifier
+ * @returns           - Data modifiée
  */
 const update = async (userId: number, userDatas: UserUpdateInput): Promise<UserUpdateInput> => {
     const user = await userModel.findOne(userId, { auth: true });

@@ -107,3 +107,7 @@ export type UserUpdateInput = {
     email_unsubscriptions?: string[];
     password?: string;
 };
+
+export type UserActivateRequest = UserUpdateInput & {
+    token?: string;
+};
