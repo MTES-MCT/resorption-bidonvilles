@@ -72,8 +72,7 @@ export default async function createInvitation(req: InvitationCreateRequest, res
     try {
         await sendTchapNotifications(guests, greeter, invite_from);
     } catch (err) {
-    // eslint-disable-next-line no-console
-        console.error(err);
+        Sentry.captureException(err);
     }
 
     return res.status(200).send({});
