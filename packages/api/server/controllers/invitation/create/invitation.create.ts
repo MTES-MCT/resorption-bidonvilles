@@ -59,12 +59,7 @@ async function sendTchapNotifications(guests: InvitationGuest[], greeter: Invita
         email: guest.email,
     }));
 
-    try {
-        await triggerPeopleInvitedAlert(users as User[], greeterWithId as User, from);
-    } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err.message);
-    }
+    await triggerPeopleInvitedAlert(users as User[], greeterWithId as User, from);
 }
 
 export default async function createInvitation(req: InvitationCreateRequest, res: Response) {
