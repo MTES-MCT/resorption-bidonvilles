@@ -148,6 +148,9 @@ function loadTchap(env: Record<string, string | undefined>): TchapModule {
     const fullEnv: Record<string, string | undefined> = {
         RB_API_TCHAP_TOKEN: 'token-de-test',
         RB_API_TCHAP_BASE_URL: BASE_URL,
+        // par défaut l'étiquette est absente, indépendamment de l'environnement du processus ;
+        // un test qui en a besoin la passe explicitement
+        RB_API_ENV_LABEL: undefined,
         ...env,
     };
 
