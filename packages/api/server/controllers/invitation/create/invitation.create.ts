@@ -4,13 +4,13 @@ import mailsUtils from '#server/mails/mails';
 import tchapUtils from '#server/utils/tchap';
 import userModel from '#server/models/userModel';
 import { User } from '#root/types/resources/User.d';
-import { InvitationCreateRequest, InvitationGuest, InvitationGreeter } from '#root/types/resources/InvitationCreateRequestInterface.d';
+import { InvitationCreateRequest, InvitationPerson } from '#root/types/resources/InvitationCreateRequestInterface.d';
 
 const { sendUserPlatformInvitation } = mailsUtils;
 const { triggerPeopleInvitedAlert } = tchapUtils;
 const { formatName } = userModel;
 
-async function sendEmailsInvitations(guests: InvitationGuest[], greeter: InvitationGreeter): Promise<void> {
+async function sendEmailsInvitations(guests: InvitationPerson[], greeter: InvitationPerson): Promise<void> {
     await Promise.all(guests.map(async (originalGuest) => {
         const guest = {
             first_name: originalGuest.first_name,
@@ -30,7 +30,7 @@ async function sendEmailsInvitations(guests: InvitationGuest[], greeter: Invitat
     }));
 }
 
-async function sendTchapNotifications(guests: InvitationGuest[], greeter: InvitationGreeter, invite_from: string): Promise<void> {
+async function sendTchapNotifications(guests: InvitationPerson[], greeter: InvitationPerson, invite_from: string): Promise<void> {
     let from = null;
     // invite_from is initialized in pages/Contact/index.vue or in api/server/amils/mails.js (see sendUserShare)
     if (invite_from === 'access_request') {
