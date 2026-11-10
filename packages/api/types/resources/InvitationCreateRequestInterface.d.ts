@@ -1,21 +1,11 @@
 import { type Request } from 'express';
+import { type User } from '#root/types/resources/User.d';
 
-export interface InvitationGuest {
-    first_name: string;
-    last_name: string;
-    email: string;
-}
-
-export interface InvitationGreeter {
-    first_name: string;
-    last_name: string;
-    email: string;
-}
-
+export type InvitationPerson = Pick<User, 'first_name' | 'last_name' | 'email'>;
 export interface InvitationCreateRequest extends Request {
     body: {
-        greeter: InvitationGreeter;
-        guests: InvitationGuest[];
+        greeter: InvitationPerson;
+        guests: InvitationPerson[];
         invite_from: string;
     };
 }
