@@ -292,12 +292,14 @@ describe('controllers/invitation.create()', () => {
             expect(stubs.tchap.triggerPeopleInvitedAlert.firstCall.args[1]).to.deep.equal({ ...greeter, id: null });
         });
 
-        it('répond 200 et journalise l\'erreur si la notification échoue', async () => {
-            stubs.tchap.triggerPeopleInvitedAlert.rejects(new Error('Tchap indisponible'));
+        it('répond 200 et signale l\'erreur à Sentry si la notification échoue', async () => {
+            const tchapError = new Error('Tchap indisponible');
+            stubs.tchap.triggerPeopleInvitedAlert.rejects(tchapError);
 
             await callController(buildReq(), res);
 
-            expect(consoleErrorStub).to.have.been.called;
+            expect(stubs.sentry.captureException).to.have.been.calledOnceWithExactly(tchapError);
+            expect(consoleErrorStub).not.to.have.been.called;
             expect(res.status).to.have.been.calledOnceWithExactly(200);
             expect(res.send).to.have.been.calledOnceWithExactly({});
         });
