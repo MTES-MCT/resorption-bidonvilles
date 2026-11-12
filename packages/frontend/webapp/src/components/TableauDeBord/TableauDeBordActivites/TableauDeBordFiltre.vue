@@ -7,7 +7,8 @@
                 : 'hover:underline',
             focusClasses.ring,
         ]"
-        :aria-labelledby="isActive ? `Filtre actif : ${label}` : label"
+        type="button"
+        :aria-pressed="isActive"
         @click="setFilter"
     >
         {{ label }}

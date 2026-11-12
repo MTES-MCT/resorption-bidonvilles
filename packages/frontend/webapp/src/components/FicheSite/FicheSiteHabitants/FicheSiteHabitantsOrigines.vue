@@ -8,7 +8,7 @@
                 :key="origin.id"
                 class="flex items-center space-x-2"
             >
-                <img :src="origin.img" class="w-8" />
+                <img :src="origin.img" class="w-8" alt="" />
                 <span class="">{{ origin.label }}</span>
             </p>
         </template>

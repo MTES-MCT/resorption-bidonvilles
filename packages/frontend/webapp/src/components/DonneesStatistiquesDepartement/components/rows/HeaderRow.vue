@@ -54,7 +54,12 @@
                     name="ri:sun-fill"
                 />
 
-                <img v-else :src="flagMap[col.icon].icon" class="w-6 ml-auto" />
+                <img
+                    v-else
+                    :src="flagMap[col.icon].icon"
+                    class="w-6 ml-auto"
+                    :alt="col.title"
+                />
                 <span
                     v-if="
                         departementMetricsStore.sort[
@@ -121,7 +126,7 @@ const globalCollapseStatus = computed(() => {
         return "mixed";
     }
 
-    return hasFalse ? false : true;
+    return !hasFalse;
 });
 
 const collapseTitle = computed(() => {

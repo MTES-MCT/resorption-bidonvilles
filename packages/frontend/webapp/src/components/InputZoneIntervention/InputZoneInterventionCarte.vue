@@ -12,6 +12,7 @@
         <p class="hover:text-primary self-end">
             <Button
                 type="button"
+                :aria-label="`Retirer le territoire ${area.name}`"
                 :padding="false"
                 variant="primaryText"
                 icon="trash-alt"

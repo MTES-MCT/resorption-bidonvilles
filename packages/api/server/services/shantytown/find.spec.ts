@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 import shantytownModel from '#server/models/shantytownModel';
+import organizationModel from '#server/models/organizationModel';
 import ServiceError from '#server/errors/ServiceError';
 import { serialized as fakeUser } from '#test/utils/user';
 import { serialized as fakeTown } from '#test/utils/shantytown';
@@ -17,6 +18,7 @@ describe('services/shantytown', () => {
         beforeEach(() => {
             stubs = {
                 findOne: sinon.stub(shantytownModel, 'findOne'),
+                findJusticeReadersByShantytown: sinon.stub(organizationModel, 'findJusticeReadersByShantytown').resolves([]),
             };
         });
 
