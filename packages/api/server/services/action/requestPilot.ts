@@ -1,10 +1,10 @@
-import mattermostUtils from '#server/utils/mattermost';
+import tchapUtils from '#server/utils/tchap';
 import ServiceError from '#server/errors/ServiceError';
 import { AuthUser } from '#server/middlewares/authMiddleware';
 import fetch from './fetch';
 import { EnrichedAction } from '#root/types/resources/ActionEnriched.d';
 
-const { triggerRequestActionPilot } = mattermostUtils;
+const { triggerRequestActionPilot } = tchapUtils;
 
 const requestPilot = async (actionId: number, user: AuthUser) => {
     try {

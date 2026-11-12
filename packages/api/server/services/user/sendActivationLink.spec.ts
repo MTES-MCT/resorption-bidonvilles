@@ -144,7 +144,7 @@ describe('userService/sendActivationLink', () => {
             return;
         }
 
-        expect.fail('should have thrown an error');
+        expect.fail('une erreur aurait dû être levée');
     });
 
     it('en cas d\'erreur, ne rollback pas la transaction s\'il s\'agit d\'une transaction passée en paramètre', async () => {
@@ -158,7 +158,7 @@ describe('userService/sendActivationLink', () => {
             return;
         }
 
-        expect.fail('should have thrown an error');
+        expect.fail('une erreur aurait dû être levée');
     });
 
     it('en cas d\'erreur, lance une ServiceError', async () => {
@@ -174,6 +174,6 @@ describe('userService/sendActivationLink', () => {
             return;
         }
 
-        expect.fail('should have thrown an error');
+        expect.fail('une erreur aurait dû être levée');
     });
 });

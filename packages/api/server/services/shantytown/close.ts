@@ -1,5 +1,5 @@
 import shantytownModel from '#server/models/shantytownModel';
-import mattermostUtils from '#server/utils/mattermost';
+import tchapUtils from '#server/utils/tchap';
 import sendMailForClosedTown from './_common/sendMailForClosedTown';
 
 export default async (user, data) => {
@@ -18,12 +18,12 @@ export default async (user, data) => {
     );
     const updatedTown = await shantytownModel.findOne(user, data.shantytown.id);
 
-    // Send a mattermost alert, if it fails, do nothing
+    // Send a Tchap alert, if it fails, do nothing
     try {
-        await mattermostUtils.triggerShantytownCloseAlert(updatedTown, user);
+        await tchapUtils.triggerShantytownCloseAlert(updatedTown, user);
     } catch (err) {
         // eslint-disable-next-line no-console
-        console.log(`Error with shantytown close mattermost webhook : ${err.message}`);
+        console.log(`Error with shantytown close Tchap webhook : ${err.message}`);
     }
     // Send a notification to all users of the related departement, if it fails, do nothing
     try {
