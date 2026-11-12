@@ -1,5 +1,5 @@
 <template>
-    <fieldset class="fieldset-reset">
+    <fieldset class="m-0 p-0 min-w-0">
         <legend class="text-xl font-bold mb-4 pl-4">Nouveau rôle</legend>
         <ul class="mb-4 pl-12">
             <li v-for="role in options" :key="role.id">

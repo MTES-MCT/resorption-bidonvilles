@@ -18,28 +18,28 @@
                 <ToolTip
                     tip="Cliquez ici pour modifier vos champs d'intervention"
                 >
-                    <Button
-                        type="button"
-                        icon="plus"
-                        size="sm"
-                        variant="primaryOutline"
-                        aria-label="Modifier mes champs d'intervention"
+                    <DsfrButton
+                        iconOnly
+                        icon="fr-icon-add-circle-line"
+                        tertiary
+                        noOutline
+                        title="Modifier mes champs d'intervention"
                         @click="openSelfThemes"
                     />
                 </ToolTip>
             </div>
             <p class="text-right mt-6">
-                <Button
-                    type="button"
-                    size="sm"
-                    variant="primaryOutline"
-                    icon="fa-regular fa-trash-alt"
+                <DsfrButton
+                    icon="fr-icon-delete-line"
                     iconPosition="left"
+                    tertiary
+                    noOutline
+                    title="Signaler que je n'interviens plus sur ce site"
                     @click="removeSelf"
                     :loading="isLoading"
                 >
-                    Signaler que je n'interviens plus sur ce site</Button
-                >
+                    Signaler que je n'interviens plus sur ce site
+                </DsfrButton>
             </p>
         </div>
     </article>
@@ -50,7 +50,7 @@ import { toRefs, ref } from "vue";
 import { useTownsStore } from "@/stores/towns.store";
 import { useNotificationStore } from "@/stores/notification.store";
 import { useEventBus } from "@common/helpers/event-bus";
-import { Button, Icon, ToolTip } from "@resorptionbidonvilles/ui";
+import { Icon, ToolTip } from "@resorptionbidonvilles/ui";
 import CarteIntervenantSelfTag from "./CarteIntervenantSelfTag.vue";
 
 const props = defineProps({

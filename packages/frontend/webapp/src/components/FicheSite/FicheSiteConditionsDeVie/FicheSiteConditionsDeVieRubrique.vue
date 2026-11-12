@@ -41,7 +41,7 @@
                     :class="{
                         'border-b-2 border-G200 ': !collapsed,
                     }"
-                    class="rubrique-titre py-2 font-bold text-primary flex items-center justify-between cursor-pointer"
+                    class="w-full text-left py-2 font-bold text-primary flex items-center justify-between cursor-pointer"
                     :aria-expanded="!collapsed"
                     :aria-controls="detailsId"
                     @click="toggleCollapse"
