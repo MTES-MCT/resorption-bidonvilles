@@ -1,22 +1,17 @@
+import { type Response } from 'express';
+import * as Sentry from '@sentry/node';
 import mailsUtils from '#server/mails/mails';
-import mattermostUtils from '#server/utils/mattermost';
-import config from '#server/config';
+import tchapUtils from '#server/utils/tchap';
 import userModel from '#server/models/userModel';
 import { User } from '#root/types/resources/User.d';
+import { InvitationCreateRequest, InvitationPerson } from '#root/types/resources/InvitationCreateRequestInterface.d';
 
 const { sendUserPlatformInvitation } = mailsUtils;
-const { triggerPeopleInvitedAlert } = mattermostUtils;
-const { mattermost } = config;
+const { triggerPeopleInvitedAlert } = tchapUtils;
 const { formatName } = userModel;
 
-type Greeter = {
-    first_name: string,
-    last_name: string,
-    email: string,
-};
-
-async function sendEmailsInvitations(guests: { first_name: string; last_name: string; email: string }[], greeter: Greeter) {
-    guests.forEach((originalGuest) => {
+async function sendEmailsInvitations(guests: InvitationPerson[], greeter: InvitationPerson): Promise<void> {
+    await Promise.all(guests.map(async (originalGuest) => {
         const guest = {
             first_name: originalGuest.first_name,
             last_name: originalGuest.last_name,
@@ -24,22 +19,18 @@ async function sendEmailsInvitations(guests: { first_name: string; last_name: st
         };
 
         try {
-            sendUserPlatformInvitation(guest, {
+            await sendUserPlatformInvitation(guest, {
                 variables: {
                     inviterName: formatName(greeter),
                 },
             });
         } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error('Error with invited people email :', err.message);
+            Sentry.captureException(err);
         }
-    });
+    }));
 }
 
-async function sendMattermostNotifications(guests: { first_name: string; last_name: string; email: string }[], greeter: Greeter, invite_from: string) {
-    if (!mattermost) {
-        return;
-    }
+async function sendTchapNotifications(guests: InvitationPerson[], greeter: InvitationPerson, invite_from: string): Promise<void> {
     let from = null;
     // invite_from is initialized in pages/Contact/index.vue or in api/server/amils/mails.js (see sendUserShare)
     if (invite_from === 'access_request') {
@@ -62,42 +53,27 @@ async function sendMattermostNotifications(guests: { first_name: string; last_na
         id: greeterUser ? greeterUser.id : null,
     };
 
-    guests.forEach(async (guest) => {
-        const user: Partial<User> = {
-            first_name: guest.first_name,
-            last_name: guest.last_name,
-            email: guest.email,
-        };
+    const users: Partial<User>[] = guests.map(guest => ({
+        first_name: guest.first_name,
+        last_name: guest.last_name,
+        email: guest.email,
+    }));
 
-        try {
-            await triggerPeopleInvitedAlert(user as User, greeterWithId as User, from);
-        } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error(err.message);
-        }
-    });
+    await triggerPeopleInvitedAlert(users as User[], greeterWithId as User, from);
 }
 
-export default async (req, res, next) => {
+export default async function createInvitation(req: InvitationCreateRequest, res: Response) {
     const { greeter, guests, invite_from } = req.body;
 
     // Send an email to each guest
-    try {
-        await sendEmailsInvitations(guests, greeter);
-    } catch (err) {
-        res.status(500).send({
-            user_message: 'Impossible d\'envoyer les invitations',
-        });
-        return next(err);
-    }
+    await sendEmailsInvitations(guests, greeter);
 
-    // Send a mattermost alert for each guest
+    // Send a Tchap alert for each guest
     try {
-        await sendMattermostNotifications(guests, greeter, invite_from);
+        await sendTchapNotifications(guests, greeter, invite_from);
     } catch (err) {
-    // eslint-disable-next-line no-console
-        console.error(err);
+        Sentry.captureException(err);
     }
 
     return res.status(200).send({});
-};
+}

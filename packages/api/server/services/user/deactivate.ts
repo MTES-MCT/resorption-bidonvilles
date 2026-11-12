@@ -2,8 +2,8 @@ import { sequelize } from '#db/sequelize';
 import userModel from '#server/models/userModel/index';
 import ServiceError from '#server/errors/ServiceError';
 import mails from '#server/mails/mails';
-import mattermost from '#server/utils/mattermost';
 import getPermission from '#server/utils/permission/getPermission';
+import tchapUtils from '#server/utils/tchap';
 import agendaFactory from '#server/loaders/agendaLoader';
 import { User } from '#root/types/resources/User.d';
 
@@ -17,11 +17,11 @@ function checkUser(user: User): void {
     }
 }
 
-async function findAndValidateUser(id: number): Promise<User> {
+async function findAndValidateUser(id: number, author: User | null): Promise<User> {
     let user: User;
 
     try {
-        user = await userModel.findOne(id, undefined, null, 'deactivate');
+        user = await userModel.findOne(id, undefined, author, 'deactivate');
         checkUser(user);
         return user;
     } catch (error) {
@@ -61,7 +61,7 @@ async function sendNotifications(user: User, selfDeactivation: boolean, reason: 
         if (selfDeactivation) {
             await Promise.all([
                 mails.sendUserDeactivationConfirmation(user),
-                mattermost.triggerNotifyNewUserSelfDeactivation(user),
+                tchapUtils.triggerNotifyNewUserSelfDeactivation(user),
             ]);
         } else {
             await mails.sendUserDeactivationByAdminAlert(user, {
@@ -107,13 +107,21 @@ const onboardingJob = [
 ];
 
 export default async function deactivate(id: number, selfDeactivation: boolean, author: User, reason: string = null, anonymizationRequested: boolean = false): Promise<User> {
-    const permission = getPermission(author, 'deactivate', 'user');
-    if (!permission) {
-        throw new ServiceError('deactivation_permission_failure', new Error('Erreur de permission'));
+    // L'auto-désactivation est offerte à tout utilisateur par l'onglet « Désactiver mon compte »,
+    // sans qu'il ait la permission user.deactivate : elle est donc exemptée de la garde et de
+    // son filtre territorial. id === author.id est exigé pour que le booléen seul ne puisse
+    // jamais contourner la garde et viser un autre compte.
+    const isSelfDeactivation = selfDeactivation && id === author.id;
+
+    if (!isSelfDeactivation) {
+        const permission = getPermission(author, 'deactivate', 'user');
+        if (!permission) {
+            throw new ServiceError('deactivation_permission_failure', new Error('Erreur de permission'));
+        }
     }
     let user: User;
     try {
-        user = await findAndValidateUser(id);
+        user = await findAndValidateUser(id, isSelfDeactivation ? null : author);
     } catch (e) {
         throw new ServiceError('user_search_failure', new Error(e.message));
     }

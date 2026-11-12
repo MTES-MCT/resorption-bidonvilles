@@ -22,6 +22,7 @@ const stubs = {
     shantytownCreate: sandbox.stub(),
     findOne: sandbox.stub(),
     triggerShantytownCreationAlert: sandbox.stub(),
+    triggerReinstallationAlert: sandbox.stub(),
     getLocationWatchers: sandbox.stub(),
     sendUserShantytownDeclared: sandbox.stub(),
     socialOriginCreate: sandbox.stub(),
@@ -43,8 +44,9 @@ rewiremock('#server/models/shantytownToiletTypesModel/create').with(stubs.shanty
 rewiremock('#db/sequelize').with({ sequelize: stubs.sequelize });
 rewiremock('#server/models/electricityAccessTypesModel/create').with(stubs.electricityAccessTypesCreate);
 rewiremock('#server/services/shantytownParcelOwner').with(stubs.shantytownParcelOwnerService);
-rewiremock('#server/utils/mattermost').with({
+rewiremock('#server/utils/tchap').with({
     triggerShantytownCreationAlert: stubs.triggerShantytownCreationAlert,
+    triggerReinstallationAlert: stubs.triggerReinstallationAlert,
 });
 rewiremock('#server/models/incomingTownsModel/create').with(stubs.incomingTownsCreate);
 rewiremock('#server/models/userModel/getLocationWatchers').with(stubs.getLocationWatchers);
@@ -172,7 +174,7 @@ describe('services/shantytown', () => {
             expect(stubs.shantytownParcelOwnerService.create).to.have.been.calledOnceWith(fakeUserData, shantytownId, owners, stubs.transaction);
         });
 
-        it('si la connexion à mattermost est établie, envoie une alerte', async () => {
+        it('si la connexion à Tchap est établie, envoie une alerte', async () => {
             fakeUserData.isAllowedTo.returns(true);
             stubs.shantytownCreate.resolves(shantytownId);
             stubs.findOne.resolves(town);

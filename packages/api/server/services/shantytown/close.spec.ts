@@ -17,7 +17,7 @@ const stubs = {
 rewiremock('./_common/sendMailForClosedTown').with(stubs.sendMail);
 rewiremock('#server/models/shantytownModel/update').with(stubs.update);
 rewiremock('#server/models/shantytownModel/findOne').with(stubs.findOne);
-rewiremock('#server/utils/mattermost').with({
+rewiremock('#server/utils/tchap').with({
     triggerShantytownCloseAlert: stubs.triggerShantytownCloseAlert,
 });
 
@@ -68,7 +68,7 @@ describe('services/shantytown', () => {
             expect(updatedAt).to.be.eql(today);
             expect(response).to.be.eql({});
         });
-        it('envoie une notification mattermost', async () => {
+        it('envoie une notification Tchap', async () => {
             await closeService(user, data);
             // eslint-disable-next-line no-unused-expressions
             expect(stubs.triggerShantytownCloseAlert).to.have.been.calledOnce;
