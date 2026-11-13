@@ -5,6 +5,5 @@ export default async (req, res) => res
     .send({
         link: auth.getAccountActivationLink(
             req.body.userAccess.user_access_id,
-            req.body.userAccess.expires_at,
         ),
     });
