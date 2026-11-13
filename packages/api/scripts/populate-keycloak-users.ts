@@ -156,31 +156,58 @@ function buildCredentials(password: string | null, salt: string | null): Credent
 // Logique principale
 // ---------------------------------------------------------------------------
 
-async function main(): Promise<void> {
-    log('# Démarrage du script de peuplement de Keycloak');
+function getRealmRole(user: DbUser): 'RB_ADMINISTRATEUR' | 'RB_UTILISATEUR' {
+    const isAdmin = ['national_admin', 'local_admin'].includes(user.fk_role ?? '');
 
-    if (DRY_RUN) {
-        log('🔍  Mode --dry-run activé : aucune modification ne sera effectuée.\n');
+    return isAdmin ? 'RB_ADMINISTRATEUR' : 'RB_UTILISATEUR';
+}
+
+async function syncUserInKeycloak(
+    user: DbUser,
+    keycloakApi: Awaited<ReturnType<typeof createKeycloakApi>>,
+): Promise<{ keycloakId: string; action: 'created' | 'reused' | 'skipped' }> {
+    if (user.keycloak_id && SKIP_EXISTING) {
+        return { keycloakId: user.keycloak_id, action: 'skipped' };
     }
 
-    // 1. Connexion à la base
-    await sequelize.authenticate();
-    log('✅  Connexion à la base de données OK.');
+    const existing = await keycloakApi.getUserByEmail(user.email);
+    const realmRole = getRealmRole(user);
 
-    // createKeycloakApi gère lui-même le cache et le refresh des tokens admin Keycloak
-    // et PISTE dans sa closure. Aucun tokenProvider externe nécessaire ici.
-    const keycloakApi = await createKeycloakApi(adminAxios, publicAxios);
+    if (existing?.id) {
+        const keycloakId = existing.id;
 
+        if (!DRY_RUN) {
+            await keycloakApi.assignRealmRoles(keycloakId, [realmRole]);
+        }
 
-    // 2. Vérification de la connexion Keycloak (déclenche le premier fetch de token)
-    log(`✅  Connexion à Keycloak OK (server: ${KEYCLOAK_BASE_URL} realm: ${KEYCLOAK_REALM}).\n`);
+        return { keycloakId, action: 'reused' };
+    }
 
-    // 3. Lecture des utilisateurs
+    if (DRY_RUN) {
+        return { keycloakId: 'dry-run', action: 'created' };
+    }
+
+    const keycloakId = await keycloakApi.createUser({
+        username: user.email,
+        email: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        enabled: ['active', 'new'].includes(user.fk_status),
+        emailVerified: true,
+        credentials: buildCredentials(user.password, user.salt),
+    });
+
+    await keycloakApi.assignRealmRoles(keycloakId, [realmRole]);
+
+    return { keycloakId, action: 'created' };
+}
+
+async function getUsersToSync(): Promise<DbUser[]> {
     const whereClause = SKIP_EXISTING
         ? "fk_status IN ('active', 'new') AND keycloak_id IS NULL"
         : "fk_status IN ('active', 'new')";
 
-    const users = await sequelize.query<DbUser>(
+    return sequelize.query<DbUser>(
         `SELECT user_id, email, first_name, last_name, fk_status, fk_role, fk_role_regular, password, salt, keycloak_id
          FROM users
          WHERE ${whereClause}
@@ -188,15 +215,12 @@ async function main(): Promise<void> {
          ORDER BY user_id`,
         { type: QueryTypes.SELECT },
     );
+}
 
-    log(`📋  ${users.length} utilisateur(s) à traiter.`);
-    if (users.length === 0) {
-        log('Rien à faire.');
-        await sequelize.close();
-        return;
-    }
-
-    // 4. Traitement utilisateur par utilisateur
+async function processUsers(
+    users: DbUser[],
+    keycloakApi: Awaited<ReturnType<typeof createKeycloakApi>>,
+): Promise<{ created: number; reused: number; skipped: number; errors: number }> {
     let created = 0;
     let reused = 0;
     let skipped = 0;
@@ -206,69 +230,33 @@ async function main(): Promise<void> {
         const label = `[#${user.user_id}] ${user.email}`;
 
         try {
-            // Cas 1 : l'utilisateur a déjà un keycloak_id et on ne force pas la resynchronisation
-            if (user.keycloak_id && SKIP_EXISTING) {
-                log(`  ⏭   ${label} — déjà synchronisé (${user.keycloak_id}), ignoré.`);
-                skipped++;
-                continue;
-            }
+            const result = await syncUserInKeycloak(user, keycloakApi);
+            const isDryRun = DRY_RUN ? ' serait' : '';
 
-            // Cas 2 : cherche si l'utilisateur existe déjà dans Keycloak par email
-            log(`${user.email} : Recherche dans Keycloak par email...`);
-            const existing = await keycloakApi.getUserByEmail(user.email);
-            const roleAdmin = user.fk_role;
-            const isAdmin = ['national_admin', 'local_admin'].includes(roleAdmin ?? '');
-            console.log(`Existing? ${JSON.stringify(existing)} and isAdmin? ${isAdmin}`);
-
-            let keycloakId: string;
-
-            if (existing?.id) {
-                // Déjà présent dans Keycloak → on réutilise son UUID et on synchronise rôles / OTP
-                keycloakId = existing.id;
-
-                if (DRY_RUN) {
-                    log(`  🔄  ${label} — trouvé dans Keycloak (${keycloakId}) [dry-run, OTP: ${isAdmin ? 'oui' : 'non'}].`);
-                    reused++;
-                } else {
-                    await keycloakApi.assignRealmRoles(keycloakId, [isAdmin ? 'RB_ADMINISTRATEUR' : 'RB_UTILISATEUR']);
-
-                    log(`  🔄  ${label} — synchronisé dans Keycloak (${keycloakId})${isAdmin ? ' [OTP]' : ''}.`);
-                    reused++;
-                }
-                // throw new Error('Stop after role sync');
-            } else {
-                // Pas encore dans Keycloak → on le crée
-                if (DRY_RUN) {
-                    log(`  ➕  ${label} — serait créé (dry-run, OTP: ${isAdmin ? 'oui' : 'non'}).`);
-                    created++;
+            switch (result.action) {
+                case 'skipped':
+                    log(`  ⏭   ${label} — déjà synchronisé (${result.keycloakId}), ignoré.`);
+                    skipped++;
                     continue;
-                }
-
-                keycloakId = await keycloakApi.createUser({
-                    username: user.email,
-                    email: user.email,
-                    firstName: user.first_name,
-                    lastName: user.last_name,
-                    enabled: ['active', 'new'].includes(user.fk_status),
-                    emailVerified: true,
-                    credentials: buildCredentials(user.password, user.salt),
-                    // requiredActions: isAdmin ? ['CONFIGURE_TOTP'] : [],
-                });
-
-                // On attribue le rôle admin ou utilisateur
-                await keycloakApi.assignRealmRoles(keycloakId, [isAdmin ? 'RB_ADMINISTRATEUR' : 'RB_UTILISATEUR']);
-
-                log(`  ➕  ${label} — créé dans Keycloak (${keycloakId}).`);
-                created++;
+                case 'created':
+                    log(`  ➕  ${label} —${isDryRun} créé dans Keycloak (${result.keycloakId}).`);
+                    created++;
+                    break;
+                default:
+                    log(`  🔄  ${label} — synchronisé dans Keycloak (${result.keycloakId}).`);
+                    reused++;
+                    break;
             }
 
-            // 5. Mise à jour de la base
+            const saveMessage = !DRY_RUN
+                ? `keycloak_id = ${result.keycloakId} enregistré en base.`
+                : `keycloak_id = ${result.keycloakId} serait enregistré en base (dry-run).`;
+
             if (!DRY_RUN) {
-                await saveKeycloakId(user.user_id, keycloakId);
-                log(`       ✍️   keycloak_id = ${keycloakId} enregistré en base.`);
-            } else {
-                log(`       ✍️   keycloak_id = ${keycloakId} serait enregistré en base (dry-run).`);
+                await saveKeycloakId(user.user_id, result.keycloakId);
             }
+
+            log(`       ✍️   ${saveMessage}`);
         } catch (err) {
             errors++;
             const message = err instanceof Error ? err.message : String(err);
@@ -276,18 +264,46 @@ async function main(): Promise<void> {
         }
     }
 
-    // 6. Récapitulatif
+    return {
+        created, reused, skipped, errors,
+    };
+}
+
+async function main(): Promise<void> {
+    log('# Démarrage du script de peuplement de Keycloak');
+
+    if (DRY_RUN) {
+        log('🔍  Mode --dry-run activé : aucune modification ne sera effectuée.\n');
+    }
+
+    await sequelize.authenticate();
+    log('✅  Connexion à la base de données OK.');
+
+    const keycloakApi = createKeycloakApi(adminAxios, publicAxios);
+    log(`✅  Connexion à Keycloak OK (server: ${KEYCLOAK_BASE_URL} realm: ${KEYCLOAK_REALM}).\n`);
+
+    const users = await getUsersToSync();
+
+    log(`📋  ${users.length} utilisateur(s) à traiter.`);
+    if (users.length === 0) {
+        log('Rien à faire.');
+        await sequelize.close();
+        return;
+    }
+
+    const stats = await processUsers(users, keycloakApi);
+
     log('\n─────────────────────────────────────────');
     log(`Résultat (${DRY_RUN ? 'dry-run' : 'réel'}) :`);
-    log(`  ➕  Créés      : ${created}`);
-    log(`  🔄  Réutilisés : ${reused}`);
-    log(`  ⏩  Ignorés    : ${skipped}`);
-    log(`  ❌  Erreurs    : ${errors}`);
+    log(`  ➕  Créés      : ${stats.created}`);
+    log(`  🔄  Réutilisés : ${stats.reused}`);
+    log(`  ⏩  Ignorés    : ${stats.skipped}`);
+    log(`  ❌  Erreurs    : ${stats.errors}`);
     log('─────────────────────────────────────────');
 
     await sequelize.close();
 
-    if (errors > 0) {
+    if (stats.errors > 0) {
         process.exit(1);
     }
 }
