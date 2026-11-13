@@ -103,8 +103,8 @@ async function authenticateUser(req) {
 function hasPermission(permissions, permission): boolean {
     const [entity, feature] = permission.split('.');
 
-    return Object.prototype.hasOwnProperty.call(permissions, entity)
-        && Object.prototype.hasOwnProperty.call(permissions[entity], feature)
+    return Object.hasOwn.call(permissions, entity)
+        && Object.hasOwn.call(permissions[entity], feature)
         && permissions[entity][feature].allowed === true;
 }
 
