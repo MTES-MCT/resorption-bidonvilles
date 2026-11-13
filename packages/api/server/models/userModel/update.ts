@@ -96,3 +96,4 @@ const update = async (userId: number, values: UserUpdateExtendedInput, transacti
         }
     }
 };
+export default update;
