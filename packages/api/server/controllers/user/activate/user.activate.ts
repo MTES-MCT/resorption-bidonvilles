@@ -26,7 +26,7 @@ interface ActivateUserRequest extends Request {
  * @param   next                - {NextFunction} La fonction suivante
  * @returns {Promise<Response>} - Renvoie la réponse Express
  */
-export default async (req:ActivateUserRequest, res:Response, next:NextFunction): Promise<Response | void> => {
+const activateUser = async (req:ActivateUserRequest, res:Response, next:NextFunction): Promise<Response | void> => {
     if (!req.body.token) {
         return res.status(400).send({
             user_message: 'Le jeton d\'activation est manquant',
