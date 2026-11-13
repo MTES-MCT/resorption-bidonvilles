@@ -55,6 +55,17 @@ const KEYCLOAK_BASE_URL = process.env.RB_API_KEYCLOAK_URL ?? 'https://keycloak.r
 const PISTE_URL = process.env.RB_API_PISTE_URL ?? 'https://keycloak.resorption-bidonvilles.localhost/auth';
 
 /**
+     * Helper - Construit un message d'erreur.
+     * @param {string} httpMethod - Méthode HTTP
+     * @param {string} url - URL
+     * @param {AxiosError<{ errorMessage: string }>} axiosError - Erreur Axios
+     * @returns {string} Message d'erreur
+     */
+function buildMessage(httpMethod: string, url: string, axiosError: AxiosError<{ errorMessage: string }>): string {
+    return `Echec ${httpMethod} ${url} avec le statut ${axiosError.response?.statusText ?? '(pas de code)'} et le détail ${axiosError.response ? JSON.stringify(axiosError.response.data) : 'Pas de message'}`;
+}
+
+/**
  * Functional version of the Keycloak API client. Instead of a class, we expose a factory
  * `createKeycloakApi` that receives the required Axios instances and the app config
  * service, and returns a plain object containing async functions that perform the same
@@ -67,7 +78,7 @@ const PISTE_URL = process.env.RB_API_PISTE_URL ?? 'https://keycloak.resorption-b
  *                                   dans chaque requête via des intercepteurs et rafraîchis
  *                                   en cas de réponse 401.
  */
-export async function createKeycloakApi(
+export function createKeycloakApi(
     rawAuthenticatedInstance?: AxiosInstance,
     rawPublicInstance?: AxiosInstance,
     tokenProviders?: TokenProviders,
@@ -99,19 +110,15 @@ export async function createKeycloakApi(
             scope: 'openid',
         });
 
-        try {
-            const response: AxiosResponse<TokenResponse> = await publicInstance.post<TokenResponse>(
-                `/auth/realms/${realm}/protocol/openid-connect/token`,
-                params,
-                { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
-            );
+        const response: AxiosResponse<TokenResponse> = await publicInstance.post<TokenResponse>(
+            `/auth/realms/${realm}/protocol/openid-connect/token`,
+            params,
+            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+        );
 
-            // On ne stocke dans le cache QU'APRÈS un fetch réussi.
-            cachedAdminToken = response.data.access_token;
-            return cachedAdminToken;
-        } catch (err) {
-            throw err;
-        }
+        // On ne stocke dans le cache QU'APRÈS un fetch réussi.
+        cachedAdminToken = response.data.access_token;
+        return cachedAdminToken;
     }
 
     /**
@@ -231,20 +238,9 @@ export async function createKeycloakApi(
                     return authenticatedInstance.request(originalRequest);
                 }
             }
-            return Promise.reject(error);
+            throw error;
         },
     );
-
-    /**
-     * Helper - Construit un message d'erreur.
-     * @param {string} httpMethod - Méthode HTTP
-     * @param {string} url - URL
-     * @param {AxiosError<{ errorMessage: string }>} axiosError - Erreur Axios
-     * @returns {string} Message d'erreur
-     */
-    function buildMessage(httpMethod: string, url: string, axiosError: AxiosError<{ errorMessage: string }>): string {
-        return `Echec ${httpMethod} ${url} avec le statut ${axiosError.response?.statusText ?? '(pas de code)'} et le détail ${axiosError.response ? JSON.stringify(axiosError.response.data) : 'Pas de message'}`;
-    }
 
     /**
      * POST - Envoie une requête POST à l'API
@@ -329,13 +325,8 @@ export async function createKeycloakApi(
      * @returns {Promise<AxiosResponse>} Réponse de l'API
      */
     async function healthcheck(): Promise<AxiosResponse> {
-        let healthResponse: AxiosResponse;
-        try {
-            healthResponse = await authenticatedInstance.get('/healthcheck');
-            return healthResponse.data;
-        } catch (e) {
-            throw e;
-        }
+        const healthResponse: AxiosResponse = await authenticatedInstance.get('/healthcheck');
+        return healthResponse.data;
     }
 
     /**
