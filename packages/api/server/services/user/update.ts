@@ -42,7 +42,7 @@ const update = async (userId: number, userDatas: UserUpdateInput): Promise<UserU
             delete filteredData.email_unsubscriptions;
         }
         return filteredData;
-    } catch (error) {
+    } catch {
         throw new ServiceError('update_failed', new Error('Une erreur est survenue dans l\'écriture de vos informations en base de données.'));
     }
 };
