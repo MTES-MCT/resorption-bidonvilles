@@ -254,7 +254,7 @@ function intermediateSubmit(values) {
         ? formattedValues.private_organization.data.id
         : null;
 
-    if (formattedValues.organisation && formattedValues.organisation.data) {
+    if (formattedValues.organisation?.data) {
         const category =
             formattedValues.organisation.data.category?.toLowerCase();
         formattedValues.organization_category = category;
