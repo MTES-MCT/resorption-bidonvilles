@@ -12,7 +12,7 @@ interface UserRequest extends Request {
  * @param next                         - {NextFunction} La prochaine fonction de callback
  * @returns {Promise<Response | void>} - La réponse http sortante ou la prochaine fonction de callback
  */
-export default async (req: UserRequest, res: Response, next: NextFunction): Promise<Response | void> => {
+const updateUser = async (req: UserRequest, res: Response, next: NextFunction): Promise<Response | void> => {
     if ((req.user.role_id !== 'national_admin' && req.user.id !== req.body?.id)) {
         return res.status(403).send({
             user_message: 'Vous n\'avez pas les droits suffisants pour modifier cet utilisateur',
@@ -42,3 +42,4 @@ export default async (req: UserRequest, res: Response, next: NextFunction): Prom
         return next(error);
     }
 };
+export default updateUser;
