@@ -202,7 +202,7 @@ async function syncUserInKeycloak(
     return { keycloakId, action: 'created' };
 }
 
-async function getUsersToSync(): Promise<DbUser[]> {
+function getUsersToSync(): Promise<DbUser[]> {
     const whereClause = SKIP_EXISTING
         ? "fk_status IN ('active', 'new') AND keycloak_id IS NULL"
         : "fk_status IN ('active', 'new')";
