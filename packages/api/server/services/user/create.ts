@@ -50,7 +50,7 @@ export default async (data, createdBy: number = null): Promise<User> => {
                 keycloak_id: keycloakId,
                 created_by: createdBy,
                 salt: generateSalt(),
-            }, { transaction: t });
+            }, t);
         });
 
         const user = await userModel.findOne(userId);
