@@ -10,13 +10,8 @@
             :hidePhone="hidePhone"
             includeOrganization
         />
-        <div
-            v-if="users.length === 0 || onlyDeactivatedUsers"
-            class="flex flex-col gap-2"
-        >
-            <p class="italic" v-if="users.length === 0">
-                Aucun pilote assigné à cette action.
-            </p>
+        <div v-if="users.length === 0" class="flex flex-col gap-2">
+            <p class="italic">Aucun pilote assigné à cette action.</p>
             <DsfrButton
                 label="Demander un pilote"
                 @click="requestPilot"
@@ -42,6 +37,7 @@ import FicheSousRubrique from "@/components/FicheRubrique/FicheSousRubrique.vue"
 import CarteUtilisateur from "@/components/CarteUtilisateur/CarteUtilisateur.vue";
 import { useActionsStore } from "@/stores/actions.store";
 import usePhoneVisibility from "@/composables/usePhoneVisibility";
+import isAnonymizedUser from "@/utils/isAnonymizedUser";
 
 const props = defineProps({
     action: Object,
@@ -51,17 +47,9 @@ const loading = ref(false);
 const actionsStore = useActionsStore();
 const { hidePhone } = usePhoneVisibility();
 const users = computed(() => {
-    return action.value.managers.flatMap(({ users }) => users);
-});
-const onlyDeactivatedUsers = computed(() => {
-    return (
-        users.value.length > 0 &&
-        users.value.every(
-            (user) =>
-                user.first_name === "Utilisateur" &&
-                user.last_name === "Désactivé"
-        )
-    );
+    return action.value.managers
+        .flatMap(({ users }) => users)
+        .filter((user) => !isAnonymizedUser(user));
 });
 
 const pilotHasBeenRequested = computed(() => {
