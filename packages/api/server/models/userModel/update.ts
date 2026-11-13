@@ -17,7 +17,7 @@ interface UserUpdateExtendedInput extends UserUpdateInput {
  * @param   transaction     - {Transaction} La transaction à utiliser
  * @returns {Promise<void>} - Ne retourne rien
  */
-export default async (userId: number, values: UserUpdateExtendedInput, transaction = undefined): Promise<void> => {
+const update = async (userId: number, values: UserUpdateExtendedInput, transaction = undefined): Promise<void> => {
     if (userId === undefined) {
         throw new Error('The user id is missing');
     }
