@@ -19,7 +19,7 @@ export default async (data, createdBy: number = null): Promise<User> => {
     let keycloakApi;
     let keycloakId: string;
     try {
-        keycloakApi = await createKeycloakApi();
+        keycloakApi = createKeycloakApi();
 
         // 1. On vérifie si l'utilisateur existe déjà dans Keycloak
         const existingUser = await keycloakApi.getUserByEmail(data.email);
@@ -45,10 +45,12 @@ export default async (data, createdBy: number = null): Promise<User> => {
             const fk_role_regular = await organizationTypeModel.findRoleByOrganizationId(Number.parseInt(data.organization, 10), t);
             Object.assign(data, { fk_role_regular });
 
-            return userModel.create(Object.assign({ ...data, keycloak_id: keycloakId }, {
+            return userModel.create({
+                ...data,
+                keycloak_id: keycloakId,
                 created_by: createdBy,
                 salt: generateSalt(),
-            }), t);
+            }, { transaction: t });
         });
 
         const user = await userModel.findOne(userId);
