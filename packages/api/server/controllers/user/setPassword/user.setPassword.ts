@@ -14,7 +14,7 @@ const ERRORS: ControllerErrors = {
  * @param res - Réponse
  * @param next - Prochain middleware
  */
-export default async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+const setPassword = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
     if (!req.body.token) {
         return res.status(400).send({
             user_message: 'Le jeton d\'identification est manquant',
@@ -51,3 +51,4 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
 
     return res.status(200).send({});
 };
+export default setPassword;
