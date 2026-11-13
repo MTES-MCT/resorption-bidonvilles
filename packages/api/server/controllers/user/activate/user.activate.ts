@@ -112,3 +112,4 @@ const activateUser = async (req:ActivateUserRequest, res:Response, next:NextFunc
 
     return res.status(200).send({});
 };
+export default activateUser;
