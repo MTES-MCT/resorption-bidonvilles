@@ -25,7 +25,7 @@ const fakeKeycloakApi = {
     createUser: sandbox.stub().resolves('fake-keycloak-id'),
     assignRealmRoles: sandbox.stub().resolves(),
 };
-const createKeycloakApi = sandbox.stub().resolves(fakeKeycloakApi);
+const createKeycloakApi = sandbox.stub().returns(fakeKeycloakApi);
 
 rewiremock('#db/sequelize').with({ sequelize });
 rewiremock('#server/utils/tchap').with(tchapUtils);
@@ -42,7 +42,7 @@ describe('userService.createUser()', () => {
         fakeKeycloakApi.getUserByEmail.resolves(null);
         fakeKeycloakApi.createUser.resolves('fake-keycloak-id');
         fakeKeycloakApi.assignRealmRoles.resolves();
-        createKeycloakApi.resolves(fakeKeycloakApi);
+        createKeycloakApi.returns(fakeKeycloakApi);
     });
 
     afterEach(() => {
