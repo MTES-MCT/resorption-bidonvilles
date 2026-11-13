@@ -184,7 +184,7 @@ const followDatas = {
         label: 'LinkedIn',
         title: 'Page LinkedIn de la DIHAL - Ouverture dans une nouvelle fenêtre',
         icon: 'fr-icon-linkedin-box-fill',
-        onClick: () => globalThis.window != undefined && globalThis.window.open('https://fr.linkedin.com/company/dihal', '_blank'),
+        onClick: () => globalThis.window?.open('https://fr.linkedin.com/company/dihal', '_blank'),
       }
     ]
   }
