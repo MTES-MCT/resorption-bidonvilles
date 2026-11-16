@@ -109,7 +109,7 @@ describe('models/actionModel/fetch/mergeMetrics()', () => {
 
         mergeMetrics(hash, [buildRow({ rank: 2 })]);
 
-        expect(hash[1].metrics_updated_at).to.equal(null);
+        expect(hash[1].metrics_updated_at).to.be.null;
         expect(hash[1].metrics).to.eql([]);
     });
 
@@ -162,6 +162,6 @@ describe('models/actionModel/fetch/mergeMetrics()', () => {
         mergeMetrics(hash, [buildRow({ action_id: 99 })]);
 
         expect(hash[1].metrics).to.eql([]);
-        expect(hash[99]).to.equal(undefined);
+        expect(hash[99]).to.be.undefined;
     });
 });
