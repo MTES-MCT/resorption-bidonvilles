@@ -30,7 +30,9 @@ const COLUMNS = [
     'created_by',
 ] as const;
 
-export default function insertMetrics(actionId: number, authorId: number, data: ActionInput, transaction: Transaction) {
+export default function insertMetrics(actionId: number, authorId: number, data: ActionInput, transaction: Transaction, versionId?: number | null) {
+    // sans versionId (création d'action), la colonne fk_version n'est pas écrite : requête inchangée
+    const columns: readonly string[] = versionId === undefined ? COLUMNS : [...COLUMNS, 'fk_version'];
     const today = new Date();
 
     const yearsWithData = Object.keys(data.indicateurs).filter(strYear => hasMetricValues(data.indicateurs[strYear]));
@@ -41,11 +43,11 @@ export default function insertMetrics(actionId: number, authorId: number, data: 
 
     const numberOfRows = yearsWithData.length;
 
-    const placeholders = `(${COLUMNS.map(() => '?').join(', ')})`;
+    const placeholders = `(${columns.map(() => '?').join(', ')})`;
 
     return sequelize.query(
         `INSERT INTO action_metrics(
-            ${COLUMNS.join(',\n            ')}
+            ${columns.join(',\n            ')}
         ) VALUES
             ${new Array(numberOfRows).fill(placeholders).join(',')}`,
         {
@@ -55,7 +57,7 @@ export default function insertMetrics(actionId: number, authorId: number, data: 
                 const year = Number.parseInt(strYear, 10);
                 const indicateur = data.indicateurs[strYear];
 
-                return [
+                const values = [
                     actionId,
                     year < today.getFullYear() ? new Date(year, 11, 31, 23, 59, 59) : today,
                     indicateur.nombre_personnes ?? null,
@@ -81,6 +83,8 @@ export default function insertMetrics(actionId: number, authorId: number, data: 
                     indicateur.scolaire_mineur_scolarise_dans_annee ?? null,
                     authorId,
                 ];
+
+                return versionId === undefined ? values : [...values, versionId];
             }),
         },
     );
