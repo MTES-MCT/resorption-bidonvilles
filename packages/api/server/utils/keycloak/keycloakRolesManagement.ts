@@ -19,7 +19,7 @@ export async function activateUser(user: User): Promise<boolean> {
         return false;
     }
 
-    const keycloakApi = await createKeycloakApi();
+    const keycloakApi = createKeycloakApi();
     await keycloakApi.assignRealmRoles(user.keycloak_id, [ROLES.UTILISATEUR]);
     return true;
 }
@@ -30,7 +30,7 @@ export async function activateUser(user: User): Promise<boolean> {
  * @returns Promise<void>
  */
 export async function deactivateUser(keycloakId: string): Promise<void> {
-    const keycloakApi = await createKeycloakApi();
+    const keycloakApi = createKeycloakApi();
     await keycloakApi.deleteRealmRoles(keycloakId, ALL_ROLES);
 }
 
@@ -42,7 +42,7 @@ export async function deactivateUser(keycloakId: string): Promise<void> {
  * @returns Promise<void>
  */
 export async function modifyUserRoles(user: User, isAdmin: boolean): Promise<void> {
-    const keycloakApi = await createKeycloakApi();
+    const keycloakApi = createKeycloakApi();
 
     // Suppression préalable de tous les rôles pour partir d'un état propre
     await keycloakApi.deleteRealmRoles(user.keycloak_id, ALL_ROLES);
