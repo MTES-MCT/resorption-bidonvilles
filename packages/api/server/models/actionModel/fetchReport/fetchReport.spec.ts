@@ -20,6 +20,8 @@ rewiremock('#db/sequelize').with({ sequelize: fakeSequelize });
 rewiremock('sequelize').with({ QueryTypes: { SELECT: 'SELECT' } });
 // enrichWhere ne fait pas d'I/O : on le laisse passer tel quel
 rewiremock('../fetch/enrichWhere').callThrough();
+// fragment SQL pur (clé de version des indicateurs) : on laisse passer l'implémentation réelle
+rewiremock.passBy(/metricsVersionKey/);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
