@@ -11,7 +11,18 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  check-branch:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Ensure branch is develop
+        run: |
+          if [ "$GITHUB_REF" != "refs/heads/develop" ]; then
+            echo "::error::Le workflow de release doit être déclenché depuis la branche 'develop' (branche actuelle : $GITHUB_REF)."
+            exit 1
+          fi
+
   prebuild-qa:
+    needs: check-branch
     uses: ./.github/workflows/qa.yml
     secrets: inherit
 
@@ -70,7 +81,7 @@ jobs:
         run: |
           git fetch origin master
           git checkout master
-          git merge develop -m "Merge branch 'develop' into master"
+          git merge ${{ steps.version.outputs.new_tag }} -m "Merge branch 'develop' into master"
           git push origin master
 
   build-www:
@@ -83,14 +94,6 @@ jobs:
           fetch-depth: '0'
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
-      - name: Cache Docker layers
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-www-buildx-${{ needs['upgrade-version'].outputs.new_tag_with_v }}
-          restore-keys: |
-            ${{ runner.os }}-www-buildx
-          fail-on-cache-miss: false
       - name: Login to DockerHub
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
@@ -104,8 +107,8 @@ jobs:
           file: Dockerfile.www
           push: true
           tags: resorptionbidonvilles/www:${{ needs['upgrade-version'].outputs.new_tag_with_v }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=www
+          cache-to: type=gha,mode=max,scope=www
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
@@ -119,14 +122,6 @@ jobs:
           fetch-depth: '0'
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
-      - name: Cache Docker layers
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-webapp-buildx-${{ needs['upgrade-version'].outputs.new_tag_with_v }}
-          restore-keys: |
-            ${{ runner.os }}-webapp-buildx
-          fail-on-cache-miss: false
       - name: Login to DockerHub
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
@@ -140,8 +135,8 @@ jobs:
           file: Dockerfile.webapp
           push: true
           tags: resorptionbidonvilles/frontend:${{ needs['upgrade-version'].outputs.new_tag_with_v }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=webapp
+          cache-to: type=gha,mode=max,scope=webapp
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
@@ -155,14 +150,6 @@ jobs:
           fetch-depth: '0'
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
-      - name: Cache Docker layers
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-api-buildx-${{ needs['upgrade-version'].outputs.new_tag_with_v }}
-          restore-keys: |
-            ${{ runner.os }}-api-buildx
-          fail-on-cache-miss: false
       - name: Login to DockerHub
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
@@ -176,7 +163,7 @@ jobs:
           file: Dockerfile.api
           push: true
           tags: resorptionbidonvilles/api:${{ needs['upgrade-version'].outputs.new_tag_with_v }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,mode=max,scope=api
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
