@@ -8,6 +8,8 @@
                     {{ directoryStore.total }} structure{{
                         directoryStore.total > 1 ? "s" : ""
                     }}
+                    dont {{ directoryStore.totalWithActiveUsers }} comptant au
+                    moins un utilisateur actif
                 </p>
                 <p>
                     {{ numberOfUsers }}
