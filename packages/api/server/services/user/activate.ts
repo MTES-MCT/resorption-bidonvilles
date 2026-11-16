@@ -18,7 +18,7 @@ const activate = async (keycloakId: string, userEmail: string, password: string,
 
     // 2. On active l'utilisateur sur Keycloak
     try {
-        const keycloakApi = await createKeycloakApi();
+        const keycloakApi = createKeycloakApi();
         await keycloakApi.updateUser(keycloakId, {
             email: userEmail,
             emailVerified: true,
@@ -30,7 +30,7 @@ const activate = async (keycloakId: string, userEmail: string, password: string,
 
     // 3. On met à jour le mot de passe
     try {
-        const keycloakApi = await createKeycloakApi();
+        const keycloakApi = createKeycloakApi();
         await keycloakApi.resetPassword(keycloakId, password);
     } catch (error) {
         throw new ServiceError('keycloak_reset_password_failure', error);
