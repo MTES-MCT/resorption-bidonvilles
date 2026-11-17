@@ -3,15 +3,12 @@
     <Layout v-else>
         <ContentWrapper>
             <h3 class="font-bold text-lg">Permissions par rôle</h3>
-            <select v-model="currentRole">
-                <option
-                    v-for="role in Object.keys(data)"
-                    :key="role"
-                    :value="role"
-                >
-                    {{ role }}
-                </option>
-            </select>
+            <DsfrSelect
+                v-model="currentRole"
+                label="Rôle"
+                select-id="permissions-par-defaut-role"
+                :options="Object.keys(data)"
+            />
 
             <table class="zebra">
                 <thead>

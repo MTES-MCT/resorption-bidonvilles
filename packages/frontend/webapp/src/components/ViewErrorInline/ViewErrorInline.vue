@@ -2,7 +2,7 @@
     <div
         class="flex flex-col space-y-4 md:flex-row md:space-x-8 md:space-y-0 md:items-center"
     >
-        <img :src="img" class="w-60" />
+        <img :src="img" class="w-60" alt="" />
         <div>
             <h1 class="font-bold">
                 <slot name="title">Erreur</slot>

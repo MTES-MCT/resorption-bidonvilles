@@ -17,6 +17,5 @@
 !packages/api/server/mails/dist
 **/.editorconfig
 .yarn/*
-!.yarn/cache
 !.yarn/plugins
 !.yarn/releases
