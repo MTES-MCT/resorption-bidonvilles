@@ -21,7 +21,7 @@ function detectsPrincipalChange(
         });
     });
 
-    return payload.some((p) => {
+    const changedForIdsInPayload = payload.some((p) => {
         if (!bddPrincipalByUserId.has(p.id)) {
             return false;
         }
@@ -29,6 +29,16 @@ function detectsPrincipalChange(
         const payloadValue = p.is_principal === true;
         return bddValue !== payloadValue;
     });
+    if (changedForIdsInPayload) {
+        return true;
+    }
+
+    // Un opérateur principal en BDD qui disparaît entièrement du payload
+    // (ex : opérateur anonymisé retiré de la liste) constitue aussi un changement de principal.
+    const payloadIds = new Set(payload.map(p => p.id));
+    return Array.from(bddPrincipalByUserId.entries()).some(
+        ([id, wasPrincipal]) => wasPrincipal && !payloadIds.has(id),
+    );
 }
 
 function isAllowedToChangePrincipal(
