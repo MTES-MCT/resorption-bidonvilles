@@ -85,8 +85,8 @@
                         ci-dessous.
                     </p>
 
-                    <p v-if="isUserOptedOut === null" role="status">
-                        Chargement de votre préférence…
+                    <p v-if="isUserOptedOut === null">
+                        <output>Chargement de votre préférence…</output>
                     </p>
                     <DsfrButton
                         v-else
@@ -94,7 +94,7 @@
                         :label="buttonLabel"
                         @click="toggleOptOut"
                     />
-                    <p role="status" class="fr-sr-only">{{ statusMessage }}</p>
+                    <output class="fr-sr-only">{{ statusMessage }}</output>
                 </div>
             </div>
         </div>
