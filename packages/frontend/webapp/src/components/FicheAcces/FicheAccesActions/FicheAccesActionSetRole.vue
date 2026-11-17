@@ -1,24 +1,21 @@
 <template>
-    <Button
+    <DsfrButton
         v-if="
             userStore.user?.is_superuser &&
             !user.is_admin &&
             user.status !== 'inactive' &&
             user.status !== 'refused'
         "
-        type="button"
-        variant="primaryOutline"
+        primary
         :loading="isLoading"
         :disabled="disabled"
         @click="openChangeRoleModale"
-        class="!border !border-primary hover:!bg-primaryDark"
-        >Changer le rôle</Button
+        >Changer le rôle</DsfrButton
     >
 </template>
 
 <script setup>
 import { computed, toRefs } from "vue";
-import { Button } from "@resorptionbidonvilles/ui";
 import { useModaleStore } from "@/stores/modale.store";
 import { useUserStore } from "@/stores/user.store";
 import ModaleChangerRoleUser from "@/components/ModaleChangerRoleUser/ModaleChangerRoleUser.vue";
@@ -49,9 +46,3 @@ function openChangeRoleModale() {
     });
 }
 </script>
-
-<style scoped>
-button {
-    border: inherit;
-}
-</style>

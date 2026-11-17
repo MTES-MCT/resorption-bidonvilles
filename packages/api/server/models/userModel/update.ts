@@ -1,6 +1,19 @@
 import { sequelize } from '#db/sequelize';
+import type { RawUser } from '#server/models/userModel/_common/query.d';
 
-export default async (userId, values, transaction = undefined) => {
+interface UserUpdateExtendedInput extends RawUser {
+    fk_status?: string;
+    fk_role_regular?: string;
+}
+
+/**
+ * @description Update a user
+ * @param   userId          - {number} ID de l'utilisateur à mettre à jour
+ * @param   values          - {UserUpdateExtendedInput} Les données à mettre à jour
+ * @param   transaction     - {Transaction} La transaction à utiliser
+ * @returns {Promise<void>} - Ne retourne rien
+ */
+const update = async (userId: number, values: Partial<UserUpdateExtendedInput>, transaction = undefined): Promise<void> => {
     if (userId === undefined) {
         throw new Error('The user id is missing');
     }
@@ -79,3 +92,4 @@ export default async (userId, values, transaction = undefined) => {
         }
     }
 };
+export default update;

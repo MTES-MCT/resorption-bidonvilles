@@ -8,15 +8,13 @@
                 <slot name="description" />
             </template>
             <template v-slot:actions>
-                <Button
-                    icon="file-pdf"
-                    iconPosition="left"
-                    variant="primaryOutline"
+                <DsfrButton
+                    icon="bxs:file-pdf"
+                    secondary
                     size="sm"
-                    class="hover:!bg-primary"
-                    :href="configStore.config.version_charte_engagement.fichier"
+                    @click="openCharte"
                 >
-                    Charte d'engagement de l'utilisateur</Button
+                    Charte d'engagement de l'utilisateur</DsfrButton
                 >
             </template>
         </ViewHeader>
@@ -41,7 +39,7 @@ import { computed, toRefs } from "vue";
 import router from "@/helpers/router";
 import tabsDefinition from "./ProfilUtilisateur.tabs.js";
 
-import { Button, ContentWrapper } from "@resorptionbidonvilles/ui";
+import { ContentWrapper } from "@resorptionbidonvilles/ui";
 import ArrangementLeftMenu from "@/components/ArrangementLeftMenu/ArrangementLeftMenu.vue";
 import ViewHeader from "@/components/ViewHeader/ViewHeader.vue";
 import { useUserStore } from "@/stores/user.store";
@@ -85,4 +83,8 @@ const currentTabId = computed(() => {
 const currentTabComponent = computed(() => {
     return tabs.value.find(({ active }) => active === true).component;
 });
+
+const openCharte = () => {
+    window.open(configStore.config.version_charte_engagement.fichier, "_blank");
+};
 </script>

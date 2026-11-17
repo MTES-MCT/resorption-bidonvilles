@@ -1,18 +1,16 @@
 <template>
-    <Button
+    <DsfrButton
         v-if="userStore.user?.is_superuser && hasPendingAccess"
-        variant="primaryOutline"
-        class="!border-2 !border-primary hover:!text-white hover:!bg-primaryDark"
+        primary
         :loading="isLoading"
         :disabled="disabled"
-        >Copier le lien d'activation</Button
+        >Copier le lien d'activation</DsfrButton
     >
 </template>
 
 <script setup>
 import { toRefs, computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
-import { Button } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     user: Object,
@@ -32,8 +30,3 @@ const hasPendingAccess = computed(() => {
     );
 });
 </script>
-<style scoped>
-button {
-    border: inherit;
-}
-</style>

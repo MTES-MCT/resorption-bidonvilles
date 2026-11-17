@@ -1,6 +1,6 @@
 import axiosLib from "axios";
 import ENV from "@/helpers/env.js";
-import { useUserStore } from "@/stores/user.store.js";
+import keycloak from "@/helpers/keycloak.js";
 import logout from "@/utils/logout";
 import dateToString from "@common/utils/dateToString";
 
@@ -57,10 +57,18 @@ export const axios = axiosLib.create({
     ],
 });
 
-axios.interceptors.request.use((config) => {
-    const userStore = useUserStore();
-    if (userStore.isLoggedIn) {
-        config.headers["x-access-token"] = userStore.accessToken;
+axios.interceptors.request.use(async (config) => {
+    // On n'attache le token que si Keycloak est authentifié.
+    // Si non authentifié (ou non initialisé, routes publiques), la requête passe sans token.
+    // La redirection vers Keycloak est gérée par le guard du router, pas par cet intercepteur.
+    if (keycloak.authenticated) {
+        try {
+            // Rafraîchit le token s'il expire dans moins de 30 secondes
+            await keycloak.updateToken(30);
+            config.headers["x-access-token"] = keycloak.token;
+        } catch {
+            keycloak.login();
+        }
     }
 
     return config;

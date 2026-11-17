@@ -1,3 +1,4 @@
+import activate from './activate';
 import anonymizationRequest from './anonymizationRequest';
 import anonymizeUser from './anonymizeUser';
 import create from './create';
@@ -8,10 +9,14 @@ import reactivate from './reactivate';
 import refuse from './refuse';
 import register from './register';
 import setExpertiseTopics from './setExpertiseTopics';
+import setRoleAdmin from './setRoleAdmin';
 import sendInactiveUserAlerts from './sendInactiveUserAlerts';
+import setPassword from './setPassword';
+import update from './update';
 import updatePermissionOptions from './updatePermissionOptions';
 
 export default {
+    activate,
     anonymizationRequest,
     anonymizeUser,
     create,
@@ -22,6 +27,9 @@ export default {
     refuse,
     register,
     setExpertiseTopics,
+    setRoleAdmin,
     sendInactiveUserAlerts,
+    setPassword,
+    update,
     updatePermissionOptions,
 };

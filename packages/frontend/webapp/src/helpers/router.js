@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+import { useAuthStore } from "@/stores/auth.store";
 import { useUserStore } from "@/stores/user.store.js";
 import { useConfigStore } from "@/stores/config.store.js";
 import { useNavigationStore } from "@/stores/navigation.store";
@@ -477,7 +478,20 @@ const router = createRouter({
         },
         {
             path: "/connexion",
-            component: () => import("@/views/ConnexionView.vue"),
+            beforeEnter: async () => {
+                console.log("&&&&& CONNEXION &&&");
+
+                const authStore = useAuthStore();
+                await authStore.ensureReady();
+                if (authStore.isAuthenticated) {
+                    return "/tableau-de-bord";
+                }
+                await authStore.login({
+                    redirectUri: window.location.origin + "/tableau-de-bord",
+                });
+                return false;
+            },
+            // component: () => import("@/views/ConnexionView.vue"),
             meta: {
                 title: "S'identifier sur la plateforme",
                 requirements: {
@@ -507,9 +521,8 @@ const router = createRouter({
         },
         {
             path: "/deconnexion",
-            beforeEnter: (to, from, next) => {
+            beforeEnter: () => {
                 logout();
-                return next("/connexion");
             },
             component: () => null,
             meta: {
@@ -684,6 +697,30 @@ router.beforeEach(async (to, from) => {
         };
     }
 
+    const requiresAuth = requirements?.auth === "signedIn";
+
+    // Pour les routes publiques (signedOut ou none), on n'initialise pas Keycloak
+    // afin d'éviter le redirect check-sso vers la mire Keycloak.
+    if (!requiresAuth) {
+        return true;
+    }
+
+    // Uniquement pour les routes protégées, on initialise Keycloak
+    const authStore = useAuthStore();
+    await authStore.ensureReady();
+
+    // Gestion de panne Keycloak sur route protégée
+    if (authStore.initError) {
+        return "/tableau-de-bord";
+    }
+
+    // Non connecté sur route protégée
+    if (!authStore.isAuthenticated) {
+        await authStore.login({
+            redirectUri: window.location.origin + to.fullPath,
+        });
+    }
+
     // cas particulier des pages en auth 'none'
     // si l'utilisateur est connecté, on force les contraintes par défaut d'un utilisateur connecté
     // sauf indication contraire
@@ -718,10 +755,6 @@ router.beforeEach(async (to, from) => {
     }
 
     const navigationStore = useNavigationStore();
-    if (requirements.auth === "signedIn" && !userStore.isLoggedIn) {
-        navigationStore.entrypoint = to.fullPath;
-        return "/connexion";
-    }
 
     const configStore = useConfigStore();
     if (requirements.configLoaded === true && !configStore.isLoaded) {
@@ -759,6 +792,16 @@ router.beforeEach(async (to, from) => {
         ) {
             return "/page-interdite";
         }
+    }
+
+    // Renvoi vers la mire Keycloak pour l'auth
+    if (to.path === "/connexion") {
+        if (!authStore.isAuthenticated) {
+            await authStore.login({
+                redirectUri: window.location.origin + "/tableau-de-bord",
+            });
+        }
+        return;
     }
 
     // if logged, register navigation log

@@ -5,9 +5,17 @@
             user.role_id === 'local_admin' &&
             user.status !== 'inactive'
         "
+        :icon="
+            isLoading
+                ? {
+                      name: 'ri:loader-4-line',
+                      animation: 'spin',
+                  }
+                : null
+        "
         secondary
         :loading="isLoading"
-        :disabled="disabled"
+        :disabled="disabled || isLoading"
         >Retirer le rôle « Administrateur local »
     </DsfrButton>
 </template>

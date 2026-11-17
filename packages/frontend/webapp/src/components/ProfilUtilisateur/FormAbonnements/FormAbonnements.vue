@@ -6,7 +6,7 @@
             :message="error"
             :summary="errors"
         />
-        <Button type="submit" @click="onSubmit">Sauvegarder</Button>
+        <DsfrButton type="submit" @click="onSubmit">Sauvegarder</DsfrButton>
     </form>
 </template>
 
@@ -22,7 +22,7 @@ import { edit } from "@/api/users.api";
 import subscriptions from "@/utils/email_subscriptions";
 
 // components
-import { Button, ErrorSummary } from "@resorptionbidonvilles/ui";
+import { ErrorSummary } from "@resorptionbidonvilles/ui";
 import FormAbonnementsInputAbonnements from "./inputs/FormAbonnementsInputAbonnements.vue";
 import router from "@/helpers/router";
 

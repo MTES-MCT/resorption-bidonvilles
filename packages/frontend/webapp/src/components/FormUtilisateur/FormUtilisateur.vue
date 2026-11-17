@@ -117,9 +117,19 @@
             <FormUtilisateurInputLegal :label="labels.legal" />
         </template>
 
-        <template v-slot:button="{ disabled }">
+        <template v-slot:button="{ disabled, isLoading }">
             <p class="text-center">
-                <DsfrButton type="submit" :disabled="disabled"
+                <DsfrButton
+                    type="submit"
+                    :disabled="disabled || isLoading"
+                    :icon="
+                        isLoading
+                            ? {
+                                  name: 'ri:loader-4-line',
+                                  animation: 'spin',
+                              }
+                            : null
+                    "
                     ><slot name="submit"
                 /></DsfrButton>
             </p>
@@ -169,6 +179,10 @@ const props = defineProps({
     language: {
         type: String,
         default: "fr",
+    },
+    disabled: {
+        type: Boolean,
+        default: false,
     },
 });
 
@@ -240,7 +254,7 @@ function intermediateSubmit(values) {
         ? formattedValues.private_organization.data.id
         : null;
 
-    if (formattedValues.organisation && formattedValues.organisation.data) {
+    if (formattedValues.organisation?.data) {
         const category =
             formattedValues.organisation.data.category?.toLowerCase();
         formattedValues.organization_category = category;

@@ -61,23 +61,13 @@ export default {
      *
      * @returns {string}
      */
-    getAccountActivationLink(userAccessId, expiresAt = null) {
-        let expiresIn = activationTokenExpiresIn;
-        if (expiresAt !== null) {
-            const now = new Date();
-            const secondsUntilExpiration = Math.round((expiresAt.getTime() - now.getTime()) / 1000);
-            expiresIn = `${secondsUntilExpiration}s`;
-        }
-
+    getAccountActivationLink(userAccessId) {
         const token = jwt.sign(
             {
                 type: 'account_validation',
                 id: userAccessId,
             },
             authConfig.secret,
-            {
-                expiresIn,
-            },
         );
 
         return `${webappUrl}/activer-mon-compte/${encodeURIComponent(token)}`;

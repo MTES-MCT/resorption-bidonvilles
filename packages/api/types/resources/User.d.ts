@@ -77,6 +77,7 @@ export type User = {
     // filter: auth
     password?: string,
     salt?: string,
+    keycloak_id?: string,
 
     // filter: extended
     access_request_message?: string,
@@ -94,4 +95,19 @@ export type User = {
     // deactivation
     deactivated_at?: number | null,
     deactivation_type?: string | null,
+};
+
+export type UserUpdateInput = {
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    phone?: string;
+    position?: string;
+    email_subscriptions?: string[];
+    email_unsubscriptions?: string[];
+    password?: string;
+};
+
+export type UserActivateRequest = UserUpdateInput & {
+    token?: string;
 };
