@@ -216,8 +216,7 @@ const footerDatas = {
       },
       {
         label: 'Conditions générales d\'utilisation',
-        target: '_blank',
-        href: `${WEBAPP_URL}/doc/conditions-d-utilisation.pdf`
+        href: `${WEBAPP_URL}/conditions-d-utilisation`
       },
     ],
     mandatoryLinks: [
@@ -229,10 +228,10 @@ const footerDatas = {
         href: `${WEBAPP_URL}/mentions-legales`
       }, {
         label: 'Données personnelles',
-        href: `${WEBAPP_URL}/doc/conditions-d-utilisation.pdf`
+        href: `${WEBAPP_URL}/conditions-d-utilisation#vie-privee`
       }, {
         label: 'Gestion des cookies',
-        href: `${WEBAPP_URL}/doc/conditions-d-utilisation.pdf`
+        href: `${WEBAPP_URL}/conditions-d-utilisation#cookies`
       }
     ],
     afterMandatoryLinks: [
