@@ -263,7 +263,7 @@ function createColumnOrigines(sheet: Worksheet): void {
     col.width = 55;
 
     // on crée le header
-    writeHeaderCell(sheet, 'C1', 'Origines');
+    writeHeaderCell(sheet, 'C1', 'Origine géographique');
 
     // on crée les entêtes pour chaque propriété
     sectionsList.forEach((section, sectionIndex) => {
