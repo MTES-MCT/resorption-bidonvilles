@@ -50,4 +50,4 @@ Vous êtes prêt(e)s à travailler !
 | :---: | :---: | :---: | :---: | :---: |
 
 ## 📝 Licence
-Ce projet est distribué sous license [AGPL-3.0](LICENSE).
+Ce projet est propriétaire : tous droits réservés. Son code n'est pas diffusé et son usage est réservé à la DIHAL.
