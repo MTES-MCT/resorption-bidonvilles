@@ -654,6 +654,10 @@ const router = createRouter({
 
         // special
         {
+            path: "/doc/conditions-d-utilisation.pdf",
+            redirect: "/conditions-d-utilisation",
+        },
+        {
             path: "/:catchAll(.*)",
             redirect: "/404",
         },
