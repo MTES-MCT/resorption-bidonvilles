@@ -35,8 +35,7 @@
         :beforeMandatoryLinks="footerDatas.beforeMandatoryLinks"
         :mandatoryLinks="footerDatas.mandatoryLinks"
         :afterMandatoryLinks="footerDatas.afterMandatoryLinks"
-        :licenceName="footerDatas.licenceName"
-        :licenceTo="footerDatas.licenceTo"
+        licenceText=""
     />
 </template>
 
@@ -90,12 +89,6 @@ const footerDatas = {
     ],
     beforeMandatoryLinks: [
       {
-        label: 'Code source',
-        target: '_blank',
-        class: 'fr-icon-github-fill fr-link--icon-left mr-0',
-        href: 'https://github.com/MTES-MCT/resorption-bidonvilles'
-      },
-      {
         label: 'Mesures d\'impact',
         to: "/stats"
       },
@@ -119,7 +112,5 @@ const footerDatas = {
         to: "/conditions-d-utilisation#cookies"
       }
     ],
-    licenceName: "licence AGPL-3.0",
-    licenceTo: "https://github.com/MTES-MCT/resorption-bidonvilles/blob/develop/LICENSE",
 }
 </script>
