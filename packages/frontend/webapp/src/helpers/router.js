@@ -535,6 +535,20 @@ const router = createRouter({
             },
         },
         {
+            path: "/conditions-d-utilisation",
+            component: () => import("@/views/ConditionsUtilisationView.vue"),
+            meta: {
+                title: "Conditions générales d'utilisation",
+                requirements: {
+                    auth: "none",
+                    configLoaded: false,
+                    charterSigned: false,
+                    topicsChosen: false,
+                    changelogSeen: false,
+                },
+            },
+        },
+        {
             path: "/mentions-legales",
             component: () => import("@/views/MentionsLegales.vue"),
             meta: {
