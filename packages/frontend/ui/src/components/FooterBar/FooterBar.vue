@@ -101,8 +101,7 @@ const footerDatas = {
       },
       {
         label: 'Conditions générales d\'utilisation',
-        target: '_blank',
-        to: "/doc/conditions-d-utilisation.pdf"
+        to: "/conditions-d-utilisation"
       },
     ],
     mandatoryLinks: [
@@ -114,10 +113,10 @@ const footerDatas = {
         to: "/mentions-legales"
       }, {
         label: 'Données personnelles',
-        to: "/doc/conditions-d-utilisation.pdf"
+        to: "/conditions-d-utilisation#vie-privee"
       }, {
         label: 'Gestion des cookies',
-        to: "/doc/conditions-d-utilisation.pdf"
+        to: "/conditions-d-utilisation#cookies"
       }
     ],
     licenceName: "licence AGPL-3.0",
