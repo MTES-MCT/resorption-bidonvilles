@@ -1,5 +1,5 @@
 <template>
-    <article>
+    <article class="text-justify">
         <h1 class="fr-h1">
             Conditions générales d'utilisation de la plateforme
             <em>Résorption-bidonvilles</em>
@@ -538,3 +538,9 @@ const anchors = [
     },
 ];
 </script>
+
+<style scoped>
+a:hover {
+    text-decoration: underline;
+}
+</style>
