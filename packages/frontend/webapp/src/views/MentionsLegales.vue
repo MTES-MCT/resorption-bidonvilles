@@ -1,115 +1,137 @@
 <template>
     <Layout>
-        <div class="mt-10 max-w-screen-lg mx-auto pb-16">
-            <h2 class="text-display-lg font-bold">Mentions légales</h2>
-            <h3 class="text-display-md font-bold mt-8">&Eacute;diteurs</h3>
-            <div class="mt-4">
-                <p>
-                    <Link to="/">Résorption bidonvilles</Link>
-                    est édité par la Fabrique numérique du ministère de la
-                    transition écologique et solidaire et du ministère de la
-                    cohésion des territoires et des relations avec les
-                    collectivités territoriales, sise 1 place Carpeaux, 92800
-                    Puteaux, avec l’appui de l’incubateur de services numériques
-                    (beta.gouv.fr) de la direction interministérielle du
-                    numérique (DINUM).
-                </p>
-            </div>
-            <h3 class="text-display-md font-bold mt-8">Nous joindre</h3>
-            <div class="mt-4">
-                <ul>
-                    <li>Par téléphone : +33 (0) 1 40 81 98 80</li>
-                    <li>
-                        Par mail :
-                        <p>
-                            <Link
-                                class="underline"
-                                to="mailto: contact-resorption-bidonvilles@dihal.gouv.fr"
+        <div class="fr-container fr-pb-8w">
+            <div class="fr-grid-row fr-grid-row--center">
+                <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
+                    <h1 class="fr-h1">Mentions légales</h1>
+
+                    <h2 class="fr-h4 fr-mt-6w fr-mb-2w">Éditeurs</h2>
+                    <p>
+                        <RouterLink to="/">Résorption bidonvilles</RouterLink>
+                        est édité par la
+                        <a
+                            href="https://lannuaire.service-public.gouv.fr/gouvernement/a66b3932-b91e-441b-8ecb-f4de7a01b5a8"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Délégation interministérielle à l’hébergement et à l’accès au logement (Dihal) - nouvelle fenêtre"
+                            >Délégation interministérielle à l’hébergement et à
+                            l’accès au logement (Dihal)</a
+                        >.
+                    </p>
+
+                    <h2 class="fr-h4 fr-mt-6w fr-mb-2w">Nous joindre</h2>
+                    <ul>
+                        <li>Par téléphone : +33 (0) 1 40 81 98 80</li>
+                        <li>
+                            Par mail :
+                            <a
+                                href="mailto:contact-resorption-bidonvilles@dihal.gouv.fr"
+                                >contact-resorption-bidonvilles@dihal.gouv.fr</a
                             >
-                                contact-resorption-bidonvilles@dihal.gouv.fr</Link
-                            >
-                        </p>
-                    </li>
-                </ul>
-            </div>
-            <h3 class="text-display-md font-bold mt-8">
-                Directeurs de la publication
-            </h3>
-            <div class="mt-4">
-                <ul>
-                    <li>
-                        Délégué interministériel à l’hébergement et l’accès au
-                        logement
-                    </li>
-                    <li>La Grande Arche - 92055 La Défense Cedex</li>
-                </ul>
-            </div>
-            <h3 class="text-display-md font-bold mt-8">
-                Prestataire d’hébergement
-            </h3>
-            <div class="mt-4">
-                <p>
-                    Le site
-                    <Link to="/">resorption-bidonvilles.dihal.gouv.fr</Link>
-                    est hébergé par la société OVH<br />Code APE 6202A<br />N°
-                    TVA : FR 22 424 761 419<br />Inscrite au RCS Roubaix –
-                    Tourcoing 424 761 419 00045
-                </p>
-                <p>Siège social : 2 rue Kellermann, 59100 Roubaix, France</p>
-            </div>
-            <h3 class="text-display-md font-bold mt-8">Partage des données</h3>
-            <div class="mt-4">
-                <p>
-                    Si vous disposez d’un accès à la plateforme, des données
-                    anonymisées sont stockées pour mieux comprendre comment vous
-                    naviguez et utilisez les dernières fonctionnalités mises à
-                    votre disposition.
-                </p>
+                        </li>
+                    </ul>
 
-                <p class="mt-3">
-                    Ces données sont utilisées exclusivement à des fins
-                    d’amélioration de l’impact et de l’utilité de la plateforme
-                    et ne sont en aucun cas communiquées à des tiers.
-                </p>
+                    <h2 class="fr-h4 fr-mt-6w fr-mb-2w">
+                        Directeurs de la publication
+                    </h2>
+                    <ul>
+                        <li>
+                            Délégué interministériel à l’hébergement et l’accès
+                            au logement
+                        </li>
+                        <li>La Grande Arche - 92055 La Défense Cedex</li>
+                    </ul>
 
-                <p class="mt-3">
-                    Vous pouvez néanmoins désactiver ce partage des données
-                    ci-dessous.
-                </p>
+                    <h2 class="fr-h4 fr-mt-6w fr-mb-2w">
+                        Prestataire d’hébergement
+                    </h2>
+                    <p>
+                        Le site
+                        <RouterLink to="/"
+                            >resorption-bidonvilles.dihal.gouv.fr</RouterLink
+                        >
+                        est hébergé par la société OVH :
+                    </p>
+                    <ul>
+                        <li>Code APE 6202A</li>
+                        <li>
+                            N°&nbsp;TVA&nbsp;:
+                            FR&nbsp;22&nbsp;424&nbsp;761&nbsp;419
+                        </li>
+                        <li>
+                            Inscrite au RCS Roubaix – Tourcoing
+                            424&nbsp;761&nbsp;419&nbsp;00045
+                        </li>
+                    </ul>
+                    <p>
+                        Siège social : 2 rue Kellermann, 59100 Roubaix, France
+                    </p>
 
-                <p v-if="isUserOptedOut === null">
-                    <Spinner />
-                </p>
-                <p v-else-if="isUserOptedOut">
-                    <Button @click="forgetUserOptOut" type="button"
-                        >Autoriser le partage de mes données</Button
-                    >
-                </p>
-                <p v-else>
-                    <Button @click="optUserOut" type="button"
-                        >Ne pas autoriser le partage de mes données</Button
-                    >
-                </p>
+                    <h2 class="fr-h4 fr-mt-6w fr-mb-2w">Partage des données</h2>
+                    <p>
+                        Si vous disposez d’un accès à la plateforme, des données
+                        anonymisées sont stockées pour mieux comprendre comment
+                        vous naviguez et utilisez les dernières fonctionnalités
+                        mises à votre disposition.
+                    </p>
+                    <p>
+                        Ces données sont utilisées exclusivement à des fins
+                        d’amélioration de l’impact et de l’utilité de la
+                        plateforme et ne sont en aucun cas communiquées à des
+                        tiers.
+                    </p>
+                    <p>
+                        Vous pouvez néanmoins désactiver ce partage des données
+                        ci-dessous.
+                    </p>
+
+                    <output v-if="isUserOptedOut === null">
+                        Chargement de votre préférence…
+                    </output>
+                    <DsfrButton
+                        v-else
+                        type="button"
+                        :label="buttonLabel"
+                        @click="toggleOptOut"
+                    />
+                    <output class="fr-sr-only">{{ statusMessage }}</output>
+                </div>
             </div>
         </div>
     </Layout>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import Layout from "@/components/Layout/Layout.vue";
-import { Button, Link, Spinner } from "@resorptionbidonvilles/ui";
 import { optOut, forgetOptOut, isOptedOut } from "@/helpers/matomo";
 
-let isUserOptedOut = ref(isOptedOut());
+const isUserOptedOut = ref(isOptedOut());
+const statusMessage = ref("");
 
-onMounted(() => {
+const buttonLabel = computed(function computeButtonLabel() {
+    return isUserOptedOut.value
+        ? "Autoriser le partage de mes données"
+        : "Ne pas autoriser le partage de mes données";
+});
+
+onMounted(function initOptOutState() {
     try {
         refreshIsOptedOut();
     } catch (error) {
         console.log(`Erreur: ${error}`);
     }
 });
+
+function toggleOptOut() {
+    if (isUserOptedOut.value) {
+        forgetUserOptOut();
+        statusMessage.value = "Le partage de vos données est autorisé.";
+    } else {
+        optUserOut();
+        statusMessage.value = "Le partage de vos données est désactivé.";
+    }
+}
 
 function optUserOut() {
     optOut();
@@ -125,3 +147,9 @@ function refreshIsOptedOut() {
     isUserOptedOut.value = isOptedOut();
 }
 </script>
+
+<style scoped>
+a:hover {
+    text-decoration: underline;
+}
+</style>
