@@ -7,7 +7,7 @@ type ShantytownFiltersAsQueryParamList = Record<SiteStatus, FilterMap>;
 const all: FilterMap = {
     population: 'Nombre de personnes',
     fieldType: 'Type de sites',
-    origin: 'Origines',
+    origin: 'Origine géographique',
     target: 'Objectif résorption',
     justice: 'Justice',
     administrativeOrder: 'Ordre administratif',

@@ -1,14 +1,15 @@
 {
   "name": "@resorptionbidonvilles/api",
-  "version": "2.62.0",
+  "version": "2.63.0",
   "description": "API d'Action Bidonvilles",
   "main": "server/index.ts",
   "repository": "git+https://github.com/MTES-MCT/action-bidonvilles.git",
   "author": {
-    "name": "Anis Safine Laget",
-    "email": "anis@users.noreply.github.com"
+    "name": "Dihal",
+    "email": "contact-resorption-bidonvilles@dihal.gouv.fr"
   },
-  "license": "AGPL-3.0-or-later",
+  "license": "UNLICENSED",
+  "private": true,
   "dependencies": {
     "@aws-sdk/client-s3": "^3.32.0",
     "@aws-sdk/s3-request-presigner": "^3.598.0",

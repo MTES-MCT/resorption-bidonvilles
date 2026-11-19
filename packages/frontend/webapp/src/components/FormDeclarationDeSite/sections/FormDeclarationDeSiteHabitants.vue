@@ -6,7 +6,7 @@
             <InputPopulation />
         </Fieldset>
 
-        <Fieldset legend="Quelle est l'origine des habitants ?">
+        <Fieldset legend="Préciser l'origine géographique des habitants">
             <InputSocialOrigins />
         </Fieldset>
 

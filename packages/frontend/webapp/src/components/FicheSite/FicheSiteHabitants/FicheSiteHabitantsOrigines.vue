@@ -1,6 +1,6 @@
 <template>
     <FicheSousRubrique>
-        <p class="font-bold">Origine</p>
+        <p class="font-bold">Origine géographique</p>
         <p v-if="origins.length === 0" class="text-G700">non communiqué</p>
         <template v-else>
             <p

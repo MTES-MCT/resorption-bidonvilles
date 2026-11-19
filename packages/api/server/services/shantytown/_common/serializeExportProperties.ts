@@ -269,7 +269,7 @@ export default (closingSolutions: ClosingSolution[]) => {
             sum: true,
         },
         socialOrigins: {
-            title: 'Origines',
+            title: 'Origine géographique',
             data: ({ socialOrigins }: ShantytownWithFinancedAction) => (socialOrigins.length > 0 ? socialOrigins.map(({ label }) => label).join(';') : null),
             width: COLUMN_WIDTHS.MEDIUM,
         },

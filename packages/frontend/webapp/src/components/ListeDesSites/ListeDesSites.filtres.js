@@ -25,7 +25,7 @@ export default {
         ],
     },
     origin: {
-        label: "Origines",
+        label: "Origine géographique",
         id: "origin",
         options: [
             {
