@@ -185,6 +185,12 @@ export const useDirectoryStore = defineStore("directory", () => {
             );
         }),
         total: computed(() => filteredOrganizations.value.length),
+        totalWithActiveUsers: computed(
+            () =>
+                filteredOrganizations.value.filter(
+                    (organization) => organization.users?.length > 0
+                ).length
+        ),
         isLoaded: computed(() => organizations.value.length > 0),
         isLoading,
         error,
