@@ -12,7 +12,6 @@ const stubs = {
     resetAddresses: sandbox.stub(),
     resetFinances: sandbox.stub(),
     resetManagers: sandbox.stub(),
-    resetMetrics: sandbox.stub(),
     resetOperators: sandbox.stub(),
     resetShantytowns: sandbox.stub(),
     resetTopics: sandbox.stub(),
@@ -21,7 +20,6 @@ const stubs = {
 rewiremock('./resetAddresses').with(stubs.resetAddresses);
 rewiremock('./resetFinances').with(stubs.resetFinances);
 rewiremock('./resetManagers').with(stubs.resetManagers);
-rewiremock('./resetMetrics').with(stubs.resetMetrics);
 rewiremock('./resetOperators').with(stubs.resetOperators);
 rewiremock('./resetShantytowns').with(stubs.resetShantytowns);
 rewiremock('./resetTopics').with(stubs.resetTopics);
@@ -39,7 +37,6 @@ describe('models/actionModel/update/resetAsideData()', () => {
         stubs.resetAddresses.resolves();
         stubs.resetFinances.resolves();
         stubs.resetManagers.resolves();
-        stubs.resetMetrics.resolves();
         stubs.resetOperators.resolves();
         stubs.resetShantytowns.resolves();
         stubs.resetTopics.resolves();
@@ -50,15 +47,41 @@ describe('models/actionModel/update/resetAsideData()', () => {
     });
 
     describe('appels inconditionnels', () => {
-        it('appelle resetAddresses, resetManagers, resetMetrics, resetOperators, resetShantytowns et resetTopics avec id et transaction', async () => {
+        it('appelle resetAddresses, resetManagers, resetOperators, resetShantytowns et resetTopics avec id et transaction', async () => {
             await resetAsideData(id, false, transaction);
 
             expect(stubs.resetAddresses).to.have.been.calledOnceWithExactly(id, transaction);
             expect(stubs.resetManagers).to.have.been.calledOnceWithExactly(id, transaction);
-            expect(stubs.resetMetrics).to.have.been.calledOnceWithExactly(id, transaction);
             expect(stubs.resetOperators).to.have.been.calledOnceWithExactly(id, transaction);
             expect(stubs.resetShantytowns).to.have.been.calledOnceWithExactly(id, transaction);
             expect(stubs.resetTopics).to.have.been.calledOnceWithExactly(id, transaction);
+        });
+    });
+
+    describe('indicateurs (action_metrics)', () => {
+        it('ne réinitialise plus les indicateurs : tous les autres resets restent appelés, avec ou sans finances', async () => {
+            await resetAsideData(id, true, transaction);
+            await resetAsideData(id, false, transaction);
+
+            [
+                stubs.resetAddresses,
+                stubs.resetManagers,
+                stubs.resetOperators,
+                stubs.resetShantytowns,
+                stubs.resetTopics,
+            ].forEach(stub => expect(stub).to.have.been.calledTwice);
+            expect(stubs.resetFinances).to.have.been.calledOnce;
+        });
+
+        it('propage l\'erreur d\'un des resets restants', async () => {
+            stubs.resetTopics.rejects(new Error('boom'));
+
+            try {
+                await resetAsideData(id, false, transaction);
+                expect.fail('aurait dû lever une erreur');
+            } catch (error) {
+                expect((error as Error).message).to.equal('boom');
+            }
         });
     });
 
