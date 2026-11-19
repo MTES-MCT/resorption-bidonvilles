@@ -147,3 +147,9 @@ function refreshIsOptedOut() {
     isUserOptedOut.value = isOptedOut();
 }
 </script>
+
+<style scoped>
+a:hover {
+    text-decoration: underline;
+}
+</style>
