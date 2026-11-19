@@ -36,7 +36,7 @@ export default (shantytown: Shantytown) => {
                 },
                 children: [
                     new TextRun({
-                        text: 'Origine : ',
+                        text: 'Origine géographique : ',
                         bold: true,
                         size: 22,
                         font: 'Arial',

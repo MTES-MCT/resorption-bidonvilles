@@ -166,7 +166,7 @@ const sections = {
                 })
                 .join(", ");
             rows.push({
-                label: "Origines",
+                label: "Origine géographique",
                 value: town.value.socialOrigins.length > 0 ? value : "inconnu",
             });
         }

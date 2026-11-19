@@ -12,7 +12,7 @@
         />
         <div>
             <div v-if="!socialOrigins.length" class="text-G700">
-                Origine : inconnu
+                Origine géographique : inconnu
             </div>
             <div
                 class="flex"
@@ -22,7 +22,7 @@
             >
                 <img :src="origin.img" class="w-6 h-4 mr-2 mt-1" alt="" />
                 <div>
-                    <span class="sr-only">Origine de la population:</span
+                    <span class="sr-only">Origine géographique : </span
                     >{{ origin.label }}
                 </div>
             </div>

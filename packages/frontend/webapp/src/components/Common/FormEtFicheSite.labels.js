@@ -22,7 +22,7 @@ export default {
     population_minors_12_16: "12 - 16 ans",
     population_minors_16_18: "16 - 18 ans",
     minors_in_school: "Inscrits en établissement scolaire",
-    social_origins: "Quelle est l'origine des habitants ?",
+    social_origins: "Préciser l'origine géographique des habitants",
     caravans: "Caravanes",
     huts: "Habitats autoconstruits",
     tents: "Tentes",
