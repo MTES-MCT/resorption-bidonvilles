@@ -78,8 +78,7 @@
       :beforeMandatoryLinks="footerDatas.beforeMandatoryLinks"
       :mandatoryLinks="footerDatas.mandatoryLinks"
       :afterMandatoryLinks="footerDatas.afterMandatoryLinks"
-      :licenceName="footerDatas.licenceName"
-      :licenceTo="footerDatas.licenceTo"
+      licenceText=""
     />
   </div>
 </template>
@@ -205,19 +204,12 @@ const footerDatas = {
     ],
     beforeMandatoryLinks: [
       {
-        label: 'Code source',
-        target: '_blank',
-        class: 'fr-icon-github-fill fr-link--icon-left mr-0',
-        href: 'https://github.com/MTES-MCT/resorption-bidonvilles'
-      },
-      {
         label: 'Mesures d\'impact',
         href: `${WEBAPP_URL}/stats`
       },
       {
         label: 'Conditions générales d\'utilisation',
-        target: '_blank',
-        href: `${WEBAPP_URL}/doc/conditions-d-utilisation.pdf`
+        href: `${WEBAPP_URL}/conditions-d-utilisation`
       },
     ],
     mandatoryLinks: [
@@ -229,10 +221,10 @@ const footerDatas = {
         href: `${WEBAPP_URL}/mentions-legales`
       }, {
         label: 'Données personnelles',
-        href: `${WEBAPP_URL}/doc/conditions-d-utilisation.pdf`
+        href: `${WEBAPP_URL}/conditions-d-utilisation#vie-privee`
       }, {
         label: 'Gestion des cookies',
-        href: `${WEBAPP_URL}/doc/conditions-d-utilisation.pdf`
+        href: `${WEBAPP_URL}/conditions-d-utilisation#cookies`
       }
     ],
     afterMandatoryLinks: [
@@ -244,8 +236,6 @@ const footerDatas = {
         class: 'fr-link--icon-left pl-1.5 md:pl-0'
       }
     ],
-    licenceName: "licence AGPL-3.0",
-    licenceTo: "https://github.com/MTES-MCT/resorption-bidonvilles/blob/develop/LICENSE",
 }
 </script>
 <style scoped>
