@@ -85,18 +85,16 @@
                         ci-dessous.
                     </p>
 
-                    <p v-if="isUserOptedOut === null" output="status">
+                    <output v-if="isUserOptedOut === null">
                         Chargement de votre préférence…
-                    </p>
+                    </output>
                     <DsfrButton
                         v-else
                         type="button"
                         :label="buttonLabel"
                         @click="toggleOptOut"
                     />
-                    <p output="status" class="fr-sr-only">
-                        {{ statusMessage }}
-                    </p>
+                    <output class="fr-sr-only">{{ statusMessage }}</output>
                 </div>
             </div>
         </div>
