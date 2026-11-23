@@ -9,7 +9,7 @@ import tchapUtils from '#server/utils/tchap';
 import { RawParcel } from '#server/models/majicModel/findParcel/RawParcel.d';
 import { RawOwner } from '#server/models/majicModel/findOwners/RawOwner.d';
 
-export default async function findMajicOwners(parcelId: string, user: AuthUser) {
+export default async function findMajicOwners(parcelId: string, user: AuthUser, shantytownId: number) {
     // On trouve le département concerné par la parcelle
     const dept = parcelId.substring(0, 2);
 
@@ -68,6 +68,7 @@ export default async function findMajicOwners(parcelId: string, user: AuthUser) 
                     parcel,
                     owners,
                     majicYear,
+                    shantytownId: Number(shantytownId),
                 },
             },
         );

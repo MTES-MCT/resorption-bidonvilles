@@ -16,15 +16,16 @@ interface MajicParcelGetRequest extends Request {
     user: AuthUser,
 }
 
-export default async (req: MajicParcelGetRequest, res: Response, next: NextFunction) => {
+const getMajicOwner = async (req: MajicParcelGetRequest, res: Response, next: NextFunction) => {
     const {
         parcelid,
+        shantytownId,
     } = req.query;
 
     const { user } = req;
 
     try {
-        await majicService.find(parcelid as string, user);
+        await majicService.find(parcelid as string, user, Number(shantytownId));
     } catch (error) {
         const { code } = ERROR_RESPONSES[error?.code] ?? ERROR_RESPONSES.undefined;
 
@@ -36,3 +37,4 @@ export default async (req: MajicParcelGetRequest, res: Response, next: NextFunct
     }
     return res.status(200).send();
 };
+export default getMajicOwner;
