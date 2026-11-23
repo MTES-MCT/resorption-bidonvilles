@@ -210,6 +210,7 @@ async function showModal() {
             departement: town.value.departement.code,
             dataYear,
             hasAccessToLandRegistryOwners: hasAccessToLandRegistryOwners.value,
+            siteId: town.value.id,
         });
     } catch (error) {
         notificationStore.error(
