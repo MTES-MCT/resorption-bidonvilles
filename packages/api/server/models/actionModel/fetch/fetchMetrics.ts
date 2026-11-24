@@ -5,7 +5,8 @@ import enrichWhere from './enrichWhere';
 import metricsVersionKey from '../_common/metricsVersionKey';
 
 export type ActionMetricsRow = {
-    rank: number,
+    // RANK() est de type bigint en SQL : le driver pg le renvoie sous forme de chaîne ("1", "10"...)
+    rank: number | string,
     version_at: Date,
     action_id: number,
     date: string,

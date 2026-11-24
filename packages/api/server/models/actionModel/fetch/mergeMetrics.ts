@@ -4,7 +4,7 @@ import { ActionMetricsRow } from './fetchMetrics';
 /* eslint-disable no-param-reassign */
 export default function mergeMetrics(hash: ActionHash, metrics: ActionMetricsRow[]): void {
     metrics.forEach((row) => {
-        if (row.rank > 1) {
+        if (Number(row.rank) > 1) {
             return;
         }
 
