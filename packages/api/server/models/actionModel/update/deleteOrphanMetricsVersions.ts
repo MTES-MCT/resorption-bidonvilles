@@ -1,8 +1,8 @@
 import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 
-export default function deleteOrphanMetricsVersions(actionId: number, transaction: Transaction): Promise<unknown> {
-    return sequelize.query(
+export default async function deleteOrphanMetricsVersions(actionId: number, transaction: Transaction): Promise<void> {
+    await sequelize.query(
         `DELETE FROM action_metrics_versions
         WHERE fk_action = :actionId
         AND NOT EXISTS (

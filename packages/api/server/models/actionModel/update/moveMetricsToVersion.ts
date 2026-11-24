@@ -2,16 +2,16 @@ import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import metricsVersionKey from '../_common/metricsVersionKey';
 
-export default function moveMetricsToVersion(actionId: number, versionId: number, years: number[], transaction: Transaction): Promise<unknown> {
+export default async function moveMetricsToVersion(actionId: number, versionId: number, years: number[], transaction: Transaction): Promise<void> {
     if (years.length === 0) {
-        return Promise.resolve();
+        return;
     }
 
     // Les lignes à rattacher sont identifiées entièrement en SQL (rang 1 de l'action + année), et non à partir d'un
     // created_at renvoyé par JavaScript : pg stocke des microsecondes, JS des millisecondes, la comparaison échouerait.
     // La clé primaire d'action_metrics étant (fk_action, date, created_at), la sous-requête renvoie les trois colonnes
     // pour ne cibler que les lignes de rang 1 et jamais une ancienne version de la même année.
-    return sequelize.query(
+    await sequelize.query(
         `UPDATE action_metrics
         SET fk_version = :versionId
         WHERE action_metrics.fk_action = :actionId
