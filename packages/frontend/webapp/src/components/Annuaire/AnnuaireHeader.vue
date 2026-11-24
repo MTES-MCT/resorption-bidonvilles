@@ -8,8 +8,10 @@
                     {{ directoryStore.total }} structure{{
                         directoryStore.total > 1 ? "s" : ""
                     }}
-                    dont {{ directoryStore.totalWithActiveUsers }} comptant au
-                    moins un utilisateur actif
+                    <span v-if="directoryStore.total > 0">
+                        dont {{ directoryStore.totalWithActiveUsers }} comptant
+                        au moins un utilisateur actif
+                    </span>
                 </p>
                 <p>
                     {{ numberOfUsers }}
