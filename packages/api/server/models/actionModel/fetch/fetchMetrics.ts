@@ -2,9 +2,12 @@ import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import { CreatorInfo } from '#server/models/_common/types/UserInfoTypes.d';
 import enrichWhere from './enrichWhere';
+import metricsVersionKey from '../_common/metricsVersionKey';
 
 export type ActionMetricsRow = {
-    rank: number,
+    // RANK() est de type bigint en SQL : le driver pg le renvoie sous forme de chaîne ("1", "10"...)
+    rank: number | string,
+    version_at: Date,
     action_id: number,
     date: string,
     nombre_personnes: number | null,
@@ -31,6 +34,7 @@ export type ActionMetricsRow = {
 } & CreatorInfo;
 
 export default function fetchMetrics(actionIds?: number[], clauseGroup: object = {}, transaction?: Transaction): Promise<ActionMetricsRow[]> {
+    const versionAlias = 'metrics_version';
     const where = [];
     const replacements = { actionIds };
     if (actionIds !== undefined) {
@@ -66,6 +70,7 @@ export default function fetchMetrics(actionIds?: number[], clauseGroup: object =
             action_metrics.scolaire_nombre_autre,
             action_metrics.scolaire_mineur_scolarise_dans_annee,
             action_metrics.created_at,
+            COALESCE(${versionAlias}.version_at, action_metrics.created_at) AS version_at,
             creator.user_id AS creator_id,
             creator.first_name AS creator_first_name,
             creator.last_name AS creator_last_name,
@@ -74,9 +79,10 @@ export default function fetchMetrics(actionIds?: number[], clauseGroup: object =
             creator_organizations.abbreviation AS creator_organization_abbreviation,
             RANK() OVER(
                 PARTITION BY action_metrics.fk_action
-                ORDER BY date_trunc('seconds', action_metrics.created_at) DESC
+                ORDER BY ${metricsVersionKey('action_metrics', versionAlias)} DESC
             ) AS rank
         FROM action_metrics
+        LEFT JOIN action_metrics_versions AS ${versionAlias} ON action_metrics.fk_version = ${versionAlias}.action_metrics_version_id
         LEFT JOIN users AS creator ON action_metrics.created_by = creator.user_id
         LEFT JOIN organizations AS creator_organizations ON creator.fk_organization = creator_organizations.organization_id
         LEFT JOIN actions ON action_metrics.fk_action = actions.action_id

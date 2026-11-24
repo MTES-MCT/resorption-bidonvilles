@@ -4,7 +4,7 @@ import { ActionMetricsRow } from './fetchMetrics';
 /* eslint-disable no-param-reassign */
 export default function mergeMetrics(hash: ActionHash, metrics: ActionMetricsRow[]): void {
     metrics.forEach((row) => {
-        if (row.rank > 1) {
+        if (Number(row.rank) > 1) {
             return;
         }
 
@@ -12,10 +12,12 @@ export default function mergeMetrics(hash: ActionHash, metrics: ActionMetricsRow
             return;
         }
 
-        const metricCreatedAt = row.created_at.getTime();
+        // la date de mise à jour est celle de la version (et non le created_at de la ligne, conservé quand une ligne
+        // inchangée est rattachée à une nouvelle version)
+        const metricVersionAt = row.version_at.getTime();
 
-        if (hash[row.action_id].metrics_updated_at === null || metricCreatedAt > hash[row.action_id].metrics_updated_at) {
-            hash[row.action_id].metrics_updated_at = metricCreatedAt;
+        if (hash[row.action_id].metrics_updated_at === null || metricVersionAt > hash[row.action_id].metrics_updated_at) {
+            hash[row.action_id].metrics_updated_at = metricVersionAt;
         }
 
         hash[row.action_id].metrics.push({
