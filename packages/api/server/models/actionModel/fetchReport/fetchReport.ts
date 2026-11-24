@@ -2,6 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import enrichWhere from '../fetch/enrichWhere';
+import metricsVersionKey from '../_common/metricsVersionKey';
 import { ActionReportRow } from '#root/types/resources/Action.d';
 
 export default function fetchReport(
@@ -11,6 +12,8 @@ export default function fetchReport(
 ): Promise<ActionReportRow[]> {
     const where: string[] = [];
     const replacements: any = { annee: requestedYear };
+    const versionKey = metricsVersionKey('action_metrics', 'metrics_version');
+    const versionJoin = 'LEFT JOIN action_metrics_versions AS metrics_version ON action_metrics.fk_version = metrics_version.action_metrics_version_id';
 
     // Ajouter les filtres territoriaux pour les actions
     enrichWhere(where, replacements, actionClauseGroup, 'action');
@@ -140,9 +143,10 @@ export default function fetchReport(
                     action_metrics.created_at,
                     RANK() OVER(
                         PARTITION BY action_metrics.fk_action
-                        ORDER BY date_trunc('seconds', action_metrics.created_at) DESC
+                        ORDER BY ${versionKey} DESC
                     ) AS rank
                 FROM action_metrics
+                ${versionJoin}
                 WHERE
                 TO_CHAR(action_metrics.date, 'YYYY') = :annee::varchar
             )
@@ -154,8 +158,9 @@ export default function fetchReport(
         (
             SELECT
                 action_metrics.fk_action AS action_id,
-                MAX(action_metrics.created_at) AS last_metrics_update
+                MAX(${versionKey}) AS last_metrics_update
             FROM action_metrics
+            ${versionJoin}
             GROUP BY action_metrics.fk_action
         ),
         scolarmetrics AS
@@ -177,10 +182,11 @@ export default function fetchReport(
                     action_metrics.created_at,
                     RANK() OVER(
                         PARTITION BY action_metrics.fk_action
-                        ORDER BY action_metrics.date DESC, date_trunc('seconds', action_metrics.created_at) DESC
+                        ORDER BY action_metrics.date DESC, ${versionKey} DESC
                     ) AS rank
                 FROM 
                 action_metrics
+                ${versionJoin}
                 WHERE
                 (
                     action_metrics.scolaire_mineurs_moins_de_trois_ans IS NOT NULL OR
