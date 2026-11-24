@@ -946,6 +946,7 @@ export default {
                 webappUrl: `${webappUrl}`,
                 backUrl,
                 blogUrl,
+                siteUrl: variables.shantytownId ? `${webappUrl}/site/${variables.shantytownId}` : null,
             },
             preserveRecipient,
         });

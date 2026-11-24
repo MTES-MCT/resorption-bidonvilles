@@ -121,8 +121,12 @@ const props = defineProps({
         type: Boolean,
         required: true,
     },
+    siteId: {
+        type: Number,
+        required: true,
+    },
 });
-const { parcel, departement, dataYear, hasAccessToLandRegistryOwners } =
+const { parcel, departement, dataYear, hasAccessToLandRegistryOwners, siteId } =
     toRefs(props);
 
 const modale = ref(null);
@@ -140,7 +144,7 @@ async function fetchParcelOwners() {
     errorSummary.value = {};
     const notificationStore = useNotificationStore();
     try {
-        await getParcelOwners(parcel.value, departement.value);
+        await getParcelOwners(parcel.value, departement.value, siteId.value);
         notificationStore.success(
             "Message envoyé !",
             "Les informations ont été envoyées à l'adresse renseignée dans votre profil. Cette demande est tracée."

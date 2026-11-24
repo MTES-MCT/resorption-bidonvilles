@@ -72,7 +72,7 @@ describe('majicService.findMajicOwners()', () => {
             const user = authorizedOnDept75();
 
             try {
-                await findMajicOwners('13055000AB0123', user);
+                await findMajicOwners('13055000AB0123', user, 1);
                 expect.fail('should have thrown an error');
             } catch (e) {
                 expect(e).to.be.an.instanceof(ServiceError);
@@ -89,6 +89,7 @@ describe('majicService.findMajicOwners()', () => {
 
     describe('si la parcelle appartient au département autorisé de l\'utilisateur', () => {
         const parcelId = '75001000AB0123';
+        const shantytownId = 1;
         const fakeParcel = { idcom: '75001', dnupro: '0001' };
         const fakeOwners = [{ nom: 'Dupont', prenom: 'Jean' }];
 
@@ -103,7 +104,7 @@ describe('majicService.findMajicOwners()', () => {
         it('n\'échoue pas et accède aux tables cadastrales du bon département', async () => {
             const user = authorizedOnDept75();
 
-            await findMajicOwners(parcelId, user);
+            await findMajicOwners(parcelId, user, shantytownId);
 
             expect(stubs.majicModel.findParcel).to.have.been.calledOnceWith(parcelId, '75', 'ff2023_dep', 'pnb10_parcelle', 'd75_fftp_2023_pnb10_parcelle');
             expect(stubs.majicModel.findOwners).to.have.been.calledOnceWith(fakeParcel.idcom, fakeParcel.dnupro, '75', 'ff2023_dep', 'proprietaire_droit_non_ano', 'd75_fftp_2023_proprietaire_droit_non_ano');
@@ -112,7 +113,7 @@ describe('majicService.findMajicOwners()', () => {
         it('enregistre la demande dans les logs', async () => {
             const user = authorizedOnDept75();
 
-            await findMajicOwners(parcelId, user);
+            await findMajicOwners(parcelId, user, shantytownId);
 
             expect(stubs.majicLogsService.insert).to.have.been.calledOnceWith(user.id, user.organization.id, parcelId);
         });
@@ -120,7 +121,7 @@ describe('majicService.findMajicOwners()', () => {
         it('envoie un mail avec les informations de la parcelle et des propriétaires', async () => {
             const user = authorizedOnDept75();
 
-            await findMajicOwners(parcelId, user);
+            await findMajicOwners(parcelId, user, shantytownId);
 
             expect(stubs.mails.sendParcelOwner).to.have.been.calledOnce;
             expect(stubs.mails.sendParcelOwner).to.have.been.calledWith(
@@ -130,6 +131,7 @@ describe('majicService.findMajicOwners()', () => {
                         parcel: fakeParcel,
                         owners: fakeOwners,
                         majicYear: '2023',
+                        shantytownId,
                     },
                 },
             );
@@ -139,7 +141,7 @@ describe('majicService.findMajicOwners()', () => {
             stubs.tchap.triggerLandRegistryRequest.resolves();
             const user = authorizedOnDept75();
 
-            await findMajicOwners(parcelId, user);
+            await findMajicOwners(parcelId, user, shantytownId);
 
             expect(stubs.tchap.triggerLandRegistryRequest).to.have.been.calledOnceWith(user, parcelId, '2023');
         });
@@ -151,7 +153,7 @@ describe('majicService.findMajicOwners()', () => {
             const user = authorizedOnDept75();
 
             try {
-                await findMajicOwners(parcelId, user);
+                await findMajicOwners(parcelId, user, shantytownId);
                 expect(stubs.mails.sendParcelOwner).to.have.been.calledOnce;
                 expect(stubs.tchap.triggerLandRegistryRequest).to.have.been.calledOnce;
                 expect(consoleErrorStub).to.have.been.calledOnceWith(error);

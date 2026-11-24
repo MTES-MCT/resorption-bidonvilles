@@ -19,6 +19,9 @@ Voici les informations relatives à la propriété de la parcelle
 {{var:parcel.idpar}}.
 Ces données sont extraites des éléments du cadastre de l'année
 {{var:majicYear}}.
+{% if var:siteUrl %}
+Site concerné : Accéder à la fiche du site [{{var:siteUrl}}]
+{% endif %}
 Adresse de la parcelle cadastrale:
 {% if var:parcel.dnuvoi %}{{ var:parcel.dnuvoi }},{% endif %} {{
 var:parcel.cconvo }} {{ var:parcel.dvoilib }}
