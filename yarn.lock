@@ -1487,11 +1487,11 @@ __metadata:
   linkType: hard
 
 "@iconify-json/carbon@npm:^1.2.13":
-  version: 1.2.27
-  resolution: "@iconify-json/carbon@npm:1.2.27"
+  version: 1.2.30
+  resolution: "@iconify-json/carbon@npm:1.2.30"
   dependencies:
     "@iconify/types": "*"
-  checksum: e7e5a4a25dcb52a17483a1ef2a6db9226404d1b6afcf4791425da24b92cfeffd17163759105bd232382fcc514d08b15b7de06a0eadbb5c14ca0d97796d3aa810
+  checksum: 88b3c2f755bf268af708037138777d41bd8e063e46c668832bdc512bd7bcc71cb6a864e63d65b2f75351fd86650c26dab3af70ac87fd5ec56027d72984fe91ea
   languageName: node
   linkType: hard
 
