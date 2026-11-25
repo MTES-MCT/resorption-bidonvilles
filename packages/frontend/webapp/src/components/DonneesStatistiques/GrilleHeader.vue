@@ -1,13 +1,13 @@
 <template>
     <div
-        class="border-t border-b flex items-stretch justify-end py-3 cursor-pointer hover:bg-G100"
+        class="border-t border-b flex items-stretch py-3 cursor-pointer hover:bg-G100"
         @click="handleSort"
     >
         <div
-            class="flex space-x-2 px-3 items-end"
+            class="flex w-full items-center justify-center gap-2 px-3 text-center"
             :class="separator ? 'border-r' : ''"
         >
-            <p><slot /></p>
+            <div><slot /></div>
             <div class="flex items-center space-x-1" v-if="sortable">
                 <span
                     :class="

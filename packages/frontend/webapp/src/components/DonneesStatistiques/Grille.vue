@@ -8,15 +8,41 @@ vue
                 sortKey="number_of_towns_with_water"
                 :sortDirection="getSortDirection('number_of_towns_with_water')"
                 @sort="handleSort"
-                >Sites avec accès à l'eau<br />(nbre hab.
-                couverts)</GrilleHeader
             >
+                <div
+                    class="flex w-full flex-row items-center justify-center gap-2"
+                >
+                    <span>
+                        <Icon
+                            icon="faucet-drip"
+                            class="text-xl content-center h-full"
+                        />
+                    </span>
+                    <span class="flex flex-col leading-tight">
+                        <span class="whitespace-nowrap"
+                            >Sites avec accès à l'eau</span
+                        >
+                        <span>nbre hab. couverts</span>
+                    </span>
+                </div>
+            </GrilleHeader>
             <GrilleHeader
                 sortable
                 sortKey="number_of_persons"
                 :sortDirection="getSortDirection('number_of_persons')"
                 @sort="handleSort"
-                >Habitants</GrilleHeader
+            >
+                <div
+                    class="flex w-full flex-row items-center justify-center gap-2"
+                >
+                    <span>
+                        <Icon
+                            icon="user"
+                            class="text-xl content-center h-full"
+                        />
+                    </span>
+                    <span>Habitants</span>
+                </div></GrilleHeader
             >
             <GrilleHeader
                 :separator="false"
@@ -24,7 +50,17 @@ vue
                 sortKey="number_of_towns"
                 :sortDirection="getSortDirection('number_of_towns')"
                 @sort="handleSort"
-                >Nombre de sites</GrilleHeader
+                ><div
+                    class="flex w-full flex-row items-center justify-center gap-2"
+                >
+                    <span>
+                        <Icon
+                            icon="tent"
+                            class="text-xl content-center h-full"
+                        />
+                    </span>
+                    <span>Nombre de sites</span>
+                </div></GrilleHeader
             >
         </div>
 
@@ -51,6 +87,7 @@ export default {
 import { toRefs, computed, ref, toRaw } from "vue";
 import GrilleHeader from "./GrilleHeader.vue";
 import GrilleLigne from "./GrilleLigne.vue";
+import { Icon } from "@resorptionbidonvilles/ui";
 
 const props = defineProps({
     metrics: {

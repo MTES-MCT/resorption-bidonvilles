@@ -72,6 +72,52 @@ export const useMetricsStore = defineStore("metrics", () => {
         );
     });
 
+    const mergeWaterSnapshots = (endItems, startItems) => {
+        const flattenMetrics = (items) =>
+            items.flatMap((item) => [
+                item,
+                ...(item.children?.length ? flattenMetrics(item.children) : []),
+            ]);
+        const startByUid = new Map(
+            flattenMetrics(startItems).map((item) => [item.uid, item])
+        );
+
+        for (const item of endItems) {
+            const startItem = startByUid.get(item.uid);
+            const startTownsWithWater =
+                typeof startItem?.metrics.number_of_towns_with_water ===
+                "object"
+                    ? startItem.metrics.number_of_towns_with_water?.to ?? 0
+                    : startItem?.metrics.number_of_towns_with_water ?? 0;
+            const startPersonsWithWater =
+                typeof startItem?.metrics.number_of_persons_with_water ===
+                "object"
+                    ? startItem.metrics.number_of_persons_with_water?.to ?? 0
+                    : startItem?.metrics.number_of_persons_with_water ?? 0;
+            const endTownsWithWater =
+                typeof item.metrics.number_of_towns_with_water === "object"
+                    ? item.metrics.number_of_towns_with_water?.to ?? 0
+                    : item.metrics.number_of_towns_with_water ?? 0;
+            const endPersonsWithWater =
+                typeof item.metrics.number_of_persons_with_water === "object"
+                    ? item.metrics.number_of_persons_with_water?.to ?? 0
+                    : item.metrics.number_of_persons_with_water ?? 0;
+
+            item.metrics.number_of_towns_with_water = {
+                from: startTownsWithWater,
+                to: endTownsWithWater,
+            };
+            item.metrics.number_of_persons_with_water = {
+                from: startPersonsWithWater,
+                to: endPersonsWithWater,
+            };
+
+            if (item.children?.length) {
+                mergeWaterSnapshots(item.children, startItems);
+            }
+        }
+    };
+
     function reset() {
         nationStatus.value = null;
         error.value = null;
@@ -126,12 +172,19 @@ export const useMetricsStore = defineStore("metrics", () => {
                 return null;
             }
 
-            nationStatus.value =
-                nationStatus.value === "loaded" ? "refresh" : "init";
-            hexagoneMetrics.value = {};
-            metrics.value = [];
+            const refreshing = nationStatus.value === "loaded";
+            nationStatus.value = refreshing ? "refresh" : "init";
+            if (!refreshing) {
+                hexagoneMetrics.value = {};
+                metrics.value = [];
+            }
             try {
-                metrics.value = await getNationMetrics(from.value, to.value);
+                const [endMetrics, startMetrics] = await Promise.all([
+                    getNationMetrics(from.value, to.value),
+                    getNationMetrics(from.value, from.value),
+                ]);
+                mergeWaterSnapshots(endMetrics, startMetrics);
+                metrics.value = endMetrics;
                 nationStatus.value = "loaded";
                 loaded.value.from = new Date(from.value);
                 loaded.value.to = new Date(to.value);
@@ -155,8 +208,6 @@ export const useMetricsStore = defineStore("metrics", () => {
                     evolution.to.value
                 );
                 nationStatus.value = "loaded";
-                loaded.value.from = new Date(evolution.from.value);
-                loaded.value.to = new Date(evolution.to.value);
 
                 evolution.isLoading.value = false;
                 return evolution;

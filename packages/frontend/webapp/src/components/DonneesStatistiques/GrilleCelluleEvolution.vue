@@ -1,15 +1,17 @@
 <template>
-    <div class="flex items-stretch justify-end py-2 font-bold text-sm">
+    <div class="min-h-[76px] font-bold text-sm">
         <div
-            class="flex px-3 items-center"
+            class="flex h-full w-full flex-col"
             :class="separator ? 'border-r' : ''"
         >
-            <div>
-                <div class="h-6 w-20 text-center">
-                    <slot name="evolution" />
-                </div>
-                <p class="text-lg"><slot name="figure" /></p>
+            <div class="flex h-6 w-full items-center justify-center px-2">
+                <slot name="evolution" />
             </div>
+            <p
+                class="flex min-h-0 w-full flex-1 items-center justify-center text-center text-lg"
+            >
+                <slot name="figure" />
+            </p>
         </div>
     </div>
 </template>

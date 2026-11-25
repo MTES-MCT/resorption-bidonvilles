@@ -227,7 +227,7 @@
 </template>
 
 <script setup>
-import { toRefs } from "vue";
+import { computed } from "vue";
 import formatStat from "@common/utils/formatStat";
 import formatDate from "@common/utils/formatDate";
 
@@ -240,5 +240,20 @@ const props = defineProps({
         required: true,
     },
 });
-const { metrics } = toRefs(props);
+const metrics = computed(() => ({
+    summary: {
+        number_of_persons: {
+            all: 0,
+            eu_only: 0,
+            ...props.metrics?.summary?.number_of_persons,
+        },
+        number_of_towns: {
+            all: 0,
+            eu_only: 0,
+            unknown_population: 0,
+            out_of_date: 0,
+            ...props.metrics?.summary?.number_of_towns,
+        },
+    },
+}));
 </script>
