@@ -3,10 +3,10 @@
         <component
             :is="linkTo ? 'router-link' : 'article'"
             v-bind="linkTo ? { to: linkTo } : {}"
-            class="cursor-pointer block rounded border py-2 hover:border-primary bg-white"
+            class="grille-row cursor-pointer block py-2 bg-white"
             :class="{
-                'ml-4 mr-4': variant === 'secondary',
-                'ml-10 mr-8': variant === 'tertiary',
+                'grille-row--secondary': variant === 'secondary',
+                'grille-row--tertiary': variant === 'tertiary',
             }"
             @click="toggle"
         >
@@ -343,6 +343,57 @@ const townEvolutionIconRotation = computed(() => {
 </script>
 
 <style scoped>
+.grille-row {
+    position: relative;
+    border-radius: 0.25rem;
+}
+
+.grille-row .grid > * {
+    box-sizing: border-box;
+}
+
+.grille-row::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border: 1px solid #d6d6d6;
+    border-radius: 0.25rem;
+    pointer-events: none;
+}
+
+.grille-row:hover::before {
+    border-color: #000091;
+}
+
+.grille-row--secondary::before {
+    left: 1rem;
+    right: 1rem;
+}
+
+.grille-row--secondary .grid > :first-child {
+    padding-left: 1rem;
+}
+
+.grille-row--secondary .grid > :last-child {
+    padding-right: 1rem;
+}
+
+.grille-row--tertiary::before {
+    left: 2rem;
+    right: 2rem;
+}
+
+.grille-row--tertiary .grid > :first-child {
+    padding-left: 2rem;
+}
+
+.grille-row--tertiary .grid > :last-child {
+    padding-right: 2rem;
+}
+
 .down {
     transform: rotate(45deg);
 }
