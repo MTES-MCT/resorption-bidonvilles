@@ -101,6 +101,9 @@ export type Comment = {
 };
 type ActionMetrics = {
     date: number,
+    year: number,
+    indicators_updated_at: number | null,
+    scolaire_updated_at: number | null,
     nombre_personnes: number | null,
     nombre_menages: number | null,
     nombre_femmes: number | null,
@@ -213,6 +216,9 @@ interface GenericAction extends IAction {
     metrics: ActionMetrics[],
     indicateurs?: { [year: string]: { [field: string]: number | null } },
     metrics_updated_at: number | null,
+    is_active_previous_year: boolean,
+    indicators_up_to_date_90d: boolean,
+    indicators_up_to_date_180d: boolean,
     finances?: ActionFinances,
     hasDihalFinancing: boolean,
     dihalFinancingYear: number | null,

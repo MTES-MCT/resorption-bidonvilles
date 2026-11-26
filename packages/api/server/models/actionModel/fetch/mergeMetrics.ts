@@ -1,5 +1,6 @@
 import { ActionHash } from './hashActions';
 import { ActionMetricsRow } from './fetchMetrics';
+import { SCOLAIRE_KEYS, NON_SCOLAIRE_KEYS, hasAnyValue } from '../_common/indicatorKeys';
 
 /* eslint-disable no-param-reassign */
 export default function mergeMetrics(hash: ActionHash, metrics: ActionMetricsRow[]): void {
@@ -22,6 +23,10 @@ export default function mergeMetrics(hash: ActionHash, metrics: ActionMetricsRow
 
         hash[row.action_id].metrics.push({
             date: new Date(row.date).getTime(),
+            year: Number.parseInt(String(row.date).slice(0, 4), 10),
+            // une nature sans aucune valeur sur la ligne n'a pas de date de mise à jour
+            indicators_updated_at: hasAnyValue(row, NON_SCOLAIRE_KEYS) && row.updated_at_indicators ? new Date(row.updated_at_indicators).getTime() : null,
+            scolaire_updated_at: hasAnyValue(row, SCOLAIRE_KEYS) && row.updated_at_scolaire ? new Date(row.updated_at_scolaire).getTime() : null,
             nombre_personnes: row.nombre_personnes,
             nombre_menages: row.nombre_menages,
             nombre_femmes: row.nombre_femmes,

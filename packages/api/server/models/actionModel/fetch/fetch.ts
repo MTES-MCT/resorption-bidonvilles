@@ -18,6 +18,7 @@ import mergeMetrics from './mergeMetrics';
 import mergeOperators from './mergeOperators';
 import mergeShantytowns from './mergeShantytowns';
 import mergeTopics from './mergeTopics';
+import applyIndicatorsFreshness from './applyIndicatorsFreshness';
 import computeActionNames from './computeActionNames';
 import Action from '#root/types/resources/Action.d';
 import { User } from '#root/types/resources/User.d';
@@ -50,6 +51,7 @@ export default async function fetch(user: User, actionIds?: number[], transactio
     mergeShantytowns(hash, shantytowns);
     mergeComments(hash, comments);
     mergeMetrics(hash, metrics);
+    applyIndicatorsFreshness(hash, new Date());
     mergeFinances(hash, finances);
 
     Object.values(hash).forEach((action) => {

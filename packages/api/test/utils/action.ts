@@ -78,6 +78,9 @@ export function serialized(override = {}): Action {
         ],
         metrics: [],
         metrics_updated_at: null,
+        is_active_previous_year: false,
+        indicators_up_to_date_90d: false,
+        indicators_up_to_date_180d: false,
         comments: [
             {
                 attachments: [],

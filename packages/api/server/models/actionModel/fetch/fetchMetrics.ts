@@ -8,6 +8,8 @@ export type ActionMetricsRow = {
     // RANK() est de type bigint en SQL : le driver pg le renvoie sous forme de chaîne ("1", "10"...)
     rank: number | string,
     version_at: Date,
+    updated_at_indicators: Date,
+    updated_at_scolaire: Date,
     action_id: number,
     date: string,
     nombre_personnes: number | null,
@@ -70,6 +72,8 @@ export default function fetchMetrics(actionIds?: number[], clauseGroup: object =
             action_metrics.scolaire_nombre_autre,
             action_metrics.scolaire_mineur_scolarise_dans_annee,
             action_metrics.created_at,
+            COALESCE(action_metrics.updated_at_indicators, ${versionAlias}.version_at, action_metrics.created_at) AS updated_at_indicators,
+            COALESCE(action_metrics.updated_at_scolaire, ${versionAlias}.version_at, action_metrics.created_at) AS updated_at_scolaire,
             COALESCE(${versionAlias}.version_at, action_metrics.created_at) AS version_at,
             creator.user_id AS creator_id,
             creator.first_name AS creator_first_name,
