@@ -31,7 +31,6 @@
     <DsfrFooter
         :descText="footerDatas.descText"
         :logoText="footerDatas.logoText"
-        :ecosystemLinks="footerDatas.ecosystemLinks"
         :beforeMandatoryLinks="footerDatas.beforeMandatoryLinks"
         :mandatoryLinks="footerDatas.mandatoryLinks"
         :afterMandatoryLinks="footerDatas.afterMandatoryLinks"
@@ -57,7 +56,7 @@ const followDatas = {
         label: 'Nous contacter par courriel',
         title: 'Contactez-nous par courriel  - Ouverture de votre outils de courrier électronique',
         primary: true,
-        onClick: () => globalThis.window != undefined && globalThis.window.open(`mailto:${CONTACT_EMAIL.value}`)
+        onClick: () => globalThis.window?.open(`mailto:${CONTACT_EMAIL.value}`)
       }
     ],
   },
@@ -68,7 +67,7 @@ const followDatas = {
         label: 'LinkedIn',
         title: 'Page LinkedIn de la DIHAL - Ouverture dans une nouvelle fenêtre',
         icon: 'fr-icon-linkedin-box-fill',
-        onClick: () => globalThis.window != undefined && globalThis.window.open('https://fr.linkedin.com/company/dihal', '_blank'),
+        onClick: () => globalThis.window?.open('https://fr.linkedin.com/company/dihal', '_blank'),
       }
     ]
   }
@@ -77,21 +76,8 @@ const followDatas = {
 // Paramétrage du footer DSFR
 const footerDatas = {
     descText: "Un produit de la Délégation Interministérielle à l'Hébergement et à l'Accès au Logement (DIHAL).",
-    ecosystemLinks: [
-      {
-        label: CONTACT_EMAIL.value,
-        href: `mailto:${CONTACT_EMAIL.value}`
-      },
-      {
-        label: 'DIHAL',
-        href: 'https://www.dihal.gouv.fr/'
-      }
-    ],
+    logoText: "Gouvernement",
     beforeMandatoryLinks: [
-      {
-        label: 'Mesures d\'impact',
-        to: "/stats"
-      },
       {
         label: 'Conditions générales d\'utilisation',
         to: "/conditions-d-utilisation"
