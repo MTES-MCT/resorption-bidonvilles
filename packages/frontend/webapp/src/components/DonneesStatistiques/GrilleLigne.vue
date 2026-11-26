@@ -58,7 +58,7 @@
                                 {{ formatStat(townsWithWaterTo) }}
                                 ({{ townsWithWaterPercentage }}%)
                             </div>
-                            <span class="block text-sm">
+                            <span class="block">
                                 <Icon icon="user" class="mr-1" />
                                 {{ formatStat(personsWithWaterTo) }}
                                 ({{ personsWithWaterPercentage }}%)
