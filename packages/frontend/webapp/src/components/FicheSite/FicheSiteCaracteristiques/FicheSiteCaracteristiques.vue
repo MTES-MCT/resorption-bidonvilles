@@ -46,15 +46,9 @@
                     @click="showModal"
                     >Connaître le propriétaire</DsfrButton
                 >
-                <div
-                    v-if="
-                        canAccessLandRegistryOwners &&
-                        !cadastreIsLoading &&
-                        !isOnParcel
-                    "
-                >
+                <div v-if="landRegistryDisabledMessage">
                     <p class="text-sm italic">
-                        Le point n'est pas sur une parcelle.
+                        {{ landRegistryDisabledMessage }}
                     </p>
                 </div>
             </div>
@@ -106,6 +100,18 @@ const isOnParcel = computed(() => !!mainParcel.value);
 
 const canOpenLandRegistryModal = computed(() => {
     return canAccessLandRegistryOwners.value && isOnParcel.value;
+});
+
+const landRegistryDisabledMessage = computed(() => {
+    if (!canAccessLandRegistryOwners.value) {
+        return "Vous n'avez pas les droits pour consulter le propriétaire.";
+    }
+
+    if (!cadastreIsLoading.value && !isOnParcel.value) {
+        return "Le point n'est pas sur une parcelle.";
+    }
+
+    return null;
 });
 
 onMounted(() => {
