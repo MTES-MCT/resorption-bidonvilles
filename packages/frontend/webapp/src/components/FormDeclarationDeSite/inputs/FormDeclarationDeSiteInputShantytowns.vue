@@ -12,11 +12,21 @@
             liste les sites ouverts à date et les sites fermés trois mois avant
             ou après l'installation de celui-ci.
         </template>
+        <template #tabs-right>
+            <DsfrCheckbox
+                v-model="extendSearch"
+                :value="true"
+                label="Étendre la recherche"
+                name="extend_shantytown_search"
+                id="extend_shantytown_search"
+                small
+            />
+        </template>
     </InputShantytowns>
 </template>
 
 <script setup>
-import { toRefs } from "vue";
+import { ref, toRefs } from "vue";
 import { useFieldValue } from "vee-validate";
 import InputShantytowns from "@/components/InputShantytowns/InputShantytowns.vue";
 import labels from "@/components/Common/FormEtFicheSite.labels";
@@ -34,6 +44,7 @@ const props = defineProps({
 });
 const { departement, id } = toRefs(props);
 const builtAt = useFieldValue("built_at");
+const extendSearch = ref(false);
 
 function filter(town) {
     if (departement.value.code !== town.departement.code) {
@@ -51,7 +62,11 @@ function filter(town) {
         return true;
     }
 
-    const dateRef = builtAt.value || new Date();
+    if (extendSearch.value) {
+        return true;
+    }
+
+    const dateRef = builtAt.value ? new Date(builtAt.value) : new Date();
     dateRef.setHours(0, 0, 0, 0);
 
     const maxDate = new Date(dateRef);
