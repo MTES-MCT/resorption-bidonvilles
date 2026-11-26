@@ -2,7 +2,10 @@
     <ContentWrapper id="printable-content">
         <Title class="mt-6">Hexagone</Title>
         <DonneesStatistiquesDepartementBigFigures
-            v-if="['loaded', 'refresh'].includes(metricsStore.nationStatus)"
+            v-if="
+                ['loaded', 'refresh'].includes(metricsStore.nationStatus) &&
+                metricsStore.hexagoneMetrics?.summary
+            "
             :metrics="metricsStore.hexagoneMetrics"
         />
         <Header
@@ -69,7 +72,7 @@ import DonneesStatistiquesDepartementBigFigures from "../DonneesStatistiquesDepa
 
 const activeTab = ref("tableau");
 const departementMetricsStore = useDepartementMetricsStore();
-departementMetricsStore.activeTab = activeTab;
+departementMetricsStore.activeTab = activeTab.value;
 const metricsStore = useMetricsStore();
 const userStore = useUserStore();
 
@@ -92,8 +95,7 @@ onMounted(() => {
 });
 
 const changeActiveTab = (tab) => {
-    if (tab.target.id === "evolution") {
-        departementMetricsStore.activeTab = tab.target.id;
-    }
+    activeTab.value = tab.target.id;
+    departementMetricsStore.activeTab = tab.target.id;
 };
 </script>
