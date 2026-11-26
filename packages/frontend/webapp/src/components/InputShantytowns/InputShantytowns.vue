@@ -13,20 +13,34 @@
             >
         </div>
         <div v-else>
-            <TabList
-                :tabs="tabs"
-                v-model="currentTab"
-                class="mb-3"
-                :clickable="false"
-            />
+            <div class="mb-3 flex items-center gap-4">
+                <div class="min-w-0 flex-1">
+                    <TabList
+                        :tabs="tabs"
+                        v-model="currentTab"
+                        :clickable="false"
+                    />
+                </div>
+                <div class="shrink-0 ml-auto">
+                    <slot name="tabs-right" />
+                </div>
+            </div>
             <TextInput
                 :name="`${name}_search`"
                 prefixIcon="search"
                 placeholder="Adresse, nom d'un site, ville..."
                 @keypress="preventSubmit"
             />
+            <div class="flex justify-center mt-4 mb-2">
+                <DsfrPagination
+                    v-if="totalPages > 1"
+                    :pages="pages"
+                    v-model:current-page="currentPage"
+                    :truncLimit="3"
+                />
+            </div>
 
-            <Tableau :columns="filteredColumns" :data="currentTabData">
+            <Tableau :columns="filteredColumns" :data="paginatedCurrentTabData">
                 <template v-slot:cell="{ content, column }">
                     <Checkbox
                         v-if="column === 'checkbox'"
@@ -58,12 +72,20 @@
                     <TableauCellule v-else :content="content" />
                 </template>
             </Tableau>
+            <div class="flex justify-center mt-6">
+                <DsfrPagination
+                    v-if="totalPages > 1"
+                    :pages="pages"
+                    v-model:current-page="currentPage"
+                    :truncLimit="3"
+                />
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { toRefs, ref, onMounted, computed, nextTick } from "vue";
+import { toRefs, ref, onMounted, computed, nextTick, watch } from "vue";
 import { useField, useFieldValue } from "vee-validate";
 import { useTownsStore } from "@/stores/towns.store";
 import formatDate from "@common/utils/formatDate.js";
@@ -104,6 +126,8 @@ const { name, label, filter, columns, showMandatoryStar, defaultTab } =
     toRefs(props);
 
 const currentTab = ref(defaultTab.value);
+const currentPage = ref(0);
+const itemsPerPage = 10;
 const search = useFieldValue(`${name.value}_search`);
 const { value, handleChange } = useField(name);
 
@@ -170,9 +194,27 @@ const data = computed(() => {
     return townsStore.towns.filter(filter.value);
 });
 
+function toTimestamp(value) {
+    if (!value) {
+        return 0;
+    }
+
+    if (typeof value === "number") {
+        return value;
+    }
+
+    const asNumber = Number(value);
+    if (!Number.isNaN(asNumber)) {
+        return asNumber;
+    }
+
+    const asDate = new Date(value).getTime() / 1000;
+    return Number.isNaN(asDate) ? 0 : asDate;
+}
+
 const currentTabData = computed(() => {
     const reg = new RegExp(search.value, "i");
-    return data.value
+    const filteredData = data.value
         .filter(({ id, status, city, usename }) => {
             if (currentTab.value === "open") {
                 if (status !== "open") {
@@ -195,7 +237,24 @@ const currentTabData = computed(() => {
             // filter by search
             return search.value === "" || `${city.name} ${usename}`.match(reg);
         })
-        .map(({ id, city, usename, fieldType, populationTotal, closedAt }) => {
+        .sort((a, b) => {
+            if (currentTab.value === "open") {
+                const dateA = toTimestamp(a.builtAt || a.declaredAt);
+                const dateB = toTimestamp(b.builtAt || b.declaredAt);
+                return dateB - dateA;
+            }
+
+            if (currentTab.value === "closed") {
+                const dateA = toTimestamp(a.closedAt);
+                const dateB = toTimestamp(b.closedAt);
+                return dateB - dateA;
+            }
+
+            return 0;
+        });
+
+    return filteredData.map(
+        ({ id, city, usename, fieldType, populationTotal, closedAt }) => {
             return {
                 id,
                 checkbox: id,
@@ -207,7 +266,30 @@ const currentTabData = computed(() => {
                     ? `Fermé le ${formatDate(closedAt, "d/m/y")}`
                     : "Ouvert",
             };
+        }
+    );
+});
+
+const totalPages = computed(() => {
+    return Math.ceil(currentTabData.value.length / itemsPerPage);
+});
+
+const pages = computed(() => {
+    const results = [];
+    for (let i = 1; i <= totalPages.value; i++) {
+        results.push({
+            title: `${i}`,
+            href: `${i}`,
+            label: i,
         });
+    }
+
+    return results;
+});
+
+const paginatedCurrentTabData = computed(() => {
+    const start = currentPage.value * itemsPerPage;
+    return currentTabData.value.slice(start, start + itemsPerPage);
 });
 
 function onCheckChange() {
@@ -228,6 +310,21 @@ function preventSubmit(event) {
 }
 
 const townsStore = useTownsStore();
+
+watch([currentTab, search, data], () => {
+    currentPage.value = 0;
+});
+
+watch(totalPages, (value) => {
+    if (value === 0) {
+        currentPage.value = 0;
+        return;
+    }
+
+    if (currentPage.value > value - 1) {
+        currentPage.value = value - 1;
+    }
+});
 
 onMounted(() => {
     if (townsStore.towns.length === 0) {
