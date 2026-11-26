@@ -2,22 +2,10 @@
     <FicheRubrique
         title="Caractéristiques du site"
         category="caracteristics"
-        :class="[
-            'pb-0',
-            hasAccessToLandRegistryOwners ? 'xl:pb-32' : 'xl:pb-14',
-        ]"
+        class="pb-0 xl:pb-32"
     >
         <section class="flex flex-col-reverse xl:flex-row">
-            <div
-                :class="[
-                    'xl:w-1/2',
-                    'md:mr-8',
-                    'mb-6',
-                    hasAccessToLandRegistryOwners
-                        ? 'mt-24 md:mb-6 xl:mt-32 xl:mb-4'
-                        : 'xl:mt-8',
-                ]"
-            >
+            <div class="xl:w-1/2 md:mr-8 mb-6 mt-24 md:mb-6 xl:mt-32 xl:mb-4">
                 <FicheSiteDatesInstallation :town="town" />
                 <FicheSiteTypeDeSite :town="town" />
                 <FicheSiteInfosAcces v-if="town.addressDetails" :town="town" />
@@ -44,21 +32,24 @@
                     :cadastre="cadastre"
                     @townclick="onTownClick"
                 />
-                <div v-if="hasAccessToLandRegistryOwners">
-                    <DsfrButton
-                        class="mt-12"
-                        :icon="
-                            isShowModalLoading
-                                ? {
-                                      name: 'ri:loader-4-line',
-                                      animation: 'spin',
-                                  }
-                                : undefined
-                        "
-                        :disabled="isShowModalLoading"
-                        @click="showModal"
-                        >Connaître le propriétaire</DsfrButton
-                    >
+                <DsfrButton
+                    class="mt-12"
+                    :icon="
+                        isShowModalLoading
+                            ? {
+                                  name: 'ri:loader-4-line',
+                                  animation: 'spin',
+                              }
+                            : undefined
+                    "
+                    :disabled="!canOpenLandRegistryModal || isShowModalLoading"
+                    @click="showModal"
+                    >Connaître le propriétaire</DsfrButton
+                >
+                <div v-if="landRegistryDisabledMessage">
+                    <p class="text-sm italic">
+                        {{ landRegistryDisabledMessage }}
+                    </p>
                 </div>
             </div>
         </section>
@@ -71,7 +62,7 @@ import { getMajicYear } from "@/api/majic.api";
 import router from "@/helpers/router";
 import { useTownsStore } from "@/stores/towns.store";
 import generateSquare from "@/utils/generateSquare";
-import { computed, onMounted, ref, toRefs, watch } from "vue";
+import { computed, onMounted, ref, toRefs } from "vue";
 
 import CartoFicheSite from "@/components/CartoFicheSite/CartoFicheSite.vue";
 import FicheRubrique from "@/components/FicheRubrique/FicheRubrique.vue";
@@ -95,9 +86,33 @@ const { town } = toRefs(props);
 const cadastre = ref(null);
 const cadastreIsLoading = ref(null);
 const mainParcel = ref(null);
-const hasAccessToLandRegistryOwners = ref(null);
 const isShowModalLoading = ref(false);
 const userStore = useUserStore();
+
+const canAccessLandRegistryOwners = computed(() => {
+    return (
+        userStore.hasLocalizedPermission("land_registry.access", town.value) &&
+        town.value.status === "open"
+    );
+});
+
+const isOnParcel = computed(() => !!mainParcel.value);
+
+const canOpenLandRegistryModal = computed(() => {
+    return canAccessLandRegistryOwners.value && isOnParcel.value;
+});
+
+const landRegistryDisabledMessage = computed(() => {
+    if (!canAccessLandRegistryOwners.value) {
+        return "Vous n'avez pas les droits pour consulter le propriétaire.";
+    }
+
+    if (!cadastreIsLoading.value && !isOnParcel.value) {
+        return "Le point n'est pas sur une parcelle.";
+    }
+
+    return null;
+});
 
 onMounted(() => {
     const townsStore = useTownsStore();
@@ -181,7 +196,7 @@ async function loadCadastre() {
                 mainSiteParcel.properties.section +
                 mainSiteParcel.properties.numero;
         }
-    } catch (error) {
+    } catch {
         // ignore
     }
 
@@ -197,7 +212,7 @@ function onTownClick(clickedTown) {
 }
 
 async function showModal() {
-    if (!mainParcel.value || !hasAccessToLandRegistryOwners.value) {
+    if (!canOpenLandRegistryModal.value) {
         return;
     }
     const modaleStore = useModaleStore();
@@ -209,7 +224,7 @@ async function showModal() {
             parcel: mainParcel.value,
             departement: town.value.departement.code,
             dataYear,
-            hasAccessToLandRegistryOwners: hasAccessToLandRegistryOwners.value,
+            hasAccessToLandRegistryOwners: canOpenLandRegistryModal.value,
         });
     } catch (error) {
         notificationStore.error(
@@ -221,19 +236,4 @@ async function showModal() {
         isShowModalLoading.value = false;
     }
 }
-
-watch(
-    () => mainParcel.value,
-    (newValue) => {
-        if (
-            userStore.hasLocalizedPermission(
-                "land_registry.access",
-                town.value
-            ) &&
-            town.value.status === "open"
-        ) {
-            hasAccessToLandRegistryOwners.value = !!newValue;
-        }
-    }
-);
 </script>
