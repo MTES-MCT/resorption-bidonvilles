@@ -13,32 +13,35 @@
                         <div>
                             {{ formatActionsCountLabel(myOrgOpenActionsCount) }}
                             en cours
-                            <div v-if="actionsFinancedByDIHALMyOrg > 0">
+                            <div v-if="statisticsMyOrg.dihal.total > 0">
                                 <DsfrBadge
                                     :type="badgeDIHALVariantMyOrg"
                                     :label="badgeDIHALLabelMyOrg"
                                     noIcon
                                     small
                                 />
-                                des actions financées par la DIHAL ont des
-                                indicateurs mis à jour depuis moins de 3 mois
-                                ({{
-                                    updatedActionsFinancedByDIHALMyOrg
+                                des actions actives en {{ previousYear }},
+                                financées par la DIHAL ont des indicateurs mis à
+                                jour depuis moins de 3 mois ({{
+                                    statisticsMyOrg.dihal.updated
                                 }}
-                                actions sur {{ actionsFinancedByDIHALMyOrg }})
+                                actions sur
+                                {{ statisticsMyOrg.dihal.total }} actives en
+                                {{ previousYear }})
                             </div>
-                            <div v-if="myOrgOpenActionsCount > 0">
+                            <div v-if="statisticsMyOrg.sixMonths.total > 0">
                                 <DsfrBadge
                                     :type="badgeVariantMyOrg"
                                     :label="badgeLabelMyOrg"
                                     noIcon
                                     small
                                 />
-                                des actions ont des indicateurs mis à jour dans
-                                les 6 derniers mois ({{
-                                    updatedActionsInTheLastSixMonthsMyOrg
-                                }}
-                                actions sur {{ myOrgOpenActionsCount }} )
+                                des actions actives en {{ previousYear }} ont
+                                des indicateurs mis à jour dans les 6 derniers
+                                mois ({{ statisticsMyOrg.sixMonths.updated }}
+                                actions sur
+                                {{ statisticsMyOrg.sixMonths.total }} actives en
+                                {{ previousYear }})
                             </div>
                         </div>
                         <div v-if="myOrgClosedActionsCount > 0" class="mt-4">
@@ -54,30 +57,33 @@
                         {{ formatActionsCountLabel(currentActionsCount) }}
                         <template v-if="actionsStore.filters.status === 'open'"
                             >en cours
-                            <div v-if="actionsFinancedByDIHAL > 0">
+                            <div v-if="statistics.dihal.total > 0">
                                 <DsfrBadge
                                     :type="badgeDIHALVariant"
                                     :label="badgeDIHALLabel"
                                     noIcon
                                     small
                                 />
-                                des actions financées par la DIHAL ont des
-                                indicateurs mis à jour depuis moins de 3 mois
-                                ({{ updatedActionsFinancedByDIHAL }} actions sur
-                                {{ actionsFinancedByDIHAL }})
+                                des actions actives en {{ previousYear }},
+                                financées par la DIHAL ont des indicateurs mis à
+                                jour depuis moins de 3 mois ({{
+                                    statistics.dihal.updated
+                                }}
+                                actions sur {{ statistics.dihal.total }} actives
+                                en {{ previousYear }})
                             </div>
-                            <div v-if="currentActionsCount > 0">
+                            <div v-if="statistics.sixMonths.total > 0">
                                 <DsfrBadge
                                     :type="badgeVariant"
                                     :label="badgeLabel"
                                     noIcon
                                     small
                                 />
-                                des actions ont des indicateurs mis à jour dans
-                                les 6 derniers mois ({{
-                                    updatedActionsInTheLastSixMonths
-                                }}
-                                actions sur {{ currentActionsCount }} )
+                                des actions actives en {{ previousYear }} ont
+                                des indicateurs mis à jour dans les 6 derniers
+                                mois ({{ statistics.sixMonths.updated }} actions
+                                sur {{ statistics.sixMonths.total }} actives en
+                                {{ previousYear }})
                             </div>
                         </template>
                         <template v-else
@@ -96,15 +102,17 @@
 import { toRefs, computed } from "vue";
 import { useActionsStore } from "@/stores/actions.store";
 import computeLocationSearchTitle from "@/utils/computeLocationSearchTitle";
+import computeIndicatorsStatistics from "@/utils/computeIndicatorsStatistics";
 import MiniCarte from "@/components/MiniCarte/MiniCarte.vue";
 import formatStat from "@common/utils/formatStat";
-import getSince from "@/utils/getSince";
 import isPlural from "@/utils/isPlural";
 import getBadgeLabel from "@/utils/getBadgeLabel";
 import getBadgeVariant from "@/utils/getBadgeVariant";
 
 const actionsStore = useActionsStore();
 const { location, search } = toRefs(actionsStore.filters);
+
+const previousYear = new Date().getFullYear() - 1;
 
 const mapLocation = computed(() => {
     return location.value || { typeUid: "nation" };
@@ -127,36 +135,14 @@ const formatActionsCountLabel = (count) => {
     return `${count} action${isPlural(count) ? "s" : ""}`;
 };
 
-const updatedActionsInTheLastSixMonths = computed(() => {
-    return currentActions.value.filter((action) => {
-        // Utiliser getSince pour obtenir les mois écoulés
-        const lastUpdate = {
-            metricUpdatedAt:
-                getSince(action.metrics_updated_at / 1000).months < 6,
-        };
-
-        // Un site est considéré comme mis à jour récemment si moins de 6 mois se sont écoulés
-        return lastUpdate.metricUpdatedAt;
-    }).length;
-});
-
-const updatedActionsPercentage = computed(() => {
-    if (currentActionsCount.value === 0) {
-        return 0; // Éviter la division par zéro
-    }
-
-    const percentage =
-        (updatedActionsInTheLastSixMonths.value / currentActionsCount.value) *
-        100;
-
-    // Arrondir à 1 décimale
-    return Math.round(percentage * 10) / 10;
+const statistics = computed(() => {
+    return computeIndicatorsStatistics(currentActions.value);
 });
 
 const badgeLabel = computed(() => {
     return getBadgeLabel(
-        updatedActionsInTheLastSixMonths.value,
-        updatedActionsPercentage.value,
+        statistics.value.sixMonths.total,
+        statistics.value.sixMonths.percentage,
         false,
         false,
         true
@@ -164,39 +150,13 @@ const badgeLabel = computed(() => {
 });
 
 const badgeVariant = computed(() => {
-    return getBadgeVariant(updatedActionsPercentage.value, 80, 60);
-});
-
-const actionsFinancedByDIHAL = computed(() => {
-    return currentActions.value.filter((action) => action.hasDihalFinancing)
-        .length;
-});
-
-const updatedActionsFinancedByDIHAL = computed(() => {
-    return currentActions.value.filter(
-        (action) =>
-            action.hasDihalFinancing &&
-            getSince(action.metrics_updated_at / 1000).months < 3
-    ).length;
-});
-
-const actionFinancedByDIHALPercentage = computed(() => {
-    if (actionsFinancedByDIHAL.value === 0) {
-        return 0; // Éviter la division par zéro
-    }
-
-    const percentage =
-        (updatedActionsFinancedByDIHAL.value / actionsFinancedByDIHAL.value) *
-        100;
-
-    // Arrondir à 1 décimale
-    return Math.round(percentage * 10) / 10;
+    return getBadgeVariant(statistics.value.sixMonths.percentage, 80, 60);
 });
 
 const badgeDIHALLabel = computed(() => {
     return getBadgeLabel(
-        actionsFinancedByDIHAL.value,
-        actionFinancedByDIHALPercentage.value,
+        statistics.value.dihal.total,
+        statistics.value.dihal.percentage,
         false,
         false,
         true
@@ -204,7 +164,7 @@ const badgeDIHALLabel = computed(() => {
 });
 
 const badgeDIHALVariant = computed(() => {
-    return getBadgeVariant(actionFinancedByDIHALPercentage.value, 95, 80);
+    return getBadgeVariant(statistics.value.dihal.percentage, 95, 80);
 });
 
 const myOrgOpenActions = computed(() => {
@@ -223,31 +183,14 @@ const myOrgClosedActionsCount = computed(() => {
     return formatStat(actionsStore.myOrganizationClosedActions.length);
 });
 
-const updatedActionsInTheLastSixMonthsMyOrg = computed(() => {
-    return myOrgOpenActions.value.filter((action) => {
-        const lastUpdate = {
-            metricUpdatedAt:
-                getSince(action.metrics_updated_at / 1000).months < 6,
-        };
-        return lastUpdate.metricUpdatedAt;
-    }).length;
-});
-
-const updatedActionsPercentageMyOrg = computed(() => {
-    if (myOrgOpenActionsCount.value === 0) {
-        return 0;
-    }
-    const percentage =
-        (updatedActionsInTheLastSixMonthsMyOrg.value /
-            myOrgOpenActions.value.length) *
-        100;
-    return Math.round(percentage * 10) / 10;
+const statisticsMyOrg = computed(() => {
+    return computeIndicatorsStatistics(myOrgOpenActions.value);
 });
 
 const badgeLabelMyOrg = computed(() => {
     return getBadgeLabel(
-        updatedActionsInTheLastSixMonthsMyOrg.value,
-        updatedActionsPercentageMyOrg.value,
+        statisticsMyOrg.value.sixMonths.total,
+        statisticsMyOrg.value.sixMonths.percentage,
         false,
         false,
         true
@@ -255,37 +198,13 @@ const badgeLabelMyOrg = computed(() => {
 });
 
 const badgeVariantMyOrg = computed(() => {
-    return getBadgeVariant(updatedActionsPercentageMyOrg.value, 80, 60);
-});
-
-const actionsFinancedByDIHALMyOrg = computed(() => {
-    return myOrgOpenActions.value.filter((action) => action.hasDihalFinancing)
-        .length;
-});
-
-const updatedActionsFinancedByDIHALMyOrg = computed(() => {
-    return myOrgOpenActions.value.filter(
-        (action) =>
-            action.hasDihalFinancing &&
-            getSince(action.metrics_updated_at / 1000).months < 3
-    ).length;
-});
-
-const actionFinancedByDIHALPercentageMyOrg = computed(() => {
-    if (actionsFinancedByDIHALMyOrg.value === 0) {
-        return 0;
-    }
-    const percentage =
-        (updatedActionsFinancedByDIHALMyOrg.value /
-            actionsFinancedByDIHALMyOrg.value) *
-        100;
-    return Math.round(percentage * 10) / 10;
+    return getBadgeVariant(statisticsMyOrg.value.sixMonths.percentage, 80, 60);
 });
 
 const badgeDIHALLabelMyOrg = computed(() => {
     return getBadgeLabel(
-        actionsFinancedByDIHALMyOrg.value,
-        actionFinancedByDIHALPercentageMyOrg.value,
+        statisticsMyOrg.value.dihal.total,
+        statisticsMyOrg.value.dihal.percentage,
         false,
         false,
         true
@@ -293,6 +212,6 @@ const badgeDIHALLabelMyOrg = computed(() => {
 });
 
 const badgeDIHALVariantMyOrg = computed(() => {
-    return getBadgeVariant(actionFinancedByDIHALPercentageMyOrg.value, 95, 80);
+    return getBadgeVariant(statisticsMyOrg.value.dihal.percentage, 95, 80);
 });
 </script>
