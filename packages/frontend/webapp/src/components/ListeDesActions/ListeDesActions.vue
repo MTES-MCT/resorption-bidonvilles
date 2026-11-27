@@ -23,6 +23,7 @@
 import { computed } from "vue";
 import { useActionsStore } from "@/stores/actions.store";
 import pluralize from "@/utils/pluralize";
+import computeCandidateYears from "@/utils/computeCandidateYears";
 import { ContentWrapper, TabList } from "@resorptionbidonvilles/ui";
 import Loading from "@/components/Loading/Loading.vue";
 import ListeDesActionsHeader from "./ListeDesActionsHeader.vue";
@@ -81,28 +82,10 @@ const currentTab = computed({
     },
 });
 
-// Fonction pour récupérer les années uniques depuis les dates de lancement et de fin d'action
-const getUniqueYears = (actionsData) => {
-    if (!actionsData || actionsData.length === 0) {
-        return [];
-    }
-    const allStartedAtYears = actionsData.map((action) =>
-        new Date(action.started_at).getFullYear()
+// Années candidates à l'export : de la plus ancienne date de début des actions affichées à l'année en cours
+const years = computed(function computeYears() {
+    return computeCandidateYears(
+        actionsStore.filteredActions[currentTab.value]
     );
-    const allEndedAtYears = actionsData.map((action) =>
-        action.ended_at ? new Date(action.ended_at).getFullYear() : null
-    );
-    return [
-        ...new Set(
-            [...allStartedAtYears, ...allEndedAtYears].filter(
-                (year) => year !== null
-            )
-        ),
-    ].sort((a, b) => a - b);
-};
-
-// Liste des années uniques extraites des dates de début et de fin d'action
-const years = computed(() =>
-    getUniqueYears(actionsStore.filteredActions[currentTab.value])
-);
+});
 </script>

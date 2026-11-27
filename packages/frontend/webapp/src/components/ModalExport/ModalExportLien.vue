@@ -1,20 +1,34 @@
 <template>
-    <p>
-        <DsfrButton
-            v-if="isButton"
+    <DsfrButton
+        v-if="isButton"
+        :label="label"
+        icon="ri:file-excel-fill"
+        :disabled="disabled || isLoading"
+        @click="download"
+    />
+    <div v-else>
+        <button
+            type="button"
+            class="fr-link"
+            :class="{ 'fr-text-disabled--grey': isLoading }"
+            :aria-disabled="isLoading"
             @click="download"
-            :disabled="disabled || isLoading"
         >
-            <Icon icon="file-excel" iconPosition="left" />
-            {{ label }}</DsfrButton
-        >
-        <template v-else>
-            <Link @click="download" :class="isLoading ? 'text-G300' : ''">
-                <Icon icon="file-excel" class="mr-1" />
-                {{ label }} </Link
-            ><Spinner class="ml-2" v-if="isLoading" /><br />
-        </template>
-    </p>
+            <VIcon
+                name="ri:file-excel-fill"
+                class="fr-mr-1v"
+                aria-hidden="true"
+            />
+            {{ label }}
+        </button>
+        <!-- <output> permanent (région live) : seul son contenu dépend de isLoading. -->
+        <output :class="{ 'fr-ml-1w': isLoading }">
+            <template v-if="isLoading">
+                <Spinner aria-hidden="true" />
+                <span class="fr-sr-only">Téléchargement en cours</span>
+            </template>
+        </output>
+    </div>
 </template>
 
 <script setup>
@@ -22,7 +36,7 @@ import { toRefs, ref, computed } from "vue";
 import { useNotificationStore } from "@/stores/notification.store";
 import downloadCsv from "@/utils/downloadCsv";
 import downloadBlob from "@/utils/downloadBlob";
-import { Icon, Link, Spinner } from "@resorptionbidonvilles/ui";
+import { Spinner } from "@resorptionbidonvilles/ui";
 import formatDate from "@common/utils/formatDate";
 
 const props = defineProps({
@@ -54,7 +68,7 @@ const { shape, label, filename, downloadFn, format, year } = toRefs(props);
 const emit = defineEmits(["export-error"]);
 const notificationStore = useNotificationStore();
 
-const isLoading = ref(null);
+const isLoading = ref(false);
 
 function notifyParentError(message) {
     emit("export-error", message);
@@ -103,5 +117,7 @@ async function download() {
     isLoading.value = false;
 }
 
-const isButton = computed(() => shape.value === "button");
+const isButton = computed(function computeIsButton() {
+    return shape.value === "button";
+});
 </script>

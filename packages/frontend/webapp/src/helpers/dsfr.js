@@ -13,6 +13,7 @@ import {
     DsfrHeader,
     DsfrInput,
     DsfrInputGroup,
+    DsfrModal,
     DsfrNavigation,
     DsfrNotice,
     DsfrPagination,
@@ -58,6 +59,7 @@ export function useDsfr(app) {
     app.component("DsfrHeader", DsfrHeader);
     app.component("DsfrInput", DsfrInput);
     app.component("DsfrInputGroup", DsfrInputGroup);
+    app.component("DsfrModal", DsfrModal);
     app.component("DsfrNavigation", DsfrNavigation);
     app.component("DsfrNotice", DsfrNotice);
     app.component("DsfrPagination", DsfrPagination);
