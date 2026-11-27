@@ -2,7 +2,7 @@ import { sequelize } from '#db/sequelize';
 import { QueryTypes } from 'sequelize';
 import permissionUtils from '#server/utils/permission';
 import { Departement } from '#server/models/geoModel/Location.d';
-import serializeAction, { ActionRow } from '../_common/serializeAction';
+import serializeAction, { ActionRow, ActionEtiAddressRaw } from '../_common/serializeAction';
 import getDiff from '../_common/getDiff';
 import { User } from '#root/types/resources/User.d';
 import Action from '#root/types/resources/Action.d';
@@ -17,7 +17,7 @@ type ActionCheckRow = {
     region_name: string,
 };
 
-type ActionHistoryRawRow = Omit<ActionRow, 'topics' | 'managers' | 'operators' | 'shantytowns' | 'addresses' | 'finances' | 'metrics'> & {
+type ActionHistoryRawRow = Omit<ActionRow, 'topics' | 'managers' | 'operators' | 'shantytowns' | 'addresses' | 'finances' | 'metrics' | 'location_eti_addresses'> & {
     hid: number,
     author_first_name: string,
     author_last_name: string,
@@ -25,12 +25,12 @@ type ActionHistoryRawRow = Omit<ActionRow, 'topics' | 'managers' | 'operators' |
     author_organization_name: string,
     author_organization_abbreviation: string | null,
     topics: string | Array<{ uid: string, name: string }>,
-    managers: string | Array<any>,
-    operators: string | Array<any>,
-    shantytowns: string | Array<any>,
-    location_eti_addresses: string | Array<any>,
-    indicateurs?: string | { [key: number]: any[] },
-    finances?: string | { [key: number]: any[] },
+    managers: string | Action['managers'],
+    operators: string | Action['operators'],
+    shantytowns: string | NonNullable<Action['location_shantytowns']>,
+    location_eti_addresses: string | ActionEtiAddressRaw[],
+    indicateurs?: string | Action['indicateurs'],
+    finances?: string | Action['finances'],
 };
 
 type ActionHistoryRow = ActionRow & {

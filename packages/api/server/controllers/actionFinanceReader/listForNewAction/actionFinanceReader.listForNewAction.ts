@@ -1,5 +1,5 @@
 import { Departement } from '#server/models/geoModel/Location.d';
-import actionService from '#server/services/action/actionService';
+import actionService from '#server/services/action';
 import { Request, NextFunction, Response } from 'express';
 
 interface FindActionFinancesReadersRequest extends Request {

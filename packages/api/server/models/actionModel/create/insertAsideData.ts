@@ -9,8 +9,8 @@ import insertOperators from './insertOperators';
 import insertShantytowns from './insertShantytowns';
 import insertTopics from './insertTopics';
 
-export default function insertAsideData(actionId: number, authorId: number, data: ActionEnrichedInput, transaction: Transaction, options: { skipMetrics?: boolean } = {}) {
-    const promises: Promise<any>[] = [
+export default function insertAsideData(actionId: number, authorId: number, data: ActionEnrichedInput, transaction: Transaction, options: { skipMetrics?: boolean } = {}): Promise<unknown[]> {
+    const promises: Promise<unknown>[] = [
         insertTopics(actionId, data.topics, transaction),
         insertManagers(actionId, data.managers.map(({ id }) => id), transaction),
         insertOperators(actionId, data.operators.map(({ id, is_principal }) => ({ id, is_principal })), transaction),

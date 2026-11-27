@@ -1,4 +1,4 @@
-import actionService from '#server/services/action/actionService';
+import actionService from '#server/services/action';
 import userService from '#server/services/user/index';
 import { ControllerErrors } from '#server/errors/ControllerErrors';
 

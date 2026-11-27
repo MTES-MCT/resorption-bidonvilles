@@ -35,7 +35,7 @@ const COLUMNS = [
 
 type NatureDates = { updated_at_indicators: Date | null, updated_at_scolaire: Date | null };
 
-export default function insertMetrics(actionId: number, authorId: number, data: ActionInput, transaction: Transaction, versionId?: number | null, datesByYear?: Record<string, NatureDates>) {
+export default async function insertMetrics(actionId: number, authorId: number, data: ActionInput, transaction: Transaction, versionId?: number | null, datesByYear?: Record<string, NatureDates>): Promise<void> {
     // sans versionId (création d'action), la colonne fk_version n'est pas écrite : requête inchangée
     const columns: readonly string[] = versionId === undefined ? COLUMNS : [...COLUMNS, 'fk_version'];
     const today = new Date();
@@ -43,14 +43,14 @@ export default function insertMetrics(actionId: number, authorId: number, data: 
     const yearsWithData = Object.keys(data.indicateurs).filter(strYear => hasMetricValues(data.indicateurs[strYear]));
 
     if (yearsWithData.length === 0) {
-        return Promise.resolve();
+        return;
     }
 
     const numberOfRows = yearsWithData.length;
 
     const placeholders = `(${columns.map(() => '?').join(', ')})`;
 
-    return sequelize.query(
+    await sequelize.query(
         `INSERT INTO action_metrics(
             ${columns.join(',\n            ')}
         ) VALUES

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import actionService from '#server/services/action/actionService';
+import actionService from '#server/services/action';
 import { ControllerErrors } from '#server/errors/ControllerErrors';
 import { User } from '#root/types/resources/User.d';
 
