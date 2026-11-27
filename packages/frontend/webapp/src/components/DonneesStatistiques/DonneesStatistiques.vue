@@ -11,7 +11,7 @@
         />
 
         <main class="mt-6">
-            <ViewError v-if="metricsStore.error">
+            <ViewError v-if="metricsStore.error" title-tag="h2">
                 <template v-slot:title>Collecte des données échouée</template>
                 <template v-slot:content>{{ metricsStore.error }}</template>
                 <template v-slot:actions

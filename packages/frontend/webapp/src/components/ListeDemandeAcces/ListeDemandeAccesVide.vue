@@ -1,5 +1,5 @@
 <template>
-    <ViewError variant="vide">
+    <ViewError variant="vide" title-tag="h2">
         <template v-slot:title>Aucun résultat pour cette recherche</template>
         <template v-slot:code>Filtres ou recherche</template>
         <template v-slot:content

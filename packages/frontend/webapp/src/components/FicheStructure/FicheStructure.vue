@@ -42,7 +42,7 @@
                 :topics="expertiseTopicsFilter"
             />
         </div>
-        <ViewError v-else variant="vide">
+        <ViewError v-else variant="vide" title-tag="h2">
             <template v-slot:title>Aucun utilisateur</template>
             <template v-slot:code>{{
                 expertiseTopicsFilter.length > 0

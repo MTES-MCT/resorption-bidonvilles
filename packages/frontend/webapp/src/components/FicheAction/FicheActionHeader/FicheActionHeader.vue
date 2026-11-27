@@ -1,6 +1,6 @@
 <template>
     <ContentWrapper>
-        <ViewHeader icon="handshake-angle" direction="col">
+        <ViewHeader icon="handshake-angle" direction="col" titleTag="p">
             <template v-slot:title>
                 <FicheActionHeaderName :action="action" />
             </template>

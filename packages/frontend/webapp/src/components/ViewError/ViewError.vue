@@ -4,12 +4,12 @@
     >
         <img :src="img" class="max-w-xs w-3/4" alt="" />
         <div class="mt-10 md:mt-20 mb-10 md:mb-20">
-            <h1 class="text-3xl font-bold">
+            <component :is="titleTag" class="text-3xl font-bold">
                 <slot name="title">Erreur</slot>
-            </h1>
-            <h2 class="text-G400" v-if="$slots.code">
+            </component>
+            <p class="text-G400" v-if="$slots.code">
                 Code erreur : <slot name="code" />
-            </h2>
+            </p>
             <article class="mt-4">
                 <slot name="content" />
             </article>
@@ -34,6 +34,13 @@ const props = defineProps({
         type: String, // valeurs possibles : "erreur", "interdit", "vide"
         required: false,
         default: "erreur",
+    },
+    titleTag: {
+        // balise du titre : "h1" par défaut (page entière en erreur, cf. LayoutError).
+        // À passer à "h2" quand la page porte déjà son propre <h1>, pour ne pas en dupliquer.
+        type: String,
+        required: false,
+        default: "h1",
     },
 });
 

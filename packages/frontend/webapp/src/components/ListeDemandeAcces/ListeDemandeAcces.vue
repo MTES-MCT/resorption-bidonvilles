@@ -4,7 +4,7 @@
 
         <Loading class="py-28" v-if="isLoading !== false" />
 
-        <ViewError v-else-if="error">
+        <ViewError v-else-if="error" title-tag="h2">
             <template v-slot:title>Échec de la collecte des données</template>
             <template v-slot:code>{{ error }}</template>
             <template v-slot:content
