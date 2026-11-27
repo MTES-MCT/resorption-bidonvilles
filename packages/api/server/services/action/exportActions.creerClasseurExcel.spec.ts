@@ -91,9 +91,18 @@ const addRowStub = sandbox.stub();
 const mergeCellsStub = sandbox.stub();
 const writeBufferStub = sandbox.stub().resolves(Buffer.from([]));
 
+// Valeurs écrites dans les cellules (toutes feuilles confondues) : permet de relire le texte de l'en-tête
+const writtenCellValues: unknown[] = [];
+
 // Cellule factice réutilisable
 const fakeCell = {
-    value: null,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    currentValue: null as any,
+    get value() { return this.currentValue; },
+    set value(newValue) {
+        this.currentValue = newValue;
+        writtenCellValues.push(newValue);
+    },
     font: {},
     fill: {},
     alignment: {},
@@ -176,6 +185,7 @@ describe('services/action/exportActions.creerClasseurExcel()', () => {
 
     beforeEach(() => {
         sandbox.reset();
+        writtenCellValues.length = 0;
         writeBufferStub.resolves(Buffer.from([]));
     });
 
@@ -253,34 +263,231 @@ describe('services/action/exportActions.creerClasseurExcel()', () => {
         expect(actionSectionCall.args[1]).to.equal('K6');
     });
 
-    // ── Test 6 : Actions sans indicateurs ne sont pas comptées ──────────────
-    it('ne compte pas les actions financées DIHAL sans indicateurs renseignés dans updatedActionsFinanceesDihal', async () => {
-        const now = new Date();
-        const recentDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    // ── Test 6 : compteur DIHAL de l'en-tête (règle de fraîcheur partagée avec la liste) ─────────────
+    // Le compteur n'utilise plus finance_dedie, metrics_updated_at ni les valeurs d'indicateurs : il s'appuie sur
+    // has_dihal_financing, is_active_previous_year et indicators_up_to_date_90d calculés par le service.
+    type FreshnessFields = {
+        has_dihal_financing?: boolean | null,
+        is_active_previous_year?: boolean,
+        indicators_up_to_date_90d?: boolean,
+        indicators_up_to_date_180d?: boolean,
+    };
+    const buildFreshRow = (override: Partial<ActionReportRowExtended> & FreshnessFields = {}): ActionReportRowExtended => buildActionReportRow(
+        override as Partial<ActionReportRowExtended>,
+    );
+    const previousYear = new Date().getFullYear() - 1;
+    const dihalHeaderTexts = () => writtenCellValues.filter(
+        (value): value is string => typeof value === 'string' && value.includes('financées par la DIHAL'),
+    );
 
-        const actionWithMetrics = buildActionReportRow({
-            finance_dedie: 1000,
-            metrics_updated_at: recentDate,
-            nombre_personnes: 50,
+    it('compte les actions DIHAL actives en N-1 et celles à jour depuis moins de 3 mois (sans finance_dedie ni metrics_updated_at)', async () => {
+        const rows = [
+            // à jour
+            buildFreshRow({
+                action_id: 1, has_dihal_financing: true, is_active_previous_year: true, indicators_up_to_date_90d: true,
+            }),
+            // active mais pas à jour
+            buildFreshRow({
+                action_id: 2, has_dihal_financing: true, is_active_previous_year: true, indicators_up_to_date_90d: false,
+            }),
+            // non financée DIHAL : hors dénominateur même à jour
+            buildFreshRow({
+                action_id: 3, has_dihal_financing: false, is_active_previous_year: true, indicators_up_to_date_90d: true,
+            }),
+            // inactive en N-1 : hors dénominateur
+            buildFreshRow({
+                action_id: 4, has_dihal_financing: true, is_active_previous_year: false, indicators_up_to_date_90d: false,
+            }),
+            // finance_dedie et metrics_updated_at ne comptent plus
+            buildFreshRow({
+                action_id: 5,
+                finance_dedie: 5000,
+                metrics_updated_at: new Date().toISOString(),
+                nombre_personnes: 10,
+                has_dihal_financing: false,
+                is_active_previous_year: true,
+                indicators_up_to_date_90d: false,
+            }),
+        ];
+
+        await exportActions(rows, previousYear);
+
+        const texts = dihalHeaderTexts();
+        expect(texts.length).to.be.greaterThan(0);
+        texts.forEach((text) => {
+            expect(text).to.equal(
+                `50% des actions actives en ${previousYear}, financées par la DIHAL ont des indicateurs mis à jour depuis moins de 3 mois (1 actions sur 2 actives en ${previousYear})`,
+            );
+        });
+    });
+
+    it('arrondit le pourcentage à une décimale', async () => {
+        const rows = [
+            buildFreshRow({
+                action_id: 1, has_dihal_financing: true, is_active_previous_year: true, indicators_up_to_date_90d: true,
+            }),
+            buildFreshRow({
+                action_id: 2, has_dihal_financing: true, is_active_previous_year: true, indicators_up_to_date_90d: false,
+            }),
+            buildFreshRow({
+                action_id: 3, has_dihal_financing: true, is_active_previous_year: true, indicators_up_to_date_90d: false,
+            }),
+        ];
+
+        await exportActions(rows, previousYear);
+
+        expect(dihalHeaderTexts()[0]).to.equal(
+            `33.3% des actions actives en ${previousYear}, financées par la DIHAL ont des indicateurs mis à jour depuis moins de 3 mois (1 actions sur 3 actives en ${previousYear})`,
+        );
+    });
+
+    it('affiche 100% quand toutes les actions DIHAL actives sont à jour', async () => {
+        const rows = [
+            buildFreshRow({
+                action_id: 1, has_dihal_financing: true, is_active_previous_year: true, indicators_up_to_date_90d: true,
+            }),
+        ];
+
+        await exportActions(rows, previousYear);
+
+        expect(dihalHeaderTexts()[0]).to.include(`100% des actions actives en ${previousYear}`);
+        expect(dihalHeaderTexts()[0]).to.include('(1 actions sur 1 actives en');
+    });
+
+    it('n\'écrit pas la ligne quand le dénominateur est 0', async () => {
+        const rows = [
+            buildFreshRow({
+                action_id: 1, has_dihal_financing: false, is_active_previous_year: true, indicators_up_to_date_90d: true,
+            }),
+            buildFreshRow({
+                action_id: 2, has_dihal_financing: true, is_active_previous_year: false, indicators_up_to_date_90d: false,
+            }),
+        ];
+
+        await exportActions(rows, previousYear);
+
+        expect(dihalHeaderTexts()).to.deep.equal([]);
+    });
+
+    it('n\'écrit pas la ligne sans information financière (has_dihal_financing non renseigné)', async () => {
+        const rows = [
+            buildFreshRow({ action_id: 1, is_active_previous_year: true, indicators_up_to_date_90d: true }),
+            buildFreshRow({
+                action_id: 2, has_dihal_financing: null, is_active_previous_year: true, indicators_up_to_date_90d: true,
+            }),
+        ];
+
+        await exportActions(rows, previousYear, false);
+
+        expect(dihalHeaderTexts()).to.deep.equal([]);
+    });
+
+    it('conserve la condition d\'année : écrit la ligne pour N-1 et N, pas pour une autre année', async () => {
+        const rows = [
+            buildFreshRow({
+                action_id: 1, has_dihal_financing: true, is_active_previous_year: true, indicators_up_to_date_90d: true,
+            }),
+        ];
+
+        await exportActions(rows, new Date().getFullYear());
+        expect(dihalHeaderTexts().length).to.be.greaterThan(0);
+
+        writtenCellValues.length = 0;
+        await exportActions(rows, previousYear - 1);
+        expect(dihalHeaderTexts()).to.deep.equal([]);
+    });
+
+    it('calcule le compteur par onglet : seules les lignes du département comptent dans son en-tête', async () => {
+        const rows = [
+            buildFreshRow({
+                action_id: 1, departement_code: '78', has_dihal_financing: true, is_active_previous_year: true, indicators_up_to_date_90d: true,
+            } as Partial<ActionReportRowExtended>),
+            buildFreshRow({
+                action_id: 2, departement_code: '75', has_dihal_financing: true, is_active_previous_year: true, indicators_up_to_date_90d: false,
+            } as Partial<ActionReportRowExtended>),
+        ];
+
+        await exportActions(rows, previousYear);
+
+        const texts = dihalHeaderTexts();
+        expect(texts.some(text => text.includes('(1 actions sur 2 actives'))).to.equal(true); // onglet « Tous »
+        expect(texts.some(text => text.includes('100%') && text.includes('(1 actions sur 1 actives'))).to.equal(true); // 78
+        expect(texts.some(text => text.includes('0%') && !text.includes('100%') && text.includes('(0 actions sur 1 actives'))).to.equal(true); // 75
+    });
+
+    // ── En-tête : date de référence unique (`now` transmis par le service) ─────────────────────────
+    // setDepartementHeader calcule N-1 et la campagne {N-1, N} à partir du `now` reçu (6e paramètre de
+    // l'export), jamais de l'horloge. L'horloge réelle des tests (fin 2026) ne doit donc avoir aucune influence.
+    describe('date de référence transmise (now)', () => {
+        const dihalRows = () => [
+            buildFreshRow({
+                action_id: 1, has_dihal_financing: true, is_active_previous_year: true, indicators_up_to_date_90d: true,
+            }),
+            buildFreshRow({
+                action_id: 2, has_dihal_financing: true, is_active_previous_year: true, indicators_up_to_date_90d: false,
+            }),
+        ];
+        const exportAt = (now: Date, year: number) => exportActions(dihalRows(), year, true, null, null, now);
+        const dateHeaderTexts = () => writtenCellValues.filter(
+            (value): value is string => typeof value === 'string' && value.startsWith('à la date du'),
+        );
+
+        const LAST_MOMENT_OF_2026 = new Date(2026, 11, 31, 23, 59, 0, 0);
+        const FIRST_MOMENT_OF_2027 = new Date(2027, 0, 1, 0, 0, 0, 0);
+
+        it('le 31/12/2026 23:59 : N-1 vaut 2025 dans le libellé et la date affichée est celle de now', async () => {
+            await exportAt(LAST_MOMENT_OF_2026, 2025);
+
+            const texts = dihalHeaderTexts();
+            expect(texts.length).to.be.greaterThan(0);
+            texts.forEach((text) => {
+                expect(text).to.include('des actions actives en 2025,');
+                expect(text).to.include('actives en 2025)');
+            });
+            expect(dateHeaderTexts().length).to.be.greaterThan(0);
+            dateHeaderTexts().forEach(text => expect(text).to.equal('à la date du 31/12/2026'));
         });
 
-        const actionWithoutMetrics = buildActionReportRow({
-            finance_dedie: 2000,
-            metrics_updated_at: recentDate,
-            nombre_personnes: null,
-            nombre_menages: null,
-            nombre_femmes: null,
-            nombre_mineurs: null,
+        it('le 31/12/2026 23:59 : la campagne est {2025, 2026} (ligne affichée pour 2026, absente pour 2027)', async () => {
+            await exportAt(LAST_MOMENT_OF_2026, 2026);
+            expect(dihalHeaderTexts().length).to.be.greaterThan(0);
+            expect(dihalHeaderTexts()[0]).to.include('actives en 2025,');
+
+            writtenCellValues.length = 0;
+            await exportAt(LAST_MOMENT_OF_2026, 2027);
+            expect(dihalHeaderTexts()).to.deep.equal([]);
         });
 
-        await exportActions([actionWithMetrics, actionWithoutMetrics], YEAR);
+        it('le 01/01/2027 00:00 : N-1 vaut 2026 dans le libellé et la date affichée est celle de now', async () => {
+            await exportAt(FIRST_MOMENT_OF_2027, 2026);
 
-        const headerCalls = addRowStub.getCalls().filter((call) => {
-            const firstArg = call.args[0];
-            return Array.isArray(firstArg) && firstArg.some(val => typeof val === 'string' && val.includes('Indicateurs mis à jour'));
+            const texts = dihalHeaderTexts();
+            expect(texts.length).to.be.greaterThan(0);
+            texts.forEach((text) => {
+                expect(text).to.include('des actions actives en 2026,');
+                expect(text).to.include('actives en 2026)');
+                expect(text).to.not.include('actives en 2025');
+            });
+            dateHeaderTexts().forEach(text => expect(text).to.equal('à la date du 01/01/2027'));
         });
 
-        expect(headerCalls.length).to.be.greaterThan(0);
+        it('le 01/01/2027 00:00 : la campagne est {2026, 2027} (ligne affichée pour 2027, absente pour 2025)', async () => {
+            await exportAt(FIRST_MOMENT_OF_2027, 2027);
+            expect(dihalHeaderTexts().length).to.be.greaterThan(0);
+            expect(dihalHeaderTexts()[0]).to.include('actives en 2026,');
+
+            writtenCellValues.length = 0;
+            await exportAt(FIRST_MOMENT_OF_2027, 2025);
+            expect(dihalHeaderTexts()).to.deep.equal([]);
+        });
+
+        it('ne dépend pas de l\'horloge : un now lointain (2040) décide seul du libellé et de la campagne', async () => {
+            await exportAt(new Date(2040, 5, 15, 12, 0, 0, 0), 2039);
+
+            expect(dihalHeaderTexts().length).to.be.greaterThan(0);
+            expect(dihalHeaderTexts()[0]).to.include('actives en 2039,');
+            dateHeaderTexts().forEach(text => expect(text).to.equal('à la date du 15/06/2040'));
+        });
     });
 
     // ── Test 7 : Valeurs nulles affichées avec un tiret ─────────────────────

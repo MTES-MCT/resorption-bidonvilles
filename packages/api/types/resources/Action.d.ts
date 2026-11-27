@@ -61,6 +61,12 @@ export type ActionItem = {
 
 export type ActionReportRow = {
     departement_code: string,
+    started_on: string | Date,
+    ended_on: string | Date | null,
+    has_dihal_financing: boolean | null,
+    is_active_previous_year?: boolean,
+    indicators_up_to_date_90d?: boolean,
+    indicators_up_to_date_180d?: boolean,
 } & ActionItem;
 
 

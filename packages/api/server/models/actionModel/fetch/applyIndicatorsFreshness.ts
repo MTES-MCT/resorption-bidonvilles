@@ -1,5 +1,4 @@
-import computeIndicatorsFreshness from '../_common/computeIndicatorsFreshness';
-import isActiveInYear from '../_common/isActiveInYear';
+import computeActionFreshness from '../_common/computeActionFreshness';
 import { ActionHash } from './hashActions';
 
 /**
@@ -8,15 +7,10 @@ import { ActionHash } from './hashActions';
  */
 /* eslint-disable no-param-reassign */
 export default function applyIndicatorsFreshness(hash: ActionHash, referenceDate: Date): void {
-    const previousYear = referenceDate.getFullYear() - 1;
-
     Object.values(hash).forEach((action) => {
-        const isActive = isActiveInYear(action.started_at, action.ended_at, previousYear);
-        const freshness = isActive
-            ? computeIndicatorsFreshness(action.metrics, referenceDate)
-            : { isUpToDate90Days: false, isUpToDate180Days: false };
+        const freshness = computeActionFreshness(action.started_at, action.ended_at, action.metrics, referenceDate);
 
-        action.is_active_previous_year = isActive;
+        action.is_active_previous_year = freshness.isActivePreviousYear;
         action.indicators_up_to_date_90d = freshness.isUpToDate90Days;
         action.indicators_up_to_date_180d = freshness.isUpToDate180Days;
     });

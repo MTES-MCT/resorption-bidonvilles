@@ -10,4 +10,5 @@ export default async function exportActions(
     includeFinances: boolean = true,
     allowedDepartements: string[] | null = null,
     allowedFinanceActions: number[] | null = null,
-): Promise<ExcelJS.Buffer> { return creerClasseurExcel(data, fetchedYear, includeFinances, allowedDepartements, allowedFinanceActions); }
+    now: Date = new Date(),
+): Promise<ExcelJS.Buffer> { return creerClasseurExcel(data, fetchedYear, includeFinances, allowedDepartements, allowedFinanceActions, now); }

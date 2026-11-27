@@ -8,8 +8,8 @@ export type ActionMetricsRow = {
     // RANK() est de type bigint en SQL : le driver pg le renvoie sous forme de chaîne ("1", "10"...)
     rank: number | string,
     version_at: Date,
-    updated_at_indicators: Date,
-    updated_at_scolaire: Date,
+    updated_at_indicators: Date | null,
+    updated_at_scolaire: Date | null,
     action_id: number,
     date: string,
     nombre_personnes: number | null,

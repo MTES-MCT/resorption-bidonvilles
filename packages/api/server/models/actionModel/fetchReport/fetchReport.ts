@@ -4,14 +4,23 @@ import { WhereClauseGroup } from '#server/models/_common/types/Where.d';
 import enrichWhere from '../fetch/enrichWhere';
 import metricsVersionKey from '../_common/metricsVersionKey';
 import { ActionReportRow } from '#root/types/resources/Action.d';
+import buildReportFilters from './buildReportFilters';
+import { ReportFilters } from './ReportFilters.d';
+
+// Dans la requête principale, les départements et régions portent les alias d et r
+function toMainQueryAliases(clause: string): string {
+    return clause.replaceAll('departements.code', 'd.code').replaceAll('regions.code', 'r.code');
+}
 
 export default function fetchReport(
     requestedYear: number,
     actionClauseGroup: WhereClauseGroup = {},
     financeClauseGroup: WhereClauseGroup | null = {},
+    filters: ReportFilters = {},
+    now: Date = new Date(),
 ): Promise<ActionReportRow[]> {
     const where: string[] = [];
-    const replacements: any = { annee: requestedYear };
+    const replacements: Record<string, unknown> = { annee: requestedYear };
     const versionKey = metricsVersionKey('action_metrics', 'metrics_version');
     const versionJoin = 'LEFT JOIN action_metrics_versions AS metrics_version ON action_metrics.fk_version = metrics_version.action_metrics_version_id';
 
@@ -21,8 +30,45 @@ export default function fetchReport(
     // Construire la clause WHERE pour les actions
     // Remplacer les noms de tables par leurs alias utilisés dans la requête SQL
     const actionWhereClause = where.length > 0
-        ? `AND ${where.join(' AND ').replaceAll('departements.code', 'd.code').replaceAll('regions.code', 'r.code')}`
+        ? `AND ${toMainQueryAliases(where.join(' AND '))}`
         : '';
+
+    // Filtres de la liste (fragments joints par AND, remplacements nommés préfixés par filter_)
+    const reportFilters = buildReportFilters(filters, now);
+    Object.assign(replacements, reportFilters.replacements);
+    const mainFilters: string[] = [...reportFilters.where];
+
+    // Restrictions de financement : un filtre sur le financement DIHAL ne doit rien révéler au-delà des droits
+    const hasDihalFilter = (filters.dihalFinancing?.length ?? 0) > 0;
+    const financeWhere: string[] = [];
+    if (financeClauseGroup !== null) {
+        enrichWhere(financeWhere, replacements, financeClauseGroup, 'finance');
+    }
+    const financeMainClause = financeWhere.length > 0 ? toMainQueryAliases(financeWhere.join(' AND ')) : null;
+
+    if (hasDihalFilter) {
+        if (financeClauseGroup === null) {
+            mainFilters.push('FALSE');
+        } else if (financeMainClause !== null) {
+            mainFilters.push(financeMainClause);
+        }
+    }
+    const filtersWhereClause = mainFilters.length > 0 ? `AND ${mainFilters.join(' AND ')}` : '';
+
+    // Financée par la DIHAL : au moins une ligne dedie, toute année (NULL sans accès aux financements)
+    const dihalExists = `EXISTS (
+            SELECT 1 FROM action_finances
+            WHERE action_finances.fk_action = actions.action_id
+            AND action_finances.fk_action_finance_type = 'dedie'
+        )`;
+    let hasDihalFinancingColumn: string;
+    if (financeClauseGroup === null) {
+        hasDihalFinancingColumn = 'NULL::boolean AS "has_dihal_financing"';
+    } else if (financeMainClause !== null) {
+        hasDihalFinancingColumn = `CASE WHEN ${financeMainClause} THEN ${dihalExists} ELSE NULL END AS "has_dihal_financing"`;
+    } else {
+        hasDihalFinancingColumn = `${dihalExists} AS "has_dihal_financing"`;
+    }
 
     // Construire la CTE finances selon les permissions
     let financesCTE: string;
@@ -48,9 +94,7 @@ export default function fetchReport(
             WHERE FALSE
         )`;
     } else {
-        // Construire les filtres pour les financements
-        const financeWhere: string[] = [];
-        enrichWhere(financeWhere, replacements, financeClauseGroup, 'finance');
+        // Construire les filtres pour les financements (financeWhere est déjà construit plus haut)
         const financeWhereClause = financeWhere.length > 0 ? `AND ${financeWhere.join(' AND ')}` : '';
 
         financesCTE = `finances AS
@@ -233,7 +277,7 @@ export default function fetchReport(
             WHERE
                 ao.is_principal = true
         ),
-        action_operators AS (
+        operators_by_action AS (
             SELECT
                 fk_action,
                 array_agg(DISTINCT organizations."name") AS operators
@@ -252,6 +296,8 @@ export default function fetchReport(
         r.code AS "region_code",
         r.name AS "region_name",
         actions.action_id,
+        actions.started_at AS "started_on",
+        actions.ended_at AS "ended_on",
         po.operator_name AS "operator_name",
         actions."name" AS "project_name",
         CASE
@@ -295,6 +341,7 @@ export default function fetchReport(
         fi.finance_etatique,
         fi.finance_dedie,
         fi.financee_dihal,
+        ${hasDihalFinancingColumn},
         fi.finance_collectivite,
         fi.finance_europeen,
         fi.finance_prive,
@@ -319,7 +366,7 @@ export default function fetchReport(
     LEFT JOIN
         actiontopics at ON at.fk_action = actions.action_id
     LEFT JOIN
-        action_operators ao ON ao.fk_action = actions.action_id
+        operators_by_action ao ON ao.fk_action = actions.action_id
     LEFT JOIN
         metrics m ON m.action_id = actions.action_id 
     LEFT JOIN
@@ -339,6 +386,7 @@ export default function fetchReport(
     AND
         (actions.ended_at IS NULL OR actions.ended_at >=  TO_DATE(:annee::varchar || '-01-01', 'YYYY-MM-DD'))
         ${actionWhereClause}
+        ${filtersWhereClause}
     ORDER BY
         actions.action_id ;`,
         {

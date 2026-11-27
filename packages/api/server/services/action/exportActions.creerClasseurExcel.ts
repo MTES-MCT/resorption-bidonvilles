@@ -1,14 +1,15 @@
-/* eslint-disable no-param-reassign */
 import ServiceError from '#server/errors/ServiceError';
 import ExcelJS from 'exceljs';
 import departementsOrdonnes from '#server/utils/departementsOrdonnes';
 import columnToNumber from '#server/utils/excelUtils';
 import { ActionReportRow, ActionItem } from '#root/types/resources/Action.d';
 
+type ReportItem = Omit<ActionReportRow, 'departement_code'>;
+
 type DepartementObject = {
     departement: string,
     departement_name?: string,
-    data: ActionItem[]
+    data: ReportItem[]
 };
 
 type Range = {
@@ -113,7 +114,7 @@ function regrouperParDepartement(data: ActionReportRow[]): DepartementObject[] {
     const result: DepartementObject[] = Object.values(groupedData);
 
     // Créer l'objet "all"
-    const allData: ActionItem[] = result.reduce((acc: ActionItem[], dept) => acc.concat(dept.data), []);
+    const allData: ReportItem[] = result.reduce((acc: ReportItem[], dept) => acc.concat(dept.data), []);
     result.push({ departement: 'Tous', data: allData });
 
     return result;
@@ -145,19 +146,20 @@ function regrouperEtTrierParDepartement(data: ActionReportRow[]): DepartementObj
     return trierParDepartement(groupedData, departementsOrdonnes);
 }
 
-function formaterCommentaires(cell: ExcelJS.Cell, comments: any): void {
+function formaterCommentaires(cell: ExcelJS.Cell, comments: ExcelJS.CellValue): void {
     // Fusionne les commentaires en une seule chaîne avec des retours à la ligne
-    if (comments.length > 0 && Array.isArray(comments)) {
+    if (Array.isArray(comments) && comments.length > 0) {
         const formatedComments = comments.join('\n\n');
+        // eslint-disable-next-line no-param-reassign
         cell.value = formatedComments;
     }
 }
 
-function findSection(sectionLabel: string) {
+function findSection(sectionLabel: string): SectionTitle | undefined {
     return sectionTitles.find(section => section.name === sectionLabel);
 }
 
-function findSectionIndex() {
+function findSectionIndex(): number[] {
     return sectionTitles.map((section) => {
         const match = /[A-Z]+/.exec(section.range.to);
         const lastColumnLetter = match ? match[0] : '';
@@ -165,55 +167,43 @@ function findSectionIndex() {
     });
 }
 
-function createFinancementColumns(fromColumn: number, toColumn: number) {
+function createFinancementColumns(fromColumn: number, toColumn: number): number[] {
     return Array.from({ length: toColumn + 1 - fromColumn }, (_, i) => fromColumn + i);
 }
 
 // Ajouter les entêtes de sections
-function setSectionTitles(sections: SectionTitle[], worksheet: ExcelJS.Worksheet) {
+function setSectionTitles(sections: SectionTitle[], worksheet: ExcelJS.Worksheet): void {
     sections.forEach((section) => {
         const { from, to } = section.range;
         worksheet.mergeCells(from, to);
-        worksheet.getCell(from).value = section.name;
-        worksheet.getCell(from).font = {
+        const cell = worksheet.getCell(from);
+        /* eslint-disable no-param-reassign */
+        cell.value = section.name;
+        cell.font = {
             name: 'Arial',
             size: 14,
             bold: true,
             color: { argb: 'FFFFFF' },
         };
-        worksheet.getCell(from).fill = {
+        cell.fill = {
             type: 'pattern',
             pattern: 'solid',
             fgColor: { argb: '000000' },
         };
-        worksheet.getCell(from).alignment = { horizontal: 'left', vertical: 'middle', indent: 5 };
+        cell.alignment = { horizontal: 'left', vertical: 'middle', indent: 5 };
+        /* eslint-enable no-param-reassign */
     });
 }
 
-const hasAtLeastOneMetricValue = (action: ActionItem): boolean => {
-    const metricFields = [
-        'nombre_personnes', 'nombre_menages', 'nombre_femmes', 'nombre_mineurs',
-        'sante_nombre_personnes', 'travail_nombre_personnes', 'travail_nombre_femmes',
-        'hebergement_nombre_personnes', 'hebergement_nombre_menages',
-        'logement_nombre_personnes', 'logement_nombre_menages',
-        'scolaire_mineurs_moins_de_trois_ans', 'scolaire_mineurs_trois_ans_et_plus',
-        'scolaire_mediation_moins_de_trois_ans', 'scolaire_mediation_trois_ans_et_plus',
-        'scolaire_nombre_maternelle', 'scolaire_nombre_elementaire',
-        'scolaire_nombre_college', 'scolaire_nombre_lycee', 'scolaire_nombre_autre',
-        'scolaire_mineur_scolarise_dans_annee',
-    ];
-    return metricFields.some(field => action[field] !== null && action[field] !== undefined);
-};
-
-const setDepartementHeader = (worksheet: ExcelJS.Worksheet, departement: DepartementObject, year: number) => {
+const setDepartementHeader = (worksheet: ExcelJS.Worksheet, departement: DepartementObject, year: number, now: Date): void => {
     const startingCol: string = departement.departement === 'Tous' ? 'A' : 'D';
-    const dihalFinanceCampagn: Set<number> = new Set([new Date().getFullYear() - 1, new Date().getFullYear()]);
-    const actionFinanceesDihal: number = departement.data.filter(action => action.finance_dedie !== null && action.finance_dedie > 0).length;
-    const updatedActionsFinanceesDihal: number = departement.data.filter(action => action.finance_dedie !== null
-        && action.finance_dedie > 0
-        && action.metrics_updated_at !== null
-        && hasAtLeastOneMetricValue(action)
-        && (new Date(action.metrics_updated_at) >= new Date(Date.now() - 90 * 24 * 60 * 60 * 1000))).length;
+    const previousYear: number = now.getFullYear() - 1;
+    const dihalFinanceCampagn: Set<number> = new Set([previousYear, now.getFullYear()]);
+    // Dénominateur : actions financées par la DIHAL (au moins une ligne dedie, toute année) et actives en N-1
+    // Numérateur : parmi elles, celles dont les indicateurs ont été mis à jour depuis moins de 3 mois
+    const actionsDihalActives: ReportItem[] = departement.data.filter(action => action.has_dihal_financing === true
+        && action.is_active_previous_year === true);
+    const actionsDihalAJour: number = actionsDihalActives.filter(action => action.indicators_up_to_date_90d === true).length;
 
     try {
         const headerDatas: HeaderCell[] = [{
@@ -236,19 +226,17 @@ const setDepartementHeader = (worksheet: ExcelJS.Worksheet, departement: Departe
             },
         }, {
             cell: `${startingCol}4`,
-            value: `à la date du ${new Date().toLocaleDateString('fr-FR')}`,
+            value: `à la date du ${now.toLocaleDateString('fr-FR')}`,
             fontSpecific: {
                 size: 10,
             },
         }];
         // On ajoute les financements DIHAL si l'on est dans l'année N-1 ou N
-        if (dihalFinanceCampagn.has(year)) {
-            const percentageText = actionFinanceesDihal > 0
-                ? ` (${Math.round((updatedActionsFinanceesDihal / actionFinanceesDihal) * 100)}%)`
-                : '';
+        if (dihalFinanceCampagn.has(year) && actionsDihalActives.length > 0) {
+            const percentage = Math.round((actionsDihalAJour / actionsDihalActives.length) * 1000) / 10;
             headerDatas.push({
                 cell: `${startingCol}5`,
-                value: `${updatedActionsFinanceesDihal} actions financées par la DIHAL sur ${actionFinanceesDihal} ont été mises à jour il y a moins de 3 mois${percentageText}`,
+                value: `${percentage}% des actions actives en ${previousYear}, financées par la DIHAL ont des indicateurs mis à jour depuis moins de 3 mois (${actionsDihalAJour} actions sur ${actionsDihalActives.length} actives en ${previousYear})`,
                 fontSpecific: {
                     size: 10,
                 },
@@ -295,7 +283,7 @@ const formatNumericValue = (value: number | null | undefined): number | string =
 const formatBoolean = (value: boolean | null | undefined): string => (value ? 'Oui' : 'Non');
 
 // Ajouter les lignes de données
-function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, includeFinances: boolean = true, allowedFinanceActions: number[] | null = null) {
+function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, includeFinances: boolean = true, allowedFinanceActions: number[] | null = null): void {
     data.forEach((item: ActionItem) => {
         // Calculs pour les colonnes de scolarisation
         const mineursIdentifiesTotal = sumNumbers([
@@ -390,14 +378,14 @@ function addDataToWorksheet(data: ActionItem[], worksheet: ExcelJS.Worksheet, in
     });
 }
 
-function addDepartmentWorksheet(workbook: ExcelJS.Workbook, departement: string) {
+function addDepartmentWorksheet(workbook: ExcelJS.Workbook, departement: string): ExcelJS.Worksheet {
     return workbook.addWorksheet(departement === 'Tous' ? `${departement}` : `Dépt ${departement}`);
 }
 
 // Activer le retour à la ligne automatique,
 // centrer le texte pour toutes les cellules
 // et ajouter une bordure à chaque cellule
-function formatWorksheetCells(worksheet: ExcelJS.Worksheet, columnNumbers: number[], financementColumns: number[]) {
+function formatWorksheetCells(worksheet: ExcelJS.Worksheet, columnNumbers: number[], financementColumns: number[]): void {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     worksheet.eachRow({ includeEmpty: true }, (row, _rowNumber) => {
         // Ignorer les 5 premières lignes (en-tête)
@@ -406,29 +394,24 @@ function formatWorksheetCells(worksheet: ExcelJS.Worksheet, columnNumbers: numbe
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         row.eachCell({ includeEmpty: true }, (cell, _colNumber) => {
+            const rightBorderStyle = columnNumbers.includes(_colNumber) ? 'thick' : 'thin';
+            /* eslint-disable no-param-reassign */
             cell.border = {
                 top: { style: 'thin', color: { argb: '000000' } },
                 left: { style: 'thin', color: { argb: '000000' } },
                 bottom: { style: 'thin', color: { argb: '000000' } },
-                right: { style: 'thin', color: { argb: '000000' } },
+                right: { style: rightBorderStyle, color: { argb: '000000' } },
             };
-            if (columnNumbers.includes(_colNumber)) {
-                cell.border = {
-                    top: { style: 'thin', color: { argb: '000000' } },
-                    left: { style: 'thin', color: { argb: '000000' } },
-                    bottom: { style: 'thin', color: { argb: '000000' } },
-                    right: { style: 'thick', color: { argb: '000000' } },
-                };
-            }
             cell.alignment = { wrapText: true, indent: 2 };
             if (financementColumns.includes(_colNumber)) {
                 cell.numFmt = '# ##0.00 [$€-40C];[RED]-# ##0.00 [$€-40C]'; // Format monétaire français
             }
+            /* eslint-enable no-param-reassign */
         });
     });
 }
 
-function formatCommentCol(worksheet: ExcelJS.Worksheet) {
+function formatCommentCol(worksheet: ExcelJS.Worksheet): void {
     const commentsCol = worksheet.getColumn('AW');
     commentsCol.eachCell((cell) => {
         if (cell.value) {
@@ -437,19 +420,21 @@ function formatCommentCol(worksheet: ExcelJS.Worksheet) {
     });
 }
 
-function setSectionHeadersHeight(worksheet: ExcelJS.Worksheet) {
+function setSectionHeadersHeight(worksheet: ExcelJS.Worksheet): void {
     const sectionRow = worksheet.getRow(6);
     sectionRow.height = 30;
     sectionRow.eachCell((cell) => {
+        // eslint-disable-next-line no-param-reassign
         cell.alignment = {
             wrapText: true, horizontal: 'left', vertical: 'middle', indent: 2,
         };
     });
 }
 
-function setColumnHeadersHeight(worksheet: ExcelJS.Worksheet) {
+function setColumnHeadersHeight(worksheet: ExcelJS.Worksheet): void {
     const headerRow = worksheet.getRow(7);
     headerRow.eachCell((cell) => {
+        /* eslint-disable no-param-reassign */
         cell.fill = {
             type: 'pattern',
             pattern: 'solid',
@@ -464,13 +449,15 @@ function setColumnHeadersHeight(worksheet: ExcelJS.Worksheet) {
         cell.alignment = {
             wrapText: true, horizontal: 'center', vertical: 'middle', indent: 2,
         };
+        /* eslint-enable no-param-reassign */
     });
 }
 
-function hideThreeFirstColumns(worksheet: ExcelJS.Worksheet) {
+function hideThreeFirstColumns(worksheet: ExcelJS.Worksheet): void {
     const colsToHide: Set<number> = worksheet.name === 'Tous' ? new Set([1, 2]) : new Set([0, 1, 2]);
     worksheet.columns.forEach((column, index) => {
         if (colsToHide.has(index)) {
+            // eslint-disable-next-line no-param-reassign
             column.hidden = true;
         }
     });
@@ -482,7 +469,8 @@ export default function exportActions(
     includeFinances: boolean = true,
     allowedDepartements: string[] | null = null,
     allowedFinanceActions: number[] | null = null,
-) {
+    now: Date = new Date(),
+): Promise<ExcelJS.Buffer> {
     // Déterminer les sections à inclure selon les permissions
     let sectionsToInclude: SectionTitle[];
     if (includeFinances) {
@@ -542,7 +530,7 @@ export default function exportActions(
         worksheet.properties.defaultColWidth = 25; // Largeur par défaut des colonnes
 
         // Ajouter l'entête du département en premier (lignes 1-5)
-        setDepartementHeader(worksheet, donneeParDepartement, fetchedYear);
+        setDepartementHeader(worksheet, donneeParDepartement, fetchedYear, now);
 
         // Ajouter les entêtes de sections (ligne 6)
         setSectionTitles(sectionsToInclude, worksheet);
