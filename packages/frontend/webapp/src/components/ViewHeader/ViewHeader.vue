@@ -1,31 +1,40 @@
 <template>
-    <header :class="classes.header.value">
-        <div
-            class="flex space-x-4 items-center"
-            :class="$slots.actions ? classes.title.value : ''"
-        >
+    <header
+        class="view-header fr-mb-5w"
+        :class="{ 'fr-hidden fr-unhidden-xl': responsive }"
+    >
+        <div class="fr-grid-row fr-grid-row--middle">
             <div
-                class="rounded-full bg-primary w-16 h-16 flex justify-center items-center text-2xl text-white shrink-0"
+                class="fr-grid-row fr-grid-row--middle"
+                :class="classes.title.value"
             >
-                <Icon :icon="icon" />
-            </div>
-            <div>
-                <p class="text-[1.5rem] font-bold leading-[1.8rem] break-all">
-                    <slot name="title" />
-                </p>
-                <p
-                    v-if="$slots.actionId"
-                    class="text-sm text-black font-normal"
+                <div
+                    class="view-header__icon fr-grid-row fr-grid-row--center fr-grid-row--middle fr-background-action-high--blue-france fr-text-inverted--blue-france fr-mr-2w"
+                    aria-hidden="true"
                 >
-                    <slot name="actionId" />
-                </p>
-                <p class="text-G700">
-                    <slot name="description" />
-                </p>
+                    <Icon :icon="icon" />
+                </div>
+                <div class="fr-col">
+                    <component
+                        :is="titleTag"
+                        class="view-header__title fr-h4 fr-m-0"
+                    >
+                        <slot name="title" />
+                    </component>
+                    <p v-if="$slots.actionId" class="fr-text--sm fr-m-0">
+                        <slot name="actionId" />
+                    </p>
+                    <p
+                        v-if="$slots.description"
+                        class="fr-text-default--grey fr-mb-0"
+                    >
+                        <slot name="description" />
+                    </p>
+                </div>
             </div>
-        </div>
-        <div v-if="$slots.actions" :class="classes.actions.value">
-            <slot name="actions" />
+            <div v-if="$slots.actions" :class="classes.actions.value">
+                <slot name="actions" />
+            </div>
         </div>
     </header>
 </template>
@@ -40,7 +49,7 @@ const props = defineProps({
         required: true,
     },
     responsive: {
-        // si true, alors ce bloc se masque automatiquement sur les écrans < 2xl de largeur
+        // si true, alors ce bloc se masque automatiquement sur les écrans < xl de largeur
         type: Boolean,
         required: false,
         default: false,
@@ -50,40 +59,59 @@ const props = defineProps({
         required: false,
         default: "row",
     },
+    titleTag: {
+        // balise du titre de la page : "h1" par défaut. À remplacer ("p", "div"...)
+        // uniquement si la page porte déjà son propre <h1>, pour ne pas en dupliquer.
+        type: String,
+        required: false,
+        default: "h1",
+    },
 });
 
-const { icon, responsive, direction } = toRefs(props);
+const { direction } = toRefs(props);
 const classes = {
-    header: computed(() => {
-        const c = ["print:hidden"];
-        if (responsive.value === true) {
-            c.push("hidden 2xl:flex");
-        } else {
-            c.push("flex");
-        }
-
-        c.push("flex-col mb-10");
-        if (direction.value === "row") {
-            c.push("lg:flex-row lg:justify-between lg:items-center");
-        }
-
-        return c.join(" ");
-    }),
     title: computed(() => {
-        const c = ["border-b pb-4"];
-        if (direction.value === "row") {
-            c.push("lg:border-0 lg:pb-0");
-        }
-
-        return c.join(" ");
+        return direction.value === "row" ? "fr-col-12 fr-col-lg" : "fr-col-12";
     }),
     actions: computed(() => {
-        const c = ["mt-4"];
-        if (direction.value === "row") {
-            c.push("lg:mt-0");
-        }
-
-        return c.join(" ");
+        return direction.value === "row"
+            ? "fr-col-12 fr-mt-2w view-header__actions--row"
+            : "fr-col-12 fr-mt-2w";
     }),
 };
 </script>
+
+<style scoped>
+/* Pastille ronde de l'icône : le DSFR ne propose pas d'utilitaire pour la forme ni la taille. */
+.view-header__icon {
+    flex: none;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    font-size: 1.5rem;
+}
+
+/* Les titres (noms de sites, d'actions) peuvent être très longs : `overflow-wrap: anywhere`
+   les coupe uniquement en cas de débordement (contrairement à l'ancien `break-all`). */
+.view-header__title {
+    overflow-wrap: anywhere;
+}
+
+/* À partir de lg (62em), les actions se placent à droite du titre, en largeur de contenu.
+   Le DSFR n'a ni `fr-col-lg-auto` ni marge responsive (`fr-mt-lg-0`). */
+@media (min-width: 62em) {
+    .view-header__actions--row {
+        flex: none;
+        width: auto;
+        max-width: none;
+        margin-top: 0 !important;
+    }
+}
+
+/* Le DSFR n'a pas d'utilitaire d'impression. */
+@media print {
+    .view-header {
+        display: none !important;
+    }
+}
+</style>

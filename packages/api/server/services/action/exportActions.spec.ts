@@ -15,7 +15,10 @@ const stubs = {
     where: sandbox.stub(),
     can: sandbox.stub(),
     fetchReport: sandbox.stub(),
+    fetchMetrics: sandbox.stub(),
     generateExportFile: sandbox.stub(),
+    toFreshnessRow: sandbox.stub(),
+    computeActionFreshness: sandbox.stub(),
 };
 
 rewiremock('#server/utils/permission').with({
@@ -24,8 +27,11 @@ rewiremock('#server/utils/permission').with({
 });
 rewiremock('#server/models/actionModel').with({
     fetchReport: stubs.fetchReport,
+    fetchMetrics: stubs.fetchMetrics,
 });
 rewiremock('./exportActions.generateExportFile').with(stubs.generateExportFile);
+rewiremock('#server/models/actionModel/_common/toFreshnessRow').with(stubs.toFreshnessRow);
+rewiremock('#server/models/actionModel/_common/computeActionFreshness').with(stubs.computeActionFreshness);
 
 rewiremock.enable();
 // eslint-disable-next-line import/newline-after-import, import/first
@@ -46,9 +52,11 @@ describe('services/action/exportActions()', () => {
         stubs.getPermission.returns('allowed');
         stubs.fetchReport.resolves([
             {
-                action_id: 1, action_name: 'Action de test', departement_code: '75', finance_dedie: 1000,
+                action_id: 1, action_name: 'Action de test', departement_code: '75', finance_dedie: 1000, started_on: new Date(2024, 0, 1), ended_on: null,
             },
         ]);
+        stubs.fetchMetrics.resolves([]);
+        stubs.computeActionFreshness.returns({ isActivePreviousYear: false, isUpToDate90Days: false, isUpToDate180Days: false });
         stubs.generateExportFile.resolves(Buffer.from('excel file'));
     });
 

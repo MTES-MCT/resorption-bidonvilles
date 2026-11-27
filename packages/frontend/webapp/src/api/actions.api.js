@@ -43,9 +43,25 @@ export function edit(id, data) {
     return axios.patch(`/actions/${encodeURI(id)}`, data);
 }
 
-export function exportActions(year, dihalFinancing = false) {
+function isEmptyParam(value) {
+    return (
+        value === undefined ||
+        value === null ||
+        value === "" ||
+        (Array.isArray(value) && value.length === 0)
+    );
+}
+
+// Les tableaux sont sérialisés par axios sous la forme `topic[]=a&topic[]=b`
+// (comportement par défaut, aucun paramsSerializer dans helpers/axios.js),
+// que le parseur de requête d'Express (qs) restitue en tableau.
+export function exportActions(year, filters = {}) {
+    const params = Object.fromEntries(
+        Object.entries(filters).filter(([, value]) => !isEmptyParam(value))
+    );
+
     return axios.get(`/actions/export/excel/${encodeURI(year)}`, {
-        params: { dihalFinancing },
+        params,
         responseType: "blob",
     });
 }

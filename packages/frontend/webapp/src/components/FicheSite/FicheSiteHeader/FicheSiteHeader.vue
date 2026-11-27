@@ -1,6 +1,6 @@
 <template>
     <ContentWrapper>
-        <ViewHeader icon="tent" direction="col">
+        <ViewHeader icon="tent" direction="col" titleTag="div">
             <template v-slot:title>
                 <FicheSiteHeaderName :town="town" />
             </template>

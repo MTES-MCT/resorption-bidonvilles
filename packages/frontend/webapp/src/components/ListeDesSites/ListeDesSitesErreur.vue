@@ -1,5 +1,5 @@
 <template>
-    <ViewError>
+    <ViewError title-tag="h2">
         <template v-slot:title>Liste des sites indisponible</template>
         <template v-slot:code>{{ townsStore.error }}</template>
         <template v-slot:content

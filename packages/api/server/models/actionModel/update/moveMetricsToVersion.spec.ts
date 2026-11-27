@@ -126,3 +126,128 @@ describe('models/actionModel/update/moveMetricsToVersion()', () => {
         }
     });
 });
+
+describe('models/actionModel/update/moveMetricsToVersion() - matérialisation des dates de mise à jour par nature (issue 2739)', () => {
+    const actionId = 7;
+    const versionId = 42;
+    const transaction = {} as any;
+
+    function normalize(sql: string): string {
+        return sql.replace(/\s+/g, ' ').trim();
+    }
+
+    // Extrait l'affectation `colonne = COALESCE(...)` de la clause SET (parenthèses équilibrées)
+    function extractCoalesce(sql: string, column: string): string | null {
+        const normalized = normalize(sql);
+        const start = normalized.match(new RegExp(`(?:SET|,)\\s*${column}\\s*=\\s*COALESCE\\s*\\(`));
+        if (!start || start.index === undefined) {
+            return null;
+        }
+
+        const openIndex = start.index + start[0].length - 1;
+        let depth = 0;
+        for (let i = openIndex; i < normalized.length; i += 1) {
+            if (normalized[i] === '(') {
+                depth += 1;
+            } else if (normalized[i] === ')') {
+                depth -= 1;
+                if (depth === 0) {
+                    return normalized.slice(openIndex + 1, i);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    function getSetClause(sql: string): string {
+        const normalized = normalize(sql);
+        const match = normalized.match(/\bSET\b(.*?)\bWHERE action_metrics\.fk_action = :actionId/);
+        return match ? match[1] : '';
+    }
+
+    beforeEach(() => {
+        stubs.sequelize.query.resolves();
+        stubs.metricsVersionKey.returns(KEY_MARKER);
+    });
+
+    // Le `after` du describe précédent restaure la sandbox : ses stubs n'en font alors plus partie, on les réinitialise donc explicitement.
+    afterEach(() => {
+        stubs.sequelize.query.reset();
+        stubs.metricsVersionKey.reset();
+    });
+
+    ['updated_at_indicators', 'updated_at_scolaire'].forEach((column) => {
+        describe(column, () => {
+            it('est affectée dans le même UPDATE que fk_version, par un COALESCE', async () => {
+                await moveMetricsToVersion(actionId, versionId, [2022], transaction);
+
+                expect(stubs.sequelize.query).to.have.been.calledOnce;
+                const [sql] = stubs.sequelize.query.firstCall.args;
+                const setClause = getSetClause(sql);
+
+                expect(setClause).to.match(/fk_version\s*=\s*:versionId/);
+                expect(setClause).to.match(new RegExp(`${column}\\s*=\\s*COALESCE\\s*\\(`));
+            });
+
+            it('est matérialisée dans l\'ordre : la colonne elle-même, la version_at de l\'ancienne version, puis created_at', async () => {
+                await moveMetricsToVersion(actionId, versionId, [2022], transaction);
+
+                const [sql] = stubs.sequelize.query.firstCall.args;
+                const expression = extractCoalesce(sql, column);
+
+                expect(expression, `COALESCE introuvable pour ${column}`).not.to.be.null;
+                const selfIndex = expression!.search(new RegExp(`^\\s*(action_metrics\\.)?${column}\\s*,`));
+                const subqueryIndex = expression!.search(/\(\s*SELECT\s+\w+\.version_at\s+FROM\s+action_metrics_versions/i);
+                const createdAtIndex = expression!.search(/,\s*action_metrics\.created_at\s*$/);
+
+                expect(selfIndex, 'la colonne elle-même doit venir en premier').to.equal(0);
+                expect(subqueryIndex, 'sous-requête version_at').to.be.greaterThan(selfIndex);
+                expect(createdAtIndex, 'created_at en dernier').to.be.greaterThan(subqueryIndex);
+            });
+
+            it('lit l\'ancienne version via action_metrics.fk_version (jamais :versionId) dans la sous-requête', async () => {
+                await moveMetricsToVersion(actionId, versionId, [2022], transaction);
+
+                const [sql] = stubs.sequelize.query.firstCall.args;
+                const expression = extractCoalesce(sql, column);
+
+                expect(expression, `COALESCE introuvable pour ${column}`).not.to.be.null;
+                expect(expression).to.match(/FROM\s+action_metrics_versions(\s+AS)?\s+(\w+)\s+WHERE\s+\2\.action_metrics_version_id\s*=\s*action_metrics\.fk_version\b/i);
+                expect(expression).not.to.contain(':versionId');
+                expect(expression).not.to.match(/:\w+/);
+            });
+        });
+    });
+
+    it('ne référence :versionId qu\'une seule fois, pour l\'affectation de fk_version', async () => {
+        await moveMetricsToVersion(actionId, versionId, [2022], transaction);
+
+        const [sql] = stubs.sequelize.query.firstCall.args;
+        expect(normalize(sql).match(/:versionId/g)).to.have.lengthOf(1);
+    });
+
+    it('laisse les replacements inchangés ({ actionId, versionId, years }), sans timestamp JS', async () => {
+        await moveMetricsToVersion(actionId, versionId, [2022, 2024], transaction);
+
+        const [, options] = stubs.sequelize.query.firstCall.args;
+        expect(options.replacements).to.eql({ actionId, versionId, years: [2022, 2024] });
+        Object.values(options.replacements).forEach(value => expect(value).not.to.be.instanceOf(Date));
+    });
+
+    it('conserve la sélection des lignes (rang 1 par clé de version, année dans :years)', async () => {
+        await moveMetricsToVersion(actionId, versionId, [2022, 2024], transaction);
+
+        const sql = normalize(stubs.sequelize.query.firstCall.args[0]);
+        expect(sql).to.match(/RANK\(\) OVER\(/);
+        expect(sql).to.match(new RegExp(`ORDER BY ${KEY_MARKER} DESC`));
+        expect(sql).to.match(/rank\s*=\s*1/);
+        expect(sql).to.match(/EXTRACT\(\s*YEAR FROM [\w.]*date\s*\) IN \(:years\)/);
+    });
+
+    it('n\'exécute aucune requête quand la liste d\'années est vide', async () => {
+        await moveMetricsToVersion(actionId, versionId, [], transaction);
+
+        expect(stubs.sequelize.query).not.to.have.been.called;
+    });
+});

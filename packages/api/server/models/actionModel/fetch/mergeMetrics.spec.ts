@@ -269,3 +269,186 @@ describe('models/actionModel/fetch/mergeMetrics() - rank renvoyé sous forme de 
         expect(hash[3].metrics_updated_at).to.be.null;
     });
 });
+
+/**
+ * Contrat ajouté (ticket 2739, fraîcheur des indicateurs) : chaque entrée de `metrics` porte aussi
+ *  - year                  : année de la ligne, extraite de `date` (chaîne YYYY-MM-DD) ;
+ *  - indicators_updated_at : `updated_at_indicators` en ms, SEULEMENT si la ligne a au moins une valeur non scolaire
+ *                            non nulle, sinon null ;
+ *  - scolaire_updated_at   : `updated_at_scolaire` en ms, SEULEMENT si la ligne a au moins une valeur scolaire_*
+ *                            non nulle, sinon null.
+ * `metrics_updated_at` (max de version_at) reste inchangé ; les lignes de rang > 1 sont toujours ignorées.
+ * Choix : « valeur non nulle » = ni null, ni undefined, ni chaîne vide ; 0 est une valeur.
+ */
+type FreshnessFields = { updated_at_indicators: Date | null, updated_at_scolaire: Date | null };
+type FreshnessMetric = { year: number, indicators_updated_at: number | null, scolaire_updated_at: number | null };
+
+function buildFreshRow(override: Partial<ActionMetricsRow> & Partial<FreshnessFields> = {}): ActionMetricsRow {
+    return buildRow({
+        updated_at_indicators: new Date(2025, 2, 1, 10, 0, 0),
+        updated_at_scolaire: new Date(2025, 3, 1, 10, 0, 0),
+        ...override,
+    } as Partial<ActionMetricsRow>);
+}
+
+function metricsOf(hash: ActionHash, id = 1): FreshnessMetric[] {
+    return hash[id].metrics as unknown as FreshnessMetric[];
+}
+
+describe('models/actionModel/fetch/mergeMetrics() - dates de mise à jour par nature d\'indicateur', () => {
+    const indicatorsAt = new Date(2025, 2, 1, 10, 0, 0);
+    const scolaireAt = new Date(2025, 3, 1, 10, 0, 0);
+
+    it('expose l\'année de la ligne, extraite de sa date', () => {
+        const hash = buildHash(1);
+
+        mergeMetrics(hash, [buildFreshRow({ date: '2024-12-31' })]);
+
+        expect(metricsOf(hash)[0].year).to.equal(2024);
+    });
+
+    it('expose indicators_updated_at en ms quand la ligne a une valeur non scolaire', () => {
+        const hash = buildHash(1);
+
+        mergeMetrics(hash, [buildFreshRow({ nombre_personnes: 10, scolaire_nombre_college: null })]);
+
+        expect(metricsOf(hash)[0].indicators_updated_at).to.equal(indicatorsAt.getTime());
+        expect(metricsOf(hash)[0].scolaire_updated_at).to.be.null;
+    });
+
+    it('expose scolaire_updated_at en ms quand la ligne a une valeur scolaire', () => {
+        const hash = buildHash(1);
+
+        mergeMetrics(hash, [buildFreshRow({ nombre_personnes: null, scolaire_nombre_college: 4 })]);
+
+        expect(metricsOf(hash)[0].indicators_updated_at).to.be.null;
+        expect(metricsOf(hash)[0].scolaire_updated_at).to.equal(scolaireAt.getTime());
+    });
+
+    it('expose les deux dates quand les deux natures sont renseignées', () => {
+        const hash = buildHash(1);
+
+        mergeMetrics(hash, [buildFreshRow({ nombre_personnes: 10, scolaire_nombre_lycee: 2 })]);
+
+        expect(metricsOf(hash)[0].indicators_updated_at).to.equal(indicatorsAt.getTime());
+        expect(metricsOf(hash)[0].scolaire_updated_at).to.equal(scolaireAt.getTime());
+    });
+
+    it('considère 0 comme une valeur', () => {
+        const hash = buildHash(1);
+
+        mergeMetrics(hash, [buildFreshRow({ nombre_personnes: null, scolaire_nombre_autre: 0 })]);
+
+        expect(metricsOf(hash)[0].indicators_updated_at).to.be.null;
+        expect(metricsOf(hash)[0].scolaire_updated_at).to.equal(scolaireAt.getTime());
+    });
+
+    it('met les deux dates à null quand la ligne n\'a aucune valeur', () => {
+        const hash = buildHash(1);
+
+        mergeMetrics(hash, [buildFreshRow({ nombre_personnes: null })]);
+
+        expect(metricsOf(hash)[0].indicators_updated_at).to.be.null;
+        expect(metricsOf(hash)[0].scolaire_updated_at).to.be.null;
+    });
+
+    it('met à null une nature sans valeur même quand sa colonne de date est renseignée', () => {
+        const hash = buildHash(1);
+
+        mergeMetrics(hash, [buildFreshRow({ nombre_personnes: 5, updated_at_scolaire: new Date(2026, 0, 1) })]);
+
+        expect(metricsOf(hash)[0].scolaire_updated_at).to.be.null;
+    });
+
+    it('retourne null quand la nature a des valeurs mais que sa date est nulle', () => {
+        const hash = buildHash(1);
+
+        mergeMetrics(hash, [buildFreshRow({ nombre_personnes: 5, updated_at_indicators: null })]);
+
+        expect(metricsOf(hash)[0].indicators_updated_at).to.be.null;
+    });
+
+    it('détecte chacun des champs scolaires comme nature scolaire (et aucun comme non scolaire)', () => {
+        const scolaireKeys = [
+            'scolaire_mineurs_moins_de_trois_ans',
+            'scolaire_mineurs_trois_ans_et_plus',
+            'scolaire_mediation_moins_de_trois_ans',
+            'scolaire_mediation_trois_ans_et_plus',
+            'scolaire_nombre_maternelle',
+            'scolaire_nombre_elementaire',
+            'scolaire_nombre_college',
+            'scolaire_nombre_lycee',
+            'scolaire_nombre_autre',
+            'scolaire_mineur_scolarise_dans_annee',
+        ];
+
+        scolaireKeys.forEach((key) => {
+            const hash = buildHash(1);
+
+            mergeMetrics(hash, [buildFreshRow({ nombre_personnes: null, [key]: 1 })]);
+
+            expect(metricsOf(hash)[0].indicators_updated_at, key).to.be.null;
+            expect(metricsOf(hash)[0].scolaire_updated_at, key).to.equal(scolaireAt.getTime());
+        });
+    });
+
+    it('détecte chacun des champs non scolaires comme nature non scolaire (et aucun comme scolaire)', () => {
+        const keys = [
+            'nombre_personnes',
+            'nombre_menages',
+            'nombre_femmes',
+            'nombre_mineurs',
+            'sante_nombre_personnes',
+            'travail_nombre_personnes',
+            'travail_nombre_femmes',
+            'hebergement_nombre_personnes',
+            'hebergement_nombre_menages',
+            'logement_nombre_personnes',
+            'logement_nombre_menages',
+        ];
+
+        keys.forEach((key) => {
+            const hash = buildHash(1);
+
+            mergeMetrics(hash, [buildFreshRow({ nombre_personnes: null, [key]: 1 })]);
+
+            expect(metricsOf(hash)[0].indicators_updated_at, key).to.equal(indicatorsAt.getTime());
+            expect(metricsOf(hash)[0].scolaire_updated_at, key).to.be.null;
+        });
+    });
+
+    it('traite chaque ligne (année) avec ses propres dates', () => {
+        const hash = buildHash(1);
+        const otherAt = new Date(2025, 8, 9, 9, 0, 0);
+
+        mergeMetrics(hash, [
+            buildFreshRow({ date: '2025-12-31', nombre_personnes: 10 }),
+            buildFreshRow({
+                date: '2026-06-01', nombre_personnes: null, scolaire_nombre_college: 3, updated_at_scolaire: otherAt,
+            }),
+        ]);
+
+        expect(metricsOf(hash).map(metric => metric.year)).to.eql([2025, 2026]);
+        expect(metricsOf(hash)[0].indicators_updated_at).to.equal(indicatorsAt.getTime());
+        expect(metricsOf(hash)[0].scolaire_updated_at).to.be.null;
+        expect(metricsOf(hash)[1].indicators_updated_at).to.be.null;
+        expect(metricsOf(hash)[1].scolaire_updated_at).to.equal(otherAt.getTime());
+    });
+
+    it('laisse metrics_updated_at inchangé (max de version_at) indépendamment des nouvelles dates', () => {
+        const hash = buildHash(1);
+        const versionAt = new Date(2025, 5, 1, 12, 0, 0);
+
+        mergeMetrics(hash, [buildFreshRow({ version_at: versionAt, updated_at_indicators: new Date(2026, 0, 1) })]);
+
+        expect(hash[1].metrics_updated_at).to.equal(versionAt.getTime());
+    });
+
+    it('ignore toujours les lignes de rang > 1', () => {
+        const hash = buildHash(1);
+
+        mergeMetrics(hash, [buildFreshRow({ rank: 2 }), buildFreshRow({ rank: '3' as unknown as number })]);
+
+        expect(hash[1].metrics).to.eql([]);
+    });
+});

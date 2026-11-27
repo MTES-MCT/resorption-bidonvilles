@@ -1,30 +1,18 @@
 <template>
-    <Select
-        id="selected_year_for_actions_export"
+    <DsfrSelect
+        select-id="selected_year_for_actions_export"
         name="selected_year"
-        label="Choisissez l'année:"
-        v-model="selectedYear"
-        width="w-1/2 md:w-1/4"
-        info="Sélectionnez l'année pour laquelle vous souhaitez exporter les actions"
-        showMandatoryStar
-        @change="handleYearSelected"
-    >
-        <option
-            v-for="year in years"
-            :key="year"
-            :value="year"
-            :selected="year === selectedYear"
-        >
-            {{ year }}
-        </option>
-    </Select>
+        label="Choisissez l'année :"
+        hint="Sélectionnez l'année pour laquelle vous souhaitez exporter les actions"
+        required
+        :modelValue="selectedYear"
+        :options="years"
+        @update:modelValue="handleYearSelected"
+    />
 </template>
 
 <script setup>
-import { toRefs } from "vue";
-import { Select } from "@resorptionbidonvilles/ui";
-
-const props = defineProps({
+defineProps({
     years: {
         type: Array,
         required: true,
@@ -37,9 +25,8 @@ const props = defineProps({
 
 const emit = defineEmits(["year-selected"]);
 
-const { years, selectedYear } = toRefs(props);
-
-const handleYearSelected = (newYear) => {
-    emit("year-selected", newYear.target.value);
-};
+function handleYearSelected(newYear) {
+    // DsfrSelect émet la valeur lue sur le <select>, donc une chaîne.
+    emit("year-selected", Number.parseInt(newYear, 10));
+}
 </script>

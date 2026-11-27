@@ -179,28 +179,38 @@ const updatedPopulationPercentage = computed(() => {
 });
 
 const badgeLabel = computed(() => {
-    return getBadgeLabel(
-        updatedSitesInTheLastSixMonths.value,
-        updatedSitesPercentage.value,
-        "mis à jour dans les 6 derniers mois",
-        "Aucun site mis à jour au cours des 6 derniers mois"
-    );
+    return getBadgeLabel({
+        count: updatedSitesInTheLastSixMonths.value,
+        percentage: updatedSitesPercentage.value,
+        positiveLabel: "mis à jour dans les 6 derniers mois",
+        emptyLabel: "Aucun site mis à jour au cours des 6 derniers mois",
+    });
 });
 
 const badgePopulationLabel = computed(() => {
-    return getBadgeLabel(
-        updatedPopulationInTheLastThreeMonths.value,
-        updatedPopulationPercentage.value,
-        "dont le nombre d’habitants a été mis à jour dans les 3 derniers mois",
-        "Aucun site dont les habitants ont été mis à jour au cours des 3 derniers mois"
-    );
+    return getBadgeLabel({
+        count: updatedPopulationInTheLastThreeMonths.value,
+        percentage: updatedPopulationPercentage.value,
+        positiveLabel:
+            "dont le nombre d’habitants a été mis à jour dans les 3 derniers mois",
+        emptyLabel:
+            "Aucun site dont les habitants ont été mis à jour au cours des 3 derniers mois",
+    });
 });
 
 const badgePopulationVariant = computed(() => {
-    return getBadgeVariant(updatedPopulationPercentage.value, 95, 80);
+    return getBadgeVariant({
+        value: updatedPopulationPercentage.value,
+        successThreshold: 95,
+        warningThreshold: 80,
+    });
 });
 
 const badgeVariant = computed(() => {
-    return getBadgeVariant(updatedSitesPercentage.value, 80, 60);
+    return getBadgeVariant({
+        value: updatedSitesPercentage.value,
+        successThreshold: 80,
+        warningThreshold: 60,
+    });
 });
 </script>

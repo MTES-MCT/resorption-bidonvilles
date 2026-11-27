@@ -208,8 +208,12 @@ describe('models/actionModel/update/updateMetrics', () => {
         });
 
         it('ne prévoit aucun changement quand il n\'y a ni ligne existante ni indicateur renseigné', () => {
-            expect(planMetricsUpdate([], {})).to.eql({ hasChanges: false, keptYears: [], yearsToWrite: [] });
-            expect(planMetricsUpdate([], { 2022: buildIndicateurs() })).to.eql({ hasChanges: false, keptYears: [], yearsToWrite: [] });
+            expect(planMetricsUpdate([], {})).to.eql({
+                hasChanges: false, keptYears: [], yearsToWrite: [], datesByYear: {},
+            });
+            expect(planMetricsUpdate([], { 2022: buildIndicateurs() })).to.eql({
+                hasChanges: false, keptYears: [], yearsToWrite: [], datesByYear: {},
+            });
         });
 
         describe('lignes de rang supérieur à 1 (anciennes versions)', () => {
@@ -497,13 +501,17 @@ describe('models/actionModel/update/updateMetrics', () => {
             it('ignore une ligne vide absente du formulaire : aucun changement, rien conservé ni écrit', () => {
                 const plan = planMetricsUpdate([buildRow(2022)], {});
 
-                expect(plan).to.eql({ hasChanges: false, keptYears: [], yearsToWrite: [] });
+                expect(plan).to.eql({
+                    hasChanges: false, keptYears: [], yearsToWrite: [], datesByYear: {},
+                });
             });
 
             it('ignore une ligne vide quand le formulaire contient la même année entièrement vide', () => {
                 const plan = planMetricsUpdate([buildRow(2022)], { 2022: buildIndicateurs() });
 
-                expect(plan).to.eql({ hasChanges: false, keptYears: [], yearsToWrite: [] });
+                expect(plan).to.eql({
+                    hasChanges: false, keptYears: [], yearsToWrite: [], datesByYear: {},
+                });
             });
 
             it('écrit l\'année (jamais conservée) quand le formulaire renseigne au moins une valeur pour une ligne vide', () => {
@@ -590,13 +598,17 @@ describe('models/actionModel/update/updateMetrics', () => {
             it('considère vide une ligne dont toutes les colonnes valent une chaîne vide', () => {
                 const plan = planMetricsUpdate([buildRow(2022, buildOverride(''))], {});
 
-                expect(plan).to.eql({ hasChanges: false, keptYears: [], yearsToWrite: [] });
+                expect(plan).to.eql({
+                    hasChanges: false, keptYears: [], yearsToWrite: [], datesByYear: {},
+                });
             });
 
             it('considère vide une ligne dont toutes les colonnes valent undefined', () => {
                 const plan = planMetricsUpdate([buildRow(2022, buildOverride(undefined))], {});
 
-                expect(plan).to.eql({ hasChanges: false, keptYears: [], yearsToWrite: [] });
+                expect(plan).to.eql({
+                    hasChanges: false, keptYears: [], yearsToWrite: [], datesByYear: {},
+                });
             });
 
             it('ignore la ligne vide d\'un doublon de rang 1 et compare l\'autre seule (identique => conservée)', () => {
@@ -1052,6 +1064,332 @@ describe('models/actionModel/update/updateMetrics', () => {
                     following.forEach(next => expect(next()).not.to.have.been.called);
                 });
             });
+        });
+    });
+});
+
+/**
+ * Contrat ajouté (ticket 2739) :
+ *
+ *   planMetricsUpdate(currentRows, incoming, now: Date = new Date()): MetricsUpdatePlan
+ *   MetricsUpdatePlan gagne `datesByYear: Record<string, { updated_at_indicators: Date | null, updated_at_scolaire: Date | null }>`
+ *
+ * Une entrée par année de `yearsToWrite` (clé = même chaîne), aucune pour les années conservées.
+ *  - année réécrite qui existait : une nature (non scolaire / scolaire) dont au moins un champ diffère prend `now`,
+ *    une nature inchangée reprend la date de l'ancienne ligne (`updated_at_indicators` / `updated_at_scolaire`) ;
+ *  - année nouvelle : `now` pour chaque nature ayant au moins une valeur, null pour une nature entièrement vide ;
+ *  - année en plusieurs lignes de rang 1 (données héritées) : `now` pour les natures renseignées, null pour les autres.
+ * Choix : une nature « renseignée » = au moins un champ dont normalize() n'est pas null (0 est une valeur).
+ * Pour une nature inchangée dont l'ancienne date est null, on reporte null.
+ */
+type PlanDates = Record<string, { updated_at_indicators: Date | null, updated_at_scolaire: Date | null }>;
+
+function datesOf(plan: unknown): PlanDates {
+    return (plan as { datesByYear: PlanDates }).datesByYear;
+}
+
+describe('models/actionModel/update/updateMetrics - planMetricsUpdate() : dates par nature (2739)', () => {
+    const now = new Date(2026, 10, 25, 14, 30, 0);
+    const oldIndicators = new Date(2025, 1, 10, 9, 0, 0);
+    const oldScolaire = new Date(2025, 2, 20, 9, 0, 0);
+
+    function rowWithDates(
+        year: number,
+        override: Partial<Indicateurs> = {},
+        dates: { indicators?: Date | null, scolaire?: Date | null } = {},
+        options: { rank?: number } = {},
+    ): ActionMetricsRow {
+        return {
+            ...buildRow(year, override, options),
+            updated_at_indicators: dates.indicators === undefined ? oldIndicators : dates.indicators,
+            updated_at_scolaire: dates.scolaire === undefined ? oldScolaire : dates.scolaire,
+        } as unknown as ActionMetricsRow;
+    }
+
+    describe('année existante réécrite', () => {
+        it('prend now pour le non scolaire modifié et reprend l\'ancienne date du scolaire inchangé', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2025, { nombre_personnes: 10, scolaire_nombre_college: 4 })],
+                { 2025: buildIndicateurs({ nombre_personnes: 11, scolaire_nombre_college: 4 }) },
+                now,
+            );
+
+            expect(plan.yearsToWrite).to.eql(['2025']);
+            expect(datesOf(plan)['2025']).to.eql({ updated_at_indicators: now, updated_at_scolaire: oldScolaire });
+        });
+
+        it('prend now pour le scolaire modifié et reprend l\'ancienne date du non scolaire inchangé', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2026, { nombre_personnes: 10, scolaire_nombre_college: 4 })],
+                { 2026: buildIndicateurs({ nombre_personnes: 10, scolaire_nombre_college: 5 }) },
+                now,
+            );
+
+            expect(datesOf(plan)['2026']).to.eql({ updated_at_indicators: oldIndicators, updated_at_scolaire: now });
+        });
+
+        it('prend now pour les deux natures quand les deux changent', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2025, { nombre_personnes: 10, scolaire_nombre_college: 4 })],
+                { 2025: buildIndicateurs({ nombre_personnes: 12, scolaire_nombre_college: 5 }) },
+                now,
+            );
+
+            expect(datesOf(plan)['2025']).to.eql({ updated_at_indicators: now, updated_at_scolaire: now });
+        });
+
+        it('une nature dont un seul champ sur plusieurs diffère prend now', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2025, { nombre_personnes: 10, nombre_menages: 3, sante_nombre_personnes: 2 })],
+                { 2025: buildIndicateurs({ nombre_personnes: 10, nombre_menages: 3, sante_nombre_personnes: 9 }) },
+                now,
+            );
+
+            expect(datesOf(plan)['2025'].updated_at_indicators).to.eql(now);
+        });
+
+        it('reprend les dates de l\'ancienne ligne pour la nature inchangée quand elle est renseignée à l\'identique avec normalisation null / chaîne vide', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2025, { nombre_personnes: 10, nombre_menages: null, scolaire_nombre_college: 4 })],
+                {
+                    2025: buildIndicateurs({
+                        nombre_personnes: 10,
+                        nombre_menages: '' as unknown as null,
+                        scolaire_nombre_college: 4,
+                        nombre_femmes: 7,
+                    }),
+                },
+                now,
+            );
+
+            // nombre_femmes (non scolaire) est ajouté : le non scolaire change, le scolaire reste
+            expect(datesOf(plan)['2025']).to.eql({ updated_at_indicators: now, updated_at_scolaire: oldScolaire });
+        });
+
+        it('null, undefined et chaîne vide sont équivalents : la nature reste inchangée et garde sa date', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2025, { nombre_personnes: 10, scolaire_nombre_college: null })],
+                {
+                    2025: buildIndicateurs({
+                        nombre_personnes: 10,
+                        nombre_menages: undefined as unknown as null,
+                        scolaire_nombre_college: '' as unknown as null,
+                        scolaire_nombre_lycee: 3,
+                    }),
+                },
+                now,
+            );
+
+            expect(datesOf(plan)['2025'].updated_at_indicators).to.eql(oldIndicators);
+            expect(datesOf(plan)['2025'].updated_at_scolaire).to.eql(now);
+        });
+
+        it('0 est distinct de null : passer de null à 0 modifie la nature', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2025, { nombre_personnes: 10, scolaire_nombre_college: null })],
+                { 2025: buildIndicateurs({ nombre_personnes: 10, scolaire_nombre_college: 0 }) },
+                now,
+            );
+
+            expect(datesOf(plan)['2025']).to.eql({ updated_at_indicators: oldIndicators, updated_at_scolaire: now });
+        });
+
+        it('une nature entièrement vide avant et renseignée maintenant prend now', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2025, { nombre_personnes: 10 }, { scolaire: null })],
+                { 2025: buildIndicateurs({ nombre_personnes: 10, scolaire_nombre_lycee: 2 }) },
+                now,
+            );
+
+            expect(datesOf(plan)['2025']).to.eql({ updated_at_indicators: oldIndicators, updated_at_scolaire: now });
+        });
+
+        it('une nature vidée par le formulaire est modifiée (now), même si elle devient entièrement vide', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2025, { nombre_personnes: 10, scolaire_nombre_college: 4 })],
+                { 2025: buildIndicateurs({ nombre_personnes: 11, scolaire_nombre_college: null }) },
+                now,
+            );
+
+            expect(datesOf(plan)['2025'].updated_at_indicators).to.eql(now);
+            expect(datesOf(plan)['2025'].updated_at_scolaire).to.eql(now);
+        });
+
+        it('reporte null quand la nature est inchangée et que l\'ancienne date est null', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2025, { nombre_personnes: 10 }, { indicators: null, scolaire: null })],
+                { 2025: buildIndicateurs({ nombre_personnes: 10, scolaire_nombre_college: 3 }) },
+                now,
+            );
+
+            expect(datesOf(plan)['2025']).to.eql({ updated_at_indicators: null, updated_at_scolaire: now });
+        });
+
+        it('compare chacune des 21 colonnes : toute modification de la nature correspondante prend now', () => {
+            INDICATOR_COLUMNS.forEach((column) => {
+                const isScolaire = column.startsWith('scolaire_');
+                const base = isScolaire ? { nombre_personnes: 1 } : { scolaire_nombre_college: 1 };
+                const current = rowWithDates(2025, { ...base, [column]: 5 });
+
+                const plan = planMetricsUpdate(
+                    [current],
+                    { 2025: buildIndicateurs({ ...base, [column]: 6 }) },
+                    now,
+                );
+
+                const expected = isScolaire
+                    ? { updated_at_indicators: oldIndicators, updated_at_scolaire: now }
+                    : { updated_at_indicators: now, updated_at_scolaire: oldScolaire };
+                expect(datesOf(plan)['2025'], column).to.eql(expected);
+            });
+        });
+    });
+
+    describe('année nouvelle', () => {
+        it('now pour les deux natures quand les deux ont une valeur', () => {
+            const plan = planMetricsUpdate(
+                [],
+                { 2026: buildIndicateurs({ nombre_personnes: 10, scolaire_nombre_college: 4 }) },
+                now,
+            );
+
+            expect(datesOf(plan)['2026']).to.eql({ updated_at_indicators: now, updated_at_scolaire: now });
+        });
+
+        it('now pour le non scolaire et null pour le scolaire entièrement vide', () => {
+            const plan = planMetricsUpdate([], { 2026: buildIndicateurs({ nombre_personnes: 10 }) }, now);
+
+            expect(datesOf(plan)['2026']).to.eql({ updated_at_indicators: now, updated_at_scolaire: null });
+        });
+
+        it('now pour le scolaire et null pour le non scolaire entièrement vide', () => {
+            const plan = planMetricsUpdate([], { 2026: buildIndicateurs({ scolaire_nombre_lycee: 2 }) }, now);
+
+            expect(datesOf(plan)['2026']).to.eql({ updated_at_indicators: null, updated_at_scolaire: now });
+        });
+
+        it('0 compte comme une valeur renseignée', () => {
+            const plan = planMetricsUpdate([], { 2026: buildIndicateurs({ nombre_personnes: 0 }) }, now);
+
+            expect(datesOf(plan)['2026']).to.eql({ updated_at_indicators: now, updated_at_scolaire: null });
+        });
+
+        it('est traitée comme nouvelle quand seule une ligne de rang supérieur à 1 existe', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2025, { nombre_personnes: 10, scolaire_nombre_college: 4 }, {}, { rank: 2 })],
+                { 2025: buildIndicateurs({ nombre_personnes: 10, scolaire_nombre_college: 4 }) },
+                now,
+            );
+
+            expect(datesOf(plan)['2025']).to.eql({ updated_at_indicators: now, updated_at_scolaire: now });
+        });
+
+        it('est traitée comme nouvelle quand la ligne de rang 1 existante est entièrement vide', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2025, {})],
+                { 2025: buildIndicateurs({ nombre_personnes: 10 }) },
+                now,
+            );
+
+            expect(datesOf(plan)['2025']).to.eql({ updated_at_indicators: now, updated_at_scolaire: null });
+        });
+    });
+
+    describe('année présente en plusieurs lignes de rang 1 (données héritées)', () => {
+        it('prend now pour les natures renseignées, même inchangées', () => {
+            const plan = planMetricsUpdate(
+                [
+                    rowWithDates(2025, { nombre_personnes: 10, scolaire_nombre_college: 4 }, {}, { rank: 1 }),
+                    rowWithDates(2025, { nombre_personnes: 10, scolaire_nombre_college: 4 }, {}, { rank: 1 }),
+                ],
+                { 2025: buildIndicateurs({ nombre_personnes: 10, scolaire_nombre_college: 4 }) },
+                now,
+            );
+
+            expect(plan.yearsToWrite).to.eql(['2025']);
+            expect(datesOf(plan)['2025']).to.eql({ updated_at_indicators: now, updated_at_scolaire: now });
+        });
+
+        it('laisse null la nature entièrement vide', () => {
+            const plan = planMetricsUpdate(
+                [
+                    rowWithDates(2025, { nombre_personnes: 10 }),
+                    rowWithDates(2025, { nombre_personnes: 10 }),
+                ],
+                { 2025: buildIndicateurs({ nombre_personnes: 10 }) },
+                now,
+            );
+
+            expect(datesOf(plan)['2025']).to.eql({ updated_at_indicators: now, updated_at_scolaire: null });
+        });
+    });
+
+    describe('années conservées et structure du plan', () => {
+        it('n\'a aucune entrée pour une année conservée et une entrée pour une année réécrite', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2024, { nombre_personnes: 10 }), rowWithDates(2025, { nombre_personnes: 20 })],
+                {
+                    2024: buildIndicateurs({ nombre_personnes: 10 }),
+                    2025: buildIndicateurs({ nombre_personnes: 21 }),
+                },
+                now,
+            );
+
+            expect(plan.keptYears).to.eql([2024]);
+            expect(plan.yearsToWrite).to.eql(['2025']);
+            expect(Object.keys(datesOf(plan))).to.eql(['2025']);
+        });
+
+        it('retourne un datesByYear vide quand rien n\'est à écrire', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2025, { nombre_personnes: 10 })],
+                { 2025: buildIndicateurs({ nombre_personnes: 10 }) },
+                now,
+            );
+
+            expect(plan.hasChanges).to.equal(false);
+            expect(datesOf(plan)).to.eql({});
+        });
+
+        it('retourne un datesByYear vide quand seules des années sont retirées', () => {
+            const plan = planMetricsUpdate([rowWithDates(2025, { nombre_personnes: 10 })], {}, now);
+
+            expect(plan.hasChanges).to.equal(true);
+            expect(datesOf(plan)).to.eql({});
+        });
+
+        it('a exactement une clé par année de yearsToWrite', () => {
+            const plan = planMetricsUpdate(
+                [rowWithDates(2024, { nombre_personnes: 10 })],
+                {
+                    2024: buildIndicateurs({ nombre_personnes: 11 }),
+                    2025: buildIndicateurs({ nombre_personnes: 5 }),
+                    2026: buildIndicateurs({ scolaire_nombre_college: 5 }),
+                },
+                now,
+            );
+
+            expect(sortedStrings(Object.keys(datesOf(plan)))).to.eql(sortedStrings(plan.yearsToWrite));
+        });
+
+        it('utilise l\'horloge courante quand now n\'est pas fourni', () => {
+            const clock = sinon.useFakeTimers(new Date(2026, 4, 5, 8, 0, 0).getTime());
+
+            try {
+                const plan = planMetricsUpdate([], { 2026: buildIndicateurs({ nombre_personnes: 1 }) });
+
+                expect(datesOf(plan)['2026'].updated_at_indicators).to.eql(new Date(2026, 4, 5, 8, 0, 0));
+            } finally {
+                clock.restore();
+            }
+        });
+
+        it('conserve les champs existants du plan (hasChanges, keptYears, yearsToWrite)', () => {
+            const plan = planMetricsUpdate([], { 2026: buildIndicateurs({ nombre_personnes: 1 }) }, now);
+
+            expect(plan.hasChanges).to.equal(true);
+            expect(plan.keptYears).to.eql([]);
+            expect(plan.yearsToWrite).to.eql(['2026']);
         });
     });
 });

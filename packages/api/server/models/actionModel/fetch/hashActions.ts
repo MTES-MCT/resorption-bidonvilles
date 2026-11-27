@@ -45,6 +45,9 @@ export default function hashActions(actions: ActionSelectRow[]): ActionHash {
             dihalFinancingYear: null,
             metrics: [],
             metrics_updated_at: null,
+            is_active_previous_year: false,
+            indicators_up_to_date_90d: false,
+            indicators_up_to_date_180d: false,
             comments: [],
             created_at: row.created_at.getTime(),
             created_by: {

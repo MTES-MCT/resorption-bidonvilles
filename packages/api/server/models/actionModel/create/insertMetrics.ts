@@ -2,6 +2,7 @@ import { QueryTypes, Transaction } from 'sequelize';
 import { sequelize } from '#db/sequelize';
 import { ActionInput } from '#server/services/action/ActionInput.d';
 import hasMetricValues from '#server/services/action/_common/hasMetricValues';
+import { SCOLAIRE_KEYS, NON_SCOLAIRE_KEYS, hasAnyValue } from '../_common/indicatorKeys';
 
 const COLUMNS = [
     'fk_action',
@@ -27,10 +28,14 @@ const COLUMNS = [
     'scolaire_nombre_lycee',
     'scolaire_nombre_autre',
     'scolaire_mineur_scolarise_dans_annee',
+    'updated_at_indicators',
+    'updated_at_scolaire',
     'created_by',
 ] as const;
 
-export default function insertMetrics(actionId: number, authorId: number, data: ActionInput, transaction: Transaction, versionId?: number | null) {
+type NatureDates = { updated_at_indicators: Date | null, updated_at_scolaire: Date | null };
+
+export default async function insertMetrics(actionId: number, authorId: number, data: ActionInput, transaction: Transaction, versionId?: number | null, datesByYear?: Record<string, NatureDates>): Promise<void> {
     // sans versionId (création d'action), la colonne fk_version n'est pas écrite : requête inchangée
     const columns: readonly string[] = versionId === undefined ? COLUMNS : [...COLUMNS, 'fk_version'];
     const today = new Date();
@@ -38,14 +43,14 @@ export default function insertMetrics(actionId: number, authorId: number, data: 
     const yearsWithData = Object.keys(data.indicateurs).filter(strYear => hasMetricValues(data.indicateurs[strYear]));
 
     if (yearsWithData.length === 0) {
-        return Promise.resolve();
+        return;
     }
 
     const numberOfRows = yearsWithData.length;
 
     const placeholders = `(${columns.map(() => '?').join(', ')})`;
 
-    return sequelize.query(
+    await sequelize.query(
         `INSERT INTO action_metrics(
             ${columns.join(',\n            ')}
         ) VALUES
@@ -56,6 +61,12 @@ export default function insertMetrics(actionId: number, authorId: number, data: 
             replacements: yearsWithData.flatMap((strYear) => {
                 const year = Number.parseInt(strYear, 10);
                 const indicateur = data.indicateurs[strYear];
+                const natureDates = datesByYear
+                    ? [datesByYear[strYear]?.updated_at_indicators ?? null, datesByYear[strYear]?.updated_at_scolaire ?? null]
+                    : [
+                        hasAnyValue(indicateur, NON_SCOLAIRE_KEYS) ? today : null,
+                        hasAnyValue(indicateur, SCOLAIRE_KEYS) ? today : null,
+                    ];
 
                 const values = [
                     actionId,
@@ -81,6 +92,7 @@ export default function insertMetrics(actionId: number, authorId: number, data: 
                     indicateur.scolaire_nombre_lycee ?? null,
                     indicateur.scolaire_nombre_autre ?? null,
                     indicateur.scolaire_mineur_scolarise_dans_annee ?? null,
+                    ...natureDates,
                     authorId,
                 ];
 

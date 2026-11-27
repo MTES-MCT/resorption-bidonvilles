@@ -1,4 +1,4 @@
-import actionService from '#server/services/action/actionService';
+import actionService from '#server/services/action';
 import { ControllerErrors } from '#server/errors/ControllerErrors';
 
 const ERRORS: ControllerErrors = {

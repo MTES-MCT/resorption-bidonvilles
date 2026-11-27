@@ -1,5 +1,5 @@
 <template>
-    <img :src="locationImg" class="w-36" alt="" />
+    <img :src="locationImg" class="mini-carte" alt="" />
 </template>
 
 <script setup>
@@ -60,3 +60,12 @@ const locationImg = computed(() => {
     return departementsImg[location.value.departement];
 });
 </script>
+
+<style scoped>
+/* Le DSFR n'a pas d'utilitaire de largeur fixe : 9rem = ancien w-36 */
+.mini-carte {
+    width: 9rem;
+    height: auto;
+    flex-shrink: 0;
+}
+</style>

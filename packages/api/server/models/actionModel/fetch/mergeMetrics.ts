@@ -1,5 +1,6 @@
 import { ActionHash } from './hashActions';
 import { ActionMetricsRow } from './fetchMetrics';
+import toFreshnessRow from '../_common/toFreshnessRow';
 
 /* eslint-disable no-param-reassign */
 export default function mergeMetrics(hash: ActionHash, metrics: ActionMetricsRow[]): void {
@@ -20,8 +21,14 @@ export default function mergeMetrics(hash: ActionHash, metrics: ActionMetricsRow
             hash[row.action_id].metrics_updated_at = metricVersionAt;
         }
 
+        const { year, indicators_updated_at, scolaire_updated_at } = toFreshnessRow(row);
+
         hash[row.action_id].metrics.push({
             date: new Date(row.date).getTime(),
+            year,
+            // une nature sans aucune valeur sur la ligne n'a pas de date de mise à jour
+            indicators_updated_at,
+            scolaire_updated_at,
             nombre_personnes: row.nombre_personnes,
             nombre_menages: row.nombre_menages,
             nombre_femmes: row.nombre_femmes,

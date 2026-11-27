@@ -1,10 +1,17 @@
+// Échappe les caractères spéciaux d'expression régulière pour que la saisie
+// de l'utilisateur soit traitée comme du texte littéral.
+function escapeRegExp(text) {
+    return text.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+}
+
 // Chaque entrée décrit un filtre : `isActive` indique si le filtre est
 // renseigné, `predicate` teste si une action doit être conservée.
 // Une action est retenue uniquement si elle passe tous les filtres actifs.
 function buildActiveFilters(filters) {
     const now = new Date();
+    // Pas de flag `g` : inutile pour un simple test de présence.
     const searchRegex = filters.search
-        ? new RegExp(filters.search, "ig")
+        ? new RegExp(escapeRegExp(String(filters.search)), "i")
         : null;
     const isOrganizationLocation = filters.location?.type === "organization";
 

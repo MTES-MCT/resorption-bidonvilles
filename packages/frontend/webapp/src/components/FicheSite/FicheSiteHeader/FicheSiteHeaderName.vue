@@ -6,7 +6,7 @@
         - {{ town.departement.name }})
     </p>
     <div class="flex flex-row gap-2 items-center">
-        <h1>{{ town.addressSimple }}</h1>
+        <h1 class="fr-h4 fr-m-0">{{ town.addressSimple }}</h1>
         <DsfrBadge
             v-if="town.heatwaveStatus"
             label="Alerte canicule"

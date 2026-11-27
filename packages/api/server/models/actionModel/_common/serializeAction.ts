@@ -3,6 +3,7 @@ import dateUtils from '#server/utils/date';
 import { CreatorInfo, EditorInfo } from '#server/models/_common/types/UserInfoTypes.d';
 import Action from '#root/types/resources/Action.d';
 import { User } from '#root/types/resources/User.d';
+import ActionLocationType from '#root/types/resources/ActionLocationType.d';
 
 const { can } = permissionUtils;
 const { toTimestamp } = dateUtils;
@@ -14,6 +15,9 @@ export type ActionAddress = {
     longitude: number,
     fk_city: string,
 };
+
+// adresse ETI telle que produite par la requête SQL de getHistory (coordonnées au format « lat,lng »)
+export type ActionEtiAddressRaw = Action['location_eti_addresses'][number] & { id: number };
 
 export type ActionRow = {
     hid?: number,
@@ -27,15 +31,17 @@ export type ActionRow = {
     departement_code: string,
     region_name: string,
     region_code: string,
-    location_type: string,
+    location_type: ActionLocationType,
     location_other: string | null,
     addresses?: ActionAddress[],
     topics?: Array<{ uid: string, name: string }>,
-    managers?: Array<any>,
-    operators?: Array<any>,
-    shantytowns?: Array<any>,
-    finances?: { [key: number]: any[] },
-    metrics?: Array<any>,
+    managers?: Action['managers'],
+    operators?: Action['operators'],
+    shantytowns?: NonNullable<Action['location_shantytowns']>,
+    finances?: Action['finances'],
+    location_eti_addresses?: ActionEtiAddressRaw[],
+    metrics?: Action['metrics'],
+    indicateurs?: Action['indicateurs'],
 } & CreatorInfo & EditorInfo;
 
 export default function serializeAction(action: ActionRow, user: User): Action {
@@ -67,7 +73,7 @@ export default function serializeAction(action: ActionRow, user: User): Action {
         goals: action.goals,
         topics: action.topics || [],
         location,
-        location_type: action.location_type as any,
+        location_type: action.location_type,
         eti: (() => {
             if (action.location_type !== 'eti') {
                 return null;
@@ -83,8 +89,8 @@ export default function serializeAction(action: ActionRow, user: User): Action {
                 }));
             }
             // Cas 2: données depuis getHistory (location_eti_addresses peuplé par SQL)
-            if ((action as any).location_eti_addresses && (action as any).location_eti_addresses.length > 0) {
-                return (action as any).location_eti_addresses.map((addr: any) => ({
+            if (action.location_eti_addresses && action.location_eti_addresses.length > 0) {
+                return action.location_eti_addresses.map(addr => ({
                     id: addr.id,
                     address: addr.address,
                     latitude: Number.parseFloat(addr.coordinates.split(',')[0]),
@@ -100,8 +106,11 @@ export default function serializeAction(action: ActionRow, user: User): Action {
         managers: action.managers || [],
         operators: action.operators || [],
         metrics: action.metrics || [],
-        indicateurs: (action as any).indicateurs || {},
+        indicateurs: action.indicateurs || {},
         metrics_updated_at: null,
+        is_active_previous_year: false,
+        indicators_up_to_date_90d: false,
+        indicators_up_to_date_180d: false,
         hasDihalFinancing: false,
         dihalFinancingYear: null,
         comments: [],

@@ -1,4 +1,4 @@
-import actionService from '#server/services/action/actionService';
+import actionService from '#server/services/action';
 import { type NextFunction, Response, Request } from 'express';
 
 interface FindActionFinancesReadersRequest extends Request {

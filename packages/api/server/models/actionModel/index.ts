@@ -3,6 +3,7 @@ import createComment from './createComment/createComment';
 import fetch from './fetch/fetch';
 import fetchByShantytown from './fetchByShantytown/fetch';
 import fetchComments from './fetchComments/fetchComments';
+import fetchMetrics from './fetch/fetchMetrics';
 import fetchFinancedActionsByYear from './fetchByShantytown/fetchFinancedActionsByYear';
 import fetchReport from './fetchReport/fetchReport';
 import findActionFinancesReaders from './findActionFinancesReaders/findActionFinancesReaders';
@@ -20,6 +21,7 @@ export default {
     fetchByShantytown,
     fetchComments,
     fetchFinancedActionsByYear,
+    fetchMetrics,
     fetchReport,
     findActionFinancesReaders,
     findActionFinancesReadersByAction,

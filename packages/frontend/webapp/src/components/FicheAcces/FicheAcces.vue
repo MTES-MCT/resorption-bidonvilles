@@ -1,5 +1,5 @@
 <template>
-    <ViewHeader icon="user">
+    <ViewHeader icon="user" titleTag="p">
         <template v-slot:title>Fiche utilisateur</template>
         <template v-slot:description
             >Accordez, refusez, ou ajustez la demande d'accès de cet

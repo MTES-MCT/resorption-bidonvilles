@@ -1,6 +1,7 @@
 <template>
     <BandeauEnvironnement />
     <NotificationGroup />
+    <RouterView />
     <component
         v-if="modaleStore.component"
         :is="modaleStore.component"
@@ -8,7 +9,6 @@
         v-bind="modaleStore.props"
         @close="modaleStore.close"
     />
-    <RouterView />
 </template>
 
 <script setup>

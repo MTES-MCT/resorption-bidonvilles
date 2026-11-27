@@ -11,7 +11,10 @@
                         :key="filter.id"
                         :title="filter.label"
                         :options="filter.options"
-                        v-model="actionsStore.filters.properties[filter.id]"
+                        :model-value="
+                            actionsStore.filters.properties[filter.id]
+                        "
+                        @update:model-value="updateFilter(filter.id, $event)"
                     />
                 </div>
             </div>
@@ -42,6 +45,7 @@ import { useUserStore } from "@/stores/user.store";
 import staticFilters from "./ListeDesActions.filtres";
 import sorts from "./ListeDesActions.tris";
 import { DsfrSort, DsfrFiltre } from "@resorptionbidonvilles/ui";
+import normalizeDihalFinancingSelection from "@/utils/normalizeDihalFinancingSelection";
 
 const actionsStore = useActionsStore();
 const userStore = useUserStore();
@@ -94,6 +98,16 @@ const filters = computed(() => {
         ? allFilters
         : allFilters.filter((filter) => filter.id !== "dihalFinancing");
 });
+
+function updateFilter(filterId, selection) {
+    actionsStore.filters.properties[filterId] =
+        filterId === "dihalFinancing"
+            ? normalizeDihalFinancingSelection(
+                  actionsStore.filters.properties[filterId],
+                  selection
+              )
+            : selection;
+}
 
 const isFiltered = computed(() => {
     const filterValues = Object.values(actionsStore.filters.properties);
